@@ -5,10 +5,12 @@ import { Button, IconButton, Drawer } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import Link from "next/link";
 import MenuIcon from "@mui/icons-material/Menu";
+import { useRouter } from "next/router";
 
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     document.addEventListener("scroll", () => {
@@ -39,6 +41,12 @@ function Navbar() {
           <Link href={"/contact"}>
             <p>Contact</p>
           </Link>
+          <Link href={"/login-shop"}>
+            <p className={styles.login}>login</p>
+          </Link>
+          <Link href={"/register-shop"}>
+            <p className={styles.register}>register</p>
+          </Link>
           <IconButton onClick={toggleMenu}>
             <CloseIcon />
           </IconButton>
@@ -46,7 +54,9 @@ function Navbar() {
       </Drawer>
       <section
         className={
-          scrolled ? `${styles.navbar} + ${styles.scrolled}` : styles.navbar
+          scrolled || router?.pathname !== "/"
+            ? `${styles.navbar} + ${styles.scrolled}`
+            : styles.navbar
         }
       >
         <IconButton onClick={toggleMenu} className={styles.drawerbtn}>
@@ -57,21 +67,13 @@ function Navbar() {
           className={styles.logo}
           style={{ textDecoration: "none" }}
         >
-          {/* <Image
+          <Image
             alt="logo"
             src="/images/logo.svg"
-            width={"120"}
+            width={"180"}
             height={"60"}
-          /> */}
-          <p
-            style={{
-              color: "var(--first-color)",
-              fontWeight: "400",
-              fontSize: "30px",
-            }}
-          >
-            Logo
-          </p>
+            style={{ objectFit: "contain" }}
+          />
         </Link>
         <ul>
           <li>
@@ -85,8 +87,13 @@ function Navbar() {
           </li>
         </ul>
         <div className={styles.buttons}>
-          <Button className={styles.login}>login</Button>&nbsp;&nbsp;
-          <Button className={styles.register}>register</Button>
+          <Link href={"/login-shop"}>
+            <Button className={styles.login}>login</Button>
+          </Link>
+          &nbsp;&nbsp;
+          <Link href={"/register-shop"}>
+            <Button className={styles.register}>register</Button>
+          </Link>
         </div>
       </section>
     </>

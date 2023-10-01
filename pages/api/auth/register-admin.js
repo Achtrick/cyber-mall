@@ -1,6 +1,6 @@
 import nc from "next-connect";
 import connectDB from "../../../utils/connectDB";
-import User from "../../../models/user";
+import User from "../../../models/user.model";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
@@ -9,7 +9,9 @@ const handler = nc();
 handler.post(async (req, res) => {
   var salt = bcrypt.genSaltSync(10);
   await connectDB();
+
   const data = req.body;
+
   try {
     const exists = await User.findOne({ email: data.email.toLowerCase() });
     if (exists) {
@@ -19,7 +21,7 @@ handler.post(async (req, res) => {
     }
     const user = await User.create({
       ...data,
-      avatar: "",
+      role: "ADMIN",
       email: data.email.toLowerCase(),
       password: bcrypt.hashSync(data.password, salt),
     });
@@ -31,18 +33,10 @@ handler.post(async (req, res) => {
     res.status(200).json({
       _id: user._id,
       role: user.role,
-      name: user.name,
+      name: user.firstName + " " + user.lastName,
       email: user.email,
-      avatar: "",
       phone: user.phone,
-      sex: user.sex,
-      type: user.type,
-      location: user.location,
-      gerant: user.gerant,
-      companyName: user.companyName,
-      mf: user.mf,
-      description: user.description,
-      isActive: user.isActive,
+      adress: user.adress,
       token: token,
     });
   } catch (err) {

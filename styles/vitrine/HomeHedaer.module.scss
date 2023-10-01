@@ -3,6 +3,7 @@
   height: 100vh;
   padding: 0px;
   margin: 0px;
+  margin-top: calc(-20px - var(--vitrine-navbar-height));
   position: relative;
   .overlay {
     z-index: 2;
