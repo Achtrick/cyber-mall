@@ -8,7 +8,7 @@ function HomeHedaer(props) {
         <h1>Making Commerce Better for Everyone</h1>
         <p>
           Shopify is supporting the next generation of entrepreneurs, the
-          world’s biggest brands, and everyone in between
+          world&apos;s biggest brands, and everyone in between
         </p>
       </div>
       <video

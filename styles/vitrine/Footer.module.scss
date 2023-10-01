@@ -1,0 +1,21 @@
+.container {
+  width: 100%;
+  padding: 50px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  border-top: 1px solid #ccc;
+}
+.col {
+  width: calc(100% / 3);
+  p {
+    font-size: large;
+    font-weight: 400;
+  }
+}
+@media (max-width: 900px) {
+  .container {
+    padding: 20px;
+    flex-direction: column;
+  }
+}

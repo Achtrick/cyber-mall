@@ -1,0 +1,52 @@
+.free {
+  background: radial-gradient(
+      circle at 85% 33%,
+      rgba(0, 255, 235, 0.085),
+      hsla(0, 0%, 100%, 0) 25%
+    ),
+    radial-gradient(
+      circle at 12% 55%,
+      rgba(108, 99, 255, 0.1),
+      hsla(0, 0%, 100%, 0) 25%
+    );
+  padding: 100px 50px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.title {
+  text-align: center;
+  font-weight: 900;
+  font-size: 2.2rem;
+  letter-spacing: -0.025em;
+  max-width: 640px;
+  h1 {
+    display: block;
+    font-size: 2em;
+    margin-block-start: 0.67em;
+    margin-block-end: 0.67em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    font-weight: bold;
+  }
+}
+.title__stress {
+  --bg-size: 400%;
+  background: linear-gradient(30deg, #6c63ff, #ec008c, #6c63ff) 0 0 / 200% 100%;
+  color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+  animation: move-bg 15s linear infinite;
+}
+@keyframes move-bg {
+  100% {
+    background-position: 200% 0;
+  }
+}
+@media (max-width: 900px) {
+  .free {
+    padding: 100px 10px;
+  }
+}

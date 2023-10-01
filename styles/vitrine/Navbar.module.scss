@@ -27,7 +27,6 @@
       margin: 0px 25px;
     }
   }
-
   .buttons {
     width: 20%;
     display: flex;
@@ -42,7 +41,45 @@
       color: black;
     }
   }
+  .drawerbtn {
+    display: none;
+  }
 }
 .scrolled {
   backdrop-filter: blur(15px);
+}
+.drawer {
+  height: 50vh;
+  background-color: white;
+  backdrop-filter: blur(15px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  a:hover {
+    text-decoration: none;
+  }
+  p {
+    font-size: 20px;
+    color: gray;
+  }
+}
+
+@media (max-width: 900px) {
+  .navbar {
+    justify-content: space-between;
+    padding: 10px;
+    .logo {
+      width: 50%;
+    }
+    .buttons {
+      width: 50%;
+    }
+    ul {
+      display: none;
+    }
+    .drawerbtn {
+      display: block;
+    }
+  }
 }
