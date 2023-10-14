@@ -20,3 +20,28 @@ a:hover {
   --second-color: #ec008c;
   --vitrine-navbar-height: 70px;
 }
+
+// inputs
+.defaultInput {
+  background-color: transparent;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  height: 35px;
+  width: 100%;
+  padding: 5px;
+  margin: 5px 0px;
+}
+
+// ConnectedGuard
+.auth-guard-loader {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  backdrop-filter: blur(25px);
+}

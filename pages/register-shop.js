@@ -1,16 +1,114 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../components/vitrine/Layout";
 import styles from "../styles/vitrine/RegisterShop.module.scss";
+import { Button } from "@mui/material";
+import axios from "axios";
+import { useSnackbar } from "notistack";
+import { getError } from "../utils/shared/getError";
+import { useDispatch } from "react-redux";
+import ConnectedGuard from "../components/guards/connectedGuard";
 
-function registerShop(props) {
+function RegisterShop(props) {
+  const dispatch = useDispatch();
+
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    shopName: "",
+  });
+
+  const { enqueueSnackbar } = useSnackbar();
+
+  const onChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const register = async (e) => {
+    e.preventDefault();
+    if (formData.password !== formData.confirmPassword) {
+      return enqueueSnackbar("passwords doesn't match", { variant: "warning" });
+    }
+    try {
+      const { data } = await axios.post("api/auth/register-admin", formData);
+      dispatch({ type: "USER_LOGIN", payload: data });
+    } catch (error) {
+      enqueueSnackbar(getError(error), { variant: "error" });
+    }
+  };
+
   return (
-    <Layout>
-      <section className={styles.container}>
-        <h1>create your shop</h1>
-        <form></form>
-      </section>
-    </Layout>
+    <ConnectedGuard>
+      <Layout>
+        <section className={styles.container}>
+          <section className={styles.form}>
+            <h1>create your shop</h1>
+            <form id="form" onSubmit={register}>
+              <input
+                className="defaultInput"
+                required
+                onChange={onChange}
+                type="text"
+                name="firstName"
+                placeholder="first name"
+              ></input>
+              <input
+                className="defaultInput"
+                required
+                onChange={onChange}
+                type="text"
+                name="lastName"
+                placeholder="last name"
+              ></input>
+              <input
+                className="defaultInput"
+                required
+                onChange={onChange}
+                type="text"
+                name="email"
+                placeholder="email"
+              ></input>
+              <input
+                className="defaultInput"
+                required
+                onChange={onChange}
+                type="password"
+                name="password"
+                placeholder="password"
+              ></input>
+              <input
+                className="defaultInput"
+                required
+                onChange={onChange}
+                type="password"
+                name="confirmPassword"
+                placeholder="confirm password"
+              ></input>
+              <input
+                className="defaultInput"
+                required
+                onChange={onChange}
+                type="text"
+                name="shopName"
+                placeholder="shop name"
+              ></input>
+              <br />
+              <Button
+                type="submit"
+                form="form"
+                style={{ background: "black", color: "white" }}
+                variant="contained"
+              >
+                register
+              </Button>
+            </form>
+          </section>
+        </section>
+      </Layout>
+    </ConnectedGuard>
   );
 }
 
-export default registerShop;
+export default RegisterShop;
