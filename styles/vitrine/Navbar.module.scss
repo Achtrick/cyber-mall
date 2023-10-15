@@ -48,7 +48,7 @@
 }
 .scrolled {
   backdrop-filter: blur(35px);
-  background-color: rgba(0, 0, 0, 0.711);
+  background-color: var(--black-color);
 }
 .drawer {
   height: 70vh;

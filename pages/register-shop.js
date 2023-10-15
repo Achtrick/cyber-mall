@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../components/vitrine/Layout";
 import styles from "../styles/vitrine/RegisterShop.module.scss";
-import { Button } from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
 import axios from "axios";
 import { useSnackbar } from "notistack";
 import { getError } from "../utils/shared/getError";
@@ -20,6 +20,8 @@ function RegisterShop(props) {
     shopName: "",
   });
 
+  const [loading, setLoading] = useState(false);
+
   const { enqueueSnackbar } = useSnackbar();
 
   const onChange = (e) => {
@@ -28,14 +30,18 @@ function RegisterShop(props) {
 
   const register = async (e) => {
     e.preventDefault();
+    setLoading(true);
     if (formData.password !== formData.confirmPassword) {
+      setLoading(false);
       return enqueueSnackbar("passwords doesn't match", { variant: "warning" });
     }
     try {
       const { data } = await axios.post("api/auth/register-admin", formData);
       dispatch({ type: "USER_LOGIN", payload: data });
+      setLoading(false);
     } catch (error) {
       enqueueSnackbar(getError(error), { variant: "error" });
+      setLoading(false);
     }
   };
 
@@ -66,7 +72,7 @@ function RegisterShop(props) {
                 className="defaultInput"
                 required
                 onChange={onChange}
-                type="text"
+                type="email"
                 name="email"
                 placeholder="email"
               ></input>
@@ -98,10 +104,19 @@ function RegisterShop(props) {
               <Button
                 type="submit"
                 form="form"
-                style={{ background: "black", color: "white" }}
+                style={{
+                  background: "black",
+                  color: "white",
+                  height: "35px",
+                  width: "100px",
+                }}
                 variant="contained"
               >
-                register
+                {loading ? (
+                  <CircularProgress style={{ color: "white" }} size={20} />
+                ) : (
+                  "register"
+                )}
               </Button>
             </form>
           </section>

@@ -1,8 +1,9 @@
 import nc from "next-connect";
 import connectDB from "../../../utils/connectDB";
-import User from "../../../models/user";
+import User from "../../../models/user.model";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import Shop from "../../../models/shop.model";
 
 const handler = nc();
 
@@ -10,49 +11,50 @@ handler.post(async (req, res) => {
   await connectDB();
   const data = req.body;
   try {
-    const exists = await User.findOne({ email: data.email.toLowerCase() });
-    if (!exists) {
+    const user = await User.findOne({ email: data.email.toLowerCase() });
+    if (!user) {
       return res.status(403).json({
         message: "il n'y a aucun utilisateur avec cette adresse email !",
       });
     }
-    const valid = bcrypt.compareSync(data.password, exists.password);
+    const valid = bcrypt.compareSync(data.password, user.password);
 
     var token = null;
 
-    if (exists.role === "ADMIN") {
-      token = jwt.sign({ id: exists._id }, process.env.JWT_ADMIN_SECRET, {
+    if (user.role === "ADMIN") {
+      token = jwt.sign({ id: user._id }, process.env.JWT_ADMIN_SECRET, {
         expiresIn: "30d",
       });
     } else {
-      token = jwt.sign({ id: exists._id }, process.env.JWT_SECRET, {
+      token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
         expiresIn: "30d",
       });
     }
 
     if (valid) {
-      if (exists.isActive) {
+      if (user.role === "ADMIN") {
+        const shop = await Shop.findById(user.shop);
         res.status(200).json({
-          _id: exists._id,
-          role: exists.role,
-          name: exists.name,
-          email: exists.email,
-          avatar: exists.avatar,
-          phone: exists.phone,
-          sex: exists.sex,
-          type: exists.type,
-          location: exists.location,
-          gerant: exists.gerant,
-          companyName: exists.companyName,
-          mf: exists.mf,
-          description: exists.description,
-          isActive: exists.isActive,
+          _id: user._id,
+          role: user.role,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          phone: user.phone,
+          adress: user.adress,
           token: token,
+          shop: shop,
         });
-      } else {
-        res.status(403).json({
-          message:
-            "votre compte est désactivé svp contacter l'administration !",
+      } else if (user.role === "CLIENT") {
+        res.status(200).json({
+          _id: user._id,
+          role: user.role,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          phone: user.phone,
+          adress: user.adress,
+          token: token,
         });
       }
     } else {

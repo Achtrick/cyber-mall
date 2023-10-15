@@ -41,7 +41,7 @@ handler.post(async (req, res) => {
       shop: shop._id,
     });
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+    const token = jwt.sign({ id: user._id }, process.env.JWT_ADMIN_SECRET, {
       expiresIn: "30d",
     });
 

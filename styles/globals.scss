@@ -16,8 +16,12 @@ a:hover {
   box-sizing: border-box;
 }
 :root {
+  // colors
   --first-color: #bb84e8;
   --second-color: #ec008c;
+  --black-color: rgba(0, 0, 0, 1);
+
+  // proportions
   --vitrine-navbar-height: 70px;
 }
 

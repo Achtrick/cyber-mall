@@ -1,0 +1,27 @@
+.navbar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+  background-color: var(--black-color);
+  color: white;
+  position: fixed;
+  z-index: 10000;
+  padding: 0px 20px;
+}
+.sidebar {
+  width: clamp(350px, 25vw, 450px);
+  height: calc(100vh - 60px);
+  overflow-y: auto;
+  background-color: whitesmoke;
+  margin-top: 60px;
+  padding: 20px;
+  .logout button {
+    position: absolute;
+    bottom: 20px;
+  }
+}
+.content {
+  padding-top: 60px;
+}
