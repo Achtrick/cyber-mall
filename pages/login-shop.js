@@ -1,20 +1,27 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../components/vitrine/Layout";
-import styles from "../styles/vitrine/RegisterShop.module.scss";
-import { Button, CircularProgress } from "@mui/material";
+import styles from "../styles/vitrine/LoginShop.module.scss";
+import { Button, CircularProgress, IconButton } from "@mui/material";
 import axios from "axios";
 import { useSnackbar } from "notistack";
 import { getError } from "../utils/shared/getError";
 import { useDispatch } from "react-redux";
 import ConnectedGuard from "../components/guards/connectedGuard";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 function LoginShop(props) {
   const dispatch = useDispatch();
+  const [passwordVisible, setPasswordVisible] = useState(false);
 
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
+
+  const togglePasswordVisibility = () => {
+    setPasswordVisible(!passwordVisible);
+  };
 
   const [loading, setLoading] = useState(false);
 
@@ -51,15 +58,25 @@ function LoginShop(props) {
                 type="email"
                 name="email"
                 placeholder="email"
-              ></input>
-              <input
-                className="defaultInput"
-                required
-                onChange={onChange}
-                type="password"
-                name="password"
-                placeholder="password"
-              ></input>
+              />
+              <div className={styles.passwordContainer}>
+                <input
+                  className="defaultInput"
+                  required
+                  onChange={onChange}
+                  type={passwordVisible ? "text" : "password"}
+                  name="password"
+                  placeholder="password"
+                />
+
+                <IconButton
+                  className={styles.passwordVisibilityIcon}
+                  style={{ color: "black" }}
+                  onClick={togglePasswordVisibility}
+                >
+                  {passwordVisible ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                </IconButton>
+              </div>
               <br />
               <Button
                 type="submit"
