@@ -6,7 +6,7 @@ function Dashboard(props) {
   return (
     <AdminLayout>
       <DisconnectedGuard>
-        <div>admin dashboard</div>
+        <div>statistics and reports here</div>
       </DisconnectedGuard>
     </AdminLayout>
   );

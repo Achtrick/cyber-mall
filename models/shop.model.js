@@ -3,6 +3,7 @@ import { Schema, model, models } from "mongoose";
 const shopSchema = new Schema(
   {
     name: String,
+    logo: { type: String, default: "" },
     settings: {
       headerColor: String,
       footerColor: String,

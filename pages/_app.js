@@ -10,6 +10,7 @@ import { Provider } from "react-redux";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import React from "react";
+import "devextreme/dist/css/dx.light.css";
 
 const clientSideEmotionCache = createEmotionCache();
 
@@ -40,7 +41,7 @@ function MyApp(props) {
               <SnackbarProvider
                 anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
               >
-                <Component {...pageProps} />
+                <Component className="dx-viewport" {...pageProps} />
               </SnackbarProvider>
             </LocalizationProvider>
           </ThemeProvider>
