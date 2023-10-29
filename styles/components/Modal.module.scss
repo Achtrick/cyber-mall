@@ -1,0 +1,41 @@
+.modal {
+  position: absolute;
+  background-color: white;
+  border-radius: 4px;
+  .header {
+    height: 40px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #ccc;
+    p {
+      margin: 0px;
+      padding: 5px;
+      font-size: 16px;
+      color: black;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+    }
+  }
+  .content {
+    padding: 10px;
+    overflow-y: auto;
+    width: 100%;
+    height: calc(100% - 40px);
+    p {
+      margin: 0px;
+    }
+  }
+}
+.big {
+  left: 10vw;
+  width: 80vw;
+  height: 80vh;
+  top: 10vh;
+}
+.small {
+  position: absolute !important;
+  left: 25vw !important;
+  width: 50vw;
+  height: 50vh;
+  top: 25vh;
+}

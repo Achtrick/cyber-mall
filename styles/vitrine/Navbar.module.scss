@@ -11,6 +11,9 @@
   z-index: 1000;
   transition: all 0.3s;
   a {
+    margin: 0px;
+    display: flex;
+    align-items: center;
     color: white;
     font-weight: 300;
     font-size: 1.2rem;
@@ -19,6 +22,8 @@
     width: 20%;
   }
   ul {
+    height: 100%;
+    margin: 0px;
     width: 60%;
     list-style: none;
     display: flex;
@@ -26,6 +31,12 @@
     justify-content: center;
     li {
       margin: 0px 25px;
+    }
+    a {
+      margin-top: -5px;
+    }
+    a:hover {
+      text-decoration: underline;
     }
   }
   .buttons {

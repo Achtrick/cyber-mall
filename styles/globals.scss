@@ -32,6 +32,18 @@ a {
   padding: 5px;
   margin: 5px 0px;
 }
+.labeledInput {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  margin: 5px 0px;
+  label {
+    font-size: 14px;
+    text-transform: capitalize;
+  }
+}
 
 // ConnectedGuard
 .auth-guard-loader {
@@ -57,4 +69,45 @@ a {
 }
 .hoverable:hover {
   background-color: #cccccc30;
+}
+
+// tables
+.defaultTable {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  border: 1px solid #ccc;
+}
+.defaultTable thead {
+  background: #f5f5f5;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 126.52%;
+  text-align: center;
+  letter-spacing: 0.105em;
+  text-transform: capitalize;
+  color: var(--black-color);
+}
+.defaultTable tbody {
+  background: #ffffff;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 126.52%;
+  text-align: center;
+  letter-spacing: 0.105em;
+  text-transform: capitalize;
+  color: #056ab1;
+}
+.defaultTable tbody tr {
+  border-bottom: 1px solid #056ab1;
+
+  text-align: left;
+}
+.defaultTable td,
+th {
+  text-align: left;
+  padding: 10px 5px;
+}
+.defaultTable tbody tr:nth-last-of-type(1) {
+  border: none;
 }
