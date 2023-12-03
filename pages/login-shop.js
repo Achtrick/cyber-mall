@@ -7,8 +7,7 @@ import { useSnackbar } from "notistack";
 import { getError } from "../utils/shared/getError";
 import { useDispatch } from "react-redux";
 import ConnectedGuard from "../components/guards/connectedGuard";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import { VisibilityIcon, VisibilityOffIcon } from "../utils/theme/icons";
 
 function LoginShop(props) {
   const dispatch = useDispatch();

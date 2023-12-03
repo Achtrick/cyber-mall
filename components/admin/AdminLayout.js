@@ -1,18 +1,20 @@
 import { Button, Drawer, IconButton } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import Link from "next/link";
 import React, { useState } from "react";
 import styles from "../../styles/admin/AdminLayout.module.scss";
 import { useDispatch, useSelector } from "react-redux";
 import Image from "next/image";
-import InventoryIcon from "@mui/icons-material/Inventory";
-import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
-import LocalShippingIcon from "@mui/icons-material/LocalShipping";
-import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
-import PaletteIcon from "@mui/icons-material/Palette";
-import SettingsSuggestIcon from "@mui/icons-material/SettingsSuggest";
+import {
+  AccountCircleIcon,
+  ExitToAppIcon,
+  InventoryIcon,
+  LocalShippingIcon,
+  MenuIcon,
+  PaletteIcon,
+  PeopleAltIcon,
+  RocketLaunchIcon,
+  SettingsSuggestIcon,
+} from "../../utils/theme/icons";
 
 function AdminLayout(props) {
   const [drawerOpen, setDrawerOpen] = useState(false);

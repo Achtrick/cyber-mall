@@ -1,4 +1,3 @@
-import AddIcon from "@mui/icons-material/Add";
 import { IconButton, Skeleton } from "@mui/material";
 import axios from "axios";
 import { useSnackbar } from "notistack";
@@ -9,11 +8,21 @@ import { AdminActions, ModalSizes } from "../../components/admin/ModalSettings";
 import DisconnectedGuard from "../../components/guards/disconnectedGuard";
 import styles from "../../styles/admin/Dashboard.module.scss";
 import { getError } from "../../utils/shared/getError";
+import { AddIcon, CloseIcon } from "../../utils/theme/icons";
+import { compressImage } from "../../utils/config/convertHelper";
 
 function Inventory(props) {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [action, setAction] = useState("");
+
+  const [product, setProduct] = useState({
+    designation: "",
+    description: "",
+    price: "",
+    qty: "",
+    images: [],
+  });
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -29,6 +38,30 @@ function Inventory(props) {
     }
   };
 
+  const onChange = async (e) => {
+    if (e.target.name === "images") {
+      let compressedImages = [];
+      const images = e.target.files;
+      for (let image of images) {
+        const base64 = await compressImage(image);
+        compressedImages.push(base64);
+      }
+      setProduct({
+        ...product,
+        images: [...product.images, ...compressedImages],
+      });
+    } else {
+      setProduct({ ...product, [e.target.name]: e.target.value });
+    }
+  };
+
+  const deleteImage = (imageToDelete) => {
+    setProduct({
+      ...product,
+      images: product.images.filter((image) => image !== imageToDelete),
+    });
+  };
+
   useEffect(() => {
     getProducts();
   }, []);
@@ -39,25 +72,84 @@ function Inventory(props) {
         <Modal
           open={action !== ""}
           onClose={() => setAction("")}
-          size={ModalSizes.BIG}
+          size={ModalSizes.MEDIUM}
           title={"add product"}
         >
           <form>
             <div className="labeledInput">
               <label>designation</label>
-              <input className="defaultInput" type="text" required />
+              <input
+                className="defaultInput"
+                type="text"
+                required
+                name="designation"
+                onChange={onChange}
+              />
             </div>
             <div className="labeledInput">
               <label>description</label>
-              <input className="defaultInput" type="text" required />
+              <textarea
+                rows={3}
+                style={{ height: "70px" }}
+                className="defaultInput"
+                type="text"
+                required
+                name="description"
+                onChange={onChange}
+              />
+            </div>
+            <div className="labeledInput">
+              <label>images</label>
+              {product.images.map((image, index) => {
+                return (
+                  <div key={index} className={styles.imgPreview}>
+                    <div className={styles.closeIcon}>
+                      <IconButton onClick={() => deleteImage(image)}>
+                        <CloseIcon />
+                      </IconButton>
+                    </div>
+                    <img alt={index} src={image} />
+                  </div>
+                );
+              })}
+              <input
+                id="images"
+                hidden
+                type="file"
+                accept="image/*"
+                multiple
+                name="images"
+                max="3"
+                onChange={onChange}
+              />
+              <IconButton>
+                <label
+                  style={{ cursor: "pointer", width: "25px", height: "25px" }}
+                  htmlFor="images"
+                >
+                  <AddIcon></AddIcon>
+                </label>
+              </IconButton>
             </div>
             <div className="labeledInput">
               <label>price</label>
-              <input className="defaultInput" type="text" required />
+              <input
+                className="defaultInput"
+                type="text"
+                required
+                name="price"
+                onChange={onChange}
+              />
             </div>
             <div className="labeledInput">
               <label>quantity</label>
-              <input className="defaultInput" type="text" required />
+              <input
+                className="defaultInput"
+                type="text"
+                required
+                name="qty"
+                onChange={onChange}
+              />
             </div>
           </form>
         </Modal>

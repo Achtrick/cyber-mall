@@ -2,10 +2,9 @@ import React, { useEffect, useState } from "react";
 import styles from "../../styles/vitrine/Navbar.module.scss";
 import Image from "next/image";
 import { Button, IconButton, Drawer } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
 import Link from "next/link";
-import MenuIcon from "@mui/icons-material/Menu";
 import { useRouter } from "next/router";
+import { CloseIcon, MenuIcon } from "../../utils/theme/icons";
 
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
