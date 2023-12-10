@@ -9,29 +9,38 @@ import styles from "../../styles/admin/Dashboard.module.scss";
 import { getError } from "../../utils/shared/getError";
 import { AddIcon, CloseIcon } from "../../utils/theme/icons";
 import { compressImage } from "../../utils/config/convertHelper";
-import XAutoComplete from "../../components/ui-components/XAutoComplete";
 import XModal from "../../components/ui-components/XModal";
+import { useSelector } from "react-redux";
 
-function Inventory(props) {
-  const [products, setProducts] = useState([]);
+function categories() {
+  const { userInfo } = useSelector((state) => state.auth);
+
+  const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [modalLoading, setModalLoading] = useState(false);
   const [action, setAction] = useState("");
 
-  const [product, setProduct] = useState({
-    designation: "",
+  const [category, setCategory] = useState({
+    name: "",
     description: "",
-    price: "",
-    qty: "",
-    images: [],
+    icon: "",
   });
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const getProducts = async () => {
+  useEffect(() => {
+    if (!categories.length) {
+      getCategories();
+    }
+  }, []);
+
+  const getCategories = async () => {
     setLoading(true);
     try {
-      const { data } = await axios.post("/api/admin/products/get");
-      setProducts(data);
+      const { data } = await axios.post("/api/admin/categories/get", {
+        shop: userInfo.shop._id,
+      });
+      setCategories(data);
       setLoading(false);
     } catch (error) {
       enqueueSnackbar(getError(error), { variant: "error" });
@@ -40,60 +49,82 @@ function Inventory(props) {
   };
 
   const onChange = async (e) => {
-    if (e.target.name === "images") {
-      let compressedImages = [];
-      const images = e.target.files;
-      for (let image of images) {
-        const base64 = await compressImage(image);
-        compressedImages.push(base64);
-      }
-      setProduct({
-        ...product,
-        images: [...product.images, ...compressedImages],
+    if (e.target.name === "icon") {
+      let icon = e.target.files[0];
+      const base64 = await compressImage(icon);
+      icon = base64;
+      setCategory({
+        ...category,
+        icon: icon,
       });
     } else {
-      setProduct({ ...product, [e.target.name]: e.target.value });
+      setCategory({ ...category, [e.target.name]: e.target.value });
     }
   };
 
-  const deleteImage = (imageToDelete) => {
-    setProduct({
-      ...product,
-      images: product.images.filter((image) => image !== imageToDelete),
+  const deleteBackground = () => {
+    setCategory({
+      ...category,
+      icon: "",
     });
   };
 
-  useEffect(() => {
-    getProducts();
-  }, []);
+  const addCategory = async (e) => {
+    e.preventDefault();
+    console.log(category);
+    setModalLoading(true);
+    try {
+      const { data } = await axios.post("/api/admin/categories/add", {
+        shop: userInfo.shop._id,
+        ...category,
+      });
+      enqueueSnackbar(data.message, { variant: "success" });
+      setModalLoading(false);
+      cancelAction();
+      getCategories();
+    } catch (error) {
+      setModalLoading(false);
+      enqueueSnackbar(getError(error), { variant: "error" });
+    }
+  };
+
+  const cancelAction = () => {
+    setCategory({
+      name: "",
+      description: "",
+      icon: "",
+    });
+    setAction("");
+  };
 
   return (
     <AdminLayout>
       <DisconnectedGuard>
         <XModal
+          loading={modalLoading}
           open={action !== ""}
           onClose={() => setAction("")}
+          formId={"add_product_category"}
+          cancelAction={cancelAction}
           size={ModalSizes.MEDIUM}
-          title={"add product"}
+          title={"add category"}
         >
-          <form>
+          <form id="add_product_category" onSubmit={addCategory}>
             <div className="labeledInput">
-              <label>category</label>
-              <XAutoComplete />
-            </div>
-            <div className="labeledInput">
-              <label>designation</label>
+              <label>name</label>
               <input
+                value={category.name}
                 className="defaultInput"
                 type="text"
                 required
-                name="designation"
+                name="name"
                 onChange={onChange}
               />
             </div>
             <div className="labeledInput">
               <label>description</label>
               <textarea
+                value={category.description}
                 rows={3}
                 style={{ height: "70px" }}
                 className="defaultInput"
@@ -104,67 +135,44 @@ function Inventory(props) {
               />
             </div>
             <div className="labeledInput">
-              <label>images</label>
-              <div className={styles.imagesContainer}>
-                {product.images.map((image, index) => {
-                  return (
-                    <div key={index} className={styles.imgPreview}>
-                      <div className={styles.closeIcon}>
-                        <IconButton
-                          style={{ width: "30px", height: "30px" }}
-                          onClick={() => deleteImage(image)}
-                        >
-                          <CloseIcon />
-                        </IconButton>
-                      </div>
-                      <img alt={index} src={image} />
+              <label>icon</label>
+              {category.icon !== "" && (
+                <div className={styles.imagesContainer}>
+                  <div className={styles.imgPreview}>
+                    <div className={styles.closeIcon}>
+                      <IconButton
+                        style={{ width: "30px", height: "30px" }}
+                        onClick={() => deleteBackground()}
+                      >
+                        <CloseIcon />
+                      </IconButton>
                     </div>
-                  );
-                })}
-              </div>
+                    <img alt={category.name} src={category.icon} />
+                  </div>
+                </div>
+              )}
               <input
-                id="images"
+                id="icon"
                 hidden
                 type="file"
                 accept="image/*"
-                multiple
-                name="images"
+                name="icon"
                 max="3"
                 onChange={onChange}
               />
               <IconButton>
                 <label
                   style={{ cursor: "pointer", width: "25px", height: "25px" }}
-                  htmlFor="images"
+                  htmlFor="icon"
                 >
                   <AddIcon></AddIcon>
                 </label>
               </IconButton>
             </div>
-            <div className="labeledInput">
-              <label>price</label>
-              <input
-                className="defaultInput"
-                type="text"
-                required
-                name="price"
-                onChange={onChange}
-              />
-            </div>
-            <div className="labeledInput">
-              <label>quantity</label>
-              <input
-                className="defaultInput"
-                type="text"
-                required
-                name="qty"
-                onChange={onChange}
-              />
-            </div>
           </form>
         </XModal>
         <section className={styles.container}>
-          <h1>Inventory</h1>
+          <h1>Categories</h1>
           <div className={styles.controls}>
             <IconButton onClick={() => setAction(AdminActions.ADD)} icon="add">
               <AddIcon color="black" />
@@ -176,21 +184,17 @@ function Inventory(props) {
             <table className="defaultTable">
               <thead>
                 <tr>
-                  <th>designation</th>
+                  <th>name</th>
                   <th>description</th>
-                  <th>price</th>
-                  <th>quantity</th>
                   <th>actions</th>
                 </tr>
               </thead>
               <tbody>
-                {products.map((product) => {
+                {categories.map((category) => {
                   return (
-                    <tr key={product._id}>
-                      <td>{product.designation}</td>
-                      <td>{product.description}</td>
-                      <td>{product.price}</td>
-                      <td>{product.qty}</td>
+                    <tr key={category._id}>
+                      <td>{category.name}</td>
+                      <td>{category.description}</td>
                       <td>
                         <IconButton></IconButton>
                         <IconButton></IconButton>
@@ -207,4 +211,4 @@ function Inventory(props) {
   );
 }
 
-export default Inventory;
+export default categories;

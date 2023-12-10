@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import { CircularProgress } from "@mui/material";
+import axios from "axios";
 
 function DisconnectedGuard(props) {
   const router = useRouter();
@@ -9,6 +10,8 @@ function DisconnectedGuard(props) {
   const [loading, setLoading] = useState(true);
 
   const { userInfo } = useSelector((state) => state.auth);
+
+  axios.defaults.headers.common["Authorization"] = userInfo?.token;
 
   useEffect(() => {
     if (userInfo === null) {

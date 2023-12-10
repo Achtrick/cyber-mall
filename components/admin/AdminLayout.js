@@ -14,6 +14,7 @@ import {
   PeopleAltIcon,
   RocketLaunchIcon,
   SettingsSuggestIcon,
+  CategoryIcon,
 } from "../../utils/theme/icons";
 
 function AdminLayout(props) {
@@ -75,27 +76,33 @@ function AdminLayout(props) {
             </Link>
           )}
 
+          <Link href="/admin/categories">
+            <div className={`${styles.link} + hoverable`}>
+              <CategoryIcon color="shop1" />
+              <p>categories</p>
+            </div>
+          </Link>
           <Link href="/admin/inventory">
             <div className={`${styles.link} + hoverable`}>
-              <InventoryIcon color="shop1" />
+              <InventoryIcon color="shop2" />
               <p>inventory</p>
             </div>
           </Link>
           <Link href="/admin/clients">
             <div className={`${styles.link} + hoverable`}>
-              <PeopleAltIcon color="shop2" />
+              <PeopleAltIcon color="shop3" />
               <p>clients</p>
             </div>
           </Link>
           <Link href="/admin/orders">
             <div className={`${styles.link} + hoverable`}>
-              <LocalShippingIcon color="shop3" />
+              <LocalShippingIcon color="shop4" />
               <p>orders</p>
             </div>
           </Link>
           <Link href="/admin/boost">
             <div className={`${styles.link} + hoverable`}>
-              <RocketLaunchIcon color="shop4" />
+              <RocketLaunchIcon color="shop5" />
               <p>boost sales</p>
             </div>
           </Link>

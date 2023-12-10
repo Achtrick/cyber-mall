@@ -11,6 +11,7 @@ import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import AddIcon from "@mui/icons-material/Add";
+import CategoryIcon from "@mui/icons-material/Category";
 
 export {
   CloseIcon,
@@ -26,4 +27,5 @@ export {
   VisibilityIcon,
   VisibilityOffIcon,
   AddIcon,
+  CategoryIcon,
 };
