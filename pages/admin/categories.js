@@ -1,16 +1,21 @@
 import { IconButton, Skeleton } from "@mui/material";
 import axios from "axios";
 import { useSnackbar } from "notistack";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import AdminLayout from "../../components/admin/AdminLayout";
 import { AdminActions, ModalSizes } from "../../components/admin/ModalSettings";
 import DisconnectedGuard from "../../components/guards/disconnectedGuard";
-import styles from "../../styles/admin/Dashboard.module.scss";
-import { getError } from "../../utils/shared/getError";
-import { AddIcon, CloseIcon } from "../../utils/theme/icons";
-import { compressImage } from "../../utils/config/convertHelper";
 import XModal from "../../components/ui-components/XModal";
-import { useSelector } from "react-redux";
+import styles from "../../styles/admin/Dashboard.module.scss";
+import { compressImage } from "../../utils/config/convertHelper";
+import { getError } from "../../utils/shared/getError";
+import {
+  AddIcon,
+  CloseIcon,
+  DeleteIcon,
+  ModeEditIcon,
+} from "../../utils/theme/icons";
 
 function categories() {
   const { userInfo } = useSelector((state) => state.auth);
@@ -103,7 +108,7 @@ function categories() {
         <XModal
           loading={modalLoading}
           open={action !== ""}
-          onClose={() => setAction("")}
+          onClose={cancelAction}
           formId={"add_product_category"}
           cancelAction={cancelAction}
           size={ModalSizes.MEDIUM}
@@ -173,37 +178,47 @@ function categories() {
         </XModal>
         <section className={styles.container}>
           <h1>Categories</h1>
-          <div className={styles.controls}>
-            <IconButton onClick={() => setAction(AdminActions.ADD)} icon="add">
-              <AddIcon color="black" />
-            </IconButton>
-          </div>
+          <div className={styles.controls}>{/* search */}</div>
           {loading ? (
             <Skeleton variant="rectangular" width={"100%"} height={"50vh"} />
           ) : (
-            <table className="defaultTable">
-              <thead>
-                <tr>
-                  <th>name</th>
-                  <th>description</th>
-                  <th>actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {categories.map((category) => {
-                  return (
-                    <tr key={category._id}>
-                      <td>{category.name}</td>
-                      <td>{category.description}</td>
-                      <td>
-                        <IconButton></IconButton>
-                        <IconButton></IconButton>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+            <div className="grid-5">
+              {categories.map((category) => {
+                return (
+                  <div className="card" key={category._id}>
+                    <img
+                      className="icon"
+                      alt={category.name}
+                      src={category.icon}
+                    />
+                    <p>{category.name}</p>
+                    <div className="centered-row">
+                      <IconButton
+                        color="warning"
+                        onClick={() => {
+                          setAction(AdminActions.UPDATE);
+                          setCategory(category);
+                        }}
+                      >
+                        <ModeEditIcon />
+                      </IconButton>
+                      <IconButton color="error">
+                        <DeleteIcon />
+                      </IconButton>
+                    </div>
+                  </div>
+                );
+              })}
+              <div className="card" key={category._id}>
+                <IconButton
+                  sx={{ width: "40px", height: "40px" }}
+                  onClick={() => setAction(AdminActions.ADD)}
+                  icon="add"
+                >
+                  <AddIcon color="black" />
+                </IconButton>
+              </div>
+            </div>
           )}
         </section>
       </DisconnectedGuard>

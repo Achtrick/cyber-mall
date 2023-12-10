@@ -12,6 +12,8 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import AddIcon from "@mui/icons-material/Add";
 import CategoryIcon from "@mui/icons-material/Category";
+import ModeEditIcon from "@mui/icons-material/ModeEdit";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 export {
   CloseIcon,
@@ -28,4 +30,6 @@ export {
   VisibilityOffIcon,
   AddIcon,
   CategoryIcon,
+  ModeEditIcon,
+  DeleteIcon,
 };
