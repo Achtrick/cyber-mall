@@ -7,17 +7,28 @@ import { AdminActions, ModalSizes } from "../../components/admin/ModalSettings";
 import DisconnectedGuard from "../../components/guards/disconnectedGuard";
 import styles from "../../styles/admin/Dashboard.module.scss";
 import { getError } from "../../utils/shared/getError";
-import { AddIcon, CloseIcon } from "../../utils/theme/icons";
+import {
+  AddIcon,
+  CloseIcon,
+  DeleteIcon,
+  ModeEditIcon,
+} from "../../utils/theme/icons";
 import { compressImage } from "../../utils/config/convertHelper";
 import XAutoComplete from "../../components/ui-components/XAutoComplete";
 import XModal from "../../components/ui-components/XModal";
+import { useSelector } from "react-redux";
 
 function Inventory(props) {
+  const { userInfo } = useSelector((state) => state.auth);
+
   const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [modalLoading, setModalLoading] = useState(false);
   const [action, setAction] = useState("");
 
   const [product, setProduct] = useState({
+    category: "",
     designation: "",
     description: "",
     price: "",
@@ -27,15 +38,34 @@ function Inventory(props) {
 
   const { enqueueSnackbar } = useSnackbar();
 
+  useEffect(() => {
+    getCategories();
+    getProducts();
+  }, []);
+
   const getProducts = async () => {
     setLoading(true);
     try {
-      const { data } = await axios.post("/api/admin/products/get");
+      const { data } = await axios.post("/api/admin/products/get", {
+        shop: userInfo.shop._id,
+      });
       setProducts(data);
       setLoading(false);
     } catch (error) {
       enqueueSnackbar(getError(error), { variant: "error" });
       setLoading(false);
+    }
+  };
+
+  const getCategories = async () => {
+    try {
+      const { data } = await axios.post("/api/admin/categories/get", {
+        shop: userInfo.shop._id,
+      });
+      setCategories(data);
+      setProduct({ ...product, category: data[0]._id });
+    } catch (error) {
+      enqueueSnackbar(getError(error), { variant: "error" });
     }
   };
 
@@ -63,115 +93,202 @@ function Inventory(props) {
     });
   };
 
-  useEffect(() => {
-    getProducts();
-  }, []);
+  const handleProduct = async (e) => {
+    e.preventDefault();
+    setModalLoading(true);
+    let result = null;
+    try {
+      switch (action) {
+        case AdminActions.ADD:
+          result = await axios.post("/api/admin/products/add", {
+            shop: userInfo.shop._id,
+            ...product,
+          });
+          break;
+        case AdminActions.UPDATE:
+          result = await axios.put("/api/admin/products/update", product);
+          break;
+        case AdminActions.DELETE:
+          result = await axios.delete(
+            `/api/admin/products/delete/${product._id}`
+          );
+          break;
+        default:
+          break;
+      }
+      enqueueSnackbar(result.data.message, { variant: "success" });
+      setModalLoading(false);
+      cancelAction();
+      getProducts();
+    } catch (error) {
+      setModalLoading(false);
+      enqueueSnackbar(getError(error), { variant: "error" });
+    }
+  };
+
+  const cancelAction = () => {
+    setProduct({
+      category: "",
+      designation: "",
+      description: "",
+      price: "",
+      qty: "",
+      images: [],
+    });
+    setAction("");
+  };
 
   return (
     <AdminLayout>
       <DisconnectedGuard>
         <XModal
+          loading={modalLoading}
           open={action !== ""}
-          onClose={() => setAction("")}
-          size={ModalSizes.MEDIUM}
-          title={"add product"}
+          onClose={cancelAction}
+          confirmAction={action === AdminActions.DELETE ? handleProduct : null}
+          formId={"product_category_form"}
+          cancelAction={cancelAction}
+          size={
+            action === AdminActions.DELETE
+              ? ModalSizes.SMALL
+              : ModalSizes.MEDIUM
+          }
+          title={
+            action === AdminActions.ADD
+              ? "add product"
+              : action === AdminActions.UPDATE
+              ? "update product"
+              : action === AdminActions.DELETE
+              ? "delete product"
+              : null
+          }
         >
-          <form>
-            <div className="labeledInput">
-              <label>category</label>
-              <XAutoComplete />
-            </div>
-            <div className="labeledInput">
-              <label>designation</label>
-              <input
-                className="defaultInput"
-                type="text"
-                required
-                name="designation"
-                onChange={onChange}
-              />
-            </div>
-            <div className="labeledInput">
-              <label>description</label>
-              <textarea
-                rows={3}
-                style={{ height: "70px" }}
-                className="defaultInput"
-                type="text"
-                required
-                name="description"
-                onChange={onChange}
-              />
-            </div>
-            <div className="labeledInput">
-              <label>images</label>
-              <div className={styles.imagesContainer}>
-                {product.images.map((image, index) => {
-                  return (
-                    <div key={index} className={styles.imgPreview}>
-                      <div className={styles.closeIcon}>
-                        <IconButton
-                          style={{ width: "30px", height: "30px" }}
-                          onClick={() => deleteImage(image)}
-                        >
-                          <CloseIcon />
-                        </IconButton>
-                      </div>
-                      <img alt={index} src={image} />
-                    </div>
-                  );
-                })}
+          {action === AdminActions.DELETE ? (
+            <>
+              <p>deleting "{product.designation}".</p>
+              <p>are you sure ?</p>
+            </>
+          ) : (
+            <form id="product_category_form" onSubmit={handleProduct}>
+              <div className="labeledInput">
+                <label>category</label>
+                <XAutoComplete
+                  options={categories}
+                  optionDisplayExpr={"name"}
+                  optionValueExpr={"_id"}
+                  attributeKey={"category"}
+                  value={product.category}
+                  formData={product}
+                  setFormData={setProduct}
+                  required={true}
+                />
               </div>
-              <input
-                id="images"
-                hidden
-                type="file"
-                accept="image/*"
-                multiple
-                name="images"
-                max="3"
-                onChange={onChange}
-              />
-              <IconButton>
-                <label
-                  style={{ cursor: "pointer", width: "25px", height: "25px" }}
-                  htmlFor="images"
-                >
-                  <AddIcon></AddIcon>
-                </label>
-              </IconButton>
-            </div>
-            <div className="labeledInput">
-              <label>price</label>
-              <input
-                className="defaultInput"
-                type="text"
-                required
-                name="price"
-                onChange={onChange}
-              />
-            </div>
-            <div className="labeledInput">
-              <label>quantity</label>
-              <input
-                className="defaultInput"
-                type="text"
-                required
-                name="qty"
-                onChange={onChange}
-              />
-            </div>
-          </form>
+              <div className="labeledInput">
+                <label>designation</label>
+                <input
+                  className="defaultInput"
+                  type="text"
+                  required
+                  name="designation"
+                  onChange={onChange}
+                  value={product.designation}
+                />
+              </div>
+              <div className="labeledInput">
+                <label>description</label>
+                <textarea
+                  rows={3}
+                  style={{ height: "70px" }}
+                  className="defaultInput"
+                  type="text"
+                  required
+                  name="description"
+                  onChange={onChange}
+                  value={product.description}
+                />
+              </div>
+              <div className="labeledInput">
+                <label>images</label>
+                <div className={styles.imagesContainer}>
+                  {product.images.map((image, index) => {
+                    return (
+                      <div key={index} className={styles.imgPreview}>
+                        <div className={styles.closeIcon}>
+                          <IconButton
+                            style={{ width: "30px", height: "30px" }}
+                            onClick={() => deleteImage(image)}
+                          >
+                            <CloseIcon />
+                          </IconButton>
+                        </div>
+                        <img alt={index} src={image} />
+                      </div>
+                    );
+                  })}
+                </div>
+                <input
+                  id="images"
+                  hidden
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  name="images"
+                  max="3"
+                  onChange={onChange}
+                />
+                <IconButton>
+                  <label
+                    style={{ cursor: "pointer", width: "25px", height: "25px" }}
+                    htmlFor="images"
+                  >
+                    <AddIcon></AddIcon>
+                  </label>
+                </IconButton>
+              </div>
+              <div className="labeledInput">
+                <label>price</label>
+                <input
+                  className="defaultInput"
+                  type="text"
+                  required
+                  name="price"
+                  onChange={onChange}
+                  value={product.price}
+                />
+              </div>
+              <div className="labeledInput">
+                <label>quantity</label>
+                <input
+                  className="defaultInput"
+                  type="text"
+                  required
+                  name="qty"
+                  onChange={onChange}
+                  value={product.qty}
+                />
+              </div>
+            </form>
+          )}
         </XModal>
         <section className={styles.container}>
           <h1>Inventory</h1>
           <div className={styles.controls}>
-            <IconButton onClick={() => setAction(AdminActions.ADD)} icon="add">
+            <IconButton
+              onClick={() => {
+                setAction(AdminActions.ADD);
+                setProduct({ ...product, category: categories[0]._id });
+              }}
+              icon="add"
+            >
               <AddIcon color="black" />
             </IconButton>
           </div>
           {loading ? (
-            <Skeleton variant="rectangular" width={"100%"} height={"50vh"} />
+            <Skeleton
+              variant="rectangular"
+              width={"100%"}
+              height={"calc(100vh - 200px)"}
+            />
           ) : (
             <table className="defaultTable">
               <thead>
@@ -192,8 +309,24 @@ function Inventory(props) {
                       <td>{product.price}</td>
                       <td>{product.qty}</td>
                       <td>
-                        <IconButton></IconButton>
-                        <IconButton></IconButton>
+                        <div className="centered-row">
+                          <IconButton
+                            onClick={() => {
+                              setAction(AdminActions.UPDATE);
+                              setProduct(product);
+                            }}
+                          >
+                            <ModeEditIcon sx={{ width: "20px" }} />
+                          </IconButton>
+                          <IconButton
+                            onClick={() => {
+                              setAction(AdminActions.DELETE);
+                              setProduct(product);
+                            }}
+                          >
+                            <DeleteIcon sx={{ width: "20px" }} />
+                          </IconButton>
+                        </div>
                       </td>
                     </tr>
                   );

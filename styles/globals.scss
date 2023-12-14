@@ -153,12 +153,14 @@ th {
 }
 .card {
   width: 100%;
+  height: 180px;
+  padding: 5px;
   @include flexLayout(center, center, column);
   .icon {
     width: 80px;
     height: 80px;
     object-fit: cover;
-    border-radius: 50%;
+    border-radius: 5px;
     border: 1px solid #ccc;
   }
 }

@@ -12,6 +12,7 @@ import { compressImage } from "../../utils/config/convertHelper";
 import { getError } from "../../utils/shared/getError";
 import {
   AddIcon,
+  CategoryIcon,
   CloseIcon,
   DeleteIcon,
   ModeEditIcon,
@@ -74,16 +75,30 @@ function categories() {
     });
   };
 
-  const addCategory = async (e) => {
+  const handleCategory = async (e) => {
     e.preventDefault();
-    console.log(category);
     setModalLoading(true);
+    let result = null;
     try {
-      const { data } = await axios.post("/api/admin/categories/add", {
-        shop: userInfo.shop._id,
-        ...category,
-      });
-      enqueueSnackbar(data.message, { variant: "success" });
+      switch (action) {
+        case AdminActions.ADD:
+          result = await axios.post("/api/admin/categories/add", {
+            shop: userInfo.shop._id,
+            ...category,
+          });
+          break;
+        case AdminActions.UPDATE:
+          result = await axios.put("/api/admin/categories/update", category);
+          break;
+        case AdminActions.DELETE:
+          result = await axios.delete(
+            `/api/admin/categories/delete/${category._id}`
+          );
+          break;
+        default:
+          break;
+      }
+      enqueueSnackbar(result.data.message, { variant: "success" });
       setModalLoading(false);
       cancelAction();
       getCategories();
@@ -109,101 +124,137 @@ function categories() {
           loading={modalLoading}
           open={action !== ""}
           onClose={cancelAction}
-          formId={"add_product_category"}
+          confirmAction={action === AdminActions.DELETE ? handleCategory : null}
+          formId={"product_category_form"}
           cancelAction={cancelAction}
-          size={ModalSizes.MEDIUM}
-          title={"add category"}
+          size={
+            action === AdminActions.DELETE
+              ? ModalSizes.SMALL
+              : ModalSizes.MEDIUM
+          }
+          title={
+            action === AdminActions.ADD
+              ? "add category"
+              : action === AdminActions.UPDATE
+              ? "update category"
+              : action === AdminActions.DELETE
+              ? "delete category"
+              : null
+          }
         >
-          <form id="add_product_category" onSubmit={addCategory}>
-            <div className="labeledInput">
-              <label>name</label>
-              <input
-                value={category.name}
-                className="defaultInput"
-                type="text"
-                required
-                name="name"
-                onChange={onChange}
-              />
-            </div>
-            <div className="labeledInput">
-              <label>description</label>
-              <textarea
-                value={category.description}
-                rows={3}
-                style={{ height: "70px" }}
-                className="defaultInput"
-                type="text"
-                required
-                name="description"
-                onChange={onChange}
-              />
-            </div>
-            <div className="labeledInput">
-              <label>icon</label>
-              {category.icon !== "" && (
-                <div className={styles.imagesContainer}>
-                  <div className={styles.imgPreview}>
-                    <div className={styles.closeIcon}>
-                      <IconButton
-                        style={{ width: "30px", height: "30px" }}
-                        onClick={() => deleteBackground()}
-                      >
-                        <CloseIcon />
-                      </IconButton>
+          {action === AdminActions.DELETE ? (
+            <>
+              <p>
+                if you delete "{category.name}" category all of the products
+                under it will be deleted.
+              </p>
+              <p>are you sure ?</p>
+            </>
+          ) : (
+            <form id="product_category_form" onSubmit={handleCategory}>
+              <div className="labeledInput">
+                <label>name</label>
+                <input
+                  value={category.name}
+                  className="defaultInput"
+                  type="text"
+                  required
+                  name="name"
+                  onChange={onChange}
+                />
+              </div>
+              <div className="labeledInput">
+                <label>description</label>
+                <textarea
+                  value={category.description}
+                  rows={3}
+                  style={{ height: "70px" }}
+                  className="defaultInput"
+                  type="text"
+                  required
+                  name="description"
+                  onChange={onChange}
+                />
+              </div>
+              <div className="labeledInput">
+                <label>icon</label>
+                {category.icon !== "" && (
+                  <div className={styles.imagesContainer}>
+                    <div className={styles.imgPreview}>
+                      <div className={styles.closeIcon}>
+                        <IconButton
+                          style={{ width: "30px", height: "30px" }}
+                          onClick={() => deleteBackground()}
+                        >
+                          <CloseIcon />
+                        </IconButton>
+                      </div>
+                      <img alt={category.name} src={category.icon} />
                     </div>
-                    <img alt={category.name} src={category.icon} />
                   </div>
-                </div>
-              )}
-              <input
-                id="icon"
-                hidden
-                type="file"
-                accept="image/*"
-                name="icon"
-                max="3"
-                onChange={onChange}
-              />
-              <IconButton>
-                <label
-                  style={{ cursor: "pointer", width: "25px", height: "25px" }}
-                  htmlFor="icon"
-                >
-                  <AddIcon></AddIcon>
-                </label>
-              </IconButton>
-            </div>
-          </form>
+                )}
+                <input
+                  id="icon"
+                  hidden
+                  type="file"
+                  accept="image/*"
+                  name="icon"
+                  max="3"
+                  onChange={onChange}
+                />
+                <IconButton>
+                  <label
+                    style={{ cursor: "pointer", width: "25px", height: "25px" }}
+                    htmlFor="icon"
+                  >
+                    <AddIcon></AddIcon>
+                  </label>
+                </IconButton>
+              </div>
+            </form>
+          )}
         </XModal>
         <section className={styles.container}>
           <h1>Categories</h1>
           <div className={styles.controls}>{/* search */}</div>
           {loading ? (
-            <Skeleton variant="rectangular" width={"100%"} height={"50vh"} />
+            <Skeleton
+              variant="rectangular"
+              width={"100%"}
+              height={"calc(100vh - 200px)"}
+            />
           ) : (
             <div className="grid-5">
               {categories.map((category) => {
                 return (
                   <div className="card" key={category._id}>
-                    <img
-                      className="icon"
-                      alt={category.name}
-                      src={category.icon}
-                    />
+                    {category.icon ? (
+                      <img
+                        className="icon"
+                        alt={category.name}
+                        src={category.icon}
+                      />
+                    ) : (
+                      <CategoryIcon className="icon" />
+                    )}
+
                     <p>{category.name}</p>
                     <div className="centered-row">
                       <IconButton
-                        color="warning"
                         onClick={() => {
                           setAction(AdminActions.UPDATE);
                           setCategory(category);
                         }}
                       >
-                        <ModeEditIcon />
+                        <ModeEditIcon sx={{ width: "20px" }} />
                       </IconButton>
-                      <IconButton color="error">
-                        <DeleteIcon />
+                      <IconButton
+                        onClick={() => {
+                          setAction(AdminActions.DELETE);
+                          setCategory(category);
+                        }}
+                      >
+                        <DeleteIcon sx={{ width: "20px" }} />
                       </IconButton>
                     </div>
                   </div>

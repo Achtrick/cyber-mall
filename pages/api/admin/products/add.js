@@ -1,16 +1,17 @@
 import nc from "next-connect";
-import Product from "../../../../models/product.model";
 import connectDB from "../../../../utils/connectDB";
+import Product from "../../../../models/product.model";
+import auth from "../../../../middlewares/admin-auth";
 
 const handler = nc();
 
-handler.post(async (req, res) => {
+handler.post(auth, async (req, res) => {
   await connectDB();
   const data = req.body;
   try {
-    const products = await Product.find({ shop: data.shop });
+    await Product.create(data);
 
-    res.status(200).json(products);
+    res.status(200).json({ message: "created product" });
   } catch (err) {
     res.status(400).json(err);
   }
