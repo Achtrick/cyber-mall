@@ -2,13 +2,13 @@ import { Schema, model, models } from "mongoose";
 
 const shopSchema = new Schema(
   {
-    name: String,
+    name: { type: String, unique: true },
     logo: { type: String, default: "" },
     settings: {
-      headerColor: String,
-      footerColor: String,
-      primaryColor: String,
-      secondaryColor: String,
+      headerColor: { type: String, default: "black" },
+      footerColor: { type: String, default: "black" },
+      primaryColor: { type: String, default: "#bb84e8" },
+      secondaryColor: { type: String, default: "#ec008c" },
     },
   },
   { timestamps: true }

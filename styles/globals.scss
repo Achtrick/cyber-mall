@@ -14,7 +14,7 @@ a {
 }
 /* Scrollbar Track */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 4px;
   border-radius: 5px !important;
 }
 
@@ -121,6 +121,9 @@ a {
   font-size: 13px;
   text-align: center;
   text-transform: uppercase;
+  position: sticky;
+  top: 0;
+  z-index: 1;
 }
 .defaultTable tbody {
   background: #ffffff;
@@ -146,6 +149,11 @@ th {
   @include flexLayout();
 }
 // layout
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .grid-5 {
   padding: 10px 0px;
   display: grid;
@@ -167,4 +175,19 @@ th {
 .centered-row {
   width: 100%;
   @include flexLayout;
+}
+.adminTableContainer {
+  height: calc(100vh - 210px);
+  overflow-y: auto;
+  border: 1px solid #ccc;
+}
+// components
+.loadingScreen {
+  width: 100vw;
+  height: 100vh;
+  background-color: transparent;
+  backdrop-filter: blur(15px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

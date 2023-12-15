@@ -12,14 +12,21 @@ import {
   CloseIcon,
   DeleteIcon,
   ModeEditIcon,
+  SearchIcon,
 } from "../../utils/theme/icons";
 import { compressImage } from "../../utils/config/convertHelper";
 import XAutoComplete from "../../components/ui-components/XAutoComplete";
 import XModal from "../../components/ui-components/XModal";
 import { useSelector } from "react-redux";
+import XPagination from "../../components/ui-components/XPagination";
 
 function Inventory(props) {
+  let executeSearchTimeout;
+
   const { userInfo } = useSelector((state) => state.auth);
+  const [page, setPage] = useState(0);
+  const [count, setCount] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -41,15 +48,18 @@ function Inventory(props) {
   useEffect(() => {
     getCategories();
     getProducts();
-  }, []);
+  }, [page, searchTerm]);
 
   const getProducts = async () => {
     setLoading(true);
     try {
       const { data } = await axios.post("/api/admin/products/get", {
         shop: userInfo.shop._id,
+        page: page + 1,
+        searchTerm: searchTerm,
       });
-      setProducts(data);
+      setProducts(data.products);
+      setCount(data.count);
       setLoading(false);
     } catch (error) {
       enqueueSnackbar(getError(error), { variant: "error" });
@@ -75,7 +85,11 @@ function Inventory(props) {
       const images = e.target.files;
       for (let image of images) {
         const base64 = await compressImage(image);
-        compressedImages.push(base64);
+        compressedImages.length < 3
+          ? compressedImages.push(base64)
+          : enqueueSnackbar("can't exceed 3 images per product.", {
+              variant: "warning",
+            });
       }
       setProduct({
         ...product,
@@ -136,6 +150,17 @@ function Inventory(props) {
       images: [],
     });
     setAction("");
+  };
+
+  const onPaginationChange = (e, page) => {
+    setPage(page - 1);
+  };
+
+  const onSearchTermChange = (e) => {
+    clearTimeout(executeSearchTimeout);
+    executeSearchTimeout = setTimeout(() => {
+      setSearchTerm(e.target.value);
+    }, 1000);
   };
 
   return (
@@ -271,8 +296,24 @@ function Inventory(props) {
           )}
         </XModal>
         <section className={styles.container}>
-          <h1>Inventory</h1>
           <div className={styles.controls}>
+            <h1>Inventory</h1>
+            <div className="row">
+              <SearchIcon style={{ marginRight: "-30px" }} />
+              <input
+                style={{ paddingLeft: "30px" }}
+                className="defaultInput"
+                placeholder="designation..."
+                onChange={onSearchTermChange}
+              />
+            </div>
+          </div>
+          <div className={styles.controls}>
+            <XPagination
+              page={page}
+              count={count}
+              onChange={onPaginationChange}
+            />
             <IconButton
               onClick={() => {
                 setAction(AdminActions.ADD);
@@ -290,49 +331,51 @@ function Inventory(props) {
               height={"calc(100vh - 200px)"}
             />
           ) : (
-            <table className="defaultTable">
-              <thead>
-                <tr>
-                  <th>designation</th>
-                  <th>description</th>
-                  <th>price</th>
-                  <th>quantity</th>
-                  <th>actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {products.map((product) => {
-                  return (
-                    <tr key={product._id}>
-                      <td>{product.designation}</td>
-                      <td>{product.description}</td>
-                      <td>{product.price}</td>
-                      <td>{product.qty}</td>
-                      <td>
-                        <div className="centered-row">
-                          <IconButton
-                            onClick={() => {
-                              setAction(AdminActions.UPDATE);
-                              setProduct(product);
-                            }}
-                          >
-                            <ModeEditIcon sx={{ width: "20px" }} />
-                          </IconButton>
-                          <IconButton
-                            onClick={() => {
-                              setAction(AdminActions.DELETE);
-                              setProduct(product);
-                            }}
-                          >
-                            <DeleteIcon sx={{ width: "20px" }} />
-                          </IconButton>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+            <section className="adminTableContainer">
+              <table className="defaultTable">
+                <thead>
+                  <tr>
+                    <th>designation</th>
+                    <th>description</th>
+                    <th>price</th>
+                    <th>quantity</th>
+                    <th>actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {products.map((product) => {
+                    return (
+                      <tr key={product._id}>
+                        <td>{product.designation}</td>
+                        <td>{product.description}</td>
+                        <td>{product.price}</td>
+                        <td>{product.qty}</td>
+                        <td>
+                          <div className="centered-row">
+                            <IconButton
+                              onClick={() => {
+                                setAction(AdminActions.UPDATE);
+                                setProduct(product);
+                              }}
+                            >
+                              <ModeEditIcon sx={{ width: "20px" }} />
+                            </IconButton>
+                            <IconButton
+                              onClick={() => {
+                                setAction(AdminActions.DELETE);
+                                setProduct(product);
+                              }}
+                            >
+                              <DeleteIcon sx={{ width: "20px" }} />
+                            </IconButton>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </section>
           )}
         </section>
       </DisconnectedGuard>

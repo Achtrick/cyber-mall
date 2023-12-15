@@ -31,6 +31,12 @@ handler.post(async (req, res) => {
 
     const shop = await Shop.create({
       name: data.shopName.toLowerCase(),
+      settings: {
+        headerColor: "black",
+        footerColor: "black",
+        primaryColor: "#bb84e8",
+        secondaryColor: "#ec008c",
+      },
     });
 
     const user = await User.create({

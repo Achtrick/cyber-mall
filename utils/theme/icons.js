@@ -14,6 +14,7 @@ import AddIcon from "@mui/icons-material/Add";
 import CategoryIcon from "@mui/icons-material/Category";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import SearchIcon from "@mui/icons-material/Search";
 
 export {
   CloseIcon,
@@ -32,4 +33,5 @@ export {
   CategoryIcon,
   ModeEditIcon,
   DeleteIcon,
+  SearchIcon,
 };
