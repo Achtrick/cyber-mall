@@ -1,0 +1,60 @@
+@mixin flexContainer(
+  $alignItems: center,
+  $justifyContent: center,
+  $flexDirection: row
+) {
+  display: flex;
+  align-items: $alignItems;
+  justify-content: $justifyContent;
+  flex-direction: $flexDirection;
+}
+
+.header {
+  @include flexContainer(center, space-between);
+  width: 100%;
+  padding: 10px;
+  height: 60px;
+  z-index: 1000;
+}
+.logo {
+  width: 30%;
+  @include flexContainer(center, flex-start);
+}
+.links {
+  width: 40%;
+  @include flexContainer(center, space-around);
+  .categoriesTitle {
+    p {
+      cursor: pointer;
+      @include flexContainer(center);
+    }
+    position: relative;
+    .categoriesDropDown {
+      position: absolute;
+      top: 60px;
+      left: 0px;
+      border-radius: 4px;
+      padding: 10px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+      @include flexContainer(flex-start, flex-start, column);
+      width: 200px;
+      .category {
+        margin: 5px 0px;
+        cursor: pointer;
+      }
+      .category:hover {
+        text-decoration: underline;
+      }
+    }
+    .categoriesDropDownVisible {
+      pointer-events: all;
+      opacity: 1;
+    }
+  }
+}
+.controls {
+  width: 30%;
+  @include flexContainer(center, flex-end);
+}

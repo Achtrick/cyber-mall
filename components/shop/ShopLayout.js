@@ -1,13 +1,13 @@
 import React from "react";
-import ShopHeader from "./shopHeader";
+import ShopHeader from "./ShopHeader";
 import ShopFooter from "./ShopFooter";
 
-function ShopLayout({ shopSettings, ...props }) {
+function ShopLayout({ shopInfo, ...props }) {
   return (
     <>
-      <ShopHeader shopSettings={shopSettings} />
+      <ShopHeader shopInfo={shopInfo} />
       <div>{props.children}</div>
-      <ShopFooter shopSettings={shopSettings} />
+      <ShopFooter shopInfo={shopInfo} />
     </>
   );
 }

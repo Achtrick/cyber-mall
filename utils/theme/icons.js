@@ -15,6 +15,8 @@ import CategoryIcon from "@mui/icons-material/Category";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SearchIcon from "@mui/icons-material/Search";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 
 export {
   CloseIcon,
@@ -34,4 +36,6 @@ export {
   ModeEditIcon,
   DeleteIcon,
   SearchIcon,
+  KeyboardArrowDownIcon,
+  KeyboardArrowUpIcon,
 };

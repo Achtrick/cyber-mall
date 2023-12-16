@@ -1,12 +1,12 @@
 import React from "react";
 import { isColorDark } from "../../utils/config/convertHelper";
 
-function ShopFooter({ shopSettings }) {
+function ShopFooter({ shopInfo }) {
   return (
     <div
       style={{
-        backgroundColor: shopSettings.footerColor,
-        color: isColorDark(shopSettings.headerColor) ? "white" : "black",
+        backgroundColor: shopInfo.settings.footerColor,
+        color: isColorDark(shopInfo.settings.headerColor) ? "white" : "black",
       }}
     >
       this is the footer

@@ -1,11 +1,10 @@
 import nc from "next-connect";
 import connectDB from "../../../../utils/connectDB";
 import ProductCategory from "../../../../models/productCategory.model";
-import auth from "../../../../middlewares/admin-auth";
 
 const handler = nc();
 
-handler.post(auth, async (req, res) => {
+handler.post(async (req, res) => {
   await connectDB();
   const data = req.body;
   try {

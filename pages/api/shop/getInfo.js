@@ -9,9 +9,8 @@ handler.post(async (req, res) => {
 
   try {
     await connectDB();
-    const shopSettings = await Shop.findOne({ name: shopName });
-
-    res.status(200).json(shopSettings);
+    const shopInfo = await Shop.findOne({ name: shopName });
+    shopInfo ? res.status(200).json(shopInfo) : res.status(404).json("error");
   } catch (err) {
     res.status(400).json(err);
   }

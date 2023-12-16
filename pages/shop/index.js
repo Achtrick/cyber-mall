@@ -9,22 +9,22 @@ function Shop(props) {
   const { shopName } = router.query;
 
   const [loading, setLoading] = useState(true);
-  const [shopSettings, setShopSettings] = useState({});
+  const [shopInfo, setShopInfo] = useState({});
 
   useEffect(() => {
-    if (shopName) getShopSettings();
+    if (shopName) getShopInfo();
   }, [shopName]);
 
-  const getShopSettings = async () => {
+  const getShopInfo = async () => {
     try {
-      const { data } = await axios.post("api/shop/getSettings", {
+      const { data } = await axios.post("api/shop/getInfo", {
         shopName: shopName,
       });
-      setShopSettings(data);
+
+      setShopInfo(data);
       setLoading(false);
     } catch (error) {
       router.push("/");
-      setLoading(false);
     }
   };
 
@@ -33,7 +33,7 @@ function Shop(props) {
       {loading ? (
         <LoadingScreen />
       ) : (
-        <ShopLayout shopSettings={shopSettings.settings}>
+        <ShopLayout shopInfo={shopInfo}>
           <div>page content</div>
         </ShopLayout>
       )}

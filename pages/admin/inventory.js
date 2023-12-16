@@ -85,7 +85,7 @@ function Inventory(props) {
       const images = e.target.files;
       for (let image of images) {
         const base64 = await compressImage(image);
-        compressedImages.length < 3
+        compressedImages.length + product.images.length < 3
           ? compressedImages.push(base64)
           : enqueueSnackbar("can't exceed 3 images per product.", {
               variant: "warning",
@@ -274,7 +274,7 @@ function Inventory(props) {
                 <label>price</label>
                 <input
                   className="defaultInput"
-                  type="text"
+                  type="number"
                   required
                   name="price"
                   onChange={onChange}
@@ -285,7 +285,7 @@ function Inventory(props) {
                 <label>quantity</label>
                 <input
                   className="defaultInput"
-                  type="text"
+                  type="number"
                   required
                   name="qty"
                   onChange={onChange}

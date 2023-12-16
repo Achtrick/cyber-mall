@@ -17,7 +17,8 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "pages/admin/categories.js"
+    "pages/admin/categories.js",
+    "components/shop/ShopHeader.js"
   ],
   "exclude": ["node_modules"]
 }
