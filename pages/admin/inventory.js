@@ -348,7 +348,7 @@ function Inventory(props) {
                       <tr key={product._id}>
                         <td>{product.designation}</td>
                         <td>{product.description}</td>
-                        <td>{product.price}</td>
+                        <td>{product.price + " DT"}</td>
                         <td>{product.qty}</td>
                         <td>
                           <div className="centered-row">

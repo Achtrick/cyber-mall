@@ -17,6 +17,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import SearchIcon from "@mui/icons-material/Search";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 
 export {
   CloseIcon,
@@ -38,4 +39,5 @@ export {
   SearchIcon,
   KeyboardArrowDownIcon,
   KeyboardArrowUpIcon,
+  ShoppingCartIcon,
 };

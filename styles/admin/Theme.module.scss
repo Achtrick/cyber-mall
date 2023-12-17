@@ -1,0 +1,68 @@
+@mixin flexLayout(
+  $alignItems: center,
+  $justifyContent: center,
+  $flexDirection: row
+) {
+  display: flex;
+  flex-direction: $flexDirection;
+  align-items: $alignItems;
+  justify-content: $justifyContent;
+}
+
+.pagePreview {
+  @include flexLayout(center, center, column);
+  width: 100%;
+}
+.headerPreview {
+  @include flexLayout(center, center, row);
+  width: 100%;
+  height: 40px;
+}
+.popupPreview {
+  @include flexLayout(center, center, row);
+
+  width: 40%;
+  height: 100px;
+  border-radius: 4px;
+}
+.bodyPreview {
+  width: 100%;
+  p {
+    margin: 0px;
+  }
+  button {
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  table {
+    border-collapse: collapse;
+    border: 1px solid black;
+    thead {
+      th {
+        padding: 5px;
+        border: 1px solid black;
+      }
+    }
+    tbody {
+      td {
+        padding: 5px;
+        border: 1px solid black;
+      }
+    }
+  }
+  .primaryColor {
+    width: 80%;
+    height: 30px;
+  }
+  .secondaryColor {
+    width: 80%;
+    height: 30px;
+  }
+}
+.footerPreview {
+  @include flexLayout(center, center, row);
+  width: 100%;
+  height: 40px;
+}

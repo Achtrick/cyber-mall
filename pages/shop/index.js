@@ -17,7 +17,7 @@ function Shop(props) {
 
   const getShopInfo = async () => {
     try {
-      const { data } = await axios.post("api/shop/getInfo", {
+      const { data } = await axios.post("/api/shop/getInfo", {
         shopName: shopName,
       });
 
