@@ -13,6 +13,7 @@ function XModal({
   confirmAction,
   cancelAction,
   formId,
+  hideControls,
   ...props
 }) {
   return (
@@ -37,33 +38,35 @@ function XModal({
           </div>
           <div className={styles.content}>
             {props.children}
-            <div className={styles.controls}>
-              {loading ? (
-                <Button>
-                  <CircularProgress size={"25px"} color="black" />
-                </Button>
-              ) : (
-                <>
-                  <Button
-                    color="white"
-                    variant="contained"
-                    type={confirmAction ? "" : "submit"}
-                    onClick={confirmAction ? confirmAction : null}
-                    form={formId ? formId : null}
-                  >
-                    {ModalControls.CONFIRM}
+            {!hideControls ? (
+              <div className={styles.controls}>
+                {loading ? (
+                  <Button>
+                    <CircularProgress size={"25px"} color="black" />
                   </Button>
-                  &nbsp;
-                  <Button
-                    color="white"
-                    variant="contained"
-                    onClick={cancelAction}
-                  >
-                    {ModalControls.CANCEL}
-                  </Button>
-                </>
-              )}
-            </div>
+                ) : (
+                  <>
+                    <Button
+                      color="white"
+                      variant="contained"
+                      type={confirmAction ? "" : "submit"}
+                      onClick={confirmAction ? confirmAction : null}
+                      form={formId ? formId : null}
+                    >
+                      {ModalControls.CONFIRM}
+                    </Button>
+                    &nbsp;
+                    <Button
+                      color="white"
+                      variant="contained"
+                      onClick={cancelAction}
+                    >
+                      {ModalControls.CANCEL}
+                    </Button>
+                  </>
+                )}
+              </div>
+            ) : null}
           </div>
         </div>
       </div>

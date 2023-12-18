@@ -37,15 +37,7 @@ function ShopLayout({ shopInfo, ...props }) {
         deducedColor={deducedHeaderColor}
         deducedColorInverse={deducedHeaderColorInverse}
       />
-      <div>
-        {React.Children.map(props.children, (child) =>
-          React.isValidElement(child)
-            ? React.cloneElement(child, {
-                deducedPimaryColor: deducedPimaryColor,
-              })
-            : child
-        )}
-      </div>
+      <div>{props.children}</div>
       <ShopFooter
         shopInfo={shopInfo}
         deducedColor={deducedFooterColor}

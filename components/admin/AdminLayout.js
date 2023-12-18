@@ -141,13 +141,13 @@ function AdminLayout(props) {
           <Link href="/admin/theme">
             <div className={`${styles.link} + hoverable`}>
               <PaletteIcon color="shop5" />
-              <p>theme</p>
+              <p>my shop theme</p>
             </div>
           </Link>
           <Link href="/admin/settings">
             <div className={`${styles.link} + hoverable`}>
               <SettingsSuggestIcon color="shop6" />
-              <p>settings</p>
+              <p>configure my shop</p>
             </div>
           </Link>
           <span className={styles.logout}>
