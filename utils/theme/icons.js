@@ -4,7 +4,7 @@ import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import PaletteIcon from "@mui/icons-material/Palette";
-import SettingsSuggestIcon from "@mui/icons-material/SettingsSuggest";
+import SettingsIcon from "@mui/icons-material/Settings";
 import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
@@ -27,7 +27,7 @@ export {
   LocalShippingIcon,
   RocketLaunchIcon,
   PaletteIcon,
-  SettingsSuggestIcon,
+  SettingsIcon,
   MenuIcon,
   AccountCircleIcon,
   ExitToAppIcon,

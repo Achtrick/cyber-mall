@@ -13,7 +13,7 @@ import {
   PaletteIcon,
   PeopleAltIcon,
   RocketLaunchIcon,
-  SettingsSuggestIcon,
+  SettingsIcon,
   CategoryIcon,
 } from "../../utils/theme/icons";
 
@@ -144,9 +144,9 @@ function AdminLayout(props) {
               <p>my shop theme</p>
             </div>
           </Link>
-          <Link href="/admin/settings">
+          <Link href="/admin/architecture">
             <div className={`${styles.link} + hoverable`}>
-              <SettingsSuggestIcon color="shop6" />
+              <SettingsIcon color="shop6" />
               <p>configure my shop</p>
             </div>
           </Link>

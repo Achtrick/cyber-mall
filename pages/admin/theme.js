@@ -99,26 +99,26 @@ function Theme(props) {
 
   return (
     <AdminLayout>
-      <XModal
-        open={action !== ""}
-        title={title}
-        onClose={closeAction}
-        cancelAction={closeAction}
-        size={ModalSizes.SMALL}
-        hideControls={true}
-      >
-        <div className={styles.modal}>
-          <form>
-            <input
-              name={currentColor}
-              value={colors[currentColor]}
-              onChange={updateColors}
-              type="color"
-            />
-          </form>
-        </div>
-      </XModal>
       <DisconnectedGuard>
+        <XModal
+          open={action !== ""}
+          title={title}
+          onClose={closeAction}
+          cancelAction={closeAction}
+          size={ModalSizes.SMALL}
+          hideControls={true}
+        >
+          <div className={styles.modal}>
+            <form>
+              <input
+                name={currentColor}
+                value={colors[currentColor]}
+                onChange={updateColors}
+                type="color"
+              />
+            </form>
+          </div>
+        </XModal>
         <section className={styles.container}>
           <div className={styles.controls} style={{ justifyContent: "center" }}>
             <h1>Theme</h1>
@@ -132,7 +132,11 @@ function Theme(props) {
           </p>
           <p>
             - when you finish click here to save your settings{" "}
-            <IconButton color="info" onClick={saveSettings}>
+            <IconButton
+              disabled={colors === shopInfo.settings}
+              color="info"
+              onClick={saveSettings}
+            >
               <CheckCircleIcon />
             </IconButton>
           </p>
@@ -140,7 +144,7 @@ function Theme(props) {
             <Skeleton
               variant="rectangular"
               width={"100%"}
-              height={"calc(100vh - 200px)"}
+              height={"calc(100vh - 150px)"}
             />
           ) : (
             <section>
@@ -148,7 +152,7 @@ function Theme(props) {
                 <div
                   className={themeStyles.headerPreview}
                   style={{
-                    backgroundColor: shopInfo.settings.headerColor,
+                    backgroundColor: colors.headerColor,
                     border: `1px solid ${deducedHeaderColor}`,
                     color: deducedHeaderColor,
                   }}
@@ -168,7 +172,7 @@ function Theme(props) {
                 <div
                   className={themeStyles.popupPreview}
                   style={{
-                    backgroundColor: shopInfo.settings.headerColor,
+                    backgroundColor: colors.headerColor,
                     border: `1px solid ${deducedHeaderColor}`,
                     color: deducedHeaderColor,
                   }}
@@ -181,7 +185,7 @@ function Theme(props) {
                   <br />
                   <button
                     style={{
-                      backgroundColor: shopInfo.settings.primaryColor,
+                      backgroundColor: colors.primaryColor,
                       color: deducedPimaryColor,
                     }}
                   >
@@ -195,7 +199,7 @@ function Theme(props) {
                     <div
                       className={themeStyles.primaryColor}
                       style={{
-                        backgroundColor: shopInfo.settings.primaryColor,
+                        backgroundColor: colors.primaryColor,
                       }}
                     />
                     <IconButton
@@ -215,7 +219,7 @@ function Theme(props) {
                     <div
                       className={themeStyles.secondaryColor}
                       style={{
-                        backgroundColor: shopInfo.settings.secondaryColor,
+                        backgroundColor: colors.secondaryColor,
                       }}
                     />
                     <IconButton
@@ -234,7 +238,7 @@ function Theme(props) {
                   <table>
                     <thead
                       style={{
-                        backgroundColor: shopInfo.settings.headerColor,
+                        backgroundColor: colors.headerColor,
                         color: deducedHeaderColor,
                       }}
                     >
@@ -266,7 +270,7 @@ function Theme(props) {
                 <div
                   className={themeStyles.footerPreview}
                   style={{
-                    backgroundColor: shopInfo.settings.footerColor,
+                    backgroundColor: colors.footerColor,
                     color: deducedFooterColor,
                     border: `1px solid ${deducedFooterColor}`,
                   }}
