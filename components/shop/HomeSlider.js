@@ -17,17 +17,13 @@ function HomeSlider({ slides, ...props }) {
           {slides.map((slide, index) => {
             return (
               <SwiperSlide key={index}>
-                {slide.link ? (
+                {slide.link && slide.link !== "" ? (
                   <Link href={slide.link}>
-                    <img
-                      style={{
-                        width: "100% !important;",
-                        height: "100% !important;",
-                        objectFit: "cover !important;",
-                      }}
-                      src={slide.image}
-                      alt={slide.link}
-                    />
+                    <img src={slide.image} alt={slide.link} />
+                  </Link>
+                ) : slide.category && slide.category !== "" ? (
+                  <Link href={slide.category}>
+                    <img src={slide.image} alt={slide.category} />
                   </Link>
                 ) : (
                   <img src={slide.image} alt="slide" />

@@ -23,7 +23,7 @@ function Architecture(props) {
 
   const [loading, setLoading] = useState(true);
   const [shopInfo, setShopInfo] = useState({});
-  const [categories, setCategories] = useState({});
+  const [categories, setCategories] = useState([]);
   const [architecture, setArchitecture] = useState({
     home: { sliderComponent: [] },
   });
@@ -81,6 +81,7 @@ function Architecture(props) {
     setAction("");
   };
 
+  // SLIDES FUNCTIONS
   const deleteSlide = (slide) => {
     setArchitecture({
       ...architecture,
@@ -121,6 +122,56 @@ function Architecture(props) {
     });
   };
 
+  const updateSlideCategory = async (e, slide) => {
+    architecture.home.sliderComponent.find((s) => s === slide).category =
+      e.target.value;
+    setArchitecture({
+      ...architecture,
+    });
+  };
+
+  // CATEGORIES GRID FUNCTIONS
+  const updateCategoriesGrid = (e, attribute, categoryId) => {
+    const selectedCategoriesIds =
+      architecture.home.categoriesComponent.selectedCategoriesIds;
+
+    switch (attribute) {
+      case "visibleIndex":
+        setArchitecture({
+          ...architecture,
+          home: {
+            ...architecture.home,
+            categoriesComponent: {
+              ...architecture.home.categoriesComponent,
+              visibleIndex: e.target.value,
+            },
+          },
+        });
+        break;
+      case "selectedCategoriesIds":
+        selectedCategoriesIds.includes(categoryId)
+          ? selectedCategoriesIds.splice(
+              selectedCategoriesIds.indexOf(categoryId),
+              1
+            )
+          : selectedCategoriesIds.push(categoryId);
+        setArchitecture({
+          ...architecture,
+          home: {
+            ...architecture.home,
+            categoriesComponent: {
+              ...architecture.home.categoriesComponent,
+              selectedCategoriesIds: selectedCategoriesIds,
+            },
+          },
+        });
+        break;
+
+      default:
+        break;
+    }
+  };
+
   // FORMS
   const sliderForm = (
     <form>
@@ -137,8 +188,35 @@ function Architecture(props) {
                 </IconButton>
               </div>
               <img alt={index} src={slide.image} />
+
               <p>
-                link:{" "}
+                category link:{" "}
+                <select
+                  className="defaultInput"
+                  value={slide.category}
+                  onChange={(e) => updateSlideCategory(e, slide)}
+                  disabled={slide.link && slide.link !== ""}
+                  style={
+                    slide.link && slide.link !== ""
+                      ? { backgroundColor: "#ccc" }
+                      : null
+                  }
+                >
+                  <option value="">
+                    Select a category (if you have a custom link it will
+                    override this)
+                  </option>
+                  {categories.map((category) => {
+                    return (
+                      <option key={category.name} value={category.name}>
+                        {category.name}
+                      </option>
+                    );
+                  })}
+                </select>
+              </p>
+              <p>
+                custom link:{" "}
                 <input
                   type="text"
                   className="defaultInput"
@@ -171,6 +249,54 @@ function Architecture(props) {
     </form>
   );
 
+  const categoriesGridForm = (
+    <form>
+      <p>
+        visible index:{" "}
+        <input
+          type="text"
+          className="defaultInput"
+          value={architecture.home?.categoriesComponent?.visibleIndex}
+          onChange={(e) => {
+            updateCategoriesGrid(e, "visibleIndex");
+          }}
+        />
+      </p>
+      <br />
+      <div className={styles.imagesContainer}>
+        {categories?.map((category, index) => {
+          return (
+            <div key={index} className={styles.imgPreview}>
+              <div className={styles.closeIcon}>
+                <IconButton
+                  style={{ width: "30px", height: "30px" }}
+                  onClick={(e) => {
+                    updateCategoriesGrid(
+                      e,
+                      "selectedCategoriesIds",
+                      category._id
+                    );
+                  }}
+                >
+                  <CheckCircleIcon
+                    color={
+                      architecture?.home?.categoriesComponent?.selectedCategoriesIds?.includes(
+                        category._id
+                      )
+                        ? "info"
+                        : "default"
+                    }
+                  />
+                </IconButton>
+              </div>
+              <img alt={index} src={category.icon} />
+            </div>
+          );
+        })}
+      </div>
+    </form>
+  );
+
   return (
     <AdminLayout>
       <DisconnectedGuard>
@@ -179,11 +305,21 @@ function Architecture(props) {
           title={title}
           onClose={closeAction}
           cancelAction={closeAction}
-          size={action === "SLIDER-FORM" ? ModalSizes.BIG : null}
+          size={
+            action === "SLIDER-FORM"
+              ? ModalSizes.BIG
+              : action === "CATEGORIES-GRID-FORM"
+              ? ModalSizes.MEDIUM
+              : null
+          }
           hideControls={true}
         >
           <div className={styles.modal}>
-            {action === "SLIDER-FORM" ? sliderForm : null}
+            {action === "SLIDER-FORM"
+              ? sliderForm
+              : action === "CATEGORIES-GRID-FORM"
+              ? categoriesGridForm
+              : null}
           </div>
         </XModal>
         <section className={styles.container}>
@@ -233,6 +369,47 @@ function Architecture(props) {
                       ]
                 }
               />
+              <p>
+                - categories grid (select up to 6 categories){" "}
+                <IconButton
+                  color="info"
+                  onClick={() => {
+                    setTitle("select categories to show in the grid");
+                    setAction("CATEGORIES-GRID-FORM");
+                  }}
+                >
+                  <SettingsIcon />
+                </IconButton>
+              </p>
+              <br />
+              <div className={styles.imagesContainer}>
+                {categories
+                  ?.filter((category) =>
+                    architecture.home.categoriesComponent.selectedCategoriesIds.includes(
+                      category._id
+                    )
+                  )
+                  .map((category, index) => {
+                    return (
+                      <div
+                        key={index}
+                        className={styles.imgPreview}
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                        }}
+                      >
+                        <img
+                          style={{ borderRadius: "4px" }}
+                          alt={index}
+                          src={category.icon}
+                        />
+                        <p>{category.name}</p>
+                      </div>
+                    );
+                  })}
+              </div>
             </div>
           )}
         </section>

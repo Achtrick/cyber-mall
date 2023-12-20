@@ -21,14 +21,13 @@ const shopSchema = new Schema(
             {
               image: "",
               link: "",
+              category: "",
             },
           ],
-
           categoriesComponent: {
             visibleIndex: 0,
             selectedCategoriesIds: [],
           },
-
           discountComponent: {
             visibleIndex: 0,
           },
