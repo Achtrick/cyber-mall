@@ -14,86 +14,56 @@ const shopSchema = new Schema(
       },
     },
     architecture: {
-      home: {
-        type: Object,
-        default: {
-          sliderComponent: {
-            type: [Object],
-            default: [
-              {
-                image: { type: String, default: "" },
-                link: { type: String, default: "" },
-              },
-            ],
-          },
+      type: Object,
+      default: {
+        home: {
+          sliderComponent: [
+            {
+              image: "",
+              link: "",
+            },
+          ],
+
           categoriesComponent: {
-            type: Object,
-            default: {
-              visibleIndex: { type: Number, default: 0 },
-              selectedCategories: { type: [String], default: [] },
-            },
+            visibleIndex: 0,
+            selectedCategoriesIds: [],
           },
+
           discountComponent: {
-            type: Object,
-            default: {
-              visibleIndex: { type: Number, default: 0 },
-            },
+            visibleIndex: 0,
           },
           galleryComponent: {
-            type: Object,
-            default: {
-              visibleIndex: { type: Number, default: 0 },
-              content: {
-                type: [Object],
-                default: [
-                  {
-                    title: {
-                      type: Object,
-                      default: {
-                        text: { type: String, default: "" },
-                        visible: { type: Boolean, default: false },
-                      },
-                    },
-                    description: {
-                      type: Object,
-                      default: {
-                        text: { type: String, default: "" },
-                        visible: { type: Boolean, default: false },
-                      },
-                    },
-                    backgroundImage: { type: String, default: "" },
-                    link: { type: String, default: "" },
-                  },
-                ],
+            visibleIndex: 0,
+            content: [
+              {
+                title: {
+                  text: "",
+                  visible: false,
+                },
+                description: {
+                  text: "",
+                  visible: false,
+                },
+                backgroundImage: "",
+                link: "",
               },
-            },
-          },
-        },
-      },
-      contact: {
-        type: Object,
-        default: {
-          address: { type: String, default: "" },
-          socials: {
-            type: [Object],
-            default: [
-              { instagram: { type: String, default: "" } },
-              { tiktok: { type: String, default: "" } },
-              { facebook: { type: String, default: "" } },
-              { youtube: { type: String, default: "" } },
-              { linkedIn: { type: String, default: "" } },
-            ],
-          },
-          direct: {
-            type: [Object],
-            default: [
-              { email: { type: String, default: "" } },
-              { phone: { type: [String], default: [""] } },
             ],
           },
         },
+        contact: {
+          address: "",
+          socials: [
+            { instagram: "" },
+            { tiktok: "" },
+            { facebook: "" },
+            { youtube: "" },
+            { linkedIn: "" },
+          ],
+
+          direct: [{ email: "" }, { phone: "" }],
+        },
+        about: "",
       },
-      about: { type: String, default: "" },
     },
   },
   { timestamps: true }

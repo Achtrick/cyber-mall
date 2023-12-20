@@ -11,7 +11,7 @@
 .imagesContainer {
   width: 100%;
   display: grid;
-  grid-template-columns: auto auto auto auto;
+  grid-template-columns: auto auto auto;
 }
 .imgPreview {
   width: 100px;
@@ -23,6 +23,33 @@
     object-fit: cover;
     width: 100%;
     height: 100%;
+  }
+  .closeIcon {
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    background-color: white;
+    border: 1px solid #ccc;
+    box-shadow: 0px 0px 10px #ccc;
+    border-radius: 50%;
+  }
+}
+.slidesContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
+.slidePreview {
+  width: 100%;
+  height: 500px;
+  margin: 20px 0px;
+  border-radius: 4px;
+  position: relative;
+  img {
+    object-fit: cover;
+    width: 100%;
+    height: 85%;
   }
   .closeIcon {
     position: absolute;

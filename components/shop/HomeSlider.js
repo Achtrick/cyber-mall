@@ -21,9 +21,9 @@ function HomeSlider({ slides, ...props }) {
                   <Link href={slide.link}>
                     <img
                       style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
+                        width: "100% !important;",
+                        height: "100% !important;",
+                        objectFit: "cover !important;",
                       }}
                       src={slide.image}
                       alt={slide.link}

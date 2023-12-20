@@ -105,7 +105,7 @@ function Theme(props) {
           title={title}
           onClose={closeAction}
           cancelAction={closeAction}
-          size={ModalSizes.SMALL}
+          size={ModalSizes.XSMALL}
           hideControls={true}
         >
           <div className={styles.modal}>
@@ -115,6 +115,11 @@ function Theme(props) {
                 value={colors[currentColor]}
                 onChange={updateColors}
                 type="color"
+                style={{
+                  backgroundColor: "transparent",
+                  width: "50%",
+                  height: "50px",
+                }}
               />
             </form>
           </div>

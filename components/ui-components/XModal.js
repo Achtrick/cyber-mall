@@ -21,12 +21,14 @@ function XModal({
       <div className={styles.container}>
         <div
           className={
-            size === ModalSizes.BIG
-              ? `${styles.modal} + ${styles.big}`
-              : size === ModalSizes.SMALL
+            size === ModalSizes.SMALL
               ? `${styles.modal} + ${styles.small}`
+              : size === ModalSizes.XSMALL
+              ? `${styles.modal} + ${styles.xsmall}`
               : size === ModalSizes.MEDIUM
               ? `${styles.modal} + ${styles.medium}`
+              : size === ModalSizes.BIG
+              ? `${styles.modal} + ${styles.big}`
               : null
           }
         >

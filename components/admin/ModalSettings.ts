@@ -4,9 +4,10 @@ export enum AdminActions {
   UPDATE = "UPDATE",
 }
 export enum ModalSizes {
-  BIG = "BIG",
   SMALL = "SMALL",
+  XSMALL = "XSMALL",
   MEDIUM = "MEDIUM",
+  BIG = "BIG",
 }
 
 export enum ModalControls {

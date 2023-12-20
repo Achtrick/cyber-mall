@@ -4,10 +4,18 @@ import styles from "../../styles/admin/Dashboard.module.scss";
 import DisconnectedGuard from "../../components/guards/disconnectedGuard";
 import { useSelector } from "react-redux";
 import { useSnackbar } from "notistack";
-import { IconButton, Skeleton } from "@mui/material";
+import { CircularProgress, IconButton, Skeleton } from "@mui/material";
 import axios from "axios";
 import HomeSlider from "../../components/shop/HomeSlider";
-import { SettingsIcon } from "../../utils/theme/icons";
+import {
+  AddIcon,
+  CheckCircleIcon,
+  CloseIcon,
+  SettingsIcon,
+} from "../../utils/theme/icons";
+import XModal from "../../components/ui-components/XModal";
+import { ModalSizes } from "../../components/admin/ModalSettings";
+import { compressImage } from "../../utils/config/convertHelper";
 
 function Architecture(props) {
   const { userInfo } = useSelector((state) => state.auth);
@@ -16,6 +24,12 @@ function Architecture(props) {
   const [loading, setLoading] = useState(true);
   const [shopInfo, setShopInfo] = useState({});
   const [categories, setCategories] = useState({});
+  const [architecture, setArchitecture] = useState({
+    home: { sliderComponent: [] },
+  });
+
+  const [action, setAction] = useState("");
+  const [title, setTitle] = useState("");
 
   useEffect(() => {
     getShopInfo();
@@ -29,6 +43,7 @@ function Architecture(props) {
         shopName: userInfo.shop.name,
       });
       setShopInfo(data);
+      setArchitecture(data.architecture);
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -41,17 +56,150 @@ function Architecture(props) {
         shop: userInfo.shop._id,
       });
       setCategories(data);
-      console.log(data);
     } catch (error) {
       enqueueSnackbar(getError(error), { variant: "error" });
     }
   };
 
+  const saveArchitecture = async () => {
+    setLoading(true);
+    try {
+      const { data } = await axios.post("/api/admin/shop/update-architecture", {
+        shopId: shopInfo._id,
+        architecture: architecture,
+      });
+      enqueueSnackbar(data.message, { variant: "success" });
+      setLoading(false);
+    } catch (error) {
+      enqueueSnackbar(getError(error), { variant: "error" });
+      setLoading(false);
+    }
+  };
+
+  const closeAction = () => {
+    setTitle("");
+    setAction("");
+  };
+
+  const deleteSlide = (slide) => {
+    setArchitecture({
+      ...architecture,
+      home: {
+        ...architecture.home,
+        sliderComponent: architecture?.home?.sliderComponent?.filter(
+          (s) => s.image !== slide.image
+        ),
+      },
+    });
+  };
+
+  const updateSlides = async (e) => {
+    let compressedImages = architecture.home.sliderComponent;
+    const images = e.target.files;
+    for (let image of images) {
+      const base64 = await compressImage(image);
+      compressedImages.length < 3
+        ? compressedImages.push({ link: "", image: base64 })
+        : enqueueSnackbar("can't exceed 3 slides.", {
+            variant: "warning",
+          });
+    }
+    setArchitecture({
+      ...architecture,
+      home: {
+        ...architecture.home,
+        sliderComponent: compressedImages,
+      },
+    });
+  };
+
+  const updateSlideLink = async (e, slide) => {
+    architecture.home.sliderComponent.find((s) => s === slide).link =
+      e.target.value;
+    setArchitecture({
+      ...architecture,
+    });
+  };
+
+  // FORMS
+  const sliderForm = (
+    <form>
+      <div className={styles.slidesContainer}>
+        {architecture?.home?.sliderComponent.map((slide, index) => {
+          return (
+            <div key={index} className={styles.slidePreview}>
+              <div className={styles.closeIcon}>
+                <IconButton
+                  style={{ width: "30px", height: "30px" }}
+                  onClick={() => deleteSlide(slide)}
+                >
+                  <CloseIcon />
+                </IconButton>
+              </div>
+              <img alt={index} src={slide.image} />
+              <p>
+                link:{" "}
+                <input
+                  type="text"
+                  className="defaultInput"
+                  value={slide.link}
+                  onChange={(e) => updateSlideLink(e, slide)}
+                />
+              </p>
+            </div>
+          );
+        })}
+      </div>
+      <input
+        id="slides"
+        hidden
+        type="file"
+        accept="image/*"
+        multiple
+        name="slides"
+        max="3"
+        onChange={updateSlides}
+      />
+      <IconButton>
+        <label
+          style={{ cursor: "pointer", width: "25px", height: "25px" }}
+          htmlFor="slides"
+        >
+          <AddIcon></AddIcon>
+        </label>
+      </IconButton>
+    </form>
+  );
+
   return (
     <AdminLayout>
       <DisconnectedGuard>
+        <XModal
+          open={action !== ""}
+          title={title}
+          onClose={closeAction}
+          cancelAction={closeAction}
+          size={action === "SLIDER-FORM" ? ModalSizes.BIG : null}
+          hideControls={true}
+        >
+          <div className={styles.modal}>
+            {action === "SLIDER-FORM" ? sliderForm : null}
+          </div>
+        </XModal>
         <section className={styles.container}>
           <h1>Configure your shop to your taste</h1>
+          <p>
+            - when you finish click here to save your settings{" "}
+            {loading ? (
+              <IconButton>
+                <CircularProgress color="black" size={"22px"} />
+              </IconButton>
+            ) : (
+              <IconButton color="info" onClick={saveArchitecture}>
+                <CheckCircleIcon />
+              </IconButton>
+            )}
+          </p>
           {loading ? (
             <Skeleton
               variant="rectangular"
@@ -62,19 +210,27 @@ function Architecture(props) {
             <div className={styles.container}>
               <h1>Home Page</h1>
               <p>
-                - slider (recommended resolution is 1004 x 950){" "}
-                <IconButton color="info">
+                - slider (recommended resolution is 1500 x 600){" "}
+                <IconButton
+                  color="info"
+                  onClick={() => {
+                    setTitle("select home slider images");
+                    setAction("SLIDER-FORM");
+                  }}
+                >
                   <SettingsIcon />
                 </IconButton>
               </p>
               <HomeSlider
                 slides={
-                  shopInfo?.architecture?.home?.sliderComponent ?? [
-                    {
-                      link: "text",
-                      image: "/images/image-placeholder.jpg",
-                    },
-                  ]
+                  architecture.home.sliderComponent.length
+                    ? architecture.home?.sliderComponent
+                    : [
+                        {
+                          link: "text",
+                          image: "/images/image-placeholder.jpg",
+                        },
+                      ]
                 }
               />
             </div>
