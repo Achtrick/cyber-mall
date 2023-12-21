@@ -177,7 +177,7 @@ function categories() {
                 />
               </div>
               <div className="labeledInput">
-                <label>icon</label>
+                <label>icon (recommended resolution (250px * 250px))</label>
                 {category.icon !== "" && (
                   <div className={styles.imagesContainer}>
                     <div className={styles.imgPreview}>

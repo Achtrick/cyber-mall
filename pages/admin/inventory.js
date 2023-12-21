@@ -38,7 +38,8 @@ function Inventory(props) {
     category: "",
     designation: "",
     description: "",
-    price: "",
+    price: 0,
+    discount: 0,
     qty: "",
     images: [],
   });
@@ -145,7 +146,8 @@ function Inventory(props) {
       category: "",
       designation: "",
       description: "",
-      price: "",
+      price: 0,
+      discount: 0,
       qty: "",
       images: [],
     });
@@ -277,8 +279,20 @@ function Inventory(props) {
                   type="number"
                   required
                   name="price"
+                  min={0}
                   onChange={onChange}
                   value={product.price}
+                />
+              </div>
+              <div className="labeledInput">
+                <label>discount (%)</label>
+                <input
+                  className="defaultInput"
+                  type="number"
+                  min={0}
+                  name="discount"
+                  onChange={onChange}
+                  value={product.discount}
                 />
               </div>
               <div className="labeledInput">
@@ -303,7 +317,7 @@ function Inventory(props) {
               <input
                 style={{ paddingLeft: "30px" }}
                 className="defaultInput"
-                placeholder="designation..."
+                placeholder="Designation..."
                 onChange={onSearchTermChange}
               />
             </div>

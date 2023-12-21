@@ -4,7 +4,8 @@ const productSchema = new Schema(
   {
     designation: String,
     images: [String],
-    price: String,
+    price: { type: Number, default: 0 },
+    discount: { type: Number, default: 0 },
     description: String,
     qty: String,
     category: { type: Schema.Types.ObjectId, ref: "ProductCategory" },

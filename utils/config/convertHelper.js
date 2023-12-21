@@ -21,3 +21,7 @@ export function isColorDark(color) {
   const brightness = (r * 299 + g * 587 + b * 114) / 1000;
   return brightness < 128;
 }
+
+export function calculateDiscount(price, discount) {
+  return price - (price * discount) / 100;
+}

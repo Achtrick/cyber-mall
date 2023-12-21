@@ -16,6 +16,9 @@ import {
 import XModal from "../../components/ui-components/XModal";
 import { ModalSizes } from "../../components/admin/ModalSettings";
 import { compressImage } from "../../utils/config/convertHelper";
+import CategoriesGrid from "../../components/shop/CategoriesGrid";
+import { getError } from "../../utils/shared/getError";
+import DiscountsSection from "../../components/shop/DiscountsSection";
 
 function Architecture(props) {
   const { userInfo } = useSelector((state) => state.auth);
@@ -24,6 +27,8 @@ function Architecture(props) {
   const [loading, setLoading] = useState(true);
   const [shopInfo, setShopInfo] = useState({});
   const [categories, setCategories] = useState([]);
+  const [discounts, setDiscounts] = useState([]);
+
   const [architecture, setArchitecture] = useState({
     home: { sliderComponent: [] },
   });
@@ -34,6 +39,7 @@ function Architecture(props) {
   useEffect(() => {
     getShopInfo();
     getCategories();
+    getDiscounts();
   }, []);
 
   const getShopInfo = async () => {
@@ -56,6 +62,18 @@ function Architecture(props) {
         shop: userInfo.shop._id,
       });
       setCategories(data);
+    } catch (error) {
+      enqueueSnackbar(getError(error), { variant: "error" });
+    }
+  };
+
+  const getDiscounts = async () => {
+    try {
+      const { data } = await axios.post("/api/shop/get-random-discounts", {
+        shopId: userInfo.shop._id,
+      });
+      setDiscounts(data);
+      console.log(data);
     } catch (error) {
       enqueueSnackbar(getError(error), { variant: "error" });
     }
@@ -252,7 +270,8 @@ function Architecture(props) {
   const categoriesGridForm = (
     <form>
       <p>
-        visible index:{" "}
+        visible index: (this will determine the display order of this section on
+        your home screen)
         <input
           type="text"
           className="defaultInput"
@@ -297,6 +316,32 @@ function Architecture(props) {
     </form>
   );
 
+  const discountsSectionForm = (
+    <form>
+      <p>
+        visible index: (this will determine the display order of this section on
+        your home screen)
+        <input
+          type="text"
+          className="defaultInput"
+          value={architecture.home?.discountComponent?.visibleIndex}
+          onChange={(e) => {
+            setArchitecture({
+              ...architecture,
+              home: {
+                ...architecture.home,
+                discountComponent: {
+                  ...architecture.home.discountComponent,
+                  visibleIndex: e.target.value,
+                },
+              },
+            });
+          }}
+        />
+      </p>
+    </form>
+  );
+
   return (
     <AdminLayout>
       <DisconnectedGuard>
@@ -310,6 +355,8 @@ function Architecture(props) {
               ? ModalSizes.BIG
               : action === "CATEGORIES-GRID-FORM"
               ? ModalSizes.MEDIUM
+              : action === "DISCOUNT-FORM"
+              ? ModalSizes.SMALL
               : null
           }
           hideControls={true}
@@ -319,6 +366,8 @@ function Architecture(props) {
               ? sliderForm
               : action === "CATEGORIES-GRID-FORM"
               ? categoriesGridForm
+              : action === "DISCOUNT-FORM"
+              ? discountsSectionForm
               : null}
           </div>
         </XModal>
@@ -369,6 +418,8 @@ function Architecture(props) {
                       ]
                 }
               />
+              <br />
+              <hr />
               <p>
                 - categories grid (select up to 6 categories){" "}
                 <IconButton
@@ -381,35 +432,286 @@ function Architecture(props) {
                   <SettingsIcon />
                 </IconButton>
               </p>
-              <br />
-              <div className={styles.imagesContainer}>
-                {categories
-                  ?.filter((category) =>
-                    architecture.home.categoriesComponent.selectedCategoriesIds.includes(
-                      category._id
-                    )
-                  )
-                  .map((category, index) => {
-                    return (
-                      <div
-                        key={index}
-                        className={styles.imgPreview}
+              {categories.length ? (
+                <CategoriesGrid
+                  activateControls={false}
+                  categories={categories}
+                  architecture={architecture}
+                  shopName={shopInfo.name}
+                />
+              ) : (
+                <section
+                  style={{
+                    width: "100%",
+                    padding: "10px",
+                  }}
+                >
+                  <h2 align="center">Discover Our Catgegories</h2>
+                  <div
+                    style={{
+                      width: "100%",
+                      display: "grid",
+                      gridTemplateColumns: "auto auto auto auto auto auto ",
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: "100%",
+                        height: "150px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <img
                         style={{
-                          display: "flex",
-                          flexDirection: "column",
-                          alignItems: "center",
+                          width: "100px",
+                          height: "100px",
+                          objectFit: "cover",
                         }}
-                      >
-                        <img
-                          style={{ borderRadius: "4px" }}
-                          alt={index}
-                          src={category.icon}
-                        />
-                        <p>{category.name}</p>
-                      </div>
-                    );
-                  })}
-              </div>
+                        src="/images/image-placeholder.jpg"
+                      />
+                    </div>
+                    <div
+                      style={{
+                        width: "100%",
+                        height: "150px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <img
+                        style={{
+                          width: "100px",
+                          height: "100px",
+                          objectFit: "cover",
+                        }}
+                        src="/images/image-placeholder.jpg"
+                      />
+                    </div>
+                    <div
+                      style={{
+                        width: "100%",
+                        height: "150px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <img
+                        style={{
+                          width: "100px",
+                          height: "100px",
+                          objectFit: "cover",
+                        }}
+                        src="/images/image-placeholder.jpg"
+                      />
+                    </div>
+                    <div
+                      style={{
+                        width: "100%",
+                        height: "150px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <img
+                        style={{
+                          width: "100px",
+                          height: "100px",
+                          objectFit: "cover",
+                        }}
+                        src="/images/image-placeholder.jpg"
+                      />
+                    </div>
+                    <div
+                      style={{
+                        width: "100%",
+                        height: "150px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <img
+                        style={{
+                          width: "100px",
+                          height: "100px",
+                          objectFit: "cover",
+                        }}
+                        src="/images/image-placeholder.jpg"
+                      />
+                    </div>
+                    <div
+                      style={{
+                        width: "100%",
+                        height: "150px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <img
+                        style={{
+                          width: "100px",
+                          height: "100px",
+                          objectFit: "cover",
+                        }}
+                        src="/images/image-placeholder.jpg"
+                      />
+                    </div>
+                  </div>
+                </section>
+              )}
+              <br />
+              <hr />
+              <p>
+                - discount section (this will show random discounted products
+                for fast purchase)
+                <IconButton
+                  color="info"
+                  onClick={() => {
+                    setTitle("set the display order of the discounts section");
+                    setAction("DISCOUNT-FORM");
+                  }}
+                >
+                  <SettingsIcon />
+                </IconButton>
+              </p>
+              {discounts.length ? (
+                <DiscountsSection
+                  activateControls={false}
+                  discounts={discounts}
+                  shopName={shopInfo.name}
+                />
+              ) : (
+                <section
+                  style={{
+                    width: "100%",
+                    padding: "10px",
+                  }}
+                >
+                  <h2 align="center">Get More For Less !</h2>
+                  <div
+                    style={{
+                      width: "100%",
+                      display: "grid",
+                      gridTemplateColumns: "auto auto auto auto auto auto ",
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: "100%",
+                        height: "150px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <img
+                        style={{
+                          width: "100px",
+                          height: "100px",
+                          objectFit: "cover",
+                        }}
+                        src="/images/image-placeholder.jpg"
+                      />
+                    </div>
+                    <div
+                      style={{
+                        width: "100%",
+                        height: "150px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <img
+                        style={{
+                          width: "100px",
+                          height: "100px",
+                          objectFit: "cover",
+                        }}
+                        src="/images/image-placeholder.jpg"
+                      />
+                    </div>
+                    <div
+                      style={{
+                        width: "100%",
+                        height: "150px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <img
+                        style={{
+                          width: "100px",
+                          height: "100px",
+                          objectFit: "cover",
+                        }}
+                        src="/images/image-placeholder.jpg"
+                      />
+                    </div>
+                    <div
+                      style={{
+                        width: "100%",
+                        height: "150px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <img
+                        style={{
+                          width: "100px",
+                          height: "100px",
+                          objectFit: "cover",
+                        }}
+                        src="/images/image-placeholder.jpg"
+                      />
+                    </div>
+                    <div
+                      style={{
+                        width: "100%",
+                        height: "150px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <img
+                        style={{
+                          width: "100px",
+                          height: "100px",
+                          objectFit: "cover",
+                        }}
+                        src="/images/image-placeholder.jpg"
+                      />
+                    </div>
+                    <div
+                      style={{
+                        width: "100%",
+                        height: "150px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <img
+                        style={{
+                          width: "100px",
+                          height: "100px",
+                          objectFit: "cover",
+                        }}
+                        src="/images/image-placeholder.jpg"
+                      />
+                    </div>
+                  </div>
+                </section>
+              )}
             </div>
           )}
         </section>
