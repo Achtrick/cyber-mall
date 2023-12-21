@@ -19,6 +19,7 @@ import { compressImage } from "../../utils/config/convertHelper";
 import CategoriesGrid from "../../components/shop/CategoriesGrid";
 import { getError } from "../../utils/shared/getError";
 import DiscountsSection from "../../components/shop/DiscountsSection";
+import XGallery from "../../components/ui-components/XGallery";
 
 function Architecture(props) {
   const { userInfo } = useSelector((state) => state.auth);
@@ -49,6 +50,8 @@ function Architecture(props) {
         shopName: userInfo.shop.name,
       });
       setShopInfo(data);
+      console.log(data);
+
       setArchitecture(data.architecture);
       setLoading(false);
     } catch (error) {
@@ -73,7 +76,6 @@ function Architecture(props) {
         shopId: userInfo.shop._id,
       });
       setDiscounts(data);
-      console.log(data);
     } catch (error) {
       enqueueSnackbar(getError(error), { variant: "error" });
     }
@@ -342,6 +344,82 @@ function Architecture(props) {
     </form>
   );
 
+  // const galleryForm = (
+  //   <form>
+  //     <div className={styles.slidesContainer}>
+  //       {architecture?.home?.sliderComponent.map((slide, index) => {
+  //         return (
+  //           <div key={index} className={styles.slidePreview}>
+  //             <div className={styles.closeIcon}>
+  //               <IconButton
+  //                 style={{ width: "30px", height: "30px" }}
+  //                 onClick={() => deleteSlide(slide)}
+  //               >
+  //                 <CloseIcon />
+  //               </IconButton>
+  //             </div>
+  //             <img alt={index} src={slide.image} />
+
+  //             <p>
+  //               category link:{" "}
+  //               <select
+  //                 className="defaultInput"
+  //                 value={slide.category}
+  //                 onChange={(e) => updateSlideCategory(e, slide)}
+  //                 disabled={slide.link && slide.link !== ""}
+  //                 style={
+  //                   slide.link && slide.link !== ""
+  //                     ? { backgroundColor: "#ccc" }
+  //                     : null
+  //                 }
+  //               >
+  //                 <option value="">
+  //                   Select a category (if you have a custom link it will
+  //                   override this)
+  //                 </option>
+  //                 {categories.map((category) => {
+  //                   return (
+  //                     <option key={category.name} value={category.name}>
+  //                       {category.name}
+  //                     </option>
+  //                   );
+  //                 })}
+  //               </select>
+  //             </p>
+  //             <p>
+  //               custom link:{" "}
+  //               <input
+  //                 type="text"
+  //                 className="defaultInput"
+  //                 value={slide.link}
+  //                 onChange={(e) => updateSlideLink(e, slide)}
+  //               />
+  //             </p>
+  //           </div>
+  //         );
+  //       })}
+  //     </div>
+  //     <input
+  //       id="slides"
+  //       hidden
+  //       type="file"
+  //       accept="image/*"
+  //       multiple
+  //       name="slides"
+  //       max="3"
+  //       onChange={updateSlides}
+  //     />
+  //     <IconButton>
+  //       <label
+  //         style={{ cursor: "pointer", width: "25px", height: "25px" }}
+  //         htmlFor="slides"
+  //       >
+  //         <AddIcon></AddIcon>
+  //       </label>
+  //     </IconButton>
+  //   </form>
+  // );
+
   return (
     <AdminLayout>
       <DisconnectedGuard>
@@ -389,7 +467,7 @@ function Architecture(props) {
             <Skeleton
               variant="rectangular"
               width={"100%"}
-              height={"calc(100vh - 150px)"}
+              height={"calc(100vh - 200px)"}
             />
           ) : (
             <div className={styles.container}>
@@ -408,11 +486,12 @@ function Architecture(props) {
               </p>
               <HomeSlider
                 slides={
-                  architecture.home.sliderComponent.length
+                  architecture.home.sliderComponent.length &&
+                  architecture.home.sliderComponent[0].image !== ""
                     ? architecture.home?.sliderComponent
                     : [
                         {
-                          link: "text",
+                          link: "",
                           image: "/images/image-placeholder.jpg",
                         },
                       ]
@@ -585,6 +664,7 @@ function Architecture(props) {
                   activateControls={false}
                   discounts={discounts}
                   shopName={shopInfo.name}
+                  settings={shopInfo.settings}
                 />
               ) : (
                 <section
@@ -712,6 +792,22 @@ function Architecture(props) {
                   </div>
                 </section>
               )}
+              <br />
+              <hr />
+              <p>
+                - gallery component (this will show selected images with each
+                one containing a title that shows on hover)
+                <IconButton
+                  color="info"
+                  onClick={() => {
+                    setTitle("set the images for your gallery");
+                    setAction("GALLERY-FORM");
+                  }}
+                >
+                  <SettingsIcon />
+                </IconButton>
+              </p>
+              <XGallery content={architecture.home.galleryComponent.content} />
             </div>
           )}
         </section>

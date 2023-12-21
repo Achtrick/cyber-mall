@@ -1,40 +1,55 @@
-import React from "react";
-import styles from "../../styles/shop/DiscountsSection.module.scss";
 import Link from "next/link";
+import React from "react";
+import { SwiperSlide } from "swiper/react";
+import styles from "../../styles/shop/DiscountsSection.module.scss";
 import { calculateDiscount } from "../../utils/config/convertHelper";
+import XButton from "../ui-components/XButton";
+import XSwiper from "../ui-components/XSwiper";
 
 function DiscountsSection({
   activateControls = true,
   discounts,
   shopName,
-  props,
+  settings,
 }) {
   return (
     <section className={styles.container}>
       <h2>Get More For Less !</h2>
       <br />
-      <div className={styles.grid}>
+      <XSwiper autoplay={true} loop={true} slidesPerView={4} spaceBetween={20}>
         {discounts.map((product, index) => {
           return (
-            <div key={index} className={styles.product}>
-              <Link
-                href={
-                  activateControls
-                    ? `product/?shopName=${shopName}&?id=${product._id}`
-                    : ""
-                }
-              >
-                <img alt={index} src={product.images[0]} />
+            <SwiperSlide key={index}>
+              <div className={styles.product}>
+                <Link
+                  href={
+                    activateControls
+                      ? `product/?shopName=${shopName}&?id=${product._id}`
+                      : ""
+                  }
+                >
+                  <img alt={index} src={product.images[0]} />
+                </Link>
                 <p>{product.designation}</p>
                 <p className={styles.oldPrice}>{product.price + " DT"}</p>
-                <p className={styles.price}>
+                <p
+                  style={{ color: settings.secondaryColor }}
+                  className={styles.price}
+                >
                   {calculateDiscount(product.price, product.discount) + " DT"}
                 </p>
-              </Link>
-            </div>
+                <XButton
+                  color={settings.primaryColor}
+                  text={"add to cart"}
+                  action={() => {
+                    console.log("add to cart");
+                  }}
+                />
+              </div>
+            </SwiperSlide>
           );
         })}
-      </div>
+      </XSwiper>
     </section>
   );
 }

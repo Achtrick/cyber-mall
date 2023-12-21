@@ -35,15 +35,8 @@ const shopSchema = new Schema(
             visibleIndex: 0,
             content: [
               {
-                title: {
-                  text: "",
-                  visible: false,
-                },
-                description: {
-                  text: "",
-                  visible: false,
-                },
-                backgroundImage: "",
+                text: "",
+                image: "",
                 link: "",
               },
             ],

@@ -22,6 +22,10 @@ export function isColorDark(color) {
   return brightness < 128;
 }
 
+export function deduceColor(color) {
+  return isColorDark(color) ? "white" : "black";
+}
+
 export function calculateDiscount(price, discount) {
   return price - (price * discount) / 100;
 }

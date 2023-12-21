@@ -1,6 +1,7 @@
 import nc from "next-connect";
 import connectDB from "../../../../../utils/connectDB";
 import ProductCategory from "../../../../../models/productCategory.model";
+import Product from "../../../../../models/product.model";
 import auth from "../../../../../middlewares/admin-auth";
 
 const handler = nc();
@@ -10,6 +11,7 @@ handler.delete(auth, async (req, res) => {
   const { _id } = req.query;
   console.log(req.body);
   try {
+    await Product.deleteMany({ category: _id });
     await ProductCategory.findOneAndRemove({ _id: _id });
 
     res.status(200).json({ message: "deleted catgegory" });

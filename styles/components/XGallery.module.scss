@@ -1,0 +1,84 @@
+.container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .col {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 50%;
+  }
+  .square {
+    width: 100%;
+    height: 40%;
+    padding: 5px;
+    position: relative;
+    .overlay {
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      opacity: 1;
+      background-color: rgba(0, 0, 0, 0.214);
+      height: calc(100% - 8px);
+      width: calc(100% - 8px);
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      .text {
+        opacity: 0;
+        transition: all 0.5s;
+        font-size: 47px;
+        text-transform: uppercase;
+      }
+    }
+  }
+  .square:hover .overlay {
+    opacity: 0.5;
+    .text {
+      opacity: 1;
+      mix-blend-mode: difference;
+    }
+  }
+  .rectangle {
+    width: 100%;
+    height: 60%;
+    padding: 5px;
+    position: relative;
+    .overlay {
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      opacity: 1;
+      background-color: rgba(0, 0, 0, 0.214);
+      height: calc(100% - 8px);
+      width: calc(100% - 8px);
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      .text {
+        opacity: 0;
+        transition: all 0.5s;
+        font-size: 47px;
+        text-transform: uppercase;
+      }
+    }
+  }
+  .rectangle:hover .overlay {
+    opacity: 0.5;
+    .text {
+      opacity: 1;
+      mix-blend-mode: difference;
+    }
+  }
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}

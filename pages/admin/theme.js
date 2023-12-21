@@ -7,12 +7,13 @@ import AdminLayout from "../../components/admin/AdminLayout";
 import { Button, CircularProgress, IconButton, Skeleton } from "@mui/material";
 import { useRouter } from "next/router";
 import axios from "axios";
-import { isColorDark } from "../../utils/config/convertHelper";
+import { deduceColor, isColorDark } from "../../utils/config/convertHelper";
 import { CheckCircleIcon, PaletteIcon } from "../../utils/theme/icons";
 import XModal from "../../components/ui-components/XModal";
 import { AdminActions, ModalSizes } from "../../components/admin/ModalSettings";
 import { getError } from "../../utils/shared/getError";
 import { useSnackbar } from "notistack";
+import XButton from "../../components/ui-components/XButton";
 
 function Theme(props) {
   const { userInfo } = useSelector((state) => state.auth);
@@ -20,14 +21,6 @@ function Theme(props) {
 
   const [loading, setLoading] = useState(true);
   const [shopInfo, setShopInfo] = useState({});
-
-  const [deducedHeaderColor, setDeducedHeaderColor] = useState("white");
-  const [deducedHeaderColorInverse, setDeducedHeaderColorInverse] =
-    useState("black");
-  const [deducedFooterColor, setDeducedFooterColor] = useState("white");
-  const [deducedFooterColorInverse, setDeducedFooterColorInverse] =
-    useState("black");
-  const [deducedPimaryColor, setDeducedPrimaryColor] = useState("white");
 
   const [action, setAction] = useState("");
   const [title, setTitle] = useState("");
@@ -53,21 +46,6 @@ function Theme(props) {
 
       setShopInfo(data);
       setColors(data.settings);
-      setDeducedHeaderColor(
-        isColorDark(data.settings.headerColor) ? "white" : "black"
-      );
-      setDeducedHeaderColorInverse(
-        isColorDark(data.settings.headerColor) ? "black" : "white"
-      );
-      setDeducedFooterColor(
-        isColorDark(data.settings.footerColor) ? "white" : "black"
-      );
-      setDeducedFooterColorInverse(
-        isColorDark(data.settings.footerColor) ? "black" : "white"
-      );
-      setDeducedPrimaryColor(
-        isColorDark(data.settings.primaryColor) ? "white" : "black"
-      );
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -84,6 +62,7 @@ function Theme(props) {
   };
 
   const saveSettings = async () => {
+    setLoading(true);
     try {
       const { data } = await axios.post("/api/admin/shop/update-theme", {
         shopId: shopInfo._id,
@@ -137,19 +116,25 @@ function Theme(props) {
           </p>
           <p>
             - when you finish click here to save your settings{" "}
-            <IconButton
-              disabled={colors === shopInfo.settings}
-              color="info"
-              onClick={saveSettings}
-            >
-              <CheckCircleIcon />
-            </IconButton>
+            {loading ? (
+              <IconButton>
+                <CircularProgress color="black" size={"22px"} />
+              </IconButton>
+            ) : (
+              <IconButton
+                disabled={colors === shopInfo.settings}
+                color="info"
+                onClick={saveSettings}
+              >
+                <CheckCircleIcon />
+              </IconButton>
+            )}
           </p>
           {loading ? (
             <Skeleton
               variant="rectangular"
               width={"100%"}
-              height={"calc(100vh - 150px)"}
+              height={"calc(100vh - 300px)"}
             />
           ) : (
             <section>
@@ -158,8 +143,8 @@ function Theme(props) {
                   className={themeStyles.headerPreview}
                   style={{
                     backgroundColor: colors.headerColor,
-                    border: `1px solid ${deducedHeaderColor}`,
-                    color: deducedHeaderColor,
+                    border: `1px solid ${deduceColor(colors.headerColor)}`,
+                    color: deduceColor(colors.headerColor),
                   }}
                 >
                   this is what your navbar will look like
@@ -178,24 +163,24 @@ function Theme(props) {
                   className={themeStyles.popupPreview}
                   style={{
                     backgroundColor: colors.headerColor,
-                    border: `1px solid ${deducedHeaderColor}`,
-                    color: deducedHeaderColor,
+                    border: `1px solid ${deduceColor(colors.headerColor)}`,
+                    color: deduceColor(colors.headerColor),
                   }}
                 >
                   this is what popups will look like
                 </div>
                 <br />
                 <div className={themeStyles.bodyPreview}>
-                  <p>- accents will look like this:</p>
+                  <p>- controls will look like this:</p>
                   <br />
-                  <button
-                    style={{
-                      backgroundColor: colors.primaryColor,
-                      color: deducedPimaryColor,
-                    }}
-                  >
-                    actions
-                  </button>
+                  <div className="row" style={{ justifyContent: "flex-start" }}>
+                    <XButton text="action" color={colors.primaryColor} />
+                    &nbsp;
+                    <CircularProgress
+                      size={"22px"}
+                      style={{ marginLeft: "10px", color: colors.primaryColor }}
+                    />
+                  </div>
                   <br />
                   <br />
                   <p>- main color will look like this:</p>
@@ -244,7 +229,7 @@ function Theme(props) {
                     <thead
                       style={{
                         backgroundColor: colors.headerColor,
-                        color: deducedHeaderColor,
+                        color: deduceColor(colors.headerColor),
                       }}
                     >
                       <tr>
@@ -276,8 +261,8 @@ function Theme(props) {
                   className={themeStyles.footerPreview}
                   style={{
                     backgroundColor: colors.footerColor,
-                    color: deducedFooterColor,
-                    border: `1px solid ${deducedFooterColor}`,
+                    color: deduceColor(colors.footerColor),
+                    border: `1px solid ${deduceColor(colors.footerColor)}`,
                   }}
                 >
                   this is what your footer will look like

@@ -22,7 +22,7 @@ handler.post(async (req, res) => {
     }
 
     const shopExists = await Shop.findOne({
-      shopName: data.shopName.toLowerCase(),
+      name: data.shopName.toLowerCase(),
     });
 
     if (shopExists) {
@@ -36,6 +36,47 @@ handler.post(async (req, res) => {
         footerColor: "black",
         primaryColor: "#bb84e8",
         secondaryColor: "#ec008c",
+      },
+      architecture: {
+        home: {
+          sliderComponent: [
+            {
+              image: "",
+              link: "",
+              category: "",
+            },
+          ],
+          categoriesComponent: {
+            visibleIndex: 0,
+            selectedCategoriesIds: [],
+          },
+          discountComponent: {
+            visibleIndex: 0,
+          },
+          galleryComponent: {
+            visibleIndex: 0,
+            content: [
+              {
+                text: "",
+                image: "",
+                link: "",
+              },
+            ],
+          },
+        },
+        contact: {
+          address: "",
+          socials: [
+            { instagram: "" },
+            { tiktok: "" },
+            { facebook: "" },
+            { youtube: "" },
+            { linkedIn: "" },
+          ],
+
+          direct: [{ email: "" }, { phone: "" }],
+        },
+        about: "",
       },
     });
 

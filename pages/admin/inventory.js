@@ -31,6 +31,7 @@ function Inventory(props) {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [loadingCategories, setLoadingCategories] = useState(false);
   const [modalLoading, setModalLoading] = useState(false);
   const [action, setAction] = useState("");
 
@@ -69,14 +70,17 @@ function Inventory(props) {
   };
 
   const getCategories = async () => {
+    setLoadingCategories(true);
     try {
       const { data } = await axios.post("/api/admin/categories/get", {
         shop: userInfo.shop._id,
       });
       setCategories(data);
-      setProduct({ ...product, category: data[0]._id });
+      data.length && setProduct({ ...product, category: data[0]._id });
+      setLoadingCategories(false);
     } catch (error) {
       enqueueSnackbar(getError(error), { variant: "error" });
+      setLoadingCategories(false);
     }
   };
 
@@ -328,15 +332,23 @@ function Inventory(props) {
               count={count}
               onChange={onPaginationChange}
             />
-            <IconButton
-              onClick={() => {
-                setAction(AdminActions.ADD);
-                setProduct({ ...product, category: categories[0]._id });
-              }}
-              icon="add"
-            >
-              <AddIcon color="black" />
-            </IconButton>
+            <div className="row" style={{ justifyContent: "flex-end" }}>
+              {loadingCategories
+                ? null
+                : !categories.length && (
+                    <p>create categories to start adding products !</p>
+                  )}
+              <IconButton
+                onClick={() => {
+                  setAction(AdminActions.ADD);
+                  setProduct({ ...product, category: categories[0]._id });
+                }}
+                icon="add"
+                disabled={!categories.length}
+              >
+                <AddIcon color="black" />
+              </IconButton>
+            </div>
           </div>
           {loading ? (
             <Skeleton
