@@ -7,11 +7,26 @@ const handler = nc();
 
 handler.post(auth, async (req, res) => {
   await connectDB();
-  const data = req.body;
+  const { shopId, component, ...body } = req.body;
 
   try {
-    const shop = await Shop.findOne({ _id: data.shopId });
-    shop.architecture = data.architecture;
+    const shop = await Shop.findOne({ _id: shopId });
+    switch (component) {
+      case "sliderComponent":
+        shop.architecture.home.sliderComponent = body;
+        break;
+      case "categoriesComponent":
+        shop.architecture.home.categoriesComponent = body;
+        break;
+      case "discountComponent":
+        shop.architecture.home.discountComponent = body;
+        break;
+      case "galleryComponent":
+        shop.architecture.home.galleryComponent = body;
+        break;
+      default:
+        break;
+    }
     await shop.save();
 
     res.status(200).json({ message: "updated architecture" });
@@ -22,3 +37,11 @@ handler.post(auth, async (req, res) => {
 });
 
 export default handler;
+
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: "8mb",
+    },
+  },
+};

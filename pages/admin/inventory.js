@@ -267,14 +267,20 @@ function Inventory(props) {
                   max="3"
                   onChange={onChange}
                 />
-                <IconButton>
-                  <label
-                    style={{ cursor: "pointer", width: "25px", height: "25px" }}
-                    htmlFor="images"
-                  >
-                    <AddIcon></AddIcon>
-                  </label>
-                </IconButton>
+                {product.images.length < 3 ? (
+                  <IconButton>
+                    <label
+                      style={{
+                        cursor: "pointer",
+                        width: "25px",
+                        height: "25px",
+                      }}
+                      htmlFor="images"
+                    >
+                      <AddIcon></AddIcon>
+                    </label>
+                  </IconButton>
+                ) : null}
               </div>
               <div className="labeledInput">
                 <label>price</label>

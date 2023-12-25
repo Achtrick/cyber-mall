@@ -18,3 +18,11 @@ handler.post(auth, async (req, res) => {
 });
 
 export default handler;
+
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: "8mb",
+    },
+  },
+};

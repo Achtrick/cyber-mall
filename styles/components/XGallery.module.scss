@@ -20,7 +20,7 @@
       top: 4px;
       left: 4px;
       opacity: 1;
-      background-color: rgba(0, 0, 0, 0.214);
+      background-color: rgba(0, 0, 0, 0.538);
       height: calc(100% - 8px);
       width: calc(100% - 8px);
       transition: all 0.3s;
@@ -37,10 +37,11 @@
     }
   }
   .square:hover .overlay {
-    opacity: 0.5;
+    opacity: 0.8;
     .text {
       opacity: 1;
       mix-blend-mode: difference;
+      color: white;
     }
   }
   .rectangle {
@@ -53,7 +54,7 @@
       top: 4px;
       left: 4px;
       opacity: 1;
-      background-color: rgba(0, 0, 0, 0.214);
+      background-color: rgba(0, 0, 0, 0.538);
       height: calc(100% - 8px);
       width: calc(100% - 8px);
       transition: all 0.3s;
@@ -70,10 +71,11 @@
     }
   }
   .rectangle:hover .overlay {
-    opacity: 0.5;
+    opacity: 0.8;
     .text {
       opacity: 1;
       mix-blend-mode: difference;
+      color: white;
     }
   }
   img {

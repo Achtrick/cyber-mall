@@ -17,13 +17,7 @@ const shopSchema = new Schema(
       type: Object,
       default: {
         home: {
-          sliderComponent: [
-            {
-              image: "",
-              link: "",
-              category: "",
-            },
-          ],
+          sliderComponent: [],
           categoriesComponent: {
             visibleIndex: 0,
             selectedCategoriesIds: [],
@@ -33,13 +27,7 @@ const shopSchema = new Schema(
           },
           galleryComponent: {
             visibleIndex: 0,
-            content: [
-              {
-                text: "",
-                image: "",
-                link: "",
-              },
-            ],
+            content: [],
           },
         },
         contact: {

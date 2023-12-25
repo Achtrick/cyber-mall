@@ -30,9 +30,7 @@ function Architecture(props) {
   const [categories, setCategories] = useState([]);
   const [discounts, setDiscounts] = useState([]);
 
-  const [architecture, setArchitecture] = useState({
-    home: { sliderComponent: [] },
-  });
+  const [architecture, setArchitecture] = useState({});
 
   const [action, setAction] = useState("");
   const [title, setTitle] = useState("");
@@ -50,7 +48,6 @@ function Architecture(props) {
         shopName: userInfo.shop.name,
       });
       setShopInfo(data);
-      console.log(data);
 
       setArchitecture(data.architecture);
       setLoading(false);
@@ -81,12 +78,33 @@ function Architecture(props) {
     }
   };
 
-  const saveArchitecture = async () => {
+  const saveArchitecture = async (component) => {
     setLoading(true);
     try {
+      let body = {};
+      console.log(architecture);
+      switch (component) {
+        case "sliderComponent":
+          body = architecture.home.sliderComponent;
+          break;
+        case "categoriesComponent":
+          body = architecture.home.categoriesComponent;
+          break;
+        case "discountComponent":
+          body = architecture.home.discountComponent;
+          break;
+        case "galleryComponent":
+          body = architecture.home.galleryComponent;
+          break;
+
+        default:
+          break;
+      }
+
       const { data } = await axios.post("/api/admin/shop/update-architecture", {
         shopId: shopInfo._id,
-        architecture: architecture,
+        component: component,
+        body: body,
       });
       enqueueSnackbar(data.message, { variant: "success" });
       setLoading(false);
@@ -119,11 +137,7 @@ function Architecture(props) {
     const images = e.target.files;
     for (let image of images) {
       const base64 = await compressImage(image);
-      compressedImages.length < 3
-        ? compressedImages.push({ link: "", image: base64 })
-        : enqueueSnackbar("can't exceed 3 slides.", {
-            variant: "warning",
-          });
+      compressedImages.push({ link: "", image: base64 });
     }
     setArchitecture({
       ...architecture,
@@ -192,6 +206,51 @@ function Architecture(props) {
     }
   };
 
+  // GALLERY FUNCTIONS
+  const deleteBlock = (block) => {
+    setArchitecture({
+      ...architecture,
+      home: {
+        ...architecture.home,
+        galleryComponent: {
+          ...architecture?.home?.galleryComponent,
+          content: architecture?.home?.galleryComponent?.content?.filter(
+            (b) => b.image !== block.image
+          ),
+        },
+      },
+    });
+  };
+
+  const updateBlocks = async (e) => {
+    let compressedImages = architecture.home.galleryComponent.content;
+    const images = e.target.files;
+    for (let image of images) {
+      const base64 = await compressImage(image);
+
+      compressedImages.push({ link: "", image: base64 });
+    }
+    setArchitecture({
+      ...architecture,
+      home: {
+        ...architecture.home,
+        galleryComponent: {
+          ...architecture.home.galleryComponent,
+          content: compressedImages,
+        },
+      },
+    });
+  };
+
+  const updateBlock = async (e, block) => {
+    architecture.home.galleryComponent.content.find((b) => b === block)[
+      e.target.name
+    ] = e.target.value;
+    setArchitecture({
+      ...architecture,
+    });
+  };
+
   // FORMS
   const sliderForm = (
     <form>
@@ -258,14 +317,16 @@ function Architecture(props) {
         max="3"
         onChange={updateSlides}
       />
-      <IconButton>
-        <label
-          style={{ cursor: "pointer", width: "25px", height: "25px" }}
-          htmlFor="slides"
-        >
-          <AddIcon></AddIcon>
-        </label>
-      </IconButton>
+      {architecture?.home?.sliderComponent?.length < 3 ? (
+        <IconButton>
+          <label
+            style={{ cursor: "pointer", width: "25px", height: "25px" }}
+            htmlFor="slides"
+          >
+            <AddIcon></AddIcon>
+          </label>
+        </IconButton>
+      ) : null}
     </form>
   );
 
@@ -344,81 +405,89 @@ function Architecture(props) {
     </form>
   );
 
-  // const galleryForm = (
-  //   <form>
-  //     <div className={styles.slidesContainer}>
-  //       {architecture?.home?.sliderComponent.map((slide, index) => {
-  //         return (
-  //           <div key={index} className={styles.slidePreview}>
-  //             <div className={styles.closeIcon}>
-  //               <IconButton
-  //                 style={{ width: "30px", height: "30px" }}
-  //                 onClick={() => deleteSlide(slide)}
-  //               >
-  //                 <CloseIcon />
-  //               </IconButton>
-  //             </div>
-  //             <img alt={index} src={slide.image} />
-
-  //             <p>
-  //               category link:{" "}
-  //               <select
-  //                 className="defaultInput"
-  //                 value={slide.category}
-  //                 onChange={(e) => updateSlideCategory(e, slide)}
-  //                 disabled={slide.link && slide.link !== ""}
-  //                 style={
-  //                   slide.link && slide.link !== ""
-  //                     ? { backgroundColor: "#ccc" }
-  //                     : null
-  //                 }
-  //               >
-  //                 <option value="">
-  //                   Select a category (if you have a custom link it will
-  //                   override this)
-  //                 </option>
-  //                 {categories.map((category) => {
-  //                   return (
-  //                     <option key={category.name} value={category.name}>
-  //                       {category.name}
-  //                     </option>
-  //                   );
-  //                 })}
-  //               </select>
-  //             </p>
-  //             <p>
-  //               custom link:{" "}
-  //               <input
-  //                 type="text"
-  //                 className="defaultInput"
-  //                 value={slide.link}
-  //                 onChange={(e) => updateSlideLink(e, slide)}
-  //               />
-  //             </p>
-  //           </div>
-  //         );
-  //       })}
-  //     </div>
-  //     <input
-  //       id="slides"
-  //       hidden
-  //       type="file"
-  //       accept="image/*"
-  //       multiple
-  //       name="slides"
-  //       max="3"
-  //       onChange={updateSlides}
-  //     />
-  //     <IconButton>
-  //       <label
-  //         style={{ cursor: "pointer", width: "25px", height: "25px" }}
-  //         htmlFor="slides"
-  //       >
-  //         <AddIcon></AddIcon>
-  //       </label>
-  //     </IconButton>
-  //   </form>
-  // );
+  const galleryForm = (
+    <form>
+      <p>
+        visible index: (this will determine the display order of this section on
+        your home screen)
+        <input
+          type="text"
+          className="defaultInput"
+          value={architecture.home?.galleryComponent?.visibleIndex}
+          onChange={(e) => {
+            setArchitecture({
+              ...architecture,
+              home: {
+                ...architecture.home,
+                galleryComponent: {
+                  ...architecture.home.galleryComponent,
+                  visibleIndex: e.target.value,
+                },
+              },
+            });
+          }}
+        />
+      </p>
+      <br />
+      <div className={styles.slidesContainer}>
+        {architecture?.home?.galleryComponent?.content?.map((block, index) => {
+          return (
+            <div key={index} className={styles.slidePreview}>
+              <div className={styles.closeIcon}>
+                <IconButton
+                  style={{ width: "30px", height: "30px" }}
+                  onClick={() => deleteBlock(block)}
+                >
+                  <CloseIcon />
+                </IconButton>
+              </div>
+              <img alt={index} src={block.image} />
+              <p>
+                link:
+                <input
+                  type="text"
+                  name="link"
+                  className="defaultInput"
+                  value={block.link}
+                  onChange={(e) => updateBlock(e, block)}
+                />
+              </p>
+              <p>
+                text:
+                <input
+                  type="text"
+                  name="text"
+                  className="defaultInput"
+                  value={block.text}
+                  onChange={(e) => updateBlock(e, block)}
+                />
+              </p>
+            </div>
+          );
+        })}
+      </div>
+      <input
+        id="blocks"
+        hidden
+        type="file"
+        accept="image/*"
+        multiple
+        name="blocks"
+        max="3"
+        onChange={updateBlocks}
+      />
+      {architecture?.home?.galleryComponent?.content?.length < 4 ? (
+        <IconButton>
+          <label
+            style={{ cursor: "pointer", width: "25px", height: "25px" }}
+            htmlFor="blocks"
+          >
+            <AddIcon></AddIcon>
+          </label>
+        </IconButton>
+      ) : null}
+    </form>
+  );
 
   return (
     <AdminLayout>
@@ -429,7 +498,7 @@ function Architecture(props) {
           onClose={closeAction}
           cancelAction={closeAction}
           size={
-            action === "SLIDER-FORM"
+            action === "SLIDER-FORM" || action === "GALLERY-FORM"
               ? ModalSizes.BIG
               : action === "CATEGORIES-GRID-FORM"
               ? ModalSizes.MEDIUM
@@ -446,22 +515,19 @@ function Architecture(props) {
               ? categoriesGridForm
               : action === "DISCOUNT-FORM"
               ? discountsSectionForm
+              : action === "GALLERY-FORM"
+              ? galleryForm
               : null}
           </div>
         </XModal>
         <section className={styles.container}>
           <h1>Configure your shop to your taste</h1>
           <p>
-            - when you finish click here to save your settings{" "}
-            {loading ? (
-              <IconButton>
-                <CircularProgress color="black" size={"22px"} />
-              </IconButton>
-            ) : (
-              <IconButton color="info" onClick={saveArchitecture}>
-                <CheckCircleIcon />
-              </IconButton>
-            )}
+            - when you finish click on the{" "}
+            <IconButton disabled>
+              <CheckCircleIcon />
+            </IconButton>{" "}
+            icon to save your settings
           </p>
           {loading ? (
             <Skeleton
@@ -482,13 +548,19 @@ function Architecture(props) {
                   }}
                 >
                   <SettingsIcon />
-                </IconButton>
+                </IconButton>{" "}
+                |{" "}
+                <IconButton
+                  color="info"
+                  onClick={() => saveArchitecture("sliderComponent")}
+                >
+                  <CheckCircleIcon />
+                </IconButton>{" "}
               </p>
               <HomeSlider
                 slides={
-                  architecture.home.sliderComponent.length &&
-                  architecture.home.sliderComponent[0].image !== ""
-                    ? architecture.home?.sliderComponent
+                  architecture.home.sliderComponent.length
+                    ? architecture.home.sliderComponent
                     : [
                         {
                           link: "",
@@ -509,7 +581,14 @@ function Architecture(props) {
                   }}
                 >
                   <SettingsIcon />
-                </IconButton>
+                </IconButton>{" "}
+                |{" "}
+                <IconButton
+                  color="info"
+                  onClick={() => saveArchitecture("categoriesComponent")}
+                >
+                  <CheckCircleIcon />
+                </IconButton>{" "}
               </p>
               {categories.length ? (
                 <CategoriesGrid
@@ -657,7 +736,14 @@ function Architecture(props) {
                   }}
                 >
                   <SettingsIcon />
-                </IconButton>
+                </IconButton>{" "}
+                |{" "}
+                <IconButton
+                  color="info"
+                  onClick={() => saveArchitecture("discountComponent")}
+                >
+                  <CheckCircleIcon />
+                </IconButton>{" "}
               </p>
               {discounts.length ? (
                 <DiscountsSection
@@ -805,9 +891,36 @@ function Architecture(props) {
                   }}
                 >
                   <SettingsIcon />
-                </IconButton>
+                </IconButton>{" "}
+                |{" "}
+                <IconButton
+                  color="info"
+                  onClick={() => saveArchitecture("galleryComponent")}
+                >
+                  <CheckCircleIcon />
+                </IconButton>{" "}
               </p>
               <XGallery content={architecture.home.galleryComponent.content} />
+              <h1>Contact</h1>
+              <p>
+                - slider (recommended resolution is 1500 x 600){" "}
+                <IconButton
+                  color="info"
+                  onClick={() => {
+                    setTitle("select home slider images");
+                    setAction("SLIDER-FORM");
+                  }}
+                >
+                  <SettingsIcon />
+                </IconButton>{" "}
+                |{" "}
+                <IconButton
+                  color="info"
+                  onClick={() => saveArchitecture("sliderComponent")}
+                >
+                  <CheckCircleIcon />
+                </IconButton>{" "}
+              </p>
             </div>
           )}
         </section>
