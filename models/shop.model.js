@@ -32,15 +32,15 @@ const shopSchema = new Schema(
         },
         contact: {
           address: "",
-          socials: [
-            { instagram: "" },
-            { tiktok: "" },
-            { facebook: "" },
-            { youtube: "" },
-            { linkedIn: "" },
-          ],
+          socials: {
+            instagram: "",
+            tiktok: "",
+            facebook: "",
+            youtube: "",
+            linkedIn: "",
+          },
 
-          direct: [{ email: "" }, { phone: "" }],
+          direct: { email: "", phone: "" },
         },
         about: "",
       },

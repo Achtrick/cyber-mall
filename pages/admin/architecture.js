@@ -9,9 +9,17 @@ import axios from "axios";
 import HomeSlider from "../../components/shop/HomeSlider";
 import {
   AddIcon,
+  AddressIcon,
   CheckCircleIcon,
   CloseIcon,
+  FacebookIcon,
+  InstagramIcon,
+  LinkedInIcon,
+  MailIcon,
+  PhoneEnabledIcon,
   SettingsIcon,
+  TiktokIcon,
+  YouTubeIcon,
 } from "../../utils/theme/icons";
 import XModal from "../../components/ui-components/XModal";
 import { ModalSizes } from "../../components/admin/ModalSettings";
@@ -20,6 +28,7 @@ import CategoriesGrid from "../../components/shop/CategoriesGrid";
 import { getError } from "../../utils/shared/getError";
 import DiscountsSection from "../../components/shop/DiscountsSection";
 import XGallery from "../../components/ui-components/XGallery";
+import Image from "next/image";
 
 function Architecture(props) {
   const { userInfo } = useSelector((state) => state.auth);
@@ -31,6 +40,7 @@ function Architecture(props) {
   const [discounts, setDiscounts] = useState([]);
 
   const [architecture, setArchitecture] = useState({});
+  const [logo, setLogo] = useState(null);
 
   const [action, setAction] = useState("");
   const [title, setTitle] = useState("");
@@ -48,7 +58,7 @@ function Architecture(props) {
         shopName: userInfo.shop.name,
       });
       setShopInfo(data);
-
+      setLogo(data.logo);
       setArchitecture(data.architecture);
       setLoading(false);
     } catch (error) {
@@ -82,7 +92,7 @@ function Architecture(props) {
     setLoading(true);
     try {
       let body = {};
-      console.log(architecture);
+
       switch (component) {
         case "sliderComponent":
           body = architecture.home.sliderComponent;
@@ -96,6 +106,12 @@ function Architecture(props) {
         case "galleryComponent":
           body = architecture.home.galleryComponent;
           break;
+        case "contactComponent":
+          body = architecture.contact;
+          break;
+        case "aboutComponent":
+          body = architecture.about;
+          break;
 
         default:
           break;
@@ -105,6 +121,21 @@ function Architecture(props) {
         shopId: shopInfo._id,
         component: component,
         body: body,
+      });
+      enqueueSnackbar(data.message, { variant: "success" });
+      setLoading(false);
+    } catch (error) {
+      enqueueSnackbar(getError(error), { variant: "error" });
+      setLoading(false);
+    }
+  };
+
+  const updateLogo = async () => {
+    setLoading(true);
+    try {
+      const { data } = await axios.post("/api/admin/shop/update-logo", {
+        shopId: shopInfo._id,
+        logo: logo,
       });
       enqueueSnackbar(data.message, { variant: "success" });
       setLoading(false);
@@ -251,6 +282,20 @@ function Architecture(props) {
     });
   };
 
+  // CONTACT FUNCTIONS
+  const onSocialsChange = (e) => {
+    setArchitecture({
+      ...architecture,
+      contact: {
+        ...architecture.contact,
+        socials: {
+          ...architecture.contact.socials,
+          [e.target.name]: e.target.value,
+        },
+      },
+    });
+  };
+
   // FORMS
   const sliderForm = (
     <form>
@@ -336,7 +381,8 @@ function Architecture(props) {
         visible index: (this will determine the display order of this section on
         your home screen)
         <input
-          type="text"
+          type="number"
+          min={0}
           className="defaultInput"
           value={architecture.home?.categoriesComponent?.visibleIndex}
           onChange={(e) => {
@@ -385,7 +431,8 @@ function Architecture(props) {
         visible index: (this will determine the display order of this section on
         your home screen)
         <input
-          type="text"
+          type="number"
+          min={0}
           className="defaultInput"
           value={architecture.home?.discountComponent?.visibleIndex}
           onChange={(e) => {
@@ -411,7 +458,8 @@ function Architecture(props) {
         visible index: (this will determine the display order of this section on
         your home screen)
         <input
-          type="text"
+          type="number"
+          min={0}
           className="defaultInput"
           value={architecture.home?.galleryComponent?.visibleIndex}
           onChange={(e) => {
@@ -537,6 +585,54 @@ function Architecture(props) {
             />
           ) : (
             <div className={styles.container}>
+              <h1>Logo</h1>
+              <div className="row" style={{ justifyContent: "flex-start" }}>
+                {logo ? (
+                  <Image
+                    alt="logo"
+                    src={logo}
+                    width={"100"}
+                    height={"100"}
+                    style={{ objectFit: "contain" }}
+                  />
+                ) : (
+                  <Image
+                    alt="logo"
+                    src={"/images/default-store.png"}
+                    width={"100"}
+                    height={"100"}
+                    style={{ objectFit: "contain" }}
+                  />
+                )}
+                <input
+                  id="logo"
+                  hidden
+                  type="file"
+                  accept="image/*"
+                  name="logo"
+                  onChange={async (e) => {
+                    const base64 = await compressImage(e.target.files[0]);
+                    setLogo(base64);
+                  }}
+                />
+                &nbsp;&nbsp;
+                <IconButton color="info">
+                  <label
+                    style={{ cursor: "pointer", width: "25px", height: "25px" }}
+                    htmlFor="logo"
+                  >
+                    <SettingsIcon />
+                  </label>
+                </IconButton>{" "}
+                |{" "}
+                <IconButton color="info" onClick={updateLogo}>
+                  <label
+                    style={{ cursor: "pointer", width: "25px", height: "25px" }}
+                  >
+                    <CheckCircleIcon />
+                  </label>
+                </IconButton>{" "}
+              </div>
               <h1>Home Page</h1>
               <p>
                 - slider (recommended resolution is 1500 x 600){" "}
@@ -901,26 +997,165 @@ function Architecture(props) {
                 </IconButton>{" "}
               </p>
               <XGallery content={architecture.home.galleryComponent.content} />
-              <h1>Contact</h1>
+              <h1>Contact Info</h1>
               <p>
-                - slider (recommended resolution is 1500 x 600){" "}
+                - fill your contacts infos
                 <IconButton
                   color="info"
-                  onClick={() => {
-                    setTitle("select home slider images");
-                    setAction("SLIDER-FORM");
-                  }}
-                >
-                  <SettingsIcon />
-                </IconButton>{" "}
-                |{" "}
-                <IconButton
-                  color="info"
-                  onClick={() => saveArchitecture("sliderComponent")}
+                  onClick={() => saveArchitecture("contactComponent")}
                 >
                   <CheckCircleIcon />
                 </IconButton>{" "}
               </p>
+              <div className="row" style={{ justifyContent: "flex-start" }}>
+                <AddressIcon />
+                &nbsp;
+                <input
+                  name="address"
+                  placeholder="address"
+                  value={architecture.contact.address}
+                  onChange={(e) => {
+                    setArchitecture({
+                      ...architecture,
+                      contact: {
+                        ...architecture.contact,
+                        address: e.target.value,
+                      },
+                    });
+                  }}
+                  className="defaultInput"
+                  style={{ width: "300px" }}
+                />
+              </div>
+              <div className="row" style={{ justifyContent: "flex-start" }}>
+                <MailIcon />
+                &nbsp;
+                <input
+                  type="mail"
+                  name="email"
+                  placeholder="email"
+                  value={architecture.contact.direct.email}
+                  onChange={(e) => {
+                    setArchitecture({
+                      ...architecture,
+                      contact: {
+                        ...architecture.contact,
+                        direct: {
+                          ...architecture.contact.direct,
+                          email: e.target.value,
+                        },
+                      },
+                    });
+                  }}
+                  className="defaultInput"
+                  style={{ width: "300px" }}
+                />
+              </div>
+              <div className="row" style={{ justifyContent: "flex-start" }}>
+                <PhoneEnabledIcon />
+                &nbsp;
+                <input
+                  type="number"
+                  name="phone"
+                  placeholder="phone"
+                  value={architecture.contact.direct.phone}
+                  onChange={(e) => {
+                    setArchitecture({
+                      ...architecture,
+                      contact: {
+                        ...architecture.contact,
+                        direct: {
+                          ...architecture.contact.direct,
+                          phone: e.target.value,
+                        },
+                      },
+                    });
+                  }}
+                  className="defaultInput"
+                  style={{ width: "300px" }}
+                />
+              </div>
+              <div className="row" style={{ justifyContent: "flex-start" }}>
+                <FacebookIcon />
+                &nbsp;
+                <input
+                  name="facebook"
+                  placeholder="facebook"
+                  value={architecture.contact.socials.facebook}
+                  onChange={onSocialsChange}
+                  className="defaultInput"
+                  style={{ width: "300px" }}
+                />
+              </div>
+              <div className="row" style={{ justifyContent: "flex-start" }}>
+                <InstagramIcon />
+                &nbsp;
+                <input
+                  name="instagram"
+                  placeholder="instagram"
+                  value={architecture.contact.socials.instagram}
+                  onChange={onSocialsChange}
+                  className="defaultInput"
+                  style={{ width: "300px" }}
+                />
+              </div>
+              <div className="row" style={{ justifyContent: "flex-start" }}>
+                <TiktokIcon />
+                &nbsp;
+                <input
+                  name="tiktok"
+                  placeholder="tiktok"
+                  value={architecture.contact.socials.tiktok}
+                  onChange={onSocialsChange}
+                  className="defaultInput"
+                  style={{ width: "300px" }}
+                />
+              </div>
+              <div className="row" style={{ justifyContent: "flex-start" }}>
+                <YouTubeIcon />
+                &nbsp;
+                <input
+                  name="youtube"
+                  placeholder="youtube"
+                  value={architecture.contact.socials.youtube}
+                  onChange={onSocialsChange}
+                  className="defaultInput"
+                  style={{ width: "300px" }}
+                />
+              </div>
+              <div className="row" style={{ justifyContent: "flex-start" }}>
+                <LinkedInIcon />
+                &nbsp;
+                <input
+                  name="linkedIn"
+                  placeholder="linkedIn"
+                  value={architecture.contact.socials.linkedIn}
+                  onChange={onSocialsChange}
+                  className="defaultInput"
+                  style={{ width: "300px" }}
+                />
+              </div>
+              <h1>About Info</h1>
+              <p>
+                - who are you and what do you sell ?
+                <IconButton
+                  color="info"
+                  onClick={() => saveArchitecture("aboutComponent")}
+                >
+                  <CheckCircleIcon />
+                </IconButton>{" "}
+              </p>
+              <textarea
+                rows={5}
+                name="about"
+                placeholder="i am a company and i sell awesome stuff"
+                value={architecture.about}
+                onChange={(e) => {
+                  setArchitecture({ ...architecture, about: e.target.value });
+                }}
+                className="defaultInput"
+                style={{ width: "500px", height: "100px" }}
+              />
             </div>
           )}
         </section>

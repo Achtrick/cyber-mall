@@ -19,6 +19,17 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import FacebookIcon from "@mui/icons-material/Facebook";
+import InstagramIcon from "@mui/icons-material/Instagram";
+import MusicNoteIcon from "@mui/icons-material/MusicNote";
+import YouTubeIcon from "@mui/icons-material/YouTube";
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import BusinessIcon from "@mui/icons-material/Business";
+import MailIcon from "@mui/icons-material/Mail";
+import PhoneEnabledIcon from "@mui/icons-material/PhoneEnabled";
+
+const TiktokIcon = MusicNoteIcon;
+const AddressIcon = BusinessIcon;
 
 export {
   CloseIcon,
@@ -42,4 +53,12 @@ export {
   KeyboardArrowUpIcon,
   ShoppingCartIcon,
   CheckCircleIcon,
+  FacebookIcon,
+  InstagramIcon,
+  TiktokIcon,
+  YouTubeIcon,
+  LinkedInIcon,
+  AddressIcon,
+  MailIcon,
+  PhoneEnabledIcon,
 };

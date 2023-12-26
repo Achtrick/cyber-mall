@@ -52,8 +52,8 @@ function ShopHeader({ shopInfo, deducedColor, deducedColorInverse, ...props }) {
             <Image
               alt="logo"
               src={shopInfo.logo}
-              width={"30"}
-              height={"30"}
+              width={"60"}
+              height={"60"}
               style={{
                 objectFit: "contain",
               }}

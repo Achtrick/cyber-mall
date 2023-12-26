@@ -7,22 +7,46 @@ const handler = nc();
 
 handler.post(auth, async (req, res) => {
   await connectDB();
-  const { shopId, component, ...body } = req.body;
+  const { shopId, component, body } = req.body;
 
   try {
     const shop = await Shop.findOne({ _id: shopId });
     switch (component) {
       case "sliderComponent":
-        shop.architecture.home.sliderComponent = body;
+        shop.architecture = {
+          ...shop.architecture,
+          home: { ...shop.architecture.home, sliderComponent: body },
+        };
         break;
       case "categoriesComponent":
-        shop.architecture.home.categoriesComponent = body;
+        shop.architecture = {
+          ...shop.architecture,
+          home: { ...shop.architecture.home, categoriesComponent: body },
+        };
         break;
       case "discountComponent":
-        shop.architecture.home.discountComponent = body;
+        shop.architecture = {
+          ...shop.architecture,
+          home: { ...shop.architecture.home, discountComponent: body },
+        };
         break;
       case "galleryComponent":
-        shop.architecture.home.galleryComponent = body;
+        shop.architecture = {
+          ...shop.architecture,
+          home: { ...shop.architecture.home, galleryComponent: body },
+        };
+        break;
+      case "contactComponent":
+        shop.architecture = {
+          ...shop.architecture,
+          contact: body,
+        };
+        break;
+      case "aboutComponent":
+        shop.architecture = {
+          ...shop.architecture,
+          about: body,
+        };
         break;
       default:
         break;
