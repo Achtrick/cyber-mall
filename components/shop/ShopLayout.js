@@ -6,7 +6,7 @@ function ShopLayout({ shopInfo, ...props }) {
   return (
     <>
       <ShopHeader shopInfo={shopInfo} />
-      <div>{props.children}</div>
+      <div style={{ marginTop: "80px" }}>{props.children}</div>
       <ShopFooter shopInfo={shopInfo} />
     </>
   );

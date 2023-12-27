@@ -1,11 +1,21 @@
 import React from "react";
-import Badge from "@mui/material/Badge";
+import { deduceColor } from "../../utils/config/convertHelper";
+import styles from "../../styles/components/XBadge.module.scss";
 
 function XBadge({ content, color, ...props }) {
   return (
-    <Badge badgeContent={content} color={color}>
+    <div className={styles.badgeContainer}>
+      <span
+        className={styles.badge}
+        style={{
+          backgroundColor: color,
+          color: deduceColor(color),
+        }}
+      >
+        5
+      </span>
       {props.children}
-    </Badge>
+    </div>
   );
 }
 

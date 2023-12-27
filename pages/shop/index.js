@@ -15,7 +15,7 @@ import DiscountsSection from "../../components/shop/DiscountsSection";
 
 function Shop(props) {
   const router = useRouter();
-  const { shopName } = router.query;
+  const { shop } = router.query;
   const { enqueueSnackbar } = useSnackbar();
 
   const [loading, setLoading] = useState(true);
@@ -28,13 +28,13 @@ function Shop(props) {
   const [discounts, setDiscounts] = useState([]);
 
   useEffect(() => {
-    if (shopName) getShopInfo();
-  }, [shopName]);
+    if (shop) getShopInfo();
+  }, [shop]);
 
   const getShopInfo = async () => {
     try {
       const { data } = await axios.post("/api/shop/getInfo", {
-        shopName: shopName,
+        shopName: shop,
       });
 
       setShopInfo(data);
@@ -95,7 +95,7 @@ function Shop(props) {
                 order: architecture.home.categoriesComponent.visibleIndex,
               }}
             >
-              <XHr color={shopInfo.settings.secondaryColor} width="80%" />
+              <XHr color={shopInfo.settings.secondaryColor} width="30%" />
               {loadingCategories ? (
                 <Skeleton
                   variant="rectangular"
@@ -116,7 +116,7 @@ function Shop(props) {
                 order: architecture.home.galleryComponent.visibleIndex,
               }}
             >
-              <XHr color={shopInfo.settings.secondaryColor} width="80%" />
+              <XHr color={shopInfo.settings.secondaryColor} width="30%" />
 
               <XGallery content={architecture.home.galleryComponent.content} />
             </div>
@@ -126,7 +126,7 @@ function Shop(props) {
                 order: architecture.home.discountComponent.visibleIndex,
               }}
             >
-              <XHr color={shopInfo.settings.secondaryColor} width="80%" />
+              <XHr color={shopInfo.settings.secondaryColor} width="30%" />
               {loadingDiscounts ? (
                 <Skeleton
                   variant="rectangular"

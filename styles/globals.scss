@@ -191,18 +191,7 @@ th {
   align-items: center;
   justify-content: center;
 }
-.badge-container {
-  position: relative;
-  .badge {
-    position: absolute;
-    top: -5px;
-    right: -5px;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    @include flexLayout(center, center, row);
-  }
-}
+
 // defaults
 .swiper-slide {
   img {

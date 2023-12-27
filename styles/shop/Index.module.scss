@@ -11,6 +11,7 @@
 
 .container {
   width: 100%;
+  padding: 0px 5vw;
   @include flexLayout(center, flex-start, column);
 }
 

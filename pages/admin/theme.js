@@ -8,12 +8,18 @@ import { Button, CircularProgress, IconButton, Skeleton } from "@mui/material";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { deduceColor, isColorDark } from "../../utils/config/convertHelper";
-import { CheckCircleIcon, PaletteIcon } from "../../utils/theme/icons";
+import {
+  CheckCircleIcon,
+  PaletteIcon,
+  ShoppingCartIcon,
+} from "../../utils/theme/icons";
 import XModal from "../../components/ui-components/XModal";
 import { AdminActions, ModalSizes } from "../../components/admin/ModalSettings";
 import { getError } from "../../utils/shared/getError";
 import { useSnackbar } from "notistack";
 import XButton from "../../components/ui-components/XButton";
+import XBadge from "../../components/ui-components/XBadge";
+import XHr from "../../components/ui-components/XHr";
 
 function Theme(props) {
   const { userInfo } = useSelector((state) => state.auth);
@@ -171,17 +177,37 @@ function Theme(props) {
                 </div>
                 <br />
                 <div className={themeStyles.bodyPreview}>
-                  <p>- controls will look like this:</p>
+                  <p>- tables color will look like this:</p>
                   <br />
-                  <div className="row" style={{ justifyContent: "flex-start" }}>
-                    <XButton text="action" color={colors.primaryColor} />
-                    &nbsp;
-                    <CircularProgress
-                      size={"22px"}
-                      style={{ marginLeft: "10px", color: colors.primaryColor }}
-                    />
-                  </div>
-                  <br />
+                  <table>
+                    <thead
+                      style={{
+                        backgroundColor: colors.headerColor,
+                        color: deduceColor(colors.headerColor),
+                      }}
+                    >
+                      <tr>
+                        <th>attribute 1</th>
+                        <th>attribute 2</th>
+                        <th>attribute 3</th>
+                        <th>attribute 4</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>value 1</td>
+                        <td>value 2</td>
+                        <td>value 3</td>
+                        <td>value 4</td>
+                      </tr>
+                      <tr>
+                        <td>value 1</td>
+                        <td>value 2</td>
+                        <td>value 3</td>
+                        <td>value 4</td>
+                      </tr>
+                    </tbody>
+                  </table>
                   <br />
                   <p>- main color will look like this:</p>
                   <br />
@@ -223,37 +249,30 @@ function Theme(props) {
                     </IconButton>
                   </div>
                   <br />
-                  <p>- tables color will look like this:</p>
+                  <p>- controls will look like this:</p>
                   <br />
-                  <table>
-                    <thead
-                      style={{
-                        backgroundColor: colors.headerColor,
-                        color: deduceColor(colors.headerColor),
-                      }}
-                    >
-                      <tr>
-                        <th>attribute 1</th>
-                        <th>attribute 2</th>
-                        <th>attribute 3</th>
-                        <th>attribute 4</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>value 1</td>
-                        <td>value 2</td>
-                        <td>value 3</td>
-                        <td>value 4</td>
-                      </tr>
-                      <tr>
-                        <td>value 1</td>
-                        <td>value 2</td>
-                        <td>value 3</td>
-                        <td>value 4</td>
-                      </tr>
-                    </tbody>
-                  </table>
+                  <div className="row" style={{ justifyContent: "flex-start" }}>
+                    <XButton text="action" color={colors.primaryColor} />
+                    &nbsp;
+                    <XBadge color={colors.primaryColor} content={5}>
+                      <IconButton
+                        color={deduceColor(shopInfo.settings.headerColor)}
+                      >
+                        <ShoppingCartIcon />
+                      </IconButton>
+                    </XBadge>
+                    &nbsp;
+                    <CircularProgress
+                      size={"22px"}
+                      style={{ marginLeft: "10px", color: colors.primaryColor }}
+                    />
+                  </div>
+                  <br />
+                  <p>- accents will look like this:</p>
+                  <br />
+                  <div className="row" style={{ justifyContent: "flex-start" }}>
+                    <XHr color={colors.secondaryColor} />
+                  </div>
                 </div>
                 <br />
                 <br />

@@ -24,7 +24,7 @@ function DiscountsSection({
                 <Link
                   href={
                     activateControls
-                      ? `product/?shopName=${shopName}&?id=${product._id}`
+                      ? `product/?shop=${shopName}&?id=${product._id}`
                       : ""
                   }
                 >
@@ -32,10 +32,7 @@ function DiscountsSection({
                 </Link>
                 <p>{product.designation}</p>
                 <p className={styles.oldPrice}>{product.price + " DT"}</p>
-                <p
-                  style={{ color: settings.secondaryColor }}
-                  className={styles.price}
-                >
+                <p className={styles.price}>
                   {calculateDiscount(product.price, product.discount) + " DT"}
                 </p>
                 <XButton

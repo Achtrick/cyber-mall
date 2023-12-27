@@ -1,12 +1,20 @@
-import React, { useEffect, useState } from "react";
-import AdminLayout from "../../components/admin/AdminLayout";
-import styles from "../../styles/admin/Dashboard.module.scss";
-import DisconnectedGuard from "../../components/guards/disconnectedGuard";
-import { useSelector } from "react-redux";
-import { useSnackbar } from "notistack";
-import { CircularProgress, IconButton, Skeleton } from "@mui/material";
+import { IconButton, Skeleton } from "@mui/material";
 import axios from "axios";
+import Image from "next/image";
+import { useSnackbar } from "notistack";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import AdminLayout from "../../components/admin/AdminLayout";
+import { ModalSizes } from "../../components/admin/ModalSettings";
+import DisconnectedGuard from "../../components/guards/disconnectedGuard";
+import CategoriesGrid from "../../components/shop/CategoriesGrid";
+import DiscountsSection from "../../components/shop/DiscountsSection";
 import HomeSlider from "../../components/shop/HomeSlider";
+import XGallery from "../../components/ui-components/XGallery";
+import XModal from "../../components/ui-components/XModal";
+import styles from "../../styles/admin/Dashboard.module.scss";
+import { compressImage } from "../../utils/config/convertHelper";
+import { getError } from "../../utils/shared/getError";
 import {
   AddIcon,
   AddressIcon,
@@ -21,14 +29,6 @@ import {
   TiktokIcon,
   YouTubeIcon,
 } from "../../utils/theme/icons";
-import XModal from "../../components/ui-components/XModal";
-import { ModalSizes } from "../../components/admin/ModalSettings";
-import { compressImage } from "../../utils/config/convertHelper";
-import CategoriesGrid from "../../components/shop/CategoriesGrid";
-import { getError } from "../../utils/shared/getError";
-import DiscountsSection from "../../components/shop/DiscountsSection";
-import XGallery from "../../components/ui-components/XGallery";
-import Image from "next/image";
 
 function Architecture(props) {
   const { userInfo } = useSelector((state) => state.auth);
@@ -633,6 +633,8 @@ function Architecture(props) {
                   </label>
                 </IconButton>{" "}
               </div>
+              <br />
+              <hr />
               <h1>Home Page</h1>
               <p>
                 - slider (recommended resolution is 1500 x 600){" "}
@@ -997,6 +999,8 @@ function Architecture(props) {
                 </IconButton>{" "}
               </p>
               <XGallery content={architecture.home.galleryComponent.content} />
+              <br />
+              <hr />
               <h1>Contact Info</h1>
               <p>
                 - fill your contacts infos
@@ -1135,6 +1139,8 @@ function Architecture(props) {
                   style={{ width: "300px" }}
                 />
               </div>
+              <br />
+              <hr />
               <h1>About Info</h1>
               <p>
                 - who are you and what do you sell ?

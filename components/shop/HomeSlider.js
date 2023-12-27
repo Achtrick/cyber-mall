@@ -12,7 +12,7 @@ function HomeSlider({ slides, ...props }) {
           spaceBetween={0}
           loop={true}
           autoplay={slides.length > 1}
-          style={{ width: "100%", height: "80vh" }}
+          style={{ width: "100%", height: "60vh" }}
         >
           {slides.map((slide, index) => {
             return (

@@ -12,49 +12,57 @@
 .header {
   @include flexContainer(center, space-between);
   width: 100%;
-  padding: 10px;
+  padding: 10px 5vw;
   height: 80px;
-  z-index: 1000;
+  z-index: 2000;
+  position: fixed;
+  top: 0px;
 }
 .logo {
-  width: 30%;
-  @include flexContainer(center, flex-start);
+  width: calc(100% / 3);
+  @include flexContainer(center, center);
 }
-.links {
-  width: 40%;
-  @include flexContainer(center, space-around);
-  .categoriesTitle {
-    p {
-      cursor: pointer;
-      @include flexContainer(center);
-    }
+.menu {
+  width: calc(100% / 3);
+}
+.controls {
+  width: calc(100% / 3);
+  @include flexContainer(center, flex-end);
+}
+.drawer {
+  width: clamp(300px, 80vw, 400px);
+  height: calc(100vh - 10px);
+  padding-top: 100px;
+  .container {
+    width: 100%;
+    height: 100%;
     position: relative;
-    .categoriesDropDown {
-      position: absolute;
-      top: 60px;
-      left: 0px;
-      border-radius: 4px;
-      padding: 10px;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s;
-      @include flexContainer(flex-start, flex-start, column);
-      width: 200px;
-      .category {
-        margin: 5px 0px;
-        cursor: pointer;
-      }
-      .category:hover {
-        text-decoration: underline;
-      }
+    .link {
+      padding: 15px 20px;
+      margin: 10px 0px;
+      transition: all 0.2s;
     }
-    .categoriesDropDownVisible {
-      pointer-events: all;
-      opacity: 1;
+    .socials {
+      width: 100%;
+      height: 100px;
+      position: absolute;
+      bottom: 0px;
+      left: 0px;
+      background-color: #eee;
+      @include flexContainer(center, space-around);
     }
   }
 }
-.controls {
-  width: 30%;
-  @include flexContainer(center, flex-end);
+.search {
+  @include flexContainer;
+  width: 100vw;
+  height: 80px;
+  input {
+    padding-right: 80px !important;
+    font-size: 17px;
+  }
+  .controls {
+    width: 100px;
+    margin-left: -100px;
+  }
 }

@@ -39,7 +39,6 @@ const shopSchema = new Schema(
             youtube: "",
             linkedIn: "",
           },
-
           direct: { email: "", phone: "" },
         },
         about: "",
