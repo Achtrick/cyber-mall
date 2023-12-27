@@ -1,12 +1,11 @@
 import nc from "next-connect";
 import Product from "../../../models/product.model";
 import connectDB from "../../../utils/connectDB";
-import auth from "../../../middlewares/admin-auth";
 import mongoose from "mongoose";
 
 const handler = nc();
 
-handler.post(auth, async (req, res) => {
+handler.post(async (req, res) => {
   const { shopId } = req.body;
   try {
     await connectDB();

@@ -1,12 +1,13 @@
 import React from "react";
+import { deduceColor } from "../../utils/config/convertHelper";
 
-function ShopFooter({ deducedColor, deducedColorInverse, shopInfo }) {
+function ShopFooter({ shopInfo }) {
   return (
     <div
       style={{
         backgroundColor: shopInfo.settings.footerColor,
-        color: deducedColor,
-        borderTop: `1px solid ${deducedColor}`,
+        color: deduceColor(shopInfo.settings.footerColor),
+        borderTop: `1px solid ${deduceColor(shopInfo.settings.footerColor)}`,
       }}
     >
       this is the footer

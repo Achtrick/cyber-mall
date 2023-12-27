@@ -1,0 +1,21 @@
+@mixin flexLayout(
+  $alignItems: center,
+  $justifyContent: center,
+  $flexDirection: row
+) {
+  display: flex;
+  flex-direction: $flexDirection;
+  align-items: $alignItems;
+  justify-content: $justifyContent;
+}
+
+.container {
+  width: 100%;
+  @include flexLayout(center, flex-start, column);
+}
+
+.orderedComponent {
+  margin: 20px 0px;
+  width: 100%;
+  @include flexLayout(center, center, column);
+}

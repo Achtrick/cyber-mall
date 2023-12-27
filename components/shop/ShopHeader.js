@@ -4,14 +4,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import styles from "../../styles/shop/ShopHeader.module.scss";
-import { isColorDark } from "../../utils/config/convertHelper";
+import { deduceColor, isColorDark } from "../../utils/config/convertHelper";
 import {
   KeyboardArrowDownIcon,
   KeyboardArrowUpIcon,
   ShoppingCartIcon,
 } from "../../utils/theme/icons";
 
-function ShopHeader({ shopInfo, deducedColor, deducedColorInverse, ...props }) {
+function ShopHeader({ shopInfo, ...props }) {
   const [categoriesVisible, setCategoriesVisible] = useState(false);
 
   const [categories, setCategories] = useState([]);
@@ -42,13 +42,13 @@ function ShopHeader({ shopInfo, deducedColor, deducedColorInverse, ...props }) {
       className={styles.header}
       style={{
         backgroundColor: shopInfo.settings.headerColor,
-        color: deducedColor,
-        borderBottom: `1px solid ${deducedColor}`,
+        color: deduceColor(shopInfo.settings.headerColor),
+        borderBottom: `1px solid ${deduceColor(shopInfo.settings.headerColor)}`,
       }}
     >
       <div className={styles.logo}>
         {shopInfo.logo ? (
-          <Link href="/">
+          <Link href={`/shop?shopName=${shopInfo.name}`}>
             <Image
               alt="logo"
               src={shopInfo.logo}
@@ -60,7 +60,7 @@ function ShopHeader({ shopInfo, deducedColor, deducedColorInverse, ...props }) {
             />
           </Link>
         ) : (
-          <Link href="/">
+          <Link href={`/shop?shopName=${shopInfo.name}`}>
             <div className="row">
               <Image
                 alt="logo"
@@ -77,9 +77,7 @@ function ShopHeader({ shopInfo, deducedColor, deducedColorInverse, ...props }) {
               &nbsp;
               <p
                 style={{
-                  color: isColorDark(shopInfo.settings.headerColor)
-                    ? "white"
-                    : "black",
+                  color: deduceColor(shopInfo.settings.headerColor),
                 }}
               >
                 {shopInfo.name}
@@ -108,7 +106,7 @@ function ShopHeader({ shopInfo, deducedColor, deducedColorInverse, ...props }) {
           <span
             style={{
               backgroundColor: shopInfo.settings.headerColor,
-              border: `1px solid ${deducedColor}`,
+              border: `1px solid ${deduceColor(shopInfo.settings.headerColor)}`,
             }}
             className={
               categoriesVisible
@@ -132,14 +130,17 @@ function ShopHeader({ shopInfo, deducedColor, deducedColorInverse, ...props }) {
           <span
             className="badge"
             style={{
-              backgroundColor: deducedColor,
-              color: deducedColorInverse,
+              backgroundColor: deduceColor(shopInfo.settings.primaryColor),
+              color:
+                deduceColor(shopInfo.settings.primaryColor) === "white"
+                  ? "black"
+                  : "white",
             }}
           >
             5
           </span>
           <Link href={`shop/cart/?shopName=${shopInfo.name}`}>
-            <IconButton color={deducedColor}>
+            <IconButton color={deduceColor(shopInfo.settings.primaryColor)}>
               <ShoppingCartIcon />
             </IconButton>
           </Link>
