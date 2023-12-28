@@ -36,8 +36,9 @@ function ShopHeader({ shopInfo, ...props }) {
   const navigateToSeacrh = (e) => {
     e.preventDefault();
     router.push(
-      `shop/products/?shop=${shopInfo.name}&?searchTerm=${searchTerm}`
+      `/shop/products/?shop=${shopInfo.name}&searchTerm=${searchTerm}`
     );
+    setSearchOpen(false);
   };
 
   return (

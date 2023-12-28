@@ -27,7 +27,8 @@ function XSwiper({
       slidesPerView={slidesPerView}
       spaceBetween={spaceBetween}
       style={style}
-      navigation={false}
+      navigation={true}
+      pagination={false}
     >
       {props.children}
     </Swiper>

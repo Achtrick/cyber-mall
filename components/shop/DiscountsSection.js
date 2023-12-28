@@ -24,7 +24,7 @@ function DiscountsSection({
                 <Link
                   href={
                     activateControls
-                      ? `product/?shop=${shopName}&?id=${product._id}`
+                      ? `product/?shop=${shopName}&id=${product._id}`
                       : ""
                   }
                 >
