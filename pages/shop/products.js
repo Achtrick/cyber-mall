@@ -6,8 +6,12 @@ import React, { useEffect, useState } from "react";
 import LoadingScreen from "../../components/shop/LoadingScreen";
 import ShopLayout from "../../components/shop/ShopLayout";
 import XPagination from "../../components/ui-components/XPagination";
+import XAutoComplete from "../../components/ui-components/XAutoComplete";
 import styles from "../../styles/shop/Products.module.scss";
 import { getError } from "../../utils/shared/getError";
+import Link from "next/link";
+import { calculateDiscount } from "../../utils/config/convertHelper";
+import XButton from "../../components/ui-components/XButton";
 
 function Products(props) {
   const router = useRouter();
@@ -77,6 +81,7 @@ function Products(props) {
         sort: sort,
       });
       setProducts(data.products);
+      console.log(data.products);
       setCount(data.count);
       setLoadingProducts(false);
     } catch (error) {
@@ -89,6 +94,15 @@ function Products(props) {
     setPage(page - 1);
   };
 
+  const filter = async (filterOption, filterValue) => {
+    const pathname = router.pathname;
+    let query = router.query;
+
+    query = { ...query, [filterOption]: filterValue };
+
+    router.push({ pathname: pathname, query: query });
+  };
+
   return (
     <>
       {loading ? (
@@ -96,12 +110,39 @@ function Products(props) {
       ) : (
         <ShopLayout shopInfo={shopInfo}>
           <section className={styles.container}>
-            <XPagination
-              page={page}
-              count={count}
-              onChange={onPaginationChange}
-            />
-            <p>count:{count}</p>
+            <div className={styles.header}>
+              <XPagination
+                page={page}
+                count={count}
+                onChange={onPaginationChange}
+              />
+              <div className={styles.filter}>
+                <XAutoComplete
+                  placeholder="category"
+                  options={categories}
+                  value={categories.find((c) => c.name === category)?._id || ""}
+                  optionDisplayExpr="name"
+                  optionValueExpr="name"
+                  onChange={(e, val) => {
+                    filter("category", val?.name || "");
+                  }}
+                />
+                &nbsp;
+                <XAutoComplete
+                  placeholder="sort by price"
+                  options={[
+                    { name: "ascending", value: 1 },
+                    { name: "descending", value: -1 },
+                  ]}
+                  value={sort}
+                  optionDisplayExpr="name"
+                  optionValueExpr="value"
+                  onChange={(e, val) => {
+                    filter("sort", val?.value || "");
+                  }}
+                />
+              </div>
+            </div>
             {loadingProducts ? (
               <Skeleton
                 variant="rectangular"
@@ -109,7 +150,39 @@ function Products(props) {
                 height={"calc(100vh - 200px)"}
               />
             ) : (
-              <p>loaded products</p>
+              <div className="grid-4">
+                {products.map((product) => {
+                  return (
+                    <div className={styles.product} key={product._id}>
+                      <Link
+                        href={`product/?shop=${shopInfo.name}&id=${product._id}`}
+                      >
+                        <img
+                          alt={product.designation}
+                          src={product.images[0]}
+                        />
+                      </Link>
+                      <p>{product.designation}</p>
+                      {product.discount && product.discount !== 0 ? (
+                        <p className={styles.oldPrice}>
+                          {product.price + " DT"}
+                        </p>
+                      ) : null}
+                      <p className={styles.price}>
+                        {calculateDiscount(product.price, product.discount) +
+                          " DT"}
+                      </p>
+                      <XButton
+                        color={shopInfo.settings.primaryColor}
+                        text={"add to cart"}
+                        action={() => {
+                          console.log("add to cart");
+                        }}
+                      />
+                    </div>
+                  );
+                })}
+              </div>
             )}
           </section>
         </ShopLayout>

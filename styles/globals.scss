@@ -83,6 +83,16 @@ a {
     resize: none;
   }
 }
+option {
+  font-size: 15px;
+  text-transform: capitalize;
+  color: #bb84e8;
+}
+option:hover,
+option.hovered {
+  background-color: lightgray;
+  color: #bb84e8;
+}
 
 // ConnectedGuard
 .auth-guard-loader {
@@ -158,6 +168,11 @@ th {
   padding: 10px 0px;
   display: grid;
   grid-template-columns: auto auto auto auto auto;
+}
+.grid-4 {
+  padding: 20px 0px;
+  display: grid;
+  grid-template-columns: auto auto auto auto;
 }
 .card {
   width: 100%;

@@ -1,7 +1,7 @@
 import { Drawer, IconButton } from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import XBadge from "../../components/ui-components/XBadge";
 import styles from "../../styles/shop/ShopHeader.module.scss";
 import { deduceColor } from "../../utils/config/convertHelper";
@@ -11,6 +11,7 @@ import {
   InstagramIcon,
   LinkedInIcon,
   MenuIcon,
+  ResetIcon,
   SearchIcon,
   ShoppingCartIcon,
   TiktokIcon,
@@ -25,6 +26,10 @@ function ShopHeader({ shopInfo, ...props }) {
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
+  useEffect(() => {
+    if (router.isReady) setSearchTerm(router.query.searchTerm);
+  }, [router]);
+
   const toggleDrawer = () => {
     setDrawerOpen(!drawerOpen);
   };
@@ -33,12 +38,24 @@ function ShopHeader({ shopInfo, ...props }) {
     setSearchOpen(!searchOpen);
   };
 
-  const navigateToSeacrh = (e) => {
-    e.preventDefault();
-    router.push(
-      `/shop/products/?shop=${shopInfo.name}&searchTerm=${searchTerm}`
-    );
+  const navigateToSeacrh = (searchTerm) => {
+    const pathname = router.pathname;
+    let query = router.query;
+
+    query = { ...query, searchTerm: searchTerm };
+    if (pathname.includes("products")) {
+      router.push({ pathname: pathname, query: query });
+    } else {
+      router.push(
+        `/shop/products/?shop=${shopInfo.name}&searchTerm=${searchTerm}`
+      );
+    }
+
     setSearchOpen(false);
+  };
+
+  const restSearch = async () => {
+    navigateToSeacrh("");
   };
 
   return (
@@ -50,28 +67,32 @@ function ShopHeader({ shopInfo, ...props }) {
         sx={{ zIndex: "3000" }}
       >
         <section className={styles.search}>
-          <form
-            id="search"
-            onSubmit={navigateToSeacrh}
-            style={{ width: "90%" }}
-          >
-            <input
-              type="text"
-              placeholder="what are you looking for ?"
-              className="defaultInput"
-              style={{ border: `1px solid ${shopInfo.settings.primaryColor}` }}
-              value={searchTerm}
-              required
-              onChange={(e) => {
-                setSearchTerm(e.target.value);
-              }}
-            />
-          </form>
+          <input
+            type="text"
+            placeholder="what are you looking for ?"
+            className="defaultInput"
+            style={{
+              width: "90%",
+              border: `1px solid ${shopInfo.settings.primaryColor}`,
+            }}
+            value={searchTerm}
+            onChange={(e) => {
+              setSearchTerm(e.target.value);
+            }}
+          />
+
           <div className={styles.controls}>
+            {searchTerm && searchTerm !== "" ? (
+              <IconButton
+                style={{ color: shopInfo.settings.primaryColor }}
+                onClick={restSearch}
+              >
+                <ResetIcon />
+              </IconButton>
+            ) : null}
             <IconButton
-              form="search"
-              type="submit"
               style={{ color: shopInfo.settings.primaryColor }}
+              onClick={() => navigateToSeacrh(searchTerm)}
             >
               <SearchIcon />
             </IconButton>

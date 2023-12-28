@@ -139,6 +139,7 @@ function Shop(props) {
                   settings={shopInfo.settings}
                   shopName={shopInfo.name}
                   discounts={discounts}
+                  activateControls={true}
                 />
               )}
             </div>

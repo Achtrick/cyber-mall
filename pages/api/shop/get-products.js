@@ -26,15 +26,14 @@ handler.post(async (req, res) => {
     sortOrder = { price: sort };
   }
 
-  console.log(query);
   try {
     await connectDB();
-    const products = await Product.find(query)
+    const products = await Product.find(query, { images: { $slice: 1 } })
       .sort(sortOrder)
-      .limit(5)
-      .skip((page - 1) * 5);
+      .limit(12)
+      .skip((page - 1) * 12);
     const totalProducts = await Product.countDocuments(query);
-    const count = Math.ceil(totalProducts / 5);
+    const count = Math.ceil(totalProducts / 12);
     res.status(200).json({ products: products, count: count });
   } catch (err) {
     res.status(400).json(err);

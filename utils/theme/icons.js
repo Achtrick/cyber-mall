@@ -29,11 +29,13 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import YouTubeIcon from "@mui/icons-material/YouTube";
+import ReplayIcon from "@mui/icons-material/Replay";
 
 const TiktokIcon = MusicNoteIcon;
 const AddressIcon = BusinessIcon;
 const NextIcon = NavigateNextIcon;
 const PreviousIcon = NavigateBeforeIcon;
+const ResetIcon = ReplayIcon;
 
 export {
   AccountCircleIcon,
@@ -67,4 +69,5 @@ export {
   VisibilityIcon,
   VisibilityOffIcon,
   YouTubeIcon,
+  ResetIcon,
 };

@@ -11,6 +11,8 @@ const XAutoComplete = ({
   optionDisplayExpr,
   optionValueExpr,
   required,
+  onChange,
+  placeholder,
 }) => {
   return (
     <Autocomplete
@@ -22,14 +24,19 @@ const XAutoComplete = ({
       value={options.find((option) => option[optionValueExpr] === value)}
       options={options}
       getOptionLabel={(options) => options[optionDisplayExpr] || ""}
-      onChange={(e, val) => {
-        setFormData({
-          ...formData,
-          [attributeKey]: val !== null ? val[optionValueExpr] : "",
-        });
-      }}
+      onChange={
+        onChange
+          ? onChange
+          : (e, val) => {
+              setFormData({
+                ...formData,
+                [attributeKey]: val !== null ? val[optionValueExpr] : "",
+              });
+            }
+      }
       renderInput={(params) => (
         <TextField
+          placeholder={placeholder}
           required={required}
           sx={{
             backgroundColor: "white",

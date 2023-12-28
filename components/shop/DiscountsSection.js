@@ -31,7 +31,9 @@ function DiscountsSection({
                   <img alt={index} src={product.images[0]} />
                 </Link>
                 <p>{product.designation}</p>
-                <p className={styles.oldPrice}>{product.price + " DT"}</p>
+                {product.discount && product.discount !== 0 && (
+                  <p className={styles.oldPrice}>{product.price + " DT"}</p>
+                )}
                 <p className={styles.price}>
                   {calculateDiscount(product.price, product.discount) + " DT"}
                 </p>
