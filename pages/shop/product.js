@@ -30,6 +30,10 @@ function product(props) {
     if (shop) getShopInfo();
   }, [shop]);
 
+  useEffect(() => {
+    if (router.isReady && shopInfo) getProduct(shopInfo._id);
+  }, [router]);
+
   const getShopInfo = async () => {
     try {
       const { data } = await axios.post("/api/shop/getInfo", {
@@ -54,7 +58,7 @@ function product(props) {
         id: id,
       });
       setProduct(data);
-      await getSimilars(data.shop, data.category);
+      !similars.length && (await getSimilars(data.shop, data.category));
       setLoadingProduct(false);
     } catch (error) {
       enqueueSnackbar(getError(error), { variant: "error" });
