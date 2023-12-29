@@ -8,7 +8,7 @@ import AdminLayout from "../../components/admin/AdminLayout";
 import { ModalSizes } from "../../components/admin/ModalSettings";
 import DisconnectedGuard from "../../components/guards/disconnectedGuard";
 import CategoriesGrid from "../../components/shop/CategoriesGrid";
-import DiscountsSection from "../../components/shop/DiscountsSection";
+import ProductsSlider from "../../components/shop/ProductsSlider";
 import HomeSlider from "../../components/shop/HomeSlider";
 import XGallery from "../../components/ui-components/XGallery";
 import XModal from "../../components/ui-components/XModal";
@@ -844,11 +844,12 @@ function Architecture(props) {
                 </IconButton>{" "}
               </p>
               {discounts.length ? (
-                <DiscountsSection
+                <ProductsSlider
                   activateControls={false}
-                  discounts={discounts}
+                  products={discounts}
                   shopName={shopInfo.name}
                   settings={shopInfo.settings}
+                  title={"Get More For Less !"}
                 />
               ) : (
                 <section

@@ -47,7 +47,9 @@ function ShopHeader({ shopInfo, ...props }) {
       router.push({ pathname: pathname, query: query });
     } else {
       router.push(
-        `/shop/products/?shop=${shopInfo.name}&searchTerm=${searchTerm}`
+        `/shop/products/?shop=${shopInfo.name}&searchTerm=${
+          searchTerm ? searchTerm : ""
+        }`
       );
     }
 
@@ -67,19 +69,26 @@ function ShopHeader({ shopInfo, ...props }) {
         sx={{ zIndex: "3000" }}
       >
         <section className={styles.search}>
-          <input
-            type="text"
-            placeholder="what are you looking for ?"
-            className="defaultInput"
-            style={{
-              width: "90%",
-              border: `1px solid ${shopInfo.settings.primaryColor}`,
+          <form
+            style={{ width: "90%" }}
+            onSubmit={(e) => {
+              e.preventDefault();
+              navigateToSeacrh(searchTerm);
             }}
-            value={searchTerm}
-            onChange={(e) => {
-              setSearchTerm(e.target.value);
-            }}
-          />
+          >
+            <input
+              type="text"
+              placeholder="what are you looking for ?"
+              className="defaultInput"
+              style={{
+                border: `1px solid ${shopInfo.settings.primaryColor}`,
+              }}
+              value={searchTerm}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+              }}
+            />
+          </form>
 
           <div className={styles.controls}>
             {searchTerm && searchTerm !== "" ? (

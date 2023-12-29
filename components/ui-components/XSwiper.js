@@ -14,6 +14,7 @@ function XSwiper({
   style,
   autoplay,
   loop,
+  pagination = false,
   ...props
 }) {
   const isMobile = useMediaQuery("(max-width:768px");
@@ -28,7 +29,7 @@ function XSwiper({
       spaceBetween={spaceBetween}
       style={style}
       navigation={true}
-      pagination={false}
+      pagination={pagination}
     >
       {props.children}
     </Swiper>

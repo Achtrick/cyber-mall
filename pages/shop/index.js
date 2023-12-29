@@ -11,7 +11,7 @@ import { useSnackbar } from "notistack";
 import { getError } from "../../utils/shared/getError";
 import { Skeleton } from "@mui/material";
 import XGallery from "../../components/ui-components/XGallery";
-import DiscountsSection from "../../components/shop/DiscountsSection";
+import ProductsSlider from "../../components/shop/ProductsSlider";
 
 function Shop(props) {
   const router = useRouter();
@@ -135,11 +135,12 @@ function Shop(props) {
                   style={{ margin: "20px 0px" }}
                 />
               ) : (
-                <DiscountsSection
+                <ProductsSlider
                   settings={shopInfo.settings}
                   shopName={shopInfo.name}
-                  discounts={discounts}
+                  products={discounts}
                   activateControls={true}
+                  title={"Get More For Less !"}
                 />
               )}
             </div>
