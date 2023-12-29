@@ -23,6 +23,7 @@ import XHr from "../../components/ui-components/XHr";
 
 function Theme(props) {
   const { userInfo } = useSelector((state) => state.auth);
+  const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
 
   const [loading, setLoading] = useState(true);
@@ -54,7 +55,8 @@ function Theme(props) {
       setColors(data.settings);
       setLoading(false);
     } catch (error) {
-      console.log(error);
+      enqueueSnackbar(getError(error), { variant: "error" });
+      router.push("/");
     }
   };
 

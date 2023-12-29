@@ -39,13 +39,7 @@ handler.post(async (req, res) => {
       },
       architecture: {
         home: {
-          sliderComponent: [
-            {
-              image: "",
-              link: "",
-              category: "",
-            },
-          ],
+          sliderComponent: [],
           categoriesComponent: {
             visibleIndex: 0,
             selectedCategoriesIds: [],
@@ -55,26 +49,20 @@ handler.post(async (req, res) => {
           },
           galleryComponent: {
             visibleIndex: 0,
-            content: [
-              {
-                text: "",
-                image: "",
-                link: "",
-              },
-            ],
+            content: [],
           },
         },
         contact: {
           address: "",
-          socials: [
-            { instagram: "" },
-            { tiktok: "" },
-            { facebook: "" },
-            { youtube: "" },
-            { linkedIn: "" },
-          ],
+          socials: {
+            instagram: "",
+            tiktok: "",
+            facebook: "",
+            youtube: "",
+            linkedIn: "",
+          },
 
-          direct: [{ email: "" }, { phone: "" }],
+          direct: { email: "", phone: "" },
         },
         about: "",
       },
@@ -104,7 +92,6 @@ handler.post(async (req, res) => {
       shop: shop,
     });
   } catch (err) {
-    console.log(err);
     res.status(400).json(err);
   }
 });

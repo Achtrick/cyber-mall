@@ -41,9 +41,7 @@ function ProductsSlider({
                 <XButton
                   color={settings.primaryColor}
                   text={"add to cart"}
-                  action={() => {
-                    console.log("add to cart");
-                  }}
+                  action={() => {}}
                 />
               </div>
             </SwiperSlide>

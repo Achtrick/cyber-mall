@@ -28,13 +28,21 @@ function Shop(props) {
   const [discounts, setDiscounts] = useState([]);
 
   useEffect(() => {
-    if (shop) getShopInfo();
-  }, [shop]);
+    if (router.isReady && router.query) {
+      if (shop) {
+        getShopInfo();
+      } else {
+        enqueueSnackbar("invalid shop link", { variant: "error" });
+        router.push("/");
+      }
+    }
+  }, [router]);
 
   const getShopInfo = async () => {
     try {
       const { data } = await axios.post("/api/shop/getInfo", {
         shopName: shop,
+        getHomeInfo: true,
       });
 
       setShopInfo(data);
@@ -44,7 +52,7 @@ function Shop(props) {
       !categories.length && (await getCategories(data._id));
       !discounts.length && (await getDiscounts(data._id));
     } catch (error) {
-      console.log(error);
+      enqueueSnackbar(getError(error), { variant: "error" });
       router.push("/");
     }
   };
@@ -84,11 +92,12 @@ function Shop(props) {
         <LoadingScreen />
       ) : (
         <ShopLayout shopInfo={shopInfo}>
-          <section className={styles.container}>
+          <section>
             <div style={{ marginBottom: "20px", width: "100%" }}>
               <HomeSlider slides={architecture.home.sliderComponent} />
             </div>
-
+          </section>
+          <section className={styles.container}>
             <div
               className={styles.orderedComponent}
               style={{

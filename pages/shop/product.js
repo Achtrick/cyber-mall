@@ -27,8 +27,15 @@ function product(props) {
   const [loadingSimilars, setLoadingSimilars] = useState(true);
 
   useEffect(() => {
-    if (shop) getShopInfo();
-  }, [shop]);
+    if (router.isReady && router.query) {
+      if (shop) {
+        getShopInfo();
+      } else {
+        enqueueSnackbar("invalid shop link", { variant: "error" });
+        router.push("/");
+      }
+    }
+  }, [router]);
 
   useEffect(() => {
     if (router.isReady && shopInfo) getProduct(shopInfo._id);
@@ -45,7 +52,7 @@ function product(props) {
 
       await getProduct(data._id);
     } catch (error) {
-      console.log(error);
+      enqueueSnackbar(getError(error), { variant: "error" });
       router.push("/");
     }
   };
@@ -58,8 +65,8 @@ function product(props) {
         id: id,
       });
       setProduct(data);
-      !similars.length && (await getSimilars(data.shop, data.category));
       setLoadingProduct(false);
+      !similars.length && (await getSimilars(data.shop, data.category));
     } catch (error) {
       enqueueSnackbar(getError(error), { variant: "error" });
       setLoadingProduct(false);
@@ -97,7 +104,11 @@ function product(props) {
             ) : (
               <div className={styles.row}>
                 <div className={styles.images}>
-                  <XSwiper autoplay={true} loop={true} pagination={true}>
+                  <XSwiper
+                    autoplay={product.images.length > 1}
+                    loop={product.images.length > 1}
+                    pagination={product.images.length > 1}
+                  >
                     {product.images.map((image, index) => {
                       return (
                         <SwiperSlide key={index}>
@@ -109,7 +120,6 @@ function product(props) {
                 </div>
                 <div className={styles.infos}>
                   <h1>{product.designation}</h1>
-                  <h2>{product.description}</h2>
                   {product.discount && product.discount !== 0 ? (
                     <p className={styles.oldPrice}>{product.price + " DT"}</p>
                   ) : null}
@@ -119,10 +129,9 @@ function product(props) {
                   <XButton
                     color={shopInfo.settings.primaryColor}
                     text={"add to cart"}
-                    action={() => {
-                      console.log("add to cart");
-                    }}
+                    action={() => {}}
                   />
+                  <h2>{product.description}</h2>
                 </div>
               </div>
             )}

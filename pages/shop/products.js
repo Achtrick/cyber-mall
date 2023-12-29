@@ -32,11 +32,18 @@ function Products(props) {
   const [count, setCount] = useState(0);
 
   useEffect(() => {
-    if (shop) getShopInfo();
-  }, [shop]);
+    if (router.isReady && router.query) {
+      if (shop) {
+        getShopInfo();
+      } else {
+        enqueueSnackbar("invalid shop link", { variant: "error" });
+        router.push("/");
+      }
+    }
+  }, [router]);
 
   useEffect(() => {
-    if (router.isReady && shopInfo && categories.length) getProducts();
+    if (router.isReady && shopInfo && !loadingCategories) getProducts();
   }, [router, page, shopInfo, categories]);
 
   const getShopInfo = async () => {
@@ -51,7 +58,7 @@ function Products(props) {
 
       !categories.length && (await getCategories(data._id));
     } catch (error) {
-      console.log(error);
+      enqueueSnackbar(getError(error), { variant: "error" });
       router.push("/");
     }
   };
@@ -81,7 +88,6 @@ function Products(props) {
         sort: sort,
       });
       setProducts(data.products);
-      console.log(data.products);
       setCount(data.count);
       setLoadingProducts(false);
     } catch (error) {
@@ -175,9 +181,7 @@ function Products(props) {
                       <XButton
                         color={shopInfo.settings.primaryColor}
                         text={"add to cart"}
-                        action={() => {
-                          console.log("add to cart");
-                        }}
+                        action={() => {}}
                       />
                     </div>
                   );

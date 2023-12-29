@@ -6,7 +6,7 @@ import { SwiperSlide } from "swiper/react";
 function HomeSlider({ slides, ...props }) {
   return (
     <>
-      {slides ? (
+      {slides.length ? (
         <XSwiper
           slidesPerView={1}
           spaceBetween={0}

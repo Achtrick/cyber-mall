@@ -16,7 +16,7 @@ handler.post(async (req, res) => {
           category: mongoose.Types.ObjectId(categoryId),
         },
       },
-      { $limit: 6 },
+      { $sample: { size: 6 } },
       {
         $project: {
           _id: 1,

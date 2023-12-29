@@ -8,7 +8,6 @@ const handler = nc();
 handler.delete(auth, async (req, res) => {
   await connectDB();
   const { _id } = req.query;
-  console.log(req.body);
   try {
     await Product.findOneAndRemove({ _id: _id });
 

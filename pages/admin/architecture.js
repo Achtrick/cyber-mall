@@ -29,9 +29,11 @@ import {
   TiktokIcon,
   YouTubeIcon,
 } from "../../utils/theme/icons";
+import { useRouter } from "next/router";
 
 function Architecture(props) {
   const { userInfo } = useSelector((state) => state.auth);
+  const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
 
   const [loading, setLoading] = useState(true);
@@ -56,13 +58,15 @@ function Architecture(props) {
     try {
       const { data } = await axios.post("/api/shop/getInfo", {
         shopName: userInfo.shop.name,
+        getHomeInfo: true,
       });
       setShopInfo(data);
       setLogo(data.logo);
       setArchitecture(data.architecture);
       setLoading(false);
     } catch (error) {
-      console.log(error);
+      enqueueSnackbar(getError(error), { variant: "error" });
+      router.push("/");
     }
   };
 
