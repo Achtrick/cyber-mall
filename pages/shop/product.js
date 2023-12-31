@@ -6,18 +6,21 @@ import axios from "axios";
 import LoadingScreen from "../../components/shop/LoadingScreen";
 import ShopLayout from "../../components/shop/ShopLayout";
 import styles from "../../styles/shop/Product.module.scss";
-import { Skeleton } from "@mui/material";
+import { Button, Skeleton } from "@mui/material";
 import XSwiper from "../../components/ui-components/XSwiper";
 import XButton from "../../components/ui-components/XButton";
 import XHr from "../../components/ui-components/XHr";
 import { SwiperSlide } from "swiper/react";
 import { calculateDiscount } from "../../utils/config/convertHelper";
 import ProductsSlider from "../../components/shop/ProductsSlider";
+import { useDispatch } from "react-redux";
+import { AddIcon, RemoveIcon } from "../../utils/theme/icons";
 
-function product(props) {
+function Product(props) {
   const router = useRouter();
   const { shop, id } = router.query;
   const { enqueueSnackbar } = useSnackbar();
+  const dispatch = useDispatch();
 
   const [shopInfo, setShopInfo] = useState(null);
   const [product, setProduct] = useState(null);
@@ -25,6 +28,7 @@ function product(props) {
   const [loading, setLoading] = useState(true);
   const [loadingProduct, setLoadingProduct] = useState(true);
   const [loadingSimilars, setLoadingSimilars] = useState(true);
+  const [qty, setQty] = useState(1);
 
   useEffect(() => {
     if (router.isReady && router.query) {
@@ -38,7 +42,14 @@ function product(props) {
   }, [router]);
 
   useEffect(() => {
-    if (router.isReady && shopInfo) getProduct(shopInfo._id);
+    if (router.isReady && shopInfo) {
+      if (router.query.id) {
+        getProduct(shopInfo._id);
+      } else {
+        enqueueSnackbar({ message: "invalid shop link !", variant: "error" });
+        router.push("/");
+      }
+    }
   }, [router]);
 
   const getShopInfo = async () => {
@@ -88,6 +99,25 @@ function product(props) {
     }
   };
 
+  const addTocart = (shop, product) => {
+    dispatch({
+      type: "UPDATE_CARTS",
+      payload: {
+        shop,
+        product: {
+          ...product,
+          qty: qty,
+          price: product.discount
+            ? calculateDiscount(product.price, product.discount)
+            : product.price,
+        },
+      },
+    });
+    enqueueSnackbar(`added ${product.designation} to cart`, {
+      variant: "info",
+    });
+  };
+
   return (
     <>
       {loading ? (
@@ -109,13 +139,19 @@ function product(props) {
                     loop={product.images.length > 1}
                     pagination={product.images.length > 1}
                   >
-                    {product.images.map((image, index) => {
-                      return (
-                        <SwiperSlide key={index}>
-                          <img src={image} />
-                        </SwiperSlide>
-                      );
-                    })}
+                    {product.images.length ? (
+                      product.images.map((image, index) => {
+                        return (
+                          <SwiperSlide key={index}>
+                            <img src={image} />
+                          </SwiperSlide>
+                        );
+                      })
+                    ) : (
+                      <SwiperSlide>
+                        <img src={"/images/image-placeholder.jpg"} />
+                      </SwiperSlide>
+                    )}
                   </XSwiper>
                 </div>
                 <div className={styles.infos}>
@@ -126,10 +162,39 @@ function product(props) {
                   <p className={styles.price}>
                     {calculateDiscount(product.price, product.discount) + " DT"}
                   </p>
+                  <div className={styles.quantity}>
+                    <Button
+                      style={{
+                        color: shopInfo.settings.primaryColor,
+                        width: "30px",
+                        height: "30px",
+                      }}
+                      onClick={() => {
+                        qty > 1 && setQty(qty - 1);
+                      }}
+                    >
+                      <RemoveIcon />
+                    </Button>
+                    <span className={styles.qty}>{qty}</span>
+                    <Button
+                      style={{
+                        color: shopInfo.settings.primaryColor,
+                        width: "30px",
+                        height: "30px",
+                      }}
+                      onClick={() => {
+                        qty < product.qty && setQty(qty + 1);
+                      }}
+                    >
+                      <AddIcon />
+                    </Button>
+                  </div>
                   <XButton
                     color={shopInfo.settings.primaryColor}
                     text={"add to cart"}
-                    action={() => {}}
+                    action={() => {
+                      addTocart(shop, product);
+                    }}
                   />
                   <h2>{product.description}</h2>
                 </div>
@@ -152,6 +217,7 @@ function product(props) {
                 products={similars}
                 activateControls={true}
                 title={"Checkout Similar Products !"}
+                buttonAction={addTocart}
               />
             )}
           </div>
@@ -161,4 +227,4 @@ function product(props) {
   );
 }
 
-export default product;
+export default Product;

@@ -41,7 +41,7 @@ function Inventory(props) {
     description: "",
     price: 0,
     discount: 0,
-    qty: "",
+    qty: 0,
     images: [],
   });
 
@@ -152,7 +152,7 @@ function Inventory(props) {
       description: "",
       price: 0,
       discount: 0,
-      qty: "",
+      qty: 0,
       images: [],
     });
     setAction("");

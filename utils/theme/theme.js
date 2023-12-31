@@ -1,6 +1,13 @@
 import { createTheme } from "@mui/material/styles";
 
 const lightTheme = createTheme({
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: { minWidth: 0 },
+      },
+    },
+  },
   palette: {
     mode: "light",
     white: { main: "#FFFFFF" },

@@ -12,17 +12,24 @@ import { getError } from "../../utils/shared/getError";
 import { Skeleton } from "@mui/material";
 import XGallery from "../../components/ui-components/XGallery";
 import ProductsSlider from "../../components/shop/ProductsSlider";
+import { calculateDiscount } from "../../utils/config/convertHelper";
+import { useDispatch } from "react-redux";
 
 function Shop(props) {
   const router = useRouter();
   const { shop } = router.query;
   const { enqueueSnackbar } = useSnackbar();
+  const dispatch = useDispatch();
 
   const [loading, setLoading] = useState(true);
+  const [loadingSlider, setLoadingSlider] = useState(true);
+  const [loadingGallery, setLoadingGallery] = useState(true);
   const [loadingCategories, setLoadingCategories] = useState(true);
   const [loadingDiscounts, setLoadingDiscounts] = useState(true);
 
   const [shopInfo, setShopInfo] = useState({});
+  const [sliderInfo, setSliderInfo] = useState([]);
+  const [galleryInfo, setGalleryInfo] = useState({});
   const [architecture, setArchitecture] = useState({});
   const [categories, setCategories] = useState([]);
   const [discounts, setDiscounts] = useState([]);
@@ -49,8 +56,42 @@ function Shop(props) {
       setArchitecture(data.architecture);
       setLoading(false);
 
-      !categories.length && (await getCategories(data._id));
-      !discounts.length && (await getDiscounts(data._id));
+      getSliderInfo();
+      getGalleryInfo();
+      getDiscounts(data._id);
+      getCategories(data._id);
+    } catch (error) {
+      enqueueSnackbar(getError(error), { variant: "error" });
+      router.push("/");
+    }
+  };
+
+  const getSliderInfo = async () => {
+    try {
+      const { data } = await axios.post("/api/shop/getInfo", {
+        shopName: shop,
+        getHomeInfo: true,
+        excludedSection: "galleryComponent",
+      });
+
+      setSliderInfo(data.architecture.home.sliderComponent);
+      setLoadingSlider(false);
+    } catch (error) {
+      enqueueSnackbar(getError(error), { variant: "error" });
+      router.push("/");
+    }
+  };
+
+  const getGalleryInfo = async () => {
+    try {
+      const { data } = await axios.post("/api/shop/getInfo", {
+        shopName: shop,
+        getHomeInfo: true,
+        excludedSection: "sliderComponent",
+      });
+
+      setGalleryInfo(data.architecture.home.galleryComponent);
+      setLoadingGallery(false);
     } catch (error) {
       enqueueSnackbar(getError(error), { variant: "error" });
       router.push("/");
@@ -86,6 +127,25 @@ function Shop(props) {
     }
   };
 
+  const addTocart = (shop, product) => {
+    dispatch({
+      type: "UPDATE_CARTS",
+      payload: {
+        shop,
+        product: {
+          ...product,
+          qty: 1,
+          price: product.discount
+            ? calculateDiscount(product.price, product.discount)
+            : product.price,
+        },
+      },
+    });
+    enqueueSnackbar(`added ${product.designation} to cart`, {
+      variant: "info",
+    });
+  };
+
   return (
     <>
       {loading ? (
@@ -94,7 +154,16 @@ function Shop(props) {
         <ShopLayout shopInfo={shopInfo}>
           <section>
             <div style={{ marginBottom: "20px", width: "100%" }}>
-              <HomeSlider slides={architecture.home.sliderComponent} />
+              {loadingSlider ? (
+                <Skeleton
+                  variant="rectangular"
+                  width={"100%"}
+                  height={"60vh"}
+                  style={{ margin: "20px 0px" }}
+                />
+              ) : (
+                <HomeSlider slides={sliderInfo} shopName={shop} />
+              )}
             </div>
           </section>
           <section className={styles.container}>
@@ -116,19 +185,30 @@ function Shop(props) {
                 <CategoriesGrid
                   architecture={architecture}
                   categories={categories}
+                  shopName={shop}
                 />
               )}
             </div>
-            <div
-              className={styles.orderedComponent}
-              style={{
-                order: architecture.home.galleryComponent.visibleIndex,
-              }}
-            >
-              <XHr color={shopInfo.settings.secondaryColor} width="30%" />
 
-              <XGallery content={architecture.home.galleryComponent.content} />
-            </div>
+            {loadingGallery ? (
+              <Skeleton
+                variant="rectangular"
+                width={"100%"}
+                height={"60vh"}
+                style={{ margin: "20px 0px" }}
+              />
+            ) : (
+              <div
+                className={styles.orderedComponent}
+                style={{
+                  order: galleryInfo.visibleIndex,
+                }}
+              >
+                <XHr color={shopInfo.settings.secondaryColor} width="30%" />
+                <XGallery content={galleryInfo.content} />
+              </div>
+            )}
+
             <div
               className={styles.orderedComponent}
               style={{
@@ -150,6 +230,7 @@ function Shop(props) {
                   products={discounts}
                   activateControls={true}
                   title={"Get More For Less !"}
+                  buttonAction={addTocart}
                 />
               )}
             </div>

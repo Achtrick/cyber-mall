@@ -16,7 +16,7 @@
   @include flexLayout(center, space-between);
 }
 .filter {
-  @include flexLayout(center, space-between);
+  @include flexLayout(center, flex-end);
   width: 50%;
 }
 .product {

@@ -30,6 +30,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import ReplayIcon from "@mui/icons-material/Replay";
+import RemoveIcon from "@mui/icons-material/Remove";
 
 const TiktokIcon = MusicNoteIcon;
 const AddressIcon = BusinessIcon;
@@ -70,4 +71,5 @@ export {
   VisibilityOffIcon,
   YouTubeIcon,
   ResetIcon,
+  RemoveIcon,
 };

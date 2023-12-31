@@ -1,21 +1,24 @@
-import { Skeleton } from "@mui/material";
+import { CircularProgress, Skeleton } from "@mui/material";
 import axios from "axios";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import LoadingScreen from "../../components/shop/LoadingScreen";
 import ShopLayout from "../../components/shop/ShopLayout";
-import XPagination from "../../components/ui-components/XPagination";
 import XAutoComplete from "../../components/ui-components/XAutoComplete";
-import styles from "../../styles/shop/Products.module.scss";
-import { getError } from "../../utils/shared/getError";
-import Link from "next/link";
-import { calculateDiscount } from "../../utils/config/convertHelper";
 import XButton from "../../components/ui-components/XButton";
+import XPagination from "../../components/ui-components/XPagination";
+import styles from "../../styles/shop/Products.module.scss";
+import { calculateDiscount } from "../../utils/config/convertHelper";
+import { getError } from "../../utils/shared/getError";
 
 function Products(props) {
   const router = useRouter();
   const { shop, category, searchTerm, sort } = router.query;
+
+  const dispatch = useDispatch();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -24,7 +27,6 @@ function Products(props) {
   const [loadingProducts, setLoadingProducts] = useState(true);
 
   const [shopInfo, setShopInfo] = useState(null);
-  const [architecture, setArchitecture] = useState({});
   const [categories, setCategories] = useState([]);
 
   const [products, setProducts] = useState([]);
@@ -53,7 +55,6 @@ function Products(props) {
       });
 
       setShopInfo(data);
-      setArchitecture(data.architecture);
       setLoading(false);
 
       !categories.length && (await getCategories(data._id));
@@ -98,6 +99,7 @@ function Products(props) {
 
   const onPaginationChange = (e, page) => {
     setPage(page - 1);
+    window.scroll({ top: 0, behavior: "smooth" });
   };
 
   const filter = async (filterOption, filterValue) => {
@@ -107,6 +109,25 @@ function Products(props) {
     query = { ...query, [filterOption]: filterValue };
 
     router.push({ pathname: pathname, query: query });
+  };
+
+  const addTocart = (shop, product) => {
+    dispatch({
+      type: "UPDATE_CARTS",
+      payload: {
+        shop,
+        product: {
+          ...product,
+          qty: 1,
+          price: product.discount
+            ? calculateDiscount(product.price, product.discount)
+            : product.price,
+        },
+      },
+    });
+    enqueueSnackbar(`added ${product.designation} to cart`, {
+      variant: "info",
+    });
   };
 
   return (
@@ -123,30 +144,42 @@ function Products(props) {
                 onChange={onPaginationChange}
               />
               <div className={styles.filter}>
-                <XAutoComplete
-                  placeholder="category"
-                  options={categories}
-                  value={categories.find((c) => c.name === category)?._id || ""}
-                  optionDisplayExpr="name"
-                  optionValueExpr="name"
-                  onChange={(e, val) => {
-                    filter("category", val?.name || "");
-                  }}
-                />
-                &nbsp;
-                <XAutoComplete
-                  placeholder="sort by price"
-                  options={[
-                    { name: "ascending", value: 1 },
-                    { name: "descending", value: -1 },
-                  ]}
-                  value={sort}
-                  optionDisplayExpr="name"
-                  optionValueExpr="value"
-                  onChange={(e, val) => {
-                    filter("sort", val?.value || "");
-                  }}
-                />
+                {loadingCategories ? (
+                  <CircularProgress
+                    style={{ color: shopInfo.settings.primaryColor }}
+                    size={"17px"}
+                  />
+                ) : (
+                  <>
+                    {" "}
+                    <XAutoComplete
+                      placeholder="category"
+                      options={categories}
+                      value={
+                        categories.find((c) => c.name === category)?.name || ""
+                      }
+                      optionDisplayExpr="name"
+                      optionValueExpr="name"
+                      onChange={(e, val) => {
+                        filter("category", val?.name || "");
+                      }}
+                    />
+                    &nbsp;
+                    <XAutoComplete
+                      placeholder="sort by price"
+                      options={[
+                        { name: "ascending", value: 1 },
+                        { name: "descending", value: -1 },
+                      ]}
+                      value={sort}
+                      optionDisplayExpr="name"
+                      optionValueExpr="value"
+                      onChange={(e, val) => {
+                        filter("sort", val?.value || "");
+                      }}
+                    />
+                  </>
+                )}
               </div>
             </div>
             {loadingProducts ? (
@@ -165,7 +198,9 @@ function Products(props) {
                       >
                         <img
                           alt={product.designation}
-                          src={product.images[0]}
+                          src={
+                            product.images[0] || "/images/image-placeholder.jpg"
+                          }
                         />
                       </Link>
                       <p>{product.designation}</p>
@@ -181,13 +216,23 @@ function Products(props) {
                       <XButton
                         color={shopInfo.settings.primaryColor}
                         text={"add to cart"}
-                        action={() => {}}
+                        action={() => {
+                          addTocart(shop, product);
+                        }}
                       />
                     </div>
                   );
                 })}
               </div>
             )}
+            <br />
+            <div className={styles.header}>
+              <XPagination
+                page={page}
+                count={count}
+                onChange={onPaginationChange}
+              />
+            </div>
           </section>
         </ShopLayout>
       )}

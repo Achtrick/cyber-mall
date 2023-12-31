@@ -3,7 +3,7 @@ import React from "react";
 import XSwiper from "../ui-components/XSwiper";
 import { SwiperSlide } from "swiper/react";
 
-function HomeSlider({ slides, ...props }) {
+function HomeSlider({ slides, shopName, ...props }) {
   return (
     <>
       {slides.length ? (
@@ -22,7 +22,9 @@ function HomeSlider({ slides, ...props }) {
                     <img src={slide.image} alt={slide.link} />
                   </Link>
                 ) : slide.category && slide.category !== "" ? (
-                  <Link href={slide.category}>
+                  <Link
+                    href={`/shop/products?shop=${shopName}&category=${slide.category}`}
+                  >
                     <img src={slide.image} alt={slide.category} />
                   </Link>
                 ) : (

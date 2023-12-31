@@ -26,7 +26,7 @@ function CategoriesGrid({
                 <Link
                   href={
                     activateControls
-                      ? `shop/?shop=${shopName}&category=${category.name}`
+                      ? `shop/products/?shop=${shopName}&category=${category.name}`
                       : ""
                   }
                 >

@@ -39,6 +39,15 @@
   p {
     font-size: 22px;
     font-weight: 600;
+    margin: 5px 0px;
+  }
+  .qty {
+    font-size: 20px;
+    font-weight: 400;
+    margin: 5px;
+    padding: 0px 5px;
+    width: 30px;
+    @include flexLayout;
   }
   .oldPrice {
     text-decoration: line-through;
@@ -47,5 +56,9 @@
   .price {
     text-transform: uppercase;
     font-weight: 500;
+  }
+  .quantity {
+    margin: 0px 0px;
+    @include flexLayout(center, flex-start, row);
   }
 }

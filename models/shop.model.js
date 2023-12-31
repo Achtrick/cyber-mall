@@ -4,6 +4,7 @@ const shopSchema = new Schema(
   {
     name: { type: String, unique: true },
     logo: { type: String, default: "" },
+    shippingFee: { type: Number, default: 7 },
     settings: {
       type: Object,
       default: {

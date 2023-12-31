@@ -12,6 +12,7 @@ function ProductsSlider({
   shopName,
   settings,
   title,
+  buttonAction,
 }) {
   return (
     <section className={styles.container}>
@@ -29,7 +30,14 @@ function ProductsSlider({
                       : ""
                   }
                 >
-                  <img alt={index} src={product.images[0]} />
+                  <img
+                    alt={index}
+                    src={
+                      product.images[0]
+                        ? product.images[0]
+                        : "/images/image-placeholder.jpg"
+                    }
+                  />
                 </Link>
                 <p>{product.designation}</p>
                 {product.discount && product.discount !== 0 ? (
@@ -41,7 +49,11 @@ function ProductsSlider({
                 <XButton
                   color={settings.primaryColor}
                   text={"add to cart"}
-                  action={() => {}}
+                  action={
+                    buttonAction
+                      ? () => buttonAction(shopName, product)
+                      : () => {}
+                  }
                 />
               </div>
             </SwiperSlide>

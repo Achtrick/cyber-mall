@@ -6,14 +6,17 @@ function XBadge({ content, color, ...props }) {
   return (
     <div className={styles.badgeContainer}>
       <span
-        className={styles.badge}
+        className={
+          content > 0 ? styles.badge : `${styles.badge} + ${styles.hidden}`
+        }
         style={{
           backgroundColor: color,
           color: deduceColor(color),
         }}
       >
-        5
+        <p>{content}</p>
       </span>
+
       {props.children}
     </div>
   );

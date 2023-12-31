@@ -37,10 +37,13 @@ function Architecture(props) {
   const { enqueueSnackbar } = useSnackbar();
 
   const [loading, setLoading] = useState(true);
+  const [loadingSlider, setLoadingSlider] = useState(true);
+  const [loadingGallery, setLoadingGallery] = useState(true);
   const [shopInfo, setShopInfo] = useState({});
+  const [sliderInfo, setSliderInfo] = useState([]);
+  const [galleryInfo, setGalleryInfo] = useState({});
   const [categories, setCategories] = useState([]);
   const [discounts, setDiscounts] = useState([]);
-
   const [architecture, setArchitecture] = useState({});
   const [logo, setLogo] = useState(null);
 
@@ -63,7 +66,41 @@ function Architecture(props) {
       setShopInfo(data);
       setLogo(data.logo);
       setArchitecture(data.architecture);
+      getSliderInfo(data.name);
+      getGalleryInfo(data.name);
       setLoading(false);
+    } catch (error) {
+      enqueueSnackbar(getError(error), { variant: "error" });
+      router.push("/");
+    }
+  };
+
+  const getSliderInfo = async (shopName) => {
+    try {
+      const { data } = await axios.post("/api/shop/getInfo", {
+        shopName: shopName,
+        getHomeInfo: true,
+        excludedSection: "galleryComponent",
+      });
+
+      setSliderInfo(data.architecture.home.sliderComponent);
+      setLoadingSlider(false);
+    } catch (error) {
+      enqueueSnackbar(getError(error), { variant: "error" });
+      router.push("/");
+    }
+  };
+
+  const getGalleryInfo = async (shopName) => {
+    try {
+      const { data } = await axios.post("/api/shop/getInfo", {
+        shopName: shopName,
+        getHomeInfo: true,
+        excludedSection: "sliderComponent",
+      });
+
+      setGalleryInfo(data.architecture.home.galleryComponent);
+      setLoadingGallery(false);
     } catch (error) {
       enqueueSnackbar(getError(error), { variant: "error" });
       router.push("/");
@@ -99,7 +136,7 @@ function Architecture(props) {
 
       switch (component) {
         case "sliderComponent":
-          body = architecture.home.sliderComponent;
+          body = sliderInfo;
           break;
         case "categoriesComponent":
           body = architecture.home.categoriesComponent;
@@ -108,7 +145,10 @@ function Architecture(props) {
           body = architecture.home.discountComponent;
           break;
         case "galleryComponent":
-          body = architecture.home.galleryComponent;
+          body = galleryInfo;
+          break;
+        case "shippingFee":
+          body = shopInfo.shippingFee;
           break;
         case "contactComponent":
           body = architecture.contact;
@@ -160,15 +200,14 @@ function Architecture(props) {
       ...architecture,
       home: {
         ...architecture.home,
-        sliderComponent: architecture?.home?.sliderComponent?.filter(
-          (s) => s.image !== slide.image
-        ),
+        sliderComponent: sliderInfo?.filter((s) => s.image !== slide.image),
       },
     });
+    setSliderInfo(sliderInfo.filter((s) => s.image !== slide.image));
   };
 
   const updateSlides = async (e) => {
-    let compressedImages = architecture.home.sliderComponent;
+    let compressedImages = sliderInfo;
     const images = e.target.files;
     for (let image of images) {
       const base64 = await compressImage(image);
@@ -184,16 +223,14 @@ function Architecture(props) {
   };
 
   const updateSlideLink = async (e, slide) => {
-    architecture.home.sliderComponent.find((s) => s === slide).link =
-      e.target.value;
+    sliderInfo.find((s) => s === slide).link = e.target.value;
     setArchitecture({
       ...architecture,
     });
   };
 
   const updateSlideCategory = async (e, slide) => {
-    architecture.home.sliderComponent.find((s) => s === slide).category =
-      e.target.value;
+    sliderInfo.find((s) => s === slide).category = e.target.value;
     setArchitecture({
       ...architecture,
     });
@@ -248,17 +285,19 @@ function Architecture(props) {
       home: {
         ...architecture.home,
         galleryComponent: {
-          ...architecture?.home?.galleryComponent,
-          content: architecture?.home?.galleryComponent?.content?.filter(
-            (b) => b.image !== block.image
-          ),
+          ...galleryInfo,
+          content: galleryInfo?.content?.filter((b) => b.image !== block.image),
         },
       },
+    });
+    setGalleryInfo({
+      ...galleryInfo,
+      content: galleryInfo?.content?.filter((b) => b.image !== block.image),
     });
   };
 
   const updateBlocks = async (e) => {
-    let compressedImages = architecture.home.galleryComponent.content;
+    let compressedImages = galleryInfo.content;
     const images = e.target.files;
     for (let image of images) {
       const base64 = await compressImage(image);
@@ -270,7 +309,7 @@ function Architecture(props) {
       home: {
         ...architecture.home,
         galleryComponent: {
-          ...architecture.home.galleryComponent,
+          ...galleryInfo,
           content: compressedImages,
         },
       },
@@ -278,9 +317,8 @@ function Architecture(props) {
   };
 
   const updateBlock = async (e, block) => {
-    architecture.home.galleryComponent.content.find((b) => b === block)[
-      e.target.name
-    ] = e.target.value;
+    galleryInfo.content.find((b) => b === block)[e.target.name] =
+      e.target.value;
     setArchitecture({
       ...architecture,
     });
@@ -304,7 +342,7 @@ function Architecture(props) {
   const sliderForm = (
     <form>
       <div className={styles.slidesContainer}>
-        {architecture?.home?.sliderComponent.map((slide, index) => {
+        {sliderInfo.map((slide, index) => {
           return (
             <div key={index} className={styles.slidePreview}>
               <div className={styles.closeIcon}>
@@ -366,7 +404,7 @@ function Architecture(props) {
         max="3"
         onChange={updateSlides}
       />
-      {architecture?.home?.sliderComponent?.length < 3 ? (
+      {sliderInfo?.length < 3 ? (
         <IconButton>
           <label
             style={{ cursor: "pointer", width: "25px", height: "25px" }}
@@ -458,31 +496,33 @@ function Architecture(props) {
 
   const galleryForm = (
     <form>
-      <p>
+      <p style={{ padding: "0px 10px" }}>
         visible index: (this will determine the display order of this section on
         your home screen)
         <input
           type="number"
           min={0}
           className="defaultInput"
-          value={architecture.home?.galleryComponent?.visibleIndex}
+          value={galleryInfo?.visibleIndex}
           onChange={(e) => {
             setArchitecture({
               ...architecture,
               home: {
                 ...architecture.home,
                 galleryComponent: {
-                  ...architecture.home.galleryComponent,
+                  ...galleryInfo,
                   visibleIndex: e.target.value,
                 },
               },
             });
+            setGalleryInfo({ ...galleryInfo, visibleIndex: e.target.value });
           }}
+          style={{ padding: "0px 10px" }}
         />
       </p>
       <br />
       <div className={styles.slidesContainer}>
-        {architecture?.home?.galleryComponent?.content?.map((block, index) => {
+        {galleryInfo?.content?.map((block, index) => {
           return (
             <div key={index} className={styles.slidePreview}>
               <div className={styles.closeIcon}>
@@ -528,7 +568,7 @@ function Architecture(props) {
         max="3"
         onChange={updateBlocks}
       />
-      {architecture?.home?.galleryComponent?.content?.length < 4 ? (
+      {galleryInfo?.content?.length < 4 ? (
         <IconButton>
           <label
             style={{ cursor: "pointer", width: "25px", height: "25px" }}
@@ -659,18 +699,27 @@ function Architecture(props) {
                   <CheckCircleIcon />
                 </IconButton>{" "}
               </p>
-              <HomeSlider
-                slides={
-                  architecture.home.sliderComponent.length
-                    ? architecture.home.sliderComponent
-                    : [
-                        {
-                          link: "",
-                          image: "/images/image-placeholder.jpg",
-                        },
-                      ]
-                }
-              />
+              {loadingSlider ? (
+                <Skeleton
+                  variant="rectangular"
+                  width={"100%"}
+                  height={"50vh"}
+                />
+              ) : (
+                <HomeSlider
+                  slides={
+                    sliderInfo.length
+                      ? sliderInfo
+                      : [
+                          {
+                            link: "",
+                            image: "/images/image-placeholder.jpg",
+                          },
+                        ]
+                  }
+                  shopName={shopInfo.name}
+                />
+              )}
               <br />
               <hr />
               <p>
@@ -1003,7 +1052,41 @@ function Architecture(props) {
                   <CheckCircleIcon />
                 </IconButton>{" "}
               </p>
-              <XGallery content={architecture.home.galleryComponent.content} />
+              {loadingGallery ? (
+                <Skeleton
+                  variant="rectangular"
+                  width={"100%"}
+                  height={"50vh"}
+                />
+              ) : (
+                <XGallery content={galleryInfo.content} />
+              )}
+
+              <br />
+              <hr />
+              <h1>Shipping Info</h1>
+              <p>
+                - fill your shipping fee
+                <IconButton
+                  color="info"
+                  onClick={() => saveArchitecture("shippingFee")}
+                >
+                  <CheckCircleIcon />
+                </IconButton>{" "}
+              </p>
+              <input
+                name="shippingFee"
+                placeholder="Shipping Fee"
+                value={shopInfo.shippingFee}
+                onChange={(e) => {
+                  setShopInfo({
+                    ...shopInfo,
+                    shippingFee: e.target.value,
+                  });
+                }}
+                className="defaultInput"
+                style={{ width: "300px" }}
+              />
               <br />
               <hr />
               <h1>Contact Info</h1>

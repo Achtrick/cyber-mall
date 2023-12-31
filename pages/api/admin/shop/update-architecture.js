@@ -36,6 +36,9 @@ handler.post(auth, async (req, res) => {
           home: { ...shop.architecture.home, galleryComponent: body },
         };
         break;
+      case "shippingFee":
+        shop.shippingFee = body;
+        break;
       case "contactComponent":
         shop.architecture = {
           ...shop.architecture,

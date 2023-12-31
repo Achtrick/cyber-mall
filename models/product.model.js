@@ -7,7 +7,7 @@ const productSchema = new Schema(
     price: { type: Number, default: 0 },
     discount: { type: Number, default: 0 },
     description: String,
-    qty: String,
+    qty: { type: Number, default: 0 },
     category: { type: Schema.Types.ObjectId, ref: "ProductCategory" },
     shop: { type: Schema.Types.ObjectId, ref: "Shop" },
   },

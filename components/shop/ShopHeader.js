@@ -18,9 +18,11 @@ import {
   YouTubeIcon,
 } from "../../utils/theme/icons";
 import { useRouter } from "next/router";
+import { useSelector } from "react-redux";
 
 function ShopHeader({ shopInfo, ...props }) {
   const router = useRouter();
+  const { carts } = useSelector((state) => state.cart);
 
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -36,6 +38,9 @@ function ShopHeader({ shopInfo, ...props }) {
 
   const toggleSearch = () => {
     setSearchOpen(!searchOpen);
+    setTimeout(() => {
+      document.getElementById("searchInput")?.focus();
+    }, 0);
   };
 
   const navigateToSeacrh = (searchTerm) => {
@@ -77,6 +82,7 @@ function ShopHeader({ shopInfo, ...props }) {
             }}
           >
             <input
+              id="searchInput"
               type="text"
               placeholder="what are you looking for ?"
               className="defaultInput"
@@ -275,8 +281,14 @@ function ShopHeader({ shopInfo, ...props }) {
             <SearchIcon />
           </IconButton>
           &nbsp;&nbsp;
-          <XBadge color={shopInfo.settings.primaryColor} content={5}>
-            <Link href={`shop/cart/?shop=${shopInfo.name}`}>
+          <XBadge
+            color={shopInfo.settings.primaryColor}
+            content={
+              carts.find((cart) => cart.shop === shopInfo.name)?.content
+                ?.length || 0
+            }
+          >
+            <Link href={`/shop/cart?shop=${shopInfo.name}`}>
               <IconButton color={deduceColor(shopInfo.settings.headerColor)}>
                 <ShoppingCartIcon />
               </IconButton>
