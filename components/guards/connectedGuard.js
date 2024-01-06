@@ -14,7 +14,7 @@ function ConnectedGuard(props) {
     if (userInfo !== null) {
       switch (userInfo.role) {
         case "ADMIN":
-          router.push("admin/dashboard");
+          router.push("admin/categories");
           setLoading(false);
           break;
         case "CLIENT":

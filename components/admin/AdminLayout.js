@@ -15,11 +15,12 @@ import {
   RocketLaunchIcon,
   SettingsIcon,
   CategoryIcon,
+  CloseIcon,
+  TravelExploreIcon,
 } from "../../utils/theme/icons";
 
 function AdminLayout(props) {
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [profileMenuOpen, setProfileMenuOpen] = useState(false);
 
   const { userInfo } = useSelector((state) => state.auth);
 
@@ -27,10 +28,6 @@ function AdminLayout(props) {
 
   const toggleDrawer = () => {
     setDrawerOpen(!drawerOpen);
-  };
-
-  const toggleProfileMenu = () => {
-    setProfileMenuOpen(!profileMenuOpen);
   };
 
   const logout = () => {
@@ -41,118 +38,63 @@ function AdminLayout(props) {
     <>
       <section className={styles.navbar}>
         <IconButton color="white" onClick={toggleDrawer}>
-          <MenuIcon />
+          {drawerOpen ? <CloseIcon /> : <MenuIcon />}
         </IconButton>
-        <IconButton color="white" onClick={toggleProfileMenu}>
-          <AccountCircleIcon />
-        </IconButton>
+        <Image
+          alt="logo"
+          src="/images/logo.svg"
+          width={"150"}
+          height={"60"}
+          style={{ objectFit: "contain" }}
+        />
+        <IconButton />
       </section>
       <Drawer open={drawerOpen} anchor={"left"} onClose={toggleDrawer}>
         <section className={styles.sidebar}>
-          {userInfo?.shop?.logo ? (
-            <Link href="/admin/dashboard">
-              <div className={styles.header}>
-                <Image
-                  alt="logo"
-                  src={userInfo?.shop.logo}
-                  width={"30"}
-                  height={"30"}
-                  style={{ objectFit: "contain" }}
-                />
-              </div>
-            </Link>
-          ) : (
-            <Link href="/admin/dashboard">
-              <div className={styles.header}>
-                <Image
-                  alt="logo"
-                  src={"/images/default-store.png"}
-                  width={"30"}
-                  height={"30"}
-                  style={{ objectFit: "contain" }}
-                />
-                <p>{userInfo?.shop.name}</p>
-              </div>
-            </Link>
-          )}
-
-          <Link href="/admin/categories">
+          <Link onClick={toggleDrawer} href="/admin/categories">
             <div className={`${styles.link} + hoverable`}>
-              <CategoryIcon color="shop1" />
+              <CategoryIcon color="primary" />
               <p>categories</p>
             </div>
           </Link>
-          <Link href="/admin/inventory">
+          <Link onClick={toggleDrawer} href="/admin/inventory">
             <div className={`${styles.link} + hoverable`}>
               <InventoryIcon color="shop2" />
               <p>inventory</p>
             </div>
           </Link>
-          <Link href="/admin/clients">
+          <Link onClick={toggleDrawer} href="/admin/orders">
             <div className={`${styles.link} + hoverable`}>
-              <PeopleAltIcon color="shop3" />
-              <p>clients</p>
-            </div>
-          </Link>
-          <Link href="/admin/orders">
-            <div className={`${styles.link} + hoverable`}>
-              <LocalShippingIcon color="shop4" />
+              <LocalShippingIcon color="shop3" />
               <p>orders</p>
             </div>
           </Link>
-          <Link href="/admin/boost">
+          <Link onClick={toggleDrawer} href="/admin/theme">
             <div className={`${styles.link} + hoverable`}>
-              <RocketLaunchIcon color="shop5" />
-              <p>boost sales</p>
-            </div>
-          </Link>
-          {/* <Link href="/">
-            <div className={`${styles.link} + hoverable`}>
-              <Inventory2Icon color="shop5" />
-              <p>link</p>
-            </div>
-          </Link>
-          <Link href="/">
-            <div className={`${styles.link} + hoverable`}>
-              <Inventory2Icon color="shop6" />
-              <p>link</p>
-            </div>
-          </Link>
-          <Link href="/">
-            <div className={`${styles.link} + hoverable`}>
-              <Inventory2Icon color="shop7" />
-              <p>link</p>
-            </div>
-          </Link>
-          <Link href="/">
-            <div className={`${styles.link} + hoverable`}>
-              <Inventory2Icon color="shop8" />
-              <p>link</p>
-            </div>
-          </Link> */}
-        </section>
-      </Drawer>
-      <Drawer
-        open={profileMenuOpen}
-        anchor={"right"}
-        onClose={toggleProfileMenu}
-      >
-        <section className={styles.sidebar}>
-          <Link href="/admin/theme">
-            <div className={`${styles.link} + hoverable`}>
-              <PaletteIcon color="shop5" />
+              <PaletteIcon color="shop4" />
               <p>my shop theme</p>
             </div>
           </Link>
-          <Link href="/admin/architecture">
+          <Link onClick={toggleDrawer} href="/admin/architecture">
             <div className={`${styles.link} + hoverable`}>
-              <SettingsIcon color="shop6" />
+              <SettingsIcon color="shop5" />
               <p>configure my shop</p>
             </div>
           </Link>
+          <Link
+            rel="noreferrer"
+            target="_blank"
+            onClick={toggleDrawer}
+            href={`/shop?shop=${userInfo.shop.name}`}
+          >
+            <div className={`${styles.link} + hoverable`}>
+              <TravelExploreIcon />
+              <p>visit my shop</p>
+            </div>
+          </Link>
           <span className={styles.logout}>
-            <Button onClick={logout} color="error">
-              <ExitToAppIcon></ExitToAppIcon>logout
+            <Button variant="contained" color="secondary" onClick={logout}>
+              <ExitToAppIcon></ExitToAppIcon>&nbsp;logout
             </Button>
           </span>
         </section>

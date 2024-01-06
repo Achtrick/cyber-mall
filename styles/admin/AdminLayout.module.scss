@@ -7,12 +7,13 @@
   background-color: var(--black-color);
   color: white;
   position: fixed;
-  z-index: 1000;
+  z-index: 2000;
   padding: 0px 20px;
 }
 .sidebar {
   width: clamp(350px, 25vw, 450px);
   height: 100vh;
+  padding-top: 80px !important;
   overflow-y: auto;
   background-color: whitesmoke;
   padding: 20px;
