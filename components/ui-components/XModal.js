@@ -17,7 +17,7 @@ function XModal({
   ...props
 }) {
   return (
-    <Modal open={open} onClose={onClose}>
+    <Modal style={{ zIndex: "2001" }} open={open} onClose={onClose}>
       <div className={styles.container}>
         <div
           className={
