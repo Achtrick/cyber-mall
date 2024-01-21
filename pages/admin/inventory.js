@@ -196,7 +196,7 @@ function Inventory(props) {
         >
           {action === AdminActions.DELETE ? (
             <>
-              <p>deleting "{product.designation}".</p>
+              <p>deleting &quot;{product.designation}&quot;.</p>
               <p>are you sure ?</p>
             </>
           ) : (

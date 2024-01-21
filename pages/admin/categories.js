@@ -18,7 +18,7 @@ import {
   ModeEditIcon,
 } from "../../utils/theme/icons";
 
-function categories() {
+function Categories() {
   const { userInfo } = useSelector((state) => state.auth);
 
   const [categories, setCategories] = useState([]);
@@ -145,8 +145,8 @@ function categories() {
           {action === AdminActions.DELETE ? (
             <>
               <p>
-                if you delete "{category.name}" category all of the products
-                under it will be deleted.
+                if you delete &quot;{category.name}&quot; category all of the
+                products under it will be deleted.
               </p>
               <p>are you sure ?</p>
             </>
@@ -277,4 +277,4 @@ function categories() {
   );
 }
 
-export default categories;
+export default Categories;
