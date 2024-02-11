@@ -2,6 +2,7 @@ import nc from "next-connect";
 import connectDB from "../../../../utils/connectDB";
 import Shop from "../../../../models/shop.model";
 import auth from "../../../../middlewares/admin-auth";
+import { removeFile } from "../../../../utils/shared/removeFile";
 
 const handler = nc();
 
@@ -11,7 +12,11 @@ handler.post(auth, async (req, res) => {
 
   try {
     const shop = await Shop.findOne({ _id: shopId });
+
+    removeFile(shop.logo.split("/").pop());
+
     shop.logo = logo;
+
     await shop.save();
 
     res.status(200).json({ message: "updated logo" });

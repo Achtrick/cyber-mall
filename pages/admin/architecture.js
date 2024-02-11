@@ -13,7 +13,7 @@ import HomeSlider from "../../components/shop/HomeSlider";
 import XGallery from "../../components/ui-components/XGallery";
 import XModal from "../../components/ui-components/XModal";
 import styles from "../../styles/admin/Dashboard.module.scss";
-import { compressImage } from "../../utils/config/convertHelper";
+import { compressImage, getThumbnail } from "../../utils/config/convertHelper";
 import { getError } from "../../utils/shared/getError";
 import {
   AddIcon,
@@ -46,6 +46,7 @@ function Architecture(props) {
   const [discounts, setDiscounts] = useState([]);
   const [architecture, setArchitecture] = useState({});
   const [logo, setLogo] = useState(null);
+  const [compressedLogo, setCompressedLogo] = useState(null);
 
   const [action, setAction] = useState("");
   const [title, setTitle] = useState("");
@@ -176,12 +177,18 @@ function Architecture(props) {
 
   const updateLogo = async () => {
     setLoading(true);
+    const formData = new FormData();
+    formData.append("images", compressedLogo);
     try {
-      const { data } = await axios.post("/api/admin/shop/update-logo", {
-        shopId: shopInfo._id,
-        logo: logo,
+      const { data } = await axios.post("/api/upload", formData, {
+        headers: { "content-type": "multipart/form-data" },
       });
-      enqueueSnackbar(data.message, { variant: "success" });
+      const result = await axios.post("/api/admin/shop/update-logo", {
+        shopId: shopInfo._id,
+        logo: "/uploads/" + data[0].filename,
+      });
+      setCompressedLogo(null);
+      enqueueSnackbar(result.data.message, { variant: "success" });
       setLoading(false);
     } catch (error) {
       enqueueSnackbar(getError(error), { variant: "error" });
@@ -655,8 +662,10 @@ function Architecture(props) {
                   accept="image/*"
                   name="logo"
                   onChange={async (e) => {
-                    const base64 = await compressImage(e.target.files[0]);
+                    const base64 = await getThumbnail(e.target.files[0]);
+                    const compressed = await compressImage(e.target.files[0]);
                     setLogo(base64);
+                    setCompressedLogo(compressed);
                   }}
                 />
                 &nbsp;&nbsp;
@@ -669,7 +678,11 @@ function Architecture(props) {
                   </label>
                 </IconButton>{" "}
                 |{" "}
-                <IconButton color="info" onClick={updateLogo}>
+                <IconButton
+                  disabled={!compressedLogo}
+                  color="info"
+                  onClick={updateLogo}
+                >
                   <label
                     style={{ cursor: "pointer", width: "25px", height: "25px" }}
                   >

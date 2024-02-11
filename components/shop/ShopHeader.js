@@ -240,7 +240,7 @@ function ShopHeader({ shopInfo, ...props }) {
                 alt="logo"
                 src={shopInfo.logo}
                 width={"100"}
-                height={"100"}
+                height={"60"}
                 style={{
                   objectFit: "contain",
                 }}
