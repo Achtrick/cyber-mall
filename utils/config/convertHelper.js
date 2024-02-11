@@ -1,4 +1,5 @@
 import Resizer from "react-image-file-resizer";
+import imageCompression from "browser-image-compression";
 
 export function isColorDark(color) {
   const rgb = parseInt(color.slice(1), 16);
@@ -17,7 +18,7 @@ export function calculateDiscount(price, discount) {
   return price - (price * discount) / 100;
 }
 
-export const compressImage = async (file) =>
+export const getThumbnail = async (file) =>
   await new Promise((resolve) => {
     Resizer.imageFileResizer(
       file,
@@ -32,3 +33,12 @@ export const compressImage = async (file) =>
       "base64"
     );
   });
+
+export const compressImage = async (file) => {
+  const options = {
+    maxSizeMB: 0.25,
+    maxWidthOrHeight: 720,
+    useWebWorker: true,
+  };
+  return await imageCompression(file, options);
+};

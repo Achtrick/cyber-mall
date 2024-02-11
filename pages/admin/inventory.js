@@ -9,12 +9,13 @@ import styles from "../../styles/admin/Dashboard.module.scss";
 import { getError } from "../../utils/shared/getError";
 import {
   AddIcon,
+  ChangeCircleIcon,
   CloseIcon,
   DeleteIcon,
   ModeEditIcon,
   SearchIcon,
 } from "../../utils/theme/icons";
-import { compressImage } from "../../utils/config/convertHelper";
+import { compressImage, getThumbnail } from "../../utils/config/convertHelper";
 import XAutoComplete from "../../components/ui-components/XAutoComplete";
 import XModal from "../../components/ui-components/XModal";
 import { useSelector } from "react-redux";
@@ -34,6 +35,7 @@ function Inventory(props) {
   const [loadingCategories, setLoadingCategories] = useState(false);
   const [modalLoading, setModalLoading] = useState(false);
   const [action, setAction] = useState("");
+  const [images, setImages] = useState([]);
 
   const [product, setProduct] = useState({
     category: "",
@@ -87,50 +89,100 @@ function Inventory(props) {
   const onChange = async (e) => {
     if (e.target.name === "images") {
       let compressedImages = [];
-      const images = e.target.files;
-      for (let image of images) {
-        const base64 = await compressImage(image);
-        compressedImages.length + product.images.length < 3
-          ? compressedImages.push(base64)
-          : enqueueSnackbar("can't exceed 3 images per product.", {
-              variant: "warning",
-            });
+      let imagesToUpload = [];
+
+      const files = e.target.files;
+
+      for (let image of files) {
+        const base64 = await getThumbnail(image);
+        const compressedImage = await compressImage(image);
+        if (compressedImages.length < 3) {
+          compressedImages.push(base64);
+          imagesToUpload.push(compressedImage);
+        } else {
+          enqueueSnackbar("can't exceed 3 images per product.", {
+            variant: "warning",
+          });
+        }
       }
+
+      setImages(imagesToUpload);
+
       setProduct({
         ...product,
-        images: [...product.images, ...compressedImages],
+        images: compressedImages,
       });
     } else {
       setProduct({ ...product, [e.target.name]: e.target.value });
     }
   };
 
-  const deleteImage = (imageToDelete) => {
-    setProduct({
-      ...product,
-      images: product.images.filter((image) => image !== imageToDelete),
-    });
-  };
-
   const handleProduct = async (e) => {
     e.preventDefault();
     setModalLoading(true);
     let result = null;
+
+    let formData = new FormData();
+
+    for (let image of images) {
+      formData.append("images", image);
+    }
+
     try {
       switch (action) {
         case AdminActions.ADD:
+          const { data } = await axios.post("/api/upload", formData, {
+            headers: { "content-type": "multipart/form-data" },
+          });
+
+          const uploads = [];
+
+          for (let uploaded of data) {
+            uploads.push("/uploads/" + uploaded.filename);
+          }
+
           result = await axios.post("/api/admin/products/add", {
             shop: userInfo.shop._id,
             ...product,
+            images: uploads,
           });
+
+          setImages([]);
           break;
         case AdminActions.UPDATE:
-          result = await axios.put("/api/admin/products/update", product);
+          if (images.length) {
+            const { data } = await axios.post("/api/upload", formData, {
+              headers: { "content-type": "multipart/form-data" },
+            });
+
+            const uploads = [];
+
+            for (let uploaded of data) {
+              uploads.push("/uploads/" + uploaded.filename);
+            }
+
+            result = await axios.put("/api/admin/products/update", {
+              ...product,
+              images: uploads,
+            });
+          } else {
+            result = await axios.put("/api/admin/products/update", {
+              _id: product._id,
+              category: product.category,
+              designation: product.designation,
+              description: product.description,
+              price: product.price,
+              discount: product.discount,
+              qty: product.qty,
+            });
+          }
+          setImages([]);
           break;
         case AdminActions.DELETE:
           result = await axios.delete(
             `/api/admin/products/delete/${product._id}`
           );
+          setImages([]);
           break;
         default:
           break;
@@ -244,14 +296,6 @@ function Inventory(props) {
                   {product.images.map((image, index) => {
                     return (
                       <div key={index} className={styles.imgPreview}>
-                        <div className={styles.closeIcon}>
-                          <IconButton
-                            style={{ width: "30px", height: "30px" }}
-                            onClick={() => deleteImage(image)}
-                          >
-                            <CloseIcon />
-                          </IconButton>
-                        </div>
                         <img alt={index} src={image} />
                       </div>
                     );
@@ -264,23 +308,20 @@ function Inventory(props) {
                   accept="image/*"
                   multiple
                   name="images"
-                  max="3"
                   onChange={onChange}
                 />
-                {product.images.length < 3 ? (
-                  <IconButton>
-                    <label
-                      style={{
-                        cursor: "pointer",
-                        width: "25px",
-                        height: "25px",
-                      }}
-                      htmlFor="images"
-                    >
-                      <AddIcon></AddIcon>
-                    </label>
-                  </IconButton>
-                ) : null}
+                <IconButton>
+                  <label
+                    style={{
+                      cursor: "pointer",
+                      width: "25px",
+                      height: "25px",
+                    }}
+                    htmlFor="images"
+                  >
+                    {product.images.length ? <ChangeCircleIcon /> : <AddIcon />}
+                  </label>
+                </IconButton>
               </div>
               <div className="labeledInput">
                 <label>price</label>

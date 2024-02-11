@@ -32,6 +32,7 @@ import YouTubeIcon from "@mui/icons-material/YouTube";
 import ReplayIcon from "@mui/icons-material/Replay";
 import RemoveIcon from "@mui/icons-material/Remove";
 import TravelExploreIcon from "@mui/icons-material/TravelExplore";
+import ChangeCircleIcon from "@mui/icons-material/ChangeCircle";
 
 const TiktokIcon = MusicNoteIcon;
 const AddressIcon = BusinessIcon;
@@ -74,4 +75,5 @@ export {
   ResetIcon,
   RemoveIcon,
   TravelExploreIcon,
+  ChangeCircleIcon,
 };

@@ -8,7 +8,7 @@ import { AdminActions, ModalSizes } from "../../components/admin/ModalSettings";
 import DisconnectedGuard from "../../components/guards/disconnectedGuard";
 import XModal from "../../components/ui-components/XModal";
 import styles from "../../styles/admin/Dashboard.module.scss";
-import { compressImage } from "../../utils/config/convertHelper";
+import { compressImage, getThumbnail } from "../../utils/config/convertHelper";
 import { getError } from "../../utils/shared/getError";
 import {
   AddIcon,
@@ -25,6 +25,7 @@ function Categories() {
   const [loading, setLoading] = useState(false);
   const [modalLoading, setModalLoading] = useState(false);
   const [action, setAction] = useState("");
+  const [images, setImages] = useState("");
 
   const [category, setCategory] = useState({
     name: "",
@@ -57,7 +58,8 @@ function Categories() {
   const onChange = async (e) => {
     if (e.target.name === "icon") {
       let icon = e.target.files[0];
-      const base64 = await compressImage(icon);
+      setImages(await compressImage(icon));
+      const base64 = await getThumbnail(icon);
       icon = base64;
       setCategory({
         ...category,
@@ -68,32 +70,57 @@ function Categories() {
     }
   };
 
-  const deleteBackground = () => {
-    setCategory({
-      ...category,
-      icon: "",
-    });
-  };
-
   const handleCategory = async (e) => {
     e.preventDefault();
     setModalLoading(true);
     let result = null;
+
+    let formData = new FormData();
+    formData.append("images", images);
+
     try {
       switch (action) {
         case AdminActions.ADD:
+          if (images === "") {
+            setModalLoading(false);
+            return enqueueSnackbar("category image is required", {
+              variant: "error",
+            });
+          }
+          const { data } = await axios.post("/api/upload", formData, {
+            headers: { "content-type": "multipart/form-data" },
+          });
+
           result = await axios.post("/api/admin/categories/add", {
             shop: userInfo.shop._id,
             ...category,
+            icon: "/uploads/" + data[0].filename,
           });
+          setImages("");
           break;
         case AdminActions.UPDATE:
-          result = await axios.put("/api/admin/categories/update", category);
+          if (images !== "") {
+            const { data } = await axios.post("/api/upload", formData, {
+              headers: { "content-type": "multipart/form-data" },
+            });
+            result = await axios.put("/api/admin/categories/update", {
+              ...category,
+              icon: "/uploads/" + data[0].filename,
+            });
+          } else {
+            result = await axios.put("/api/admin/categories/update", {
+              _id: category._id,
+              name: category.name,
+              description: category.description,
+            });
+          }
+          setImages("");
           break;
         case AdminActions.DELETE:
           result = await axios.delete(
             `/api/admin/categories/delete/${category._id}`
           );
+          setImages("");
           break;
         default:
           break;
@@ -115,6 +142,7 @@ function Categories() {
       icon: "",
     });
     setAction("");
+    setImages("");
   };
 
   return (
@@ -181,14 +209,6 @@ function Categories() {
                 {category.icon !== "" && (
                   <div className={styles.imagesContainer}>
                     <div className={styles.imgPreview}>
-                      <div className={styles.closeIcon}>
-                        <IconButton
-                          style={{ width: "30px", height: "30px" }}
-                          onClick={() => deleteBackground()}
-                        >
-                          <CloseIcon />
-                        </IconButton>
-                      </div>
                       <img alt={category.name} src={category.icon} />
                     </div>
                   </div>
