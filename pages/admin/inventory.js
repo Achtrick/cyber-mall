@@ -292,10 +292,10 @@ function Inventory(props) {
               </div>
               <div className="labeledInput">
                 <label>images</label>
-                <div className={styles.imagesContainer}>
+                <div className={styles.productImagesContainer}>
                   {product.images.map((image, index) => {
                     return (
-                      <div key={index} className={styles.imgPreview}>
+                      <div key={index} className={styles.productImgPreview}>
                         <img alt={index} src={image} />
                       </div>
                     );
@@ -310,7 +310,7 @@ function Inventory(props) {
                   name="images"
                   onChange={onChange}
                 />
-                <IconButton>
+                <IconButton color="success">
                   <label
                     style={{
                       cursor: "pointer",
@@ -386,6 +386,7 @@ function Inventory(props) {
                     <p>create categories to start adding products !</p>
                   )}
               <IconButton
+                color="success"
                 onClick={() => {
                   setAction(AdminActions.ADD);
                   setProduct({ ...product, category: categories[0]._id });
@@ -393,7 +394,7 @@ function Inventory(props) {
                 icon="add"
                 disabled={!categories.length}
               >
-                <AddIcon color="black" />
+                <AddIcon />
               </IconButton>
             </div>
           </div>
@@ -426,6 +427,7 @@ function Inventory(props) {
                         <td>
                           <div className="centered-row">
                             <IconButton
+                              color="warning"
                               onClick={() => {
                                 setAction(AdminActions.UPDATE);
                                 setProduct(product);
@@ -434,6 +436,7 @@ function Inventory(props) {
                               <ModeEditIcon sx={{ width: "20px" }} />
                             </IconButton>
                             <IconButton
+                              color="error"
                               onClick={() => {
                                 setAction(AdminActions.DELETE);
                                 setProduct(product);

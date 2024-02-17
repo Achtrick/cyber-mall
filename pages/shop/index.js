@@ -205,7 +205,10 @@ function Shop(props) {
                 }}
               >
                 <XHr color={shopInfo.settings.secondaryColor} width="30%" />
-                <XGallery content={galleryInfo.content} />
+                <XGallery
+                  shopName={shopInfo.name}
+                  content={galleryInfo.content}
+                />
               </div>
             )}
 

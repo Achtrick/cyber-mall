@@ -2,6 +2,7 @@ import nc from "next-connect";
 import connectDB from "../../../../utils/connectDB";
 import Shop from "../../../../models/shop.model";
 import auth from "../../../../middlewares/admin-auth";
+import { removeFile } from "../../../../utils/shared/removeFile";
 
 const handler = nc();
 
@@ -13,6 +14,14 @@ handler.post(auth, async (req, res) => {
     const shop = await Shop.findOne({ _id: shopId });
     switch (component) {
       case "sliderComponent":
+        let slidesToDelete = shop.architecture.home.sliderComponent.filter(
+          (item1) => !body.some((item2) => item1.image === item2.image)
+        );
+
+        for (let slide of slidesToDelete) {
+          removeFile(slide.image.split("/").pop());
+        }
+
         shop.architecture = {
           ...shop.architecture,
           home: { ...shop.architecture.home, sliderComponent: body },
@@ -31,6 +40,15 @@ handler.post(auth, async (req, res) => {
         };
         break;
       case "galleryComponent":
+        let itemsToDelete =
+          shop.architecture.home.galleryComponent.content.filter(
+            (item1) =>
+              !body.content.some((item2) => item1.image === item2.image)
+          );
+
+        for (let item of itemsToDelete) {
+          removeFile(item.image.split("/").pop());
+        }
         shop.architecture = {
           ...shop.architecture,
           home: { ...shop.architecture.home, galleryComponent: body },
@@ -58,6 +76,7 @@ handler.post(auth, async (req, res) => {
 
     res.status(200).json({ message: "updated architecture" });
   } catch (err) {
+    console.log(err);
     res.status(400).json(err);
   }
 });

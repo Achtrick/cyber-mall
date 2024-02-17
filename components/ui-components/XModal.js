@@ -17,7 +17,7 @@ function XModal({
   ...props
 }) {
   return (
-    <Modal style={{ zIndex: "1000 !important;" }} open={open} onClose={onClose}>
+    <Modal style={{ zIndex: "1000 !important" }} open={open} onClose={onClose}>
       <div className={styles.container}>
         <div
           className={
@@ -34,7 +34,7 @@ function XModal({
         >
           <div className={styles.header}>
             <p>{title}</p>
-            <IconButton onClick={onClose}>
+            <IconButton color="error" onClick={onClose}>
               <CloseIcon></CloseIcon>
             </IconButton>
           </div>

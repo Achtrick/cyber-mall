@@ -207,8 +207,8 @@ function Categories() {
               <div className="labeledInput">
                 <label>icon (recommended resolution (250px * 250px))</label>
                 {category.icon !== "" && (
-                  <div className={styles.imagesContainer}>
-                    <div className={styles.imgPreview}>
+                  <div className={styles.productImagesContainer}>
+                    <div className={styles.productImgPreview}>
                       <img alt={category.name} src={category.icon} />
                     </div>
                   </div>
@@ -261,6 +261,7 @@ function Categories() {
                     <p>{category.name}</p>
                     <div className="centered-row">
                       <IconButton
+                        color="warning"
                         onClick={() => {
                           setAction(AdminActions.UPDATE);
                           setCategory(category);
@@ -269,6 +270,7 @@ function Categories() {
                         <ModeEditIcon sx={{ width: "20px" }} />
                       </IconButton>
                       <IconButton
+                        color="error"
                         onClick={() => {
                           setAction(AdminActions.DELETE);
                           setCategory(category);
@@ -282,11 +284,12 @@ function Categories() {
               })}
               <div className="card" key={category._id}>
                 <IconButton
+                  color="success"
                   sx={{ width: "40px", height: "40px" }}
                   onClick={() => setAction(AdminActions.ADD)}
                   icon="add"
                 >
-                  <AddIcon color="black" />
+                  <AddIcon />
                 </IconButton>
               </div>
             </div>
