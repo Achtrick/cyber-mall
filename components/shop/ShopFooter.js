@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import styles from "../../styles/shop/ShopFooter.module.scss";
 import { deduceColor } from "../../utils/config/convertHelper";
@@ -11,7 +12,6 @@ import {
   TiktokIcon,
   YouTubeIcon,
 } from "../../utils/theme/icons";
-import Link from "next/link";
 
 function ShopFooter({ shopInfo }) {
   const [deducedColor, setDeducedColor] = useState("white");

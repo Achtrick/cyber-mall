@@ -1,7 +1,7 @@
-import React from "react";
-import styles from "../../styles/vitrine/Services.module.scss";
 import { Button } from "@mui/material";
 import Link from "next/link";
+import React from "react";
+import styles from "../../styles/vitrine/Services.module.scss";
 
 function Services(props) {
   return (

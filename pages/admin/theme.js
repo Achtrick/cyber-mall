@@ -1,25 +1,25 @@
+import { CircularProgress, IconButton, Skeleton } from "@mui/material";
+import axios from "axios";
+import { useRouter } from "next/router";
+import { useSnackbar } from "notistack";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import AdminLayout from "../../components/admin/AdminLayout";
+import { AdminActions, ModalSizes } from "../../components/admin/ModalSettings";
 import DisconnectedGuard from "../../components/guards/disconnectedGuard";
+import XBadge from "../../components/ui-components/XBadge";
+import XButton from "../../components/ui-components/XButton";
+import XHr from "../../components/ui-components/XHr";
+import XModal from "../../components/ui-components/XModal";
 import styles from "../../styles/admin/Dashboard.module.scss";
 import themeStyles from "../../styles/admin/Theme.module.scss";
-import AdminLayout from "../../components/admin/AdminLayout";
-import { Button, CircularProgress, IconButton, Skeleton } from "@mui/material";
-import { useRouter } from "next/router";
-import axios from "axios";
-import { deduceColor, isColorDark } from "../../utils/config/convertHelper";
+import { deduceColor } from "../../utils/config/convertHelper";
+import { getError } from "../../utils/shared/getError";
 import {
   CheckCircleIcon,
   PaletteIcon,
   ShoppingCartIcon,
 } from "../../utils/theme/icons";
-import XModal from "../../components/ui-components/XModal";
-import { AdminActions, ModalSizes } from "../../components/admin/ModalSettings";
-import { getError } from "../../utils/shared/getError";
-import { useSnackbar } from "notistack";
-import XButton from "../../components/ui-components/XButton";
-import XBadge from "../../components/ui-components/XBadge";
-import XHr from "../../components/ui-components/XHr";
 
 function Theme(props) {
   const { userInfo } = useSelector((state) => state.auth);

@@ -41,7 +41,7 @@ function MyApp(props) {
               <SnackbarProvider
                 anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
               >
-                <Component className="dx-viewport" {...pageProps} />
+                <Component {...pageProps} />
               </SnackbarProvider>
             </LocalizationProvider>
           </ThemeProvider>

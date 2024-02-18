@@ -1,19 +1,19 @@
+import { Button, Skeleton } from "@mui/material";
+import axios from "axios";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import React, { useEffect, useState } from "react";
-import { getError } from "../../utils/shared/getError";
-import axios from "axios";
+import { useDispatch } from "react-redux";
+import { SwiperSlide } from "swiper/react";
 import LoadingScreen from "../../components/shop/LoadingScreen";
+import ProductsSlider from "../../components/shop/ProductsSlider";
 import ShopLayout from "../../components/shop/ShopLayout";
-import styles from "../../styles/shop/Product.module.scss";
-import { Button, Skeleton } from "@mui/material";
-import XSwiper from "../../components/ui-components/XSwiper";
 import XButton from "../../components/ui-components/XButton";
 import XHr from "../../components/ui-components/XHr";
-import { SwiperSlide } from "swiper/react";
+import XSwiper from "../../components/ui-components/XSwiper";
+import styles from "../../styles/shop/Product.module.scss";
 import { calculateDiscount } from "../../utils/config/convertHelper";
-import ProductsSlider from "../../components/shop/ProductsSlider";
-import { useDispatch } from "react-redux";
+import { getError } from "../../utils/shared/getError";
 import { AddIcon, RemoveIcon } from "../../utils/theme/icons";
 
 function Product(props) {
@@ -75,6 +75,7 @@ function Product(props) {
         shopId: shopId,
         id: id,
       });
+
       setProduct(data);
       setLoadingProduct(false);
       !similars.length && (await getSimilars(data.shop, data.category));
@@ -143,7 +144,10 @@ function Product(props) {
                       product.images.map((image, index) => {
                         return (
                           <SwiperSlide key={index}>
-                            <img src={image} />
+                            <img
+                              src={`/api/images/${image.split("/").pop()}`}
+                              alt={`Image ${index}`}
+                            />
                           </SwiperSlide>
                         );
                       })
@@ -157,10 +161,15 @@ function Product(props) {
                 <div className={styles.infos}>
                   <h1>{product.designation}</h1>
                   {product.discount && product.discount !== 0 ? (
-                    <p className={styles.oldPrice}>{product.price + " DT"}</p>
+                    <p className={styles.oldPrice}>
+                      {product.price.toLocaleString() + " DT"}
+                    </p>
                   ) : null}
                   <p className={styles.price}>
-                    {calculateDiscount(product.price, product.discount) + " DT"}
+                    {calculateDiscount(
+                      product.price,
+                      product.discount
+                    ).toLocaleString() + " DT"}
                   </p>
                   <div className={styles.quantity}>
                     <Button

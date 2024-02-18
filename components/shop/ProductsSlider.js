@@ -34,17 +34,22 @@ function ProductsSlider({
                     alt={index}
                     src={
                       product.images[0]
-                        ? product.images[0]
+                        ? `/api/images/${product.images[0].split("/").pop()}`
                         : "/images/image-placeholder.jpg"
                     }
                   />
                 </Link>
                 <p>{product.designation}</p>
                 {product.discount && product.discount !== 0 ? (
-                  <p className={styles.oldPrice}>{product.price + " DT"}</p>
+                  <p className={styles.oldPrice}>
+                    {product.price.toLocaleString() + " DT"}
+                  </p>
                 ) : null}
                 <p className={styles.price}>
-                  {calculateDiscount(product.price, product.discount) + " DT"}
+                  {calculateDiscount(
+                    product.price,
+                    product.discount
+                  ).toLocaleString() + " DT"}
                 </p>
                 <XButton
                   color={settings.primaryColor}

@@ -1,6 +1,5 @@
-import React from "react";
-import { deduceColor } from "../../utils/config/convertHelper";
 import styles from "../../styles/components/XBadge.module.scss";
+import { deduceColor } from "../../utils/config/convertHelper";
 
 function XBadge({ content, color, ...props }) {
   return (

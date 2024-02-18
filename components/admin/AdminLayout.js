@@ -1,21 +1,18 @@
 import { Button, Drawer, IconButton } from "@mui/material";
-import Link from "next/link";
-import React, { useState } from "react";
-import styles from "../../styles/admin/AdminLayout.module.scss";
-import { useDispatch, useSelector } from "react-redux";
 import Image from "next/image";
+import Link from "next/link";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import styles from "../../styles/admin/AdminLayout.module.scss";
 import {
-  AccountCircleIcon,
+  CategoryIcon,
+  CloseIcon,
   ExitToAppIcon,
   InventoryIcon,
   LocalShippingIcon,
   MenuIcon,
   PaletteIcon,
-  PeopleAltIcon,
-  RocketLaunchIcon,
   SettingsIcon,
-  CategoryIcon,
-  CloseIcon,
   TravelExploreIcon,
 } from "../../utils/theme/icons";
 

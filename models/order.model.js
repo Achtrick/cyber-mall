@@ -15,6 +15,7 @@ const orderSchema = new Schema(
         phone: "",
       },
     },
+    state: { type: String, default: "WAITING" }, // WAITING CLOSED
     products: [productSchema],
   },
   { timestamps: true }

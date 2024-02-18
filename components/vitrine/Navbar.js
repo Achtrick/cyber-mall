@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
-import styles from "../../styles/vitrine/Navbar.module.scss";
+import { Button, Drawer, IconButton } from "@mui/material";
 import Image from "next/image";
-import { Button, IconButton, Drawer } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
+import styles from "../../styles/vitrine/Navbar.module.scss";
 import { CloseIcon, MenuIcon } from "../../utils/theme/icons";
 
 function Navbar() {

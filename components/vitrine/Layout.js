@@ -1,7 +1,7 @@
 import React from "react";
-import Navbar from "./Navbar";
-import Footer from "./Footer";
 import styles from "../../styles/vitrine/Layout.module.scss";
+import Footer from "./Footer";
+import Navbar from "./Navbar";
 
 function Layout(props) {
   return (

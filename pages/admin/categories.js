@@ -13,7 +13,6 @@ import { getError } from "../../utils/shared/getError";
 import {
   AddIcon,
   CategoryIcon,
-  CloseIcon,
   DeleteIcon,
   ModeEditIcon,
 } from "../../utils/theme/icons";
@@ -209,7 +208,13 @@ function Categories() {
                 {category.icon !== "" && (
                   <div className={styles.productImagesContainer}>
                     <div className={styles.productImgPreview}>
-                      <img alt={category.name} src={category.icon} />
+                      <img
+                        alt={category.name}
+                        src={`/api/images/${category.icon.split("/").pop()}`}
+                        onError={(e) => {
+                          e.target.src = category.icon;
+                        }}
+                      />
                     </div>
                   </div>
                 )}
@@ -252,7 +257,10 @@ function Categories() {
                       <img
                         className="icon"
                         alt={category.name}
-                        src={category.icon}
+                        src={`/api/images/${category.icon.split("/").pop()}`}
+                        onError={(e) => {
+                          e.target.src = category.icon;
+                        }}
                       />
                     ) : (
                       <CategoryIcon className="icon" />

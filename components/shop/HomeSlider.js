@@ -1,7 +1,7 @@
 import { Link } from "@mui/material";
 import React from "react";
-import XSwiper from "../ui-components/XSwiper";
 import { SwiperSlide } from "swiper/react";
+import XSwiper from "../ui-components/XSwiper";
 
 function HomeSlider({ slides, shopName, ...props }) {
   return (
@@ -19,16 +19,25 @@ function HomeSlider({ slides, shopName, ...props }) {
               <SwiperSlide key={index}>
                 {slide.link && slide.link !== "" ? (
                   <Link href={slide.link} rel="noreferrer" target="_blank">
-                    <img src={slide.image} alt={slide.link} />
+                    <img
+                      src={`/api/images/${slide.image.split("/").pop()}`}
+                      alt={slide.link}
+                    />
                   </Link>
                 ) : slide.category && slide.category !== "" ? (
                   <Link
                     href={`/shop/products?shop=${shopName}&category=${slide.category}`}
                   >
-                    <img src={slide.image} alt={slide.category} />
+                    <img
+                      src={`/api/images/${slide.image.split("/").pop()}`}
+                      alt={slide.category}
+                    />
                   </Link>
                 ) : (
-                  <img src={slide.image} alt="slide" />
+                  <img
+                    src={`/api/images/${slide.image.split("/").pop()}`}
+                    alt="slide"
+                  />
                 )}
               </SwiperSlide>
             );

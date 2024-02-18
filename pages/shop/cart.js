@@ -129,7 +129,7 @@ function Cart(props) {
                       <th>designation</th>
                       <th>price</th>
                       <th>qty</th>
-                      <th>total</th>
+                      <th>unit total</th>
                       <th></th>
                     </tr>
                   </thead>
@@ -143,15 +143,20 @@ function Cart(props) {
                                 alt={product.designation}
                                 src={
                                   product.images[0]
-                                    ? product.images[0]
+                                    ? `/api/images/${product.images[0]
+                                        .split("/")
+                                        .pop()}`
                                     : "/images/image-placeholder.jpg"
                                 }
                               />
                             </td>
                             <td>{product.designation}</td>
-                            <td>{product.price + " DT"}</td>
+                            <td>{product.price.toLocaleString() + " DT"}</td>
                             <td>{product.qty}</td>
-                            <td>{product.qty * product.price + " DT"}</td>
+                            <td>
+                              {(product.qty * product.price).toLocaleString() +
+                                " DT"}
+                            </td>
                             <td>
                               <IconButton
                                 color="error"
@@ -169,9 +174,11 @@ function Cart(props) {
                       <th colSpan={4}>TOTAL</th>
                       <th colSpan={2}>
                         {cart.content &&
-                          cart.content.reduce((sum, product) => {
-                            return sum + product.price * product.qty;
-                          }, 0)}{" "}
+                          cart.content
+                            .reduce((sum, product) => {
+                              return sum + product.price * product.qty;
+                            }, 0)
+                            .toLocaleString()}{" "}
                         DT + shipping fee: {shopInfo.shippingFee} DT
                       </th>
                     </tr>

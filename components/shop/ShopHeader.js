@@ -1,8 +1,12 @@
-import { Drawer, IconButton } from "@mui/material";
+import { CircularProgress, Drawer, IconButton } from "@mui/material";
+import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import XBadge from "../../components/ui-components/XBadge";
+import XHr from "../../components/ui-components/XHr";
 import styles from "../../styles/shop/ShopHeader.module.scss";
 import { deduceColor } from "../../utils/config/convertHelper";
 import {
@@ -17,8 +21,6 @@ import {
   TiktokIcon,
   YouTubeIcon,
 } from "../../utils/theme/icons";
-import { useRouter } from "next/router";
-import { useSelector } from "react-redux";
 
 function ShopHeader({ shopInfo, ...props }) {
   const router = useRouter();
@@ -28,9 +30,26 @@ function ShopHeader({ shopInfo, ...props }) {
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
+  const [loadingCategories, setLoadingCategories] = useState(true);
+  const [categories, setCategories] = useState([]);
+
   useEffect(() => {
     if (router.isReady) setSearchTerm(router.query.searchTerm);
+    !categories.length && getCategories(shopInfo._id);
   }, [router]);
+
+  const getCategories = async (shopId) => {
+    setLoadingCategories(true);
+    try {
+      const { data } = await axios.post("/api/admin/categories/get", {
+        shop: shopId,
+      });
+      setCategories(data);
+      setLoadingCategories(false);
+    } catch (error) {
+      setLoadingCategories(false);
+    }
+  };
 
   const toggleDrawer = () => {
     setDrawerOpen(!drawerOpen);
@@ -162,6 +181,39 @@ function ShopHeader({ shopInfo, ...props }) {
                 shop
               </div>
             </Link>
+            <div style={{ marginLeft: "5%" }}>
+              <XHr width="90%" color={shopInfo.settings.secondaryColor} />
+            </div>
+            {loadingCategories ? (
+              <CircularProgress />
+            ) : (
+              categories.map((category) => {
+                return (
+                  <Link
+                    key={category._id}
+                    href={`/shop/products/?shop=${shopInfo.name}&category=${category.name}`}
+                    onClick={() => toggleDrawer()}
+                  >
+                    <div
+                      className={styles.link}
+                      onMouseOver={(e) => {
+                        e.target.style.backgroundColor =
+                          shopInfo.settings.primaryColor;
+                        e.target.style.color = deduceColor(
+                          shopInfo.settings.primaryColor
+                        );
+                      }}
+                      onMouseLeave={(e) => {
+                        e.target.style.backgroundColor = "transparent";
+                        e.target.style.color = "black";
+                      }}
+                    >
+                      {category.name}
+                    </div>
+                  </Link>
+                );
+              })
+            )}
             <div className={styles.socials}>
               {shopInfo.architecture.contact.socials.facebook !== "" && (
                 <Link

@@ -1,4 +1,4 @@
-import { CircularProgress, Skeleton } from "@mui/material";
+import { CircularProgress, IconButton, Skeleton } from "@mui/material";
 import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -13,8 +13,9 @@ import XPagination from "../../components/ui-components/XPagination";
 import styles from "../../styles/shop/Products.module.scss";
 import { calculateDiscount } from "../../utils/config/convertHelper";
 import { getError } from "../../utils/shared/getError";
+import { CloseIcon, ResetIcon } from "../../utils/theme/icons";
 
-function Products(props) {
+function Products() {
   const router = useRouter();
   const { shop, category, searchTerm, sort } = router.query;
 
@@ -130,6 +131,22 @@ function Products(props) {
     });
   };
 
+  const resetSearch = (searchTerm) => {
+    const pathname = router.pathname;
+    let query = router.query;
+
+    query = { ...query, searchTerm: searchTerm };
+    if (pathname.includes("products")) {
+      router.push({ pathname: pathname, query: query });
+    } else {
+      router.push(
+        `/shop/products/?shop=${shopInfo.name}&searchTerm=${
+          searchTerm ? searchTerm : ""
+        }`
+      );
+    }
+  };
+
   return (
     <>
       {loading ? (
@@ -138,11 +155,22 @@ function Products(props) {
         <ShopLayout shopInfo={shopInfo}>
           <section className={styles.container}>
             <div className={styles.header}>
-              <XPagination
-                page={page}
-                count={count}
-                onChange={onPaginationChange}
-              />
+              <div className="row">
+                <XPagination
+                  page={page}
+                  count={count}
+                  onChange={onPaginationChange}
+                />
+                &nbsp;
+                {searchTerm?.length ? (
+                  <p>
+                    Results for: {searchTerm}{" "}
+                    <IconButton onClick={() => resetSearch()}>
+                      <ResetIcon />
+                    </IconButton>
+                  </p>
+                ) : null}
+              </div>
               <div className={styles.filter}>
                 {loadingCategories ? (
                   <CircularProgress
@@ -199,19 +227,25 @@ function Products(props) {
                         <img
                           alt={product.designation}
                           src={
-                            product.images[0] || "/images/image-placeholder.jpg"
+                            product.images[0]
+                              ? `/api/images/${product.images[0]
+                                  .split("/")
+                                  .pop()}`
+                              : "/images/image-placeholder.jpg"
                           }
                         />
                       </Link>
                       <p>{product.designation}</p>
                       {product.discount && product.discount !== 0 ? (
                         <p className={styles.oldPrice}>
-                          {product.price + " DT"}
+                          {product.price.toLocaleString() + " DT"}
                         </p>
                       ) : null}
                       <p className={styles.price}>
-                        {calculateDiscount(product.price, product.discount) +
-                          " DT"}
+                        {calculateDiscount(
+                          product.price,
+                          product.discount
+                        ).toLocaleString() + " DT"}
                       </p>
                       <XButton
                         color={shopInfo.settings.primaryColor}

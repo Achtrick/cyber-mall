@@ -1,6 +1,6 @@
 import { useMediaQuery } from "@mui/material";
 import React from "react";
-import SwiperCore, { Navigation, Autoplay, Pagination } from "swiper";
+import SwiperCore, { Autoplay, Navigation, Pagination } from "swiper";
 import { Swiper } from "swiper/react";
 // Import Swiper styles
 import "swiper/css";

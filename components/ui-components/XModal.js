@@ -1,8 +1,7 @@
 import { Button, CircularProgress, IconButton, Modal } from "@mui/material";
-import React from "react";
 import styles from "../../styles/components/XModal.module.scss";
-import { ModalControls, ModalSizes } from "../admin/ModalSettings";
 import { CloseIcon } from "../../utils/theme/icons";
+import { ModalControls, ModalSizes } from "../admin/ModalSettings";
 
 function XModal({
   loading,

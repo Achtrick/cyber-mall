@@ -2,24 +2,23 @@ import { IconButton, Skeleton } from "@mui/material";
 import axios from "axios";
 import { useSnackbar } from "notistack";
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import AdminLayout from "../../components/admin/AdminLayout";
 import { AdminActions, ModalSizes } from "../../components/admin/ModalSettings";
 import DisconnectedGuard from "../../components/guards/disconnectedGuard";
+import XAutoComplete from "../../components/ui-components/XAutoComplete";
+import XModal from "../../components/ui-components/XModal";
+import XPagination from "../../components/ui-components/XPagination";
 import styles from "../../styles/admin/Dashboard.module.scss";
+import { compressImage, getThumbnail } from "../../utils/config/convertHelper";
 import { getError } from "../../utils/shared/getError";
 import {
   AddIcon,
   ChangeCircleIcon,
-  CloseIcon,
   DeleteIcon,
   ModeEditIcon,
   SearchIcon,
 } from "../../utils/theme/icons";
-import { compressImage, getThumbnail } from "../../utils/config/convertHelper";
-import XAutoComplete from "../../components/ui-components/XAutoComplete";
-import XModal from "../../components/ui-components/XModal";
-import { useSelector } from "react-redux";
-import XPagination from "../../components/ui-components/XPagination";
 
 function Inventory(props) {
   let executeSearchTimeout;
@@ -218,7 +217,7 @@ function Inventory(props) {
     clearTimeout(executeSearchTimeout);
     executeSearchTimeout = setTimeout(() => {
       setSearchTerm(e.target.value);
-    }, 1000);
+    }, 600);
   };
 
   return (
@@ -296,7 +295,13 @@ function Inventory(props) {
                   {product.images.map((image, index) => {
                     return (
                       <div key={index} className={styles.productImgPreview}>
-                        <img alt={index} src={image} />
+                        <img
+                          alt={index}
+                          src={`/api/images/${image.split("/").pop()}`}
+                          onError={(e) => {
+                            e.target.src = image;
+                          }}
+                        />
                       </div>
                     );
                   })}
@@ -364,7 +369,7 @@ function Inventory(props) {
           <div className={styles.controls}>
             <h1>Inventory</h1>
             <div className="row">
-              <SearchIcon style={{ marginRight: "-30px" }} />
+              <SearchIcon color="secondary" style={{ marginRight: "-30px" }} />
               <input
                 style={{ paddingLeft: "30px" }}
                 className="defaultInput"
@@ -375,6 +380,7 @@ function Inventory(props) {
           </div>
           <div className={styles.controls}>
             <XPagination
+              color="secondary"
               page={page}
               count={count}
               onChange={onPaginationChange}
@@ -386,7 +392,7 @@ function Inventory(props) {
                     <p>create categories to start adding products !</p>
                   )}
               <IconButton
-                color="success"
+                color="secondary"
                 onClick={() => {
                   setAction(AdminActions.ADD);
                   setProduct({ ...product, category: categories[0]._id });
@@ -419,10 +425,19 @@ function Inventory(props) {
                 <tbody>
                   {products.map((product) => {
                     return (
-                      <tr key={product._id}>
+                      <tr
+                        className={
+                          product.qty < 5
+                            ? styles.error
+                            : product.qty < 10
+                            ? styles.warning
+                            : null
+                        }
+                        key={product._id}
+                      >
                         <td>{product.designation}</td>
                         <td>{product.description}</td>
-                        <td>{product.price + " DT"}</td>
+                        <td>{product.price.toLocaleString() + " DT"}</td>
                         <td>{product.qty}</td>
                         <td>
                           <div className="centered-row">

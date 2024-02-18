@@ -1,7 +1,7 @@
+import { CircularProgress } from "@mui/material";
 import React from "react";
 import styles from "../../styles/components/XButton.module.scss";
 import { deduceColor } from "../../utils/config/convertHelper";
-import { CircularProgress } from "@mui/material";
 
 function XButton({
   text,

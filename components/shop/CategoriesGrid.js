@@ -1,6 +1,6 @@
+import Link from "next/link";
 import React from "react";
 import styles from "../../styles/shop/CategoriesGrid.module.scss";
-import Link from "next/link";
 
 function CategoriesGrid({
   activateControls = true,
@@ -26,11 +26,14 @@ function CategoriesGrid({
                 <Link
                   href={
                     activateControls
-                      ? `shop/products/?shop=${shopName}&category=${category.name}`
+                      ? `/shop/products/?shop=${shopName}&category=${category.name}`
                       : ""
                   }
                 >
-                  <img alt={index} src={category.icon} />
+                  <img
+                    alt={index}
+                    src={`/api/images/${category.icon.split("/").pop()}`}
+                  />
                   <p>{category.name}</p>
                 </Link>
               </div>

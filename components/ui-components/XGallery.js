@@ -1,7 +1,7 @@
-import React from "react";
-import styles from "../../styles/components/XGallery.module.scss";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import React from "react";
+import styles from "../../styles/components/XGallery.module.scss";
 
 function XGallery({ shopName, content, props }) {
   const router = useRouter();
@@ -20,7 +20,12 @@ function XGallery({ shopName, content, props }) {
           rel={content[0]?.link.length ? "noreferrer" : null}
           target={content[0]?.link.length ? "_blank" : null}
         >
-          <img src={content[0]?.image ?? "/images/image-placeholder.jpg"} />
+          <img
+            src={
+              `/api/images/${content[0]?.image.split("/").pop()}` ??
+              "/images/image-placeholder.jpg"
+            }
+          />
           <div className={styles.overlay}>
             <p className={styles.text}>{content[0]?.text ?? "text"}</p>
           </div>
@@ -37,7 +42,12 @@ function XGallery({ shopName, content, props }) {
           rel={content[1]?.link.length ? "noreferrer" : null}
           target={content[1]?.link.length ? "_blank" : null}
         >
-          <img src={content[1]?.image ?? "/images/image-placeholder.jpg"} />
+          <img
+            src={
+              `/api/images/${content[1]?.image.split("/").pop()}` ??
+              "/images/image-placeholder.jpg"
+            }
+          />
           <div className={styles.overlay}>
             <p className={styles.text}>{content[1]?.text ?? "text"}</p>
           </div>
@@ -56,7 +66,12 @@ function XGallery({ shopName, content, props }) {
           rel={content[2]?.link.length ? "noreferrer" : null}
           target={content[2]?.link.length ? "_blank" : null}
         >
-          <img src={content[2]?.image ?? "/images/image-placeholder.jpg"} />
+          <img
+            src={
+              `/api/images/${content[2]?.image.split("/").pop()}` ??
+              "/images/image-placeholder.jpg"
+            }
+          />
           <div className={styles.overlay}>
             <p className={styles.text}>{content[2]?.text ?? "text"}</p>
           </div>
@@ -73,7 +88,12 @@ function XGallery({ shopName, content, props }) {
           rel={content[3]?.link.length ? "noreferrer" : null}
           target={content[3]?.link.length ? "_blank" : null}
         >
-          <img src={content[3]?.image ?? "/images/image-placeholder.jpg"} />
+          <img
+            src={
+              `/api/images/${content[3]?.image.split("/").pop()}` ??
+              "/images/image-placeholder.jpg"
+            }
+          />
           <div className={styles.overlay}>
             <p className={styles.text}>{content[3]?.text ?? "text"}</p>
           </div>

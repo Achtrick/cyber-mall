@@ -1,6 +1,7 @@
 import { IconButton, Skeleton } from "@mui/material";
 import axios from "axios";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -8,8 +9,8 @@ import AdminLayout from "../../components/admin/AdminLayout";
 import { ModalSizes } from "../../components/admin/ModalSettings";
 import DisconnectedGuard from "../../components/guards/disconnectedGuard";
 import CategoriesGrid from "../../components/shop/CategoriesGrid";
-import ProductsSlider from "../../components/shop/ProductsSlider";
 import HomeSlider from "../../components/shop/HomeSlider";
+import ProductsSlider from "../../components/shop/ProductsSlider";
 import XGallery from "../../components/ui-components/XGallery";
 import XModal from "../../components/ui-components/XModal";
 import styles from "../../styles/admin/Dashboard.module.scss";
@@ -26,13 +27,10 @@ import {
   LinkedInIcon,
   MailIcon,
   PhoneEnabledIcon,
-  ResetIcon,
   SettingsIcon,
   TiktokIcon,
   YouTubeIcon,
 } from "../../utils/theme/icons";
-import { useRouter } from "next/router";
-import { Edit } from "@mui/icons-material";
 
 function Architecture(props) {
   const { userInfo } = useSelector((state) => state.auth);
@@ -358,7 +356,13 @@ function Architecture(props) {
       <div className={styles.slideContainer}>
         <div className={styles.slidePreview}>
           {slide.image.length ? (
-            <img alt={slide.image} src={slide.image} />
+            <img
+              alt={slide.image}
+              src={`/api/images/${slide.image.split("/").pop()}`}
+              onError={(e) => {
+                e.target.src = slide.image;
+              }}
+            />
           ) : null}
           <IconButton
             color="success"
@@ -475,7 +479,13 @@ function Architecture(props) {
                   />
                 </IconButton>
               </div>
-              <img alt={index} src={category.icon} />
+              <img
+                alt={index}
+                src={`/api/images/${category.icon.split("/").pop()}`}
+                onError={(e) => {
+                  e.target.src = category.icon;
+                }}
+              />
             </div>
           );
         })}
@@ -515,7 +525,13 @@ function Architecture(props) {
       <div className={styles.slideContainer}>
         <div className={styles.slidePreview}>
           {galleryItem.image.length ? (
-            <img alt={galleryItem.image} src={galleryItem.image} />
+            <img
+              alt={galleryItem.image}
+              src={`/api/images/${galleryItem.image.split("/").pop()}`}
+              onError={(e) => {
+                e.target.src = galleryItem.image;
+              }}
+            />
           ) : null}
           <IconButton
             color="success"
@@ -762,7 +778,12 @@ function Architecture(props) {
                               <CloseIcon />
                             </IconButton>
                           </span>
-                          <img src={slide.image} />
+                          <img
+                            src={`/api/images/${slide.image.split("/").pop()}`}
+                            onError={(e) => {
+                              e.target.src = slide.image;
+                            }}
+                          />
                           {slide.link.length ? <p>custom link</p> : null}
                           {slide.category.length ? (
                             <p>category: {slide.category}</p>
@@ -1157,7 +1178,12 @@ function Architecture(props) {
                               <CloseIcon />
                             </IconButton>
                           </span>
-                          <img src={block.image} />
+                          <img
+                            src={`/api/images/${block.image.split("/").pop()}`}
+                            onError={(e) => {
+                              e.target.src = block.image;
+                            }}
+                          />
                           {block.text?.length ? (
                             <p>text: {block.text}</p>
                           ) : null}
