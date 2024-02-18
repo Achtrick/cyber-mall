@@ -91,6 +91,19 @@ function Orders() {
     }
   };
 
+  const deleteOrder = async () => {
+    try {
+      const { data } = await axios.delete(
+        `/api/admin/orders/delete/${order._id}`
+      );
+      setOrders(orders.filter((o) => o._id !== order._id));
+      enqueueSnackbar(data.message, { variant: "success" });
+      cancelAction();
+    } catch (error) {
+      enqueueSnackbar(getError(error), { variant: "error" });
+    }
+  };
+
   return (
     <AdminLayout>
       <DisconnectedGuard>
@@ -99,7 +112,13 @@ function Orders() {
           title={title}
           onClose={cancelAction}
           cancelAction={cancelAction}
-          confirmAction={closeOrder}
+          confirmAction={
+            action === "CLOSE-ORDER"
+              ? closeOrder
+              : action === "DELETE-ORDER"
+              ? deleteOrder
+              : null
+          }
           hideControls={action === "SHOW-ORDER"}
           size={action === "SHOW-ORDER" ? ModalSizes.BIG : ModalSizes.SMALL}
         >
@@ -107,6 +126,14 @@ function Orders() {
             <>
               <p>
                 are you sure to close order for client &apos;
+                {order.user.firstName + " " + order.user.lastName}&apos; ?
+              </p>
+              <br />
+            </>
+          ) : action === "DELETE-ORDER" ? (
+            <>
+              <p>
+                are you sure to delete order for client &apos;
                 {order.user.firstName + " " + order.user.lastName}&apos; ?
               </p>
               <br />
@@ -305,7 +332,14 @@ function Orders() {
                                 />
                               </div>
                             ) : null}
-                            <IconButton color="error" onClick={() => {}}>
+                            <IconButton
+                              color="error"
+                              onClick={() => {
+                                setOrder(order);
+                                setAction("DELETE-ORDER");
+                                setTitle("delete order");
+                              }}
+                            >
                               <DeleteIcon sx={{ width: "20px" }} />
                             </IconButton>
                           </div>

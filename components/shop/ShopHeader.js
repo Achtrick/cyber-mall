@@ -288,13 +288,13 @@ function ShopHeader({ shopInfo, ...props }) {
         <div className={styles.logo}>
           {shopInfo.logo ? (
             <Link href={`/shop?shop=${shopInfo.name}`}>
-              <Image
-                alt="logo"
-                src={shopInfo.logo}
-                width={"100"}
-                height={"60"}
+              <img
+                alt={shopInfo.name}
+                src={`/api/images/${shopInfo.logo.split("/").pop()}`}
                 style={{
                   objectFit: "contain",
+                  width: "100px",
+                  height: "60px",
                 }}
               />
             </Link>
