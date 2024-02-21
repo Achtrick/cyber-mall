@@ -49,77 +49,82 @@ function RegisterShop(props) {
     <ConnectedGuard>
       <Layout>
         <section className={styles.container}>
-          <section className={styles.form}>
-            <h1>create your shop</h1>
-            <form id="form" onSubmit={register}>
-              <input
-                className="defaultInput"
-                required
-                onChange={onChange}
-                type="text"
-                name="firstName"
-                placeholder="first name"
-              ></input>
-              <input
-                className="defaultInput"
-                required
-                onChange={onChange}
-                type="text"
-                name="lastName"
-                placeholder="last name"
-              ></input>
-              <input
-                className="defaultInput"
-                required
-                onChange={onChange}
-                type="email"
-                name="email"
-                placeholder="email"
-              ></input>
-              <input
-                className="defaultInput"
-                required
-                onChange={onChange}
-                type="password"
-                name="password"
-                placeholder="password"
-              ></input>
-              <input
-                className="defaultInput"
-                required
-                onChange={onChange}
-                type="password"
-                name="confirmPassword"
-                placeholder="confirm password"
-              ></input>
-              <input
-                className="defaultInput"
-                required
-                onChange={onChange}
-                type="text"
-                name="shopName"
-                placeholder="shop name"
-              ></input>
-              <br />
-              <Button
-                type="submit"
-                form="form"
-                style={{
-                  background: "black",
-                  color: "white",
-                  height: "35px",
-                  width: "100px",
-                }}
-                variant="contained"
-              >
-                {loading ? (
-                  <CircularProgress style={{ color: "white" }} size={20} />
-                ) : (
-                  "register"
-                )}
-              </Button>
-            </form>
-          </section>
+          <div className={styles.row}>
+            <section className={styles.col}>
+              <form id="form" onSubmit={register}>
+                <h1>create your shop</h1>
+                <input
+                  className="defaultInput"
+                  required
+                  onChange={onChange}
+                  type="text"
+                  name="firstName"
+                  placeholder="first name"
+                ></input>
+                <input
+                  className="defaultInput"
+                  required
+                  onChange={onChange}
+                  type="text"
+                  name="lastName"
+                  placeholder="last name"
+                ></input>
+                <input
+                  className="defaultInput"
+                  required
+                  onChange={onChange}
+                  type="email"
+                  name="email"
+                  placeholder="email"
+                ></input>
+                <input
+                  className="defaultInput"
+                  required
+                  onChange={onChange}
+                  type="password"
+                  name="password"
+                  placeholder="password"
+                ></input>
+                <input
+                  className="defaultInput"
+                  required
+                  onChange={onChange}
+                  type="password"
+                  name="confirmPassword"
+                  placeholder="confirm password"
+                ></input>
+                <input
+                  className="defaultInput"
+                  required
+                  onChange={onChange}
+                  type="text"
+                  name="shopName"
+                  placeholder="shop name"
+                ></input>
+                <br />
+                <Button
+                  type="submit"
+                  form="form"
+                  style={{
+                    background: "black",
+                    color: "white",
+                    height: "35px",
+                    width: "100px",
+                  }}
+                  variant="contained"
+                >
+                  {loading ? (
+                    <CircularProgress style={{ color: "white" }} size={20} />
+                  ) : (
+                    "register"
+                  )}
+                </Button>
+              </form>
+            </section>
+            <div className={styles.col}>
+              <img src="/images/register.svg" />
+            </div>
+          </div>
         </section>
       </Layout>
     </ConnectedGuard>

@@ -1,6 +1,6 @@
 import React from "react";
 
-function XHr({ color, width = "100%", height = "1px" }) {
+function XHr({ color, width = "100%", marginLeft, height = "1px" }) {
   return (
     <div
       style={{
@@ -8,6 +8,7 @@ function XHr({ color, width = "100%", height = "1px" }) {
         height: height,
         width: width,
         margin: "20px 0px",
+        marginLeft: marginLeft,
       }}
     ></div>
   );

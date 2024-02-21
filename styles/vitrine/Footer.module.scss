@@ -10,6 +10,12 @@
 .col {
   width: calc(100% / 3);
   p {
+    a:hover {
+      width: auto;
+      border-bottom: 1px solid #ccc;
+    }
+  }
+  p:nth-of-type(1) {
     font-size: large;
     font-weight: 400;
   }

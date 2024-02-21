@@ -34,8 +34,8 @@ function Navbar() {
           <Link href={"/"}>
             <p>Home</p>
           </Link>
-          <Link href={"/services"}>
-            <p>Services</p>
+          <Link href={"/pricing"}>
+            <p>Pricing</p>
           </Link>
           <Link href={"/contact"}>
             <p>Contact</p>
@@ -76,13 +76,13 @@ function Navbar() {
         </Link>
         <ul>
           <li>
-            <Link href="/">home</Link>
+            <Link href="/">Home</Link>
           </li>
           <li>
-            <Link href="/services">services</Link>
+            <Link href="/pricing">Pricing</Link>
           </li>
           <li>
-            <Link href="/contact">contact</Link>
+            <Link href="/contact">Contact</Link>
           </li>
         </ul>
         <div className={styles.buttons}>
