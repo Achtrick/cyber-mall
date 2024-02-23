@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from "react";
-import Layout from "../components/vitrine/Layout";
-import styles from "../styles/vitrine/RegisterShop.module.scss";
 import { Button, CircularProgress } from "@mui/material";
 import axios from "axios";
 import { useSnackbar } from "notistack";
-import { getError } from "../utils/shared/getError";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import ConnectedGuard from "../components/guards/connectedGuard";
+import Layout from "../components/vitrine/Layout";
+import styles from "../styles/vitrine/RegisterShop.module.scss";
+import { getError } from "../utils/shared/getError";
+import Link from "next/link";
 
 function RegisterShop(props) {
   const dispatch = useDispatch();
@@ -119,6 +120,12 @@ function RegisterShop(props) {
                     "register"
                   )}
                 </Button>
+                <br />
+                <br />
+                <p>
+                  already have an account ?{" "}
+                  <Link href={"/login-shop"}>Login !</Link>
+                </p>
               </form>
             </section>
             <div className={styles.col}>

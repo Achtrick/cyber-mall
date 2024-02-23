@@ -1,0 +1,20 @@
+.container {
+  width: 100%;
+  padding: 30px;
+  text-align: center;
+  p:nth-of-type(1) {
+    font-weight: 700;
+    font-size: 35px;
+    color: black;
+    text-transform: capitalize;
+  }
+  p {
+    color: rgb(48, 48, 48);
+    margin-bottom: 50px;
+    text-transform: capitalize;
+  }
+  form {
+    margin-left: 25%;
+    width: 50%;
+  }
+}
