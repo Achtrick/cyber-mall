@@ -314,23 +314,20 @@ function Orders() {
                               </IconButton>
                             ) : null}
                             {order.state === "CLOSED" ? (
-                              <div
-                                onMouseEnter={() => {
+                              <ReactToPrint
+                                onBeforeGetContent={async () => {
                                   setOrder(order);
+                                  await new Promise((resolve) => {
+                                    setTimeout(resolve, 0);
+                                  });
                                 }}
-                                onMouseLeave={() => {
-                                  setOrder(null);
-                                }}
-                              >
-                                <ReactToPrint
-                                  trigger={() => (
-                                    <IconButton color="info">
-                                      <Receipt sx={{ width: "20px" }} />
-                                    </IconButton>
-                                  )}
-                                  content={() => receiptRef.current}
-                                />
-                              </div>
+                                trigger={() => (
+                                  <IconButton color="info">
+                                    <Receipt sx={{ width: "20px" }} />
+                                  </IconButton>
+                                )}
+                                content={() => receiptRef.current}
+                              />
                             ) : null}
                             <IconButton
                               color="error"
