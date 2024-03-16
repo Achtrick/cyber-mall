@@ -66,7 +66,7 @@ function ForgotPassword(props) {
                   background: "black",
                   color: "white",
                   height: "35px",
-                  width: "110px",
+                  width: "100%",
                 }}
                 variant="contained"
               >

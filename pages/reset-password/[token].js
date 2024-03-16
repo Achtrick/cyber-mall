@@ -1,11 +1,11 @@
-import { CircularProgress } from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import Layout from "../../components/vitrine/Layout";
-import styles from "../../styles/vitrine/LoginShop.module.scss";
+import styles from "../../styles/vitrine/PasswordRecover.module.scss";
 import ConnectedGuard from "../../components/guards/connectedGuard";
 
 function ResetPassword(props) {
@@ -74,7 +74,7 @@ function ResetPassword(props) {
         ) : (
           <div className={styles.row}>
             <div className={styles.container}>
-              <form onSubmit={changePassword} className={styles.form}>
+              <form id="form" onSubmit={changePassword} className={styles.form}>
                 <h1>changer votre mot de passe</h1>
                 <div className="labeledInput">
                   <label>mot de passe</label>
@@ -97,21 +97,28 @@ function ResetPassword(props) {
                   />
                 </div>
                 &nbsp;
-                <button style={{ width: "100%" }} className="defaultBtn">
+                <Button
+                  type="submit"
+                  form="form"
+                  style={{
+                    background: "black",
+                    color: "white",
+                    height: "35px",
+                    width: "100%",
+                  }}
+                  variant="contained"
+                >
                   {formLoading ? (
-                    <CircularProgress size={"30px"} sx={{ color: "white" }} />
+                    <CircularProgress style={{ color: "white" }} size={20} />
                   ) : (
                     "confirmer"
                   )}
-                </button>
+                </Button>
               </form>
             </div>
 
             <div className={styles.col40}>
-              <img
-                alt="transportini-login"
-                src={"/" + "./images/register.webp"}
-              />
+              <img alt="transportini-login" src={"/" + "./images/login.svg"} />
             </div>
           </div>
         )}
