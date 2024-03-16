@@ -20,7 +20,14 @@ function HomeSlider({ slides, shopName, ...props }) {
                 {slide.link && slide.link !== "" ? (
                   <Link href={slide.link} rel="noreferrer" target="_blank">
                     <img
-                      src={`/api/images/${slide.image.split("/").pop()}`}
+                      src={
+                        slide.image !== "image-placeholder.jpg"
+                          ? `/api/images/${slide.image.split("/").pop()}`
+                          : "/images/image-placeholder.jpg"
+                      }
+                      onError={(e) => {
+                        e.target.src = "/images/image-placeholder.jpg";
+                      }}
                       alt={slide.link}
                     />
                   </Link>
@@ -29,13 +36,27 @@ function HomeSlider({ slides, shopName, ...props }) {
                     href={`/shop/products?shop=${shopName}&category=${slide.category}`}
                   >
                     <img
-                      src={`/api/images/${slide.image.split("/").pop()}`}
+                      src={
+                        slide.image !== "image-placeholder.jpg"
+                          ? `/api/images/${slide.image.split("/").pop()}`
+                          : "/images/image-placeholder.jpg"
+                      }
+                      onError={(e) => {
+                        e.target.src = "/images/image-placeholder.jpg";
+                      }}
                       alt={slide.category}
                     />
                   </Link>
                 ) : (
                   <img
-                    src={`/api/images/${slide.image.split("/").pop()}`}
+                    src={
+                      slide.image !== "image-placeholder.jpg"
+                        ? `/api/images/${slide.image.split("/").pop()}`
+                        : "/images/image-placeholder.jpg"
+                    }
+                    onError={(e) => {
+                      e.target.src = "/images/image-placeholder.jpg";
+                    }}
                     alt="slide"
                   />
                 )}

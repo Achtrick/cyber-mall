@@ -9,7 +9,8 @@ const userSchema = new Schema(
     phone: String,
     email: String,
     password: String,
-    role: String, // SUPER-ADMIN / ADMIN / CLIENT
+    role: String, // SUPER-ADMIN / ADMIN
+    token: String,
     shop: { type: Schema.Types.ObjectId, ref: "Shop" }, // REFERENCE FOR THE ADMIN SHOP
   },
   { timestamps: true }

@@ -233,6 +233,9 @@ function Products() {
                                   .pop()}`
                               : "/images/image-placeholder.jpg"
                           }
+                          onError={(e) => {
+                            e.target.src = "/images/image-placeholder.jpg";
+                          }}
                         />
                       </Link>
                       <p>{product.designation}</p>

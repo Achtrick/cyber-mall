@@ -22,9 +22,13 @@ function XGallery({ shopName, content, props }) {
         >
           <img
             src={
-              `/api/images/${content[0]?.image.split("/").pop()}` ??
-              "/images/image-placeholder.jpg"
+              content[0]?.image.length
+                ? `/api/images/${content[0]?.image.split("/").pop()}`
+                : "/images/image-placeholder.jpg"
             }
+            onError={(e) => {
+              e.target.src = "/images/image-placeholder.jpg";
+            }}
           />
           <div className={styles.overlay}>
             <p className={styles.text}>{content[0]?.text ?? "text"}</p>
@@ -44,9 +48,13 @@ function XGallery({ shopName, content, props }) {
         >
           <img
             src={
-              `/api/images/${content[1]?.image.split("/").pop()}` ??
-              "/images/image-placeholder.jpg"
+              content[1]?.image.length
+                ? `/api/images/${content[1]?.image.split("/").pop()}`
+                : "/images/image-placeholder.jpg"
             }
+            onError={(e) => {
+              e.target.src = "/images/image-placeholder.jpg";
+            }}
           />
           <div className={styles.overlay}>
             <p className={styles.text}>{content[1]?.text ?? "text"}</p>
@@ -68,9 +76,13 @@ function XGallery({ shopName, content, props }) {
         >
           <img
             src={
-              `/api/images/${content[2]?.image.split("/").pop()}` ??
-              "/images/image-placeholder.jpg"
+              content[2]?.image.length
+                ? `/api/images/${content[2]?.image.split("/").pop()}`
+                : "/images/image-placeholder.jpg"
             }
+            onError={(e) => {
+              e.target.src = "/images/image-placeholder.jpg";
+            }}
           />
           <div className={styles.overlay}>
             <p className={styles.text}>{content[2]?.text ?? "text"}</p>
@@ -90,9 +102,13 @@ function XGallery({ shopName, content, props }) {
         >
           <img
             src={
-              `/api/images/${content[3]?.image.split("/").pop()}` ??
-              "/images/image-placeholder.jpg"
+              content[3]?.image.length
+                ? `/api/images/${content[3]?.image.split("/").pop()}`
+                : "/images/image-placeholder.jpg"
             }
+            onError={(e) => {
+              e.target.src = "/images/image-placeholder.jpg";
+            }}
           />
           <div className={styles.overlay}>
             <p className={styles.text}>{content[3]?.text ?? "text"}</p>

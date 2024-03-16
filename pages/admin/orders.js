@@ -181,6 +181,9 @@ function Orders() {
                                     .pop()}`
                                 : "/images/image-placeholder.jpg"
                             }
+                            onError={(e) => {
+                              e.target.src = "/images/image-placeholder.jpg";
+                            }}
                           />
                         </td>
                         <td>{product.designation}</td>
@@ -351,11 +354,14 @@ function Orders() {
         </section>
 
         <section ref={receiptRef} className={styles.receipt}>
-          {order && (
+          {order && userInfo && (
             <>
               <div className="row">
                 <img
                   src={`/api/images/${userInfo.shop.logo.split("/").pop()}`}
+                  onError={(e) => {
+                    e.target.src = "/images/default-store.png";
+                  }}
                 />
               </div>
               <br />

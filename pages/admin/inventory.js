@@ -10,7 +10,11 @@ import XAutoComplete from "../../components/ui-components/XAutoComplete";
 import XModal from "../../components/ui-components/XModal";
 import XPagination from "../../components/ui-components/XPagination";
 import styles from "../../styles/admin/Dashboard.module.scss";
-import { compressImage, getThumbnail } from "../../utils/config/convertHelper";
+import {
+  compressImage,
+  getThumbnail,
+  isBase64,
+} from "../../utils/config/convertHelper";
 import { getError } from "../../utils/shared/getError";
 import {
   AddIcon,
@@ -299,7 +303,9 @@ function Inventory(props) {
                           alt={index}
                           src={`/api/images/${image.split("/").pop()}`}
                           onError={(e) => {
-                            e.target.src = image;
+                            e.target.src = isBase64(image)
+                              ? image
+                              : "/images/image-placeholder.jpg";
                           }}
                         />
                       </div>

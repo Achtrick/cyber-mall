@@ -22,8 +22,8 @@ export const getThumbnail = async (file) =>
   await new Promise((resolve) => {
     Resizer.imageFileResizer(
       file,
-      600,
-      600,
+      1000,
+      1000,
       "WEBP",
       100,
       0,
@@ -37,8 +37,12 @@ export const getThumbnail = async (file) =>
 export const compressImage = async (file) => {
   const options = {
     maxSizeMB: 0.25,
-    maxWidthOrHeight: 720,
+    maxWidthOrHeight: 2000,
     useWebWorker: true,
   };
   return await imageCompression(file, options);
+};
+
+export const isBase64 = (image) => {
+  return image.includes("data:image/webp;base64,");
 };

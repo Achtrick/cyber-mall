@@ -33,6 +33,9 @@ function CategoriesGrid({
                   <img
                     alt={index}
                     src={`/api/images/${category.icon.split("/").pop()}`}
+                    onError={(e) => {
+                      e.target.src = "/images/category.svg";
+                    }}
                   />
                   <p>{category.name}</p>
                 </Link>

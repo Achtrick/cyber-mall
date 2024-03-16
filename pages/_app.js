@@ -18,21 +18,6 @@ function MyApp(props) {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
   return (
     <>
-      {/* <Script
-        strategy="lazyOnload"
-        src={`https://www.googletagmanager.com/gtag/js?id=${process.env.GOOGLE_ANALYTICS}`}
-      />
-
-      <Script strategy="lazyOnload" id="google-analytics">
-        {`
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', '${process.env.GOOGLE_ANALYTICS}', {
-      page_path: window.location.pathname,
-      });
-  `}
-      </Script> */}
       <Provider store={store}>
         <CacheProvider value={emotionCache}>
           <ThemeProvider theme={lightTheme}>

@@ -291,6 +291,9 @@ function ShopHeader({ shopInfo, ...props }) {
               <img
                 alt={shopInfo.name}
                 src={`/api/images/${shopInfo.logo.split("/").pop()}`}
+                onError={(e) => {
+                  e.target.src = "/images/image-placeholder.jpg";
+                }}
                 style={{
                   objectFit: "contain",
                   width: "100px",

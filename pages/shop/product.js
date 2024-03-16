@@ -146,6 +146,9 @@ function Product(props) {
                           <SwiperSlide key={index}>
                             <img
                               src={`/api/images/${image.split("/").pop()}`}
+                              onError={(e) => {
+                                e.target.src = "/images/image-placeholder.jpg";
+                              }}
                               alt={`Image ${index}`}
                             />
                           </SwiperSlide>

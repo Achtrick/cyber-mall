@@ -14,7 +14,11 @@ import ProductsSlider from "../../components/shop/ProductsSlider";
 import XGallery from "../../components/ui-components/XGallery";
 import XModal from "../../components/ui-components/XModal";
 import styles from "../../styles/admin/Dashboard.module.scss";
-import { compressImage, getThumbnail } from "../../utils/config/convertHelper";
+import {
+  compressImage,
+  getThumbnail,
+  isBase64,
+} from "../../utils/config/convertHelper";
 import { getError } from "../../utils/shared/getError";
 import {
   AddIcon,
@@ -31,6 +35,7 @@ import {
   TiktokIcon,
   YouTubeIcon,
 } from "../../utils/theme/icons";
+import XGridSkeleton from "./../../components/ui-components/XGridSkeleton";
 
 function Architecture(props) {
   const { userInfo } = useSelector((state) => state.auth);
@@ -360,7 +365,9 @@ function Architecture(props) {
               alt={slide.image}
               src={`/api/images/${slide.image.split("/").pop()}`}
               onError={(e) => {
-                e.target.src = slide.image;
+                e.target.src = isBase64(slide.image)
+                  ? slide.image
+                  : "/images/default-placeholder.jpg";
               }}
             />
           ) : null}
@@ -421,8 +428,6 @@ function Architecture(props) {
         hidden
         type="file"
         accept="image/*"
-        multiple
-        max="3"
         onChange={async (e) => {
           setSlide({ ...slide, image: await getThumbnail(e.target.files[0]) });
           setSlideImage(await compressImage(e.target.files[0]));
@@ -483,7 +488,7 @@ function Architecture(props) {
                 alt={index}
                 src={`/api/images/${category.icon.split("/").pop()}`}
                 onError={(e) => {
-                  e.target.src = category.icon;
+                  e.target.src = "/images/category.svg";
                 }}
               />
             </div>
@@ -529,7 +534,9 @@ function Architecture(props) {
               alt={galleryItem.image}
               src={`/api/images/${galleryItem.image.split("/").pop()}`}
               onError={(e) => {
-                e.target.src = galleryItem.image;
+                e.target.src = isBase64(galleryItem.image)
+                  ? galleryItem.image
+                  : "/images/image-placeholder.jpg";
               }}
             />
           ) : null}
@@ -698,6 +705,9 @@ function Architecture(props) {
                   <Image
                     alt="logo"
                     src={logo}
+                    onError={(e) => {
+                      setLogo("/images/default-store.png");
+                    }}
                     width={"100"}
                     height={"100"}
                     style={{ objectFit: "contain" }}
@@ -781,7 +791,7 @@ function Architecture(props) {
                           <img
                             src={`/api/images/${slide.image.split("/").pop()}`}
                             onError={(e) => {
-                              e.target.src = slide.image;
+                              e.target.src = "/images/image-placeholder.jpg";
                             }}
                           />
                           {slide.link.length ? <p>custom link</p> : null}
@@ -826,7 +836,7 @@ function Architecture(props) {
                         : [
                             {
                               link: "",
-                              image: "/images/image-placeholder.jpg",
+                              image: "image-placeholder.jpg",
                             },
                           ]
                     }
@@ -863,130 +873,7 @@ function Architecture(props) {
                   shopName={shopInfo.name}
                 />
               ) : (
-                <section
-                  style={{
-                    width: "100%",
-                    padding: "10px",
-                  }}
-                >
-                  <h2 align="center">Discover Our Catgegories</h2>
-                  <div
-                    style={{
-                      width: "100%",
-                      display: "grid",
-                      gridTemplateColumns: "auto auto auto auto auto auto ",
-                    }}
-                  >
-                    <div
-                      style={{
-                        width: "100%",
-                        height: "150px",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                      }}
-                    >
-                      <img
-                        style={{
-                          width: "100px",
-                          height: "100px",
-                          objectFit: "cover",
-                        }}
-                        src="/images/image-placeholder.jpg"
-                      />
-                    </div>
-                    <div
-                      style={{
-                        width: "100%",
-                        height: "150px",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                      }}
-                    >
-                      <img
-                        style={{
-                          width: "100px",
-                          height: "100px",
-                          objectFit: "cover",
-                        }}
-                        src="/images/image-placeholder.jpg"
-                      />
-                    </div>
-                    <div
-                      style={{
-                        width: "100%",
-                        height: "150px",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                      }}
-                    >
-                      <img
-                        style={{
-                          width: "100px",
-                          height: "100px",
-                          objectFit: "cover",
-                        }}
-                        src="/images/image-placeholder.jpg"
-                      />
-                    </div>
-                    <div
-                      style={{
-                        width: "100%",
-                        height: "150px",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                      }}
-                    >
-                      <img
-                        style={{
-                          width: "100px",
-                          height: "100px",
-                          objectFit: "cover",
-                        }}
-                        src="/images/image-placeholder.jpg"
-                      />
-                    </div>
-                    <div
-                      style={{
-                        width: "100%",
-                        height: "150px",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                      }}
-                    >
-                      <img
-                        style={{
-                          width: "100px",
-                          height: "100px",
-                          objectFit: "cover",
-                        }}
-                        src="/images/image-placeholder.jpg"
-                      />
-                    </div>
-                    <div
-                      style={{
-                        width: "100%",
-                        height: "150px",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                      }}
-                    >
-                      <img
-                        style={{
-                          width: "100px",
-                          height: "100px",
-                          objectFit: "cover",
-                        }}
-                        src="/images/image-placeholder.jpg"
-                      />
-                    </div>
-                  </div>
-                </section>
+                <XGridSkeleton title={"Discover Our Catgegories"} />
               )}
               <br />
               <hr />
@@ -1019,130 +906,7 @@ function Architecture(props) {
                   title={"Get More For Less !"}
                 />
               ) : (
-                <section
-                  style={{
-                    width: "100%",
-                    padding: "10px",
-                  }}
-                >
-                  <h2 align="center">Get More For Less !</h2>
-                  <div
-                    style={{
-                      width: "100%",
-                      display: "grid",
-                      gridTemplateColumns: "auto auto auto auto auto auto ",
-                    }}
-                  >
-                    <div
-                      style={{
-                        width: "100%",
-                        height: "150px",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                      }}
-                    >
-                      <img
-                        style={{
-                          width: "100px",
-                          height: "100px",
-                          objectFit: "cover",
-                        }}
-                        src="/images/image-placeholder.jpg"
-                      />
-                    </div>
-                    <div
-                      style={{
-                        width: "100%",
-                        height: "150px",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                      }}
-                    >
-                      <img
-                        style={{
-                          width: "100px",
-                          height: "100px",
-                          objectFit: "cover",
-                        }}
-                        src="/images/image-placeholder.jpg"
-                      />
-                    </div>
-                    <div
-                      style={{
-                        width: "100%",
-                        height: "150px",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                      }}
-                    >
-                      <img
-                        style={{
-                          width: "100px",
-                          height: "100px",
-                          objectFit: "cover",
-                        }}
-                        src="/images/image-placeholder.jpg"
-                      />
-                    </div>
-                    <div
-                      style={{
-                        width: "100%",
-                        height: "150px",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                      }}
-                    >
-                      <img
-                        style={{
-                          width: "100px",
-                          height: "100px",
-                          objectFit: "cover",
-                        }}
-                        src="/images/image-placeholder.jpg"
-                      />
-                    </div>
-                    <div
-                      style={{
-                        width: "100%",
-                        height: "150px",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                      }}
-                    >
-                      <img
-                        style={{
-                          width: "100px",
-                          height: "100px",
-                          objectFit: "cover",
-                        }}
-                        src="/images/image-placeholder.jpg"
-                      />
-                    </div>
-                    <div
-                      style={{
-                        width: "100%",
-                        height: "150px",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                      }}
-                    >
-                      <img
-                        style={{
-                          width: "100px",
-                          height: "100px",
-                          objectFit: "cover",
-                        }}
-                        src="/images/image-placeholder.jpg"
-                      />
-                    </div>
-                  </div>
-                </section>
+                <XGridSkeleton title={"Get More For Less !"} />
               )}
               <br />
               <hr />
@@ -1181,7 +945,7 @@ function Architecture(props) {
                           <img
                             src={`/api/images/${block.image.split("/").pop()}`}
                             onError={(e) => {
-                              e.target.src = block.image;
+                              e.target.src = "/images/image-placeholder.jpg";
                             }}
                           />
                           {block.text?.length ? (

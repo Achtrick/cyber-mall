@@ -148,6 +148,10 @@ function Cart(props) {
                                         .pop()}`
                                     : "/images/image-placeholder.jpg"
                                 }
+                                onError={(e) => {
+                                  e.target.src =
+                                    "/images/image-placeholder.jpg";
+                                }}
                               />
                             </td>
                             <td>{product.designation}</td>

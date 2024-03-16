@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:svgjs="http://svgjs.dev/svgjs" width="120.95065508078994" height="120.95065508078994" viewBox="0 0 120.95065508078994 120.95065508078994">
+    <g transform="matrix(1,0,0,1,-1.2121212121212466,0.1588219627291778)">
+        <svg viewBox="0 0 120.95065508078994 120.95065508078994"
+            height="120.95065508078994" width="120.95065508078994">
+            <g>
+                <svg></svg>
+            </g>
+            <g id="icon-0">
+                <svg viewBox="0 0 120.95065508078994 120.95065508078994"
+                    height="120.95065508078994" width="120.95065508078994">
+                    <g>
+                        <path transform="scale(1.20951,1.20951)"
+                            d="M30 100c-16.569 0-30-13.431-30-30v-40c0-16.569 13.431-30 30-30h40c16.569 0 30 13.431 30 30v40c0 16.569-13.431 30-30 30z"
+                            fill="#e83d95" fill-rule="nonzero" stroke="none"
+                            stroke-width="1" stroke-linecap="butt"
+                            stroke-linejoin="miter" stroke-miterlimit="10"
+                            stroke-dasharray="" stroke-dashoffset="0"
+                            font-family="none" font-weight="none"
+                            font-size="none" text-anchor="none"
+                            style="mix-blend-mode: normal"
+                            data-fill-palette-color="accent"></path>
+                    </g>
+                    <g
+                        transform="matrix(1,0,0,1,24.196356165666202,24.19013101615799)">
+                        <svg
+                            viewBox="0 0 72.55794274945754 72.57039304847396"
+                            height="72.57039304847396"
+                            width="72.55794274945754">
+                            <g>
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                    xmlns:xlink="http://www.w3.org/1999/xlink"
+                                    version="1.1" x="0" y="0"
+                                    viewBox="14.023 14.018 71.95265356323594 71.965"
+                                    enable-background="new 0 0 100 100"
+                                    xml:space="preserve"
+                                    height="72.57039304847396"
+                                    width="72.55794274945754"
+                                    class="icon-z$-0"
+                                    data-fill-palette-color="quaternary"
+                                    id="z$-0">
+                                    <g display="none" fill="#ffffff" data-fill-palette-color="quaternary">
+                                        <path display="inline" d="M71.889 38.007c0.062-0.66 0.102-1.324 0.102-2 0-12.125-9.863-21.988-21.989-21.988s-21.988 9.863-21.988 21.988c0 0.676 0.042 1.34 0.103 2h-5.102v47.976h53.974V38.007H71.889zM52.499 62.134v9.857h-4.998v-9.857c-1.488-0.862-2.498-2.46-2.498-4.303 0-2.761 2.238-4.998 4.997-4.998 2.76 0 4.997 2.237 4.997 4.998C54.997 59.674 53.986 61.271 52.499 62.134zM63.834 38.007H36.166c-0.091-0.656-0.157-1.32-0.157-2 0-7.713 6.277-13.99 13.991-13.99 7.718 0 13.995 6.277 13.995 13.99C63.995 36.687 63.924 37.351 63.834 38.007z" fill="#ffffff" data-fill-palette-color="quaternary"></path>
+                                    </g>
+                                    <g display="none" fill="#ffffff" data-fill-palette-color="quaternary">
+                                        <path display="inline" d="M14.023 79.18L37.48 55.721c2.516 2.519 7.019 7.045 7.019 7.045 0 0.002 0 0.006 0 0.008l18.28-18.276c-0.004 0-0.008-0.002-0.014-0.004 0 0-4.524-4.5-7.045-7.02l23.465-23.455c8.922 8.924 9.045 23.287 0.412 32.389l-0.005 0.043-0.391 0.391c-0.009 0.004-0.013 0.012-0.019 0.018-0.013 0.012-0.018 0.016-0.024 0.025L46.862 79.18C37.792 88.25 23.09 88.25 14.023 79.18z" fill="#ffffff" data-fill-palette-color="quaternary"></path>
+                                    </g>
+                                    <g display="none" fill="#ffffff" data-fill-palette-color="quaternary">
+                                        <path display="inline" d="M20.016 14.018v71.964h59.968V14.018H20.016zM73.066 65.74h-46.13V20.766h46.13V65.74z" fill="#ffffff" data-fill-palette-color="quaternary"></path>
+                                    </g>
+                                    <path d="M74.935 78.389l-2.246-37.277c0-6.901-7.946-7.82-9.557-11.626 0 0-5.368-15.082-13.619-15.082s-13.619 15.06-13.619 15.06c-1.61 3.806-9.557 3.689-9.557 10.591l-2.246 38.337c-0.185 3.295 2.365 6.109 5.665 6.109h19.757H69.27C72.569 84.5 75.119 81.684 74.935 78.389zM53.494 34.5h-3.981-3.981c-3.3 0-5.079-2.758-3.953-5.859 0 0 3.006-8.391 7.935-8.391s7.935 8.445 7.935 8.445C58.573 31.797 56.794 34.5 53.494 34.5z" fill="#ffffff" data-fill-palette-color="quaternary"></path>
+                                </svg>
+                            </g>
+                        </svg>
+                    </g>
+                </svg>
+            </g>
+        </svg>
+    </g>
+</svg>

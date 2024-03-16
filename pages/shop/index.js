@@ -14,6 +14,7 @@ import XGallery from "../../components/ui-components/XGallery";
 import ProductsSlider from "../../components/shop/ProductsSlider";
 import { calculateDiscount } from "../../utils/config/convertHelper";
 import { useDispatch } from "react-redux";
+import XGridSkeleton from "../../components/ui-components/XGridSkeleton";
 
 function Shop(props) {
   const router = useRouter();
@@ -162,7 +163,19 @@ function Shop(props) {
                   style={{ margin: "20px 0px" }}
                 />
               ) : (
-                <HomeSlider slides={sliderInfo} shopName={shop} />
+                <HomeSlider
+                  slides={
+                    sliderInfo.length
+                      ? sliderInfo
+                      : [
+                          {
+                            link: "",
+                            image: "image-placeholder.jpg",
+                          },
+                        ]
+                  }
+                  shopName={shop}
+                />
               )}
             </div>
           </section>
@@ -181,12 +194,14 @@ function Shop(props) {
                   height={"150px"}
                   style={{ margin: "20px 0px" }}
                 />
-              ) : (
+              ) : categories.length ? (
                 <CategoriesGrid
-                  architecture={architecture}
                   categories={categories}
+                  architecture={architecture}
                   shopName={shop}
                 />
+              ) : (
+                <XGridSkeleton title={"Discover Our Catgegories"} />
               )}
             </div>
 
@@ -226,7 +241,7 @@ function Shop(props) {
                   height={"150px"}
                   style={{ margin: "20px 0px" }}
                 />
-              ) : (
+              ) : discounts.length ? (
                 <ProductsSlider
                   settings={shopInfo.settings}
                   shopName={shopInfo.name}
@@ -235,6 +250,8 @@ function Shop(props) {
                   title={"Get More For Less !"}
                   buttonAction={addTocart}
                 />
+              ) : (
+                <XGridSkeleton title={"Get More For Less !"} />
               )}
             </div>
           </section>

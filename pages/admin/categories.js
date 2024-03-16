@@ -8,7 +8,11 @@ import { AdminActions, ModalSizes } from "../../components/admin/ModalSettings";
 import DisconnectedGuard from "../../components/guards/disconnectedGuard";
 import XModal from "../../components/ui-components/XModal";
 import styles from "../../styles/admin/Dashboard.module.scss";
-import { compressImage, getThumbnail } from "../../utils/config/convertHelper";
+import {
+  compressImage,
+  getThumbnail,
+  isBase64,
+} from "../../utils/config/convertHelper";
 import { getError } from "../../utils/shared/getError";
 import {
   AddIcon,
@@ -212,7 +216,9 @@ function Categories() {
                         alt={category.name}
                         src={`/api/images/${category.icon.split("/").pop()}`}
                         onError={(e) => {
-                          e.target.src = category.icon;
+                          e.target.src = isBase64(category.icon)
+                            ? category.icon
+                            : "/images/category.svg";
                         }}
                       />
                     </div>
@@ -253,18 +259,16 @@ function Categories() {
               {categories.map((category) => {
                 return (
                   <div className="card" key={category._id}>
-                    {category.icon ? (
-                      <img
-                        className="icon"
-                        alt={category.name}
-                        src={`/api/images/${category.icon.split("/").pop()}`}
-                        onError={(e) => {
-                          e.target.src = category.icon;
-                        }}
-                      />
-                    ) : (
-                      <CategoryIcon className="icon" />
-                    )}
+                    <img
+                      className="icon"
+                      alt={category.name}
+                      src={`/api/images/${category.icon.split("/").pop()}`}
+                      onError={(e) => {
+                        e.target.src = isBase64(category.icon)
+                          ? category.icon
+                          : "/images/category.svg";
+                      }}
+                    />
 
                     <p>{category.name}</p>
                     <div className="centered-row">
