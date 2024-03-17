@@ -18,7 +18,7 @@ export const transporter = nodemailer.createTransport({
 
 const mailcss = {
   background: `
-    style="background: #ec008c;
+    style="background: black;
     border-radius: 5px;
     padding-left: 10px;
     padding-right: 10px;
@@ -74,7 +74,7 @@ handler.post(async (req, res) => {
                   padding: 20px 0px;
                 "
               >
-              <img alt="Cyber-Mall" src="blob:https://drive.google.com/abfbc0ba-a4e9-4468-a236-f9d526df48bb" class="ndfHFb-c4YZDc-cYSp0e-DARUcf-RJLb9c" alt="Page 1 of 1" aria-hidden="true" style="opacity: 1;">
+              <img style="object-fit: contain;" alt="Cyber-Mall" title="Cyber-Mall" src="https://cyber-mall.tn/images/logo.png" width="70%" height="80px">
               </div>
               <h1 style="text-transform: capitalize; font-size: 15px; font-wheight:500;" width="100%" text-align="center">Suivez ce lien pour changer votre mot de passe:</h1>
                 <div` +

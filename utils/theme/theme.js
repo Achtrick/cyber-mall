@@ -23,6 +23,7 @@ const lightTheme = createTheme({
     shop3: { main: "#7360DF" },
     shop4: { main: "#33186B" },
     shop5: { main: "#11235A" },
+    shop6: { main: "#11105B" },
   },
 });
 

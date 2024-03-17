@@ -7,12 +7,14 @@ import styles from "../../styles/admin/AdminLayout.module.scss";
 import {
   CategoryIcon,
   CloseIcon,
+  Credit,
   ExitToAppIcon,
   InventoryIcon,
   LocalShippingIcon,
   MenuIcon,
   PaletteIcon,
   SettingsIcon,
+  Subscription,
   TravelExploreIcon,
 } from "../../utils/theme/icons";
 
@@ -76,6 +78,12 @@ function AdminLayout(props) {
             <div className={`${styles.link} + hoverable`}>
               <SettingsIcon color="shop5" />
               <p>configure my shop</p>
+            </div>
+          </Link>
+          <Link onClick={toggleDrawer} href="/admin/subscription">
+            <div className={`${styles.link} + hoverable`}>
+              <Subscription color="shop6" />
+              <p>subscription</p>
             </div>
           </Link>
           <Link
