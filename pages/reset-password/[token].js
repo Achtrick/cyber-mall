@@ -32,7 +32,7 @@ function ResetPassword(props) {
   };
 
   useEffect(() => {
-    checkToken();
+    router.query.token && checkToken();
   }, [router]);
 
   useEffect(() => {
