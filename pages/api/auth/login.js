@@ -21,19 +21,13 @@ handler.post(async (req, res) => {
 
     var token = null;
 
-    if (user.role === "ADMIN") {
-      token = jwt.sign({ id: user._id }, process.env.JWT_ADMIN_SECRET, {
-        expiresIn: "30d",
-      });
-    } else {
-      token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-        expiresIn: "30d",
-      });
-    }
+    token = jwt.sign({ id: user._id }, process.env.JWT_ADMIN_SECRET, {
+      expiresIn: "1d",
+    });
 
     if (valid) {
-      if (user.role === "ADMIN") {
-        const shop = await Shop.findById(user.shop);
+      const shop = await Shop.findById(user.shop);
+      if (shop.verified) {
         res.status(200).json({
           _id: user._id,
           role: user.role,
@@ -45,17 +39,10 @@ handler.post(async (req, res) => {
           token: token,
           shop: shop,
         });
-      } else if (user.role === "CLIENT") {
-        res.status(200).json({
-          _id: user._id,
-          role: user.role,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          email: user.email,
-          phone: user.phone,
-          adress: user.adress,
-          token: token,
-        });
+      } else {
+        res
+          .status(401)
+          .json({ message: "vérifiez votre compte pour se connecter !" });
       }
     } else {
       res.status(403).json({ message: "mot de passe incorrecte !" });

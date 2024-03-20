@@ -4,13 +4,18 @@ import User from "../../../models/user.model";
 import Shop from "../../../models/shop.model";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { transporter } from "../../../utils/shared/mailer";
+import { mailcss } from "../../../utils/shared/mailer";
+import crypto from "crypto";
+
+const token = crypto.randomBytes(10).toString("hex");
 
 const handler = nc();
 
 handler.post(async (req, res) => {
   var salt = bcrypt.genSaltSync(10);
   await connectDB();
-
+  const url = `https://cyber-mall.tn/api/auth/activate/${token}`;
   const data = req.body;
 
   try {
@@ -74,24 +79,52 @@ handler.post(async (req, res) => {
       email: data.email.toLowerCase(),
       password: bcrypt.hashSync(data.password, salt),
       shop: shop._id,
-    });
-
-    const token = jwt.sign({ id: user._id }, process.env.JWT_ADMIN_SECRET, {
-      expiresIn: "30d",
-    });
-
-    res.status(200).json({
-      _id: user._id,
-      role: user.role,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
-      phone: user.phone,
-      adress: user.adress,
       token: token,
-      shop: shop,
     });
+
+    await new Promise((resolve, reject) => {
+      // send mail
+      transporter.sendMail(
+        {
+          from: process.env.AUTH_SUPERADMIN_EMAIL,
+          to: user.email,
+          replyTo: process.env.AUTH_SUPERADMIN_EMAIL,
+          subject: "Vérification de votre email",
+          text: "Suivez ce lien pour activer votre shop.",
+          html:
+            `<div ` +
+            mailcss.background +
+            `>
+            <div
+              style="
+                display: flex;
+                width: 100%;
+                justify-content: center;
+                padding: 20px 0px;
+              "
+            >
+            <img style="object-fit: contain;" alt="Cyber-Mall" title="Cyber-Mall" src="https://cyber-mall.tn/images/logo.png" width="70%" height="80px">
+            </div>
+            <h1 style="text-transform: capitalize; font-size: 15px; font-wheight:500;" width="100%" text-align="center">Suivez ce lien pour activer votre shop:</h1>
+              <div` +
+            mailcss.body +
+            `>
+              <h3 style="font-size: 10px; font-wheight:300;">${url}</h3>
+          </div>`,
+        },
+        (err, info) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(info);
+          }
+        }
+      );
+    });
+
+    res.status(200).json("success");
   } catch (err) {
+    console.log(err);
     res.status(400).json(err);
   }
 });

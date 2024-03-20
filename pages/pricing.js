@@ -36,7 +36,7 @@ function Pricing(props) {
               </ul>
               <hr />
               <p>Free</p>
-              <Link href={"/register-shop"}>
+              <Link href={"/register"}>
                 <Button
                   style={{
                     backgroundColor: "black",
@@ -68,7 +68,7 @@ function Pricing(props) {
               </ul>
               <hr />
               <p>10 DT / Month</p>
-              <Link href={"/register-shop"}>
+              <Link href={"/register"}>
                 <Button
                   style={{
                     backgroundColor: "black",

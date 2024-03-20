@@ -82,6 +82,35 @@
     border-radius: 50%;
   }
 }
+.account {
+  .col50 {
+    width: 48%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fafafa;
+    flex-grow: 1 1;
+    h5 {
+      margin: 0px;
+    }
+  }
+  .silver {
+    background-image: linear-gradient(
+      90deg,
+      rgba(245, 245, 245, 1) 0%,
+      rgba(188, 188, 188, 1) 45%,
+      rgba(255, 255, 255, 1) 100%
+    );
+  }
+  .gold {
+    background-image: linear-gradient(
+      90deg,
+      rgba(255, 254, 211, 1) 0%,
+      rgba(250, 245, 79, 0.9080882352941176) 35%,
+      rgba(255, 255, 255, 1) 100%
+    );
+  }
+}
 
 .error {
   background-color: rgb(255, 213, 213);

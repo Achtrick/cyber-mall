@@ -18,9 +18,15 @@ handler.post(async (req, res) => {
           : "-architecture.home"
       )
       .exec();
-    shopInfo
-      ? res.status(200).json(shopInfo)
-      : res.status(400).json({ message: "shop not found !" });
+    if (shopInfo) {
+      if (shopInfo.banned) {
+        res.status(400).json({ message: "shop is banned !" });
+      } else {
+        res.status(200).json(shopInfo);
+      }
+    } else {
+      res.status(400).json({ message: "shop not found !" });
+    }
   } catch (err) {
     res.status(400).json(err);
   }

@@ -82,6 +82,14 @@ input[type="number"]::-webkit-outer-spin-button {
   padding: 5px;
   margin: 5px 0px;
 }
+.transparentInput {
+  background-color: transparent;
+  border: none;
+  height: 40px;
+  width: 100%;
+  margin: 5px 0px;
+  pointer-events: none;
+}
 .labeledInput {
   width: 100%;
   @include flexLayout(flex-start, center, column);
@@ -115,6 +123,12 @@ option.hovered {
   @include flexLayout;
   background-color: transparent;
   backdrop-filter: blur(25px);
+  .loaderContainer {
+    width: 100%;
+    height: 100%;
+    @include flexLayout;
+    position: relative;
+  }
 }
 
 // Effects

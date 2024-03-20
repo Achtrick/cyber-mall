@@ -1,5 +1,6 @@
-import { Button, CircularProgress } from "@mui/material";
+import { Button, CircularProgress, IconButton } from "@mui/material";
 import axios from "axios";
+import Link from "next/link";
 import { useSnackbar } from "notistack";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
@@ -7,10 +8,11 @@ import ConnectedGuard from "../components/guards/connectedGuard";
 import Layout from "../components/vitrine/Layout";
 import styles from "../styles/vitrine/RegisterShop.module.scss";
 import { getError } from "../utils/shared/getError";
-import Link from "next/link";
+import { VisibilityIcon, VisibilityOffIcon } from "../utils/theme/icons";
+import { useRouter } from "next/router";
 
-function RegisterShop(props) {
-  const dispatch = useDispatch();
+function Register(props) {
+  const router = useRouter();
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -21,12 +23,17 @@ function RegisterShop(props) {
     shopName: "",
   });
 
+  const [passwordVisible, setPasswordVisible] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const { enqueueSnackbar } = useSnackbar();
 
   const onChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const togglePasswordVisibility = () => {
+    setPasswordVisible(!passwordVisible);
   };
 
   const register = async (e) => {
@@ -37,9 +44,12 @@ function RegisterShop(props) {
       return enqueueSnackbar("passwords doesn't match", { variant: "warning" });
     }
     try {
-      const { data } = await axios.post("api/auth/register-admin", formData);
-      dispatch({ type: "USER_LOGIN", payload: data });
+      await axios.post("api/auth/register", formData);
+      enqueueSnackbar("check your email to verify your account.", {
+        variant: "info",
+      });
       setLoading(false);
+      router.push("/login");
     } catch (error) {
       enqueueSnackbar(getError(error), { variant: "error" });
       setLoading(false);
@@ -61,7 +71,7 @@ function RegisterShop(props) {
                   type="text"
                   name="firstName"
                   placeholder="first name"
-                ></input>
+                />
                 <input
                   className="defaultInput"
                   required
@@ -69,7 +79,7 @@ function RegisterShop(props) {
                   type="text"
                   name="lastName"
                   placeholder="last name"
-                ></input>
+                />
                 <input
                   className="defaultInput"
                   required
@@ -77,23 +87,37 @@ function RegisterShop(props) {
                   type="email"
                   name="email"
                   placeholder="email"
-                ></input>
+                />
+                <div className={styles.passwordContainer}>
+                  <input
+                    className="defaultInput"
+                    required
+                    onChange={onChange}
+                    type={passwordVisible ? "text" : "password"}
+                    name="password"
+                    placeholder="password"
+                  />
+
+                  <IconButton
+                    className={styles.passwordVisibilityIcon}
+                    style={{ color: "black" }}
+                    onClick={togglePasswordVisibility}
+                  >
+                    {passwordVisible ? (
+                      <VisibilityOffIcon />
+                    ) : (
+                      <VisibilityIcon />
+                    )}
+                  </IconButton>
+                </div>
                 <input
                   className="defaultInput"
                   required
                   onChange={onChange}
-                  type="password"
-                  name="password"
-                  placeholder="password"
-                ></input>
-                <input
-                  className="defaultInput"
-                  required
-                  onChange={onChange}
-                  type="password"
+                  type={passwordVisible ? "text" : "password"}
                   name="confirmPassword"
                   placeholder="confirm password"
-                ></input>
+                />
                 <input
                   className="defaultInput"
                   required
@@ -101,7 +125,7 @@ function RegisterShop(props) {
                   type="text"
                   name="shopName"
                   placeholder="shop name"
-                ></input>
+                />
                 <br />
                 <Button
                   type="submit"
@@ -123,8 +147,7 @@ function RegisterShop(props) {
                 <br />
                 <br />
                 <p>
-                  already have an account ?{" "}
-                  <Link href={"/login-shop"}>Login !</Link>
+                  already have an account ? <Link href={"/login"}>Login !</Link>
                 </p>
               </form>
             </section>
@@ -138,4 +161,4 @@ function RegisterShop(props) {
   );
 }
 
-export default RegisterShop;
+export default Register;

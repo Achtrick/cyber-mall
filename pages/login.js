@@ -10,7 +10,7 @@ import ConnectedGuard from "../components/guards/connectedGuard";
 import { VisibilityIcon, VisibilityOffIcon } from "../utils/theme/icons";
 import Link from "next/link";
 
-function LoginShop(props) {
+function Login(props) {
   const dispatch = useDispatch();
   const [passwordVisible, setPasswordVisible] = useState(false);
 
@@ -106,7 +106,7 @@ function LoginShop(props) {
                 <br />
                 <p>
                   don&apos;t have an account ?{" "}
-                  <Link href={"/register-shop"}>Register !</Link>
+                  <Link href={"/register"}>Register !</Link>
                 </p>
                 <p>
                   forgot your password ?{" "}
@@ -124,4 +124,4 @@ function LoginShop(props) {
   );
 }
 
-export default LoginShop;
+export default Login;

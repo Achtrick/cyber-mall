@@ -11,7 +11,7 @@ function BecomeMember(props) {
         .<br />
         Create <span className={styles.title__stress}>your shop</span> now.
       </h1>
-      <Link href={"/register-shop"}>
+      <Link href={"/register"}>
         <Button
           style={{
             backgroundColor: "black",

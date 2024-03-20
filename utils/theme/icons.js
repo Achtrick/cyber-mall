@@ -33,14 +33,14 @@ import ReplayIcon from "@mui/icons-material/Replay";
 import RemoveIcon from "@mui/icons-material/Remove";
 import TravelExploreIcon from "@mui/icons-material/TravelExplore";
 import ChangeCircleIcon from "@mui/icons-material/ChangeCircle";
-import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
+import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 
 const TiktokIcon = MusicNoteIcon;
 const AddressIcon = BusinessIcon;
 const NextIcon = NavigateNextIcon;
 const PreviousIcon = NavigateBeforeIcon;
 const ResetIcon = ReplayIcon;
-const Subscription = AdminPanelSettingsIcon;
+const Subscription = ManageAccountsIcon;
 
 export {
   AccountCircleIcon,

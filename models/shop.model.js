@@ -2,9 +2,14 @@ import { Schema, model, models } from "mongoose";
 
 const shopSchema = new Schema(
   {
+    verified: { type: Boolean, default: false },
+    banned: { type: Boolean, default: false },
     name: { type: String, unique: true },
     logo: { type: String, default: "" },
-    pack: { type: String, default: "FREE" }, // FREE PREMIUM
+    pack: {
+      type: { type: String, default: "FREE" },
+      expiresIn: { type: Date, default: "" },
+    },
     shippingFee: { type: Number, default: 7 },
     settings: {
       type: Object,

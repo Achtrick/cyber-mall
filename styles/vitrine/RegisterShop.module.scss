@@ -34,6 +34,14 @@
     }
   }
 }
+.passwordContainer {
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+.passwordVisibilityIcon {
+  margin-left: -45px;
+}
 @media (max-width: 900px) {
   .container {
     h1 {

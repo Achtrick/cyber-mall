@@ -4,10 +4,9 @@ const userSchema = new Schema(
   {
     firstName: String,
     lastName: String,
-    birthDate: String,
     adress: String,
     phone: String,
-    email: String,
+    email: { type: String, unique: true },
     password: String,
     role: String, // SUPER-ADMIN / ADMIN
     token: String,

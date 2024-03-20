@@ -11,19 +11,9 @@ function ConnectedGuard(props) {
   const { userInfo } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    if (userInfo !== null) {
-      switch (userInfo.role) {
-        case "ADMIN":
-          router.push("admin/categories");
-          setLoading(false);
-          break;
-        case "CLIENT":
-          router.pathname === "our-shops" ? null : router.push("/our-shops");
-          setLoading(false);
-          break;
-        default:
-          break;
-      }
+    if (userInfo !== null && userInfo.role === "ADMIN") {
+      router.push("admin/categories");
+      setLoading(false);
     } else {
       setLoading(false);
     }
@@ -31,7 +21,25 @@ function ConnectedGuard(props) {
 
   return loading ? (
     <div className="auth-guard-loader">
-      <CircularProgress color="primary" />
+      <div className="loaderContainer">
+        <img
+          width="60px"
+          style={{ opacity: "0.8" }}
+          alt="cyber-mall"
+          src="/images/icon.svg"
+        />
+        <CircularProgress
+          size={100}
+          color="secondary"
+          sx={{
+            opacity: 0.3,
+            position: "absolute",
+            top: "calc(50% - 50px)",
+            left: "calc(50% - 50px)",
+            zIndex: 1,
+          }}
+        />
+      </div>
     </div>
   ) : (
     <div>{props.children}</div>

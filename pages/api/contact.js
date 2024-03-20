@@ -1,5 +1,5 @@
 import nc from "next-connect";
-import { transporter } from "./auth/recoverPassword";
+import { transporter } from "../../utils/shared/mailer";
 
 const handler = nc();
 

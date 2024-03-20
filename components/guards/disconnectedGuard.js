@@ -24,7 +24,25 @@ function DisconnectedGuard(props) {
 
   return loading ? (
     <div className="auth-guard-loader">
-      <CircularProgress color="primary" />
+      <div className="loaderContainer">
+        <img
+          width="60px"
+          style={{ opacity: "0.8" }}
+          alt="cyber-mall"
+          src="/images/icon.svg"
+        />
+        <CircularProgress
+          size={100}
+          color="secondary"
+          sx={{
+            opacity: 0.3,
+            position: "absolute",
+            top: "calc(50% - 50px)",
+            left: "calc(50% - 50px)",
+            zIndex: 1,
+          }}
+        />
+      </div>
     </div>
   ) : (
     <div>{props.children}</div>

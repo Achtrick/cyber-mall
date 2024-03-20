@@ -2,38 +2,10 @@ import crypto from "crypto";
 import nc from "next-connect";
 import User from "../../../models/user.model";
 import connectDB from "../../../utils/connectDB";
+import { transporter } from "../../../utils/shared/mailer";
+import { mailcss } from "../../../utils/shared/mailer";
 
-const nodemailer = require("nodemailer");
 const token = crypto.randomBytes(10).toString("hex");
-
-export const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 465,
-  secure: true,
-  auth: {
-    user: process.env.AUTH_SUPERADMIN_EMAIL,
-    pass: process.env.AUTH_SUPERADMIN_PASS,
-  },
-});
-
-const mailcss = {
-  background: `
-    style="background: black;
-    border-radius: 5px;
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    color: white !important;"`,
-  body: `
-    style="background: white;
-    border-radius: 5px;
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    "`,
-};
 
 const handler = nc();
 

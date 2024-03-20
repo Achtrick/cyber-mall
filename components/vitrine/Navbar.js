@@ -40,10 +40,10 @@ function Navbar() {
           <Link href={"/contact"}>
             <p>Contact</p>
           </Link>
-          <Link href={"/login-shop"}>
+          <Link href={"/login"}>
             <p className={styles.login}>login</p>
           </Link>
-          <Link href={"/register-shop"}>
+          <Link href={"/register"}>
             <p className={styles.register}>register</p>
           </Link>
           <IconButton onClick={toggleMenu}>
@@ -86,11 +86,11 @@ function Navbar() {
           </li>
         </ul>
         <div className={styles.buttons}>
-          <Link href={"/login-shop"}>
+          <Link href={"/login"}>
             <Button className={styles.login}>login</Button>
           </Link>
           &nbsp;&nbsp;
-          <Link href={"/register-shop"}>
+          <Link href={"/register"}>
             <Button className={styles.register}>register</Button>
           </Link>
         </div>
