@@ -14,7 +14,7 @@ handler.post(async (req, res) => {
     const user = await User.findOne({ email: data.email.toLowerCase() });
     if (!user) {
       return res.status(403).json({
-        message: "il n'y a aucun utilisateur avec cette adresse email !",
+        message: "il n'y a aucun utilisateur avec cette addresse email !",
       });
     }
     const valid = bcrypt.compareSync(data.password, user.password);
@@ -35,7 +35,7 @@ handler.post(async (req, res) => {
           lastName: user.lastName,
           email: user.email,
           phone: user.phone,
-          adress: user.adress,
+          address: user.address,
           token: token,
           shop: shop,
         });

@@ -72,7 +72,7 @@ handler.post(async (req, res) => {
       });
     } else {
       res.status(404).json({
-        message: "il n'y a aucun compte avec cette adresse mail !",
+        message: "il n'y a aucun compte avec cette addresse mail !",
       });
     }
   } catch (err) {

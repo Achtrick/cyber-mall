@@ -7,8 +7,11 @@ const shopSchema = new Schema(
     name: { type: String, unique: true },
     logo: { type: String, default: "" },
     pack: {
-      type: { type: String, default: "FREE" },
-      expiresIn: { type: Date, default: "" },
+      type: Object,
+      default: {
+        type: { type: String, default: "FREE" },
+        expiresIn: { type: String, default: "" },
+      },
     },
     shippingFee: { type: Number, default: 7 },
     settings: {

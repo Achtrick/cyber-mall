@@ -49,40 +49,40 @@ function AdminLayout(props) {
       </section>
       <Drawer open={drawerOpen} anchor={"left"} onClose={toggleDrawer}>
         <section className={styles.sidebar}>
+          <Link onClick={toggleDrawer} href="/admin/account">
+            <div className={`${styles.link} + hoverable`}>
+              <Subscription color="primary" />
+              <p>my account</p>
+            </div>
+          </Link>
           <Link onClick={toggleDrawer} href="/admin/categories">
             <div className={`${styles.link} + hoverable`}>
-              <CategoryIcon color="primary" />
+              <CategoryIcon color="shop2" />
               <p>categories</p>
             </div>
           </Link>
           <Link onClick={toggleDrawer} href="/admin/inventory">
             <div className={`${styles.link} + hoverable`}>
-              <InventoryIcon color="shop2" />
+              <InventoryIcon color="shop3" />
               <p>inventory</p>
             </div>
           </Link>
           <Link onClick={toggleDrawer} href="/admin/orders">
             <div className={`${styles.link} + hoverable`}>
-              <LocalShippingIcon color="shop3" />
+              <LocalShippingIcon color="shop4" />
               <p>orders</p>
             </div>
           </Link>
           <Link onClick={toggleDrawer} href="/admin/theme">
             <div className={`${styles.link} + hoverable`}>
-              <PaletteIcon color="shop4" />
+              <PaletteIcon color="shop5" />
               <p>my shop theme</p>
             </div>
           </Link>
           <Link onClick={toggleDrawer} href="/admin/architecture">
             <div className={`${styles.link} + hoverable`}>
-              <SettingsIcon color="shop5" />
+              <SettingsIcon color="shop6" />
               <p>configure my shop</p>
-            </div>
-          </Link>
-          <Link onClick={toggleDrawer} href="/admin/account">
-            <div className={`${styles.link} + hoverable`}>
-              <Subscription color="shop6" />
-              <p>my account</p>
             </div>
           </Link>
           <Link

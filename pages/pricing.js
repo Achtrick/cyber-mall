@@ -67,7 +67,7 @@ function Pricing(props) {
                 <li>invoice generation: allowed</li>
               </ul>
               <hr />
-              <p>10 DT / Month</p>
+              <p>30 DT / Month</p>
               <Link href={"/register"}>
                 <Button
                   style={{

@@ -144,7 +144,7 @@ export default function Privacy(props) {
           </p>
           <ul>
             <li>
-              <p>Adresse e-mail</p>
+              <p>addresse e-mail</p>
             </li>
             <li>
               <p>Données d&apos;utilisation</p>
@@ -157,8 +157,8 @@ export default function Privacy(props) {
           </p>
           <p>
             Les données d&apos;utilisation peuvent inclure des informations
-            telles que Vos appareils Internet Adresse de protocole (par ex.
-            adresse IP), type de navigateur, version du navigateur, pages de
+            telles que Vos appareils Internet addresse de protocole (par ex.
+            addresse IP), type de navigateur, version du navigateur, pages de
             notre Service que Vous visitez, l&apos;heure et la date de Votre
             visite, le temps passé sur ces pages, les identifiants
             d&apos;appareil uniques et d&apos;autres données diagnostiques.
@@ -168,7 +168,7 @@ export default function Privacy(props) {
             pouvons collecter automatiquement certaines informations, y compris,
             mais sans s&apos;y limiter au type d&apos;appareil mobile que vous
             utilisez, l&apos;identifiant unique de votre appareil mobile,
-            l&apos;adresse IP de Votre appareil mobile, Votre système
+            l&apos;addresse IP de Votre appareil mobile, Votre système
             d&apos;exploitation mobile, le type de navigateur Internet mobile
             que vous utilisez, les identifiants uniques de l&apos;appareil et
             d&apos;autres données diagnostiques.
@@ -460,7 +460,7 @@ export default function Privacy(props) {
           </p>
           <h1>Confidentialité des enfants</h1>
           <p>
-            Notre service ne s&apos;adresse à personne de moins de 13 ans. Nous
+            Notre service ne s&apos;addresse à personne de moins de 13 ans. Nous
             ne recueillir sciemment des informations personnellement
             identifiables auprès de quiconque moins de 13 ans. Si vous êtes un
             parent ou un tuteur et que vous savez que votre enfant nous a fourni

@@ -23,7 +23,7 @@ handler.post(async (req, res) => {
     if (userExists) {
       return res
         .status(403)
-        .json({ message: "il y a un utilisateur avec cette adresse email !" });
+        .json({ message: "il y a un utilisateur avec cette addresse email !" });
     }
 
     const shopExists = await Shop.findOne({

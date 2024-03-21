@@ -12,7 +12,7 @@ function ConnectedGuard(props) {
 
   useEffect(() => {
     if (userInfo !== null && userInfo.role === "ADMIN") {
-      router.push("admin/categories");
+      router.push("admin/account");
       setLoading(false);
     } else {
       setLoading(false);

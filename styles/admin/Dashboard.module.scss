@@ -1,3 +1,14 @@
+// functions
+@mixin flexLayout(
+  $alignItems: center,
+  $justifyContent: center,
+  $flexDirection: row
+) {
+  display: flex;
+  flex-direction: $flexDirection;
+  align-items: $alignItems;
+  justify-content: $justifyContent;
+}
 .container {
   width: 100%;
   padding: 10px;
@@ -83,33 +94,92 @@
   }
 }
 .account {
-  .col50 {
-    width: 48%;
+  .row {
+    width: 100%;
     padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    background-color: #fafafa;
-    flex-grow: 1 1;
+    background-repeat: no-repeat;
+    border-radius: 10px;
+    text-transform: capitalize;
+    form {
+      @include flexLayout(flex-start, flex-start, column);
+    }
+    input {
+      max-width: 300px;
+    }
     h5 {
       margin: 0px;
+      font-size: 20px;
+    }
+    h1 {
+      font-size: 45px;
+      margin: 15px 0px;
+    }
+    p {
+      width: 100%;
+      margin: 10px 0px;
+      @include flexLayout(center, flex-start);
     }
   }
+
   .silver {
-    background-image: linear-gradient(
-      90deg,
-      rgba(245, 245, 245, 1) 0%,
-      rgba(188, 188, 188, 1) 45%,
-      rgba(255, 255, 255, 1) 100%
-    );
+    background-image: url(/images/silver-bg.svg);
+    background-position: 0%;
   }
+
   .gold {
-    background-image: linear-gradient(
-      90deg,
-      rgba(255, 254, 211, 1) 0%,
-      rgba(250, 245, 79, 0.9080882352941176) 35%,
-      rgba(255, 255, 255, 1) 100%
-    );
+    background-image: url(/images/gold-bg.svg);
+    background-position: 0%;
   }
+
+  .passwordContainer {
+    width: 100%;
+    display: flex;
+    align-items: center;
+  }
+
+  .passwordVisibilityIcon {
+    margin-left: -45px;
+  }
+}
+
+.offer {
+  position: relative;
+  width: 90%;
+  height: 200px;
+  background-image: url(/images/default-bg.svg);
+  background-position: 0%;
+  background-repeat: no-repeat;
+  padding: 20px;
+  border-radius: 10px;
+  border: 2px solid #ccc;
+  transition: all 0.3s;
+  cursor: pointer;
+  p {
+    font-size: 20px;
+    font-weight: 500;
+  }
+  .price {
+    position: absolute;
+    width: 100%;
+    height: 35px;
+    @include flexLayout();
+    background-color: var(--second-color);
+    color: white;
+    font-size: 20px;
+    font-weight: 700;
+    bottom: 0px;
+    left: 0px;
+    border-radius: 0px 0px 10px 10px;
+    opacity: 0.5;
+  }
+}
+.offer:hover {
+  border: 2px solid var(--second-color);
+  transform: scale(1.03);
+}
+.activeOffer {
+  border: 2px solid var(--second-color);
+  transform: scale(1.03);
 }
 
 .error {

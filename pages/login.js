@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from "react";
-import Layout from "../components/vitrine/Layout";
-import styles from "../styles/vitrine/LoginShop.module.scss";
 import { Button, CircularProgress, IconButton } from "@mui/material";
 import axios from "axios";
+import Link from "next/link";
 import { useSnackbar } from "notistack";
-import { getError } from "../utils/shared/getError";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import ConnectedGuard from "../components/guards/connectedGuard";
+import Layout from "../components/vitrine/Layout";
+import styles from "../styles/vitrine/LoginShop.module.scss";
+import { getError } from "../utils/shared/getError";
 import { VisibilityIcon, VisibilityOffIcon } from "../utils/theme/icons";
-import Link from "next/link";
 
 function Login(props) {
   const dispatch = useDispatch();
@@ -50,7 +50,6 @@ function Login(props) {
         <section className={styles.container}>
           <div className={styles.row}>
             <div className={styles.col}>
-              {" "}
               <section className={styles.form}>
                 <h1>login</h1>
                 <form id="form" onSubmit={login}>
