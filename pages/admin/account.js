@@ -1,20 +1,23 @@
+import { Check } from "@mui/icons-material";
 import {
-  Button,
   CircularProgress,
   IconButton,
   LinearProgress,
-  Skeleton,
   Tooltip,
 } from "@mui/material";
+import axios from "axios";
+import moment from "moment";
+import Image from "next/image";
 import { useSnackbar } from "notistack";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import AdminLayout from "../../components/admin/AdminLayout";
-import { AdminActions, ModalSizes } from "../../components/admin/ModalSettings";
+import { ModalSizes } from "../../components/admin/ModalSettings";
 import DisconnectedGuard from "../../components/guards/disconnectedGuard";
+import XButton from "../../components/ui-components/XButton";
 import XModal from "../../components/ui-components/XModal";
 import styles from "../../styles/admin/Dashboard.module.scss";
-import Image from "next/image";
+import { getError } from "../../utils/shared/getError";
 import {
   AccountCircleIcon,
   CheckCircleIcon,
@@ -23,10 +26,6 @@ import {
   VisibilityIcon,
   VisibilityOffIcon,
 } from "../../utils/theme/icons";
-import axios from "axios";
-import { getError } from "../../utils/shared/getError";
-import XButton from "../../components/ui-components/XButton";
-import { Check } from "@mui/icons-material";
 
 function Account(props) {
   const { userInfo } = useSelector((state) => state.auth);
@@ -41,7 +40,7 @@ function Account(props) {
     { period: "1 MONTH", price: 30 },
     { period: "3 MONTHS", price: 85 },
     { period: "6 MONTHS", price: 160 },
-    { period: "1 YEAR", price: 300 },
+    { period: "12 MONTHS", price: 300 },
   ];
 
   const [upgradeDemand, setUpgradeDemand] = useState(null);
@@ -75,7 +74,7 @@ function Account(props) {
 
   useEffect(() => {
     setFormdata(userInfo);
-    getUpgradeDemand();
+    userInfo && getUpgradeDemand();
   }, [userInfo]);
 
   const getUpgradeDemand = async () => {
@@ -286,7 +285,11 @@ function Account(props) {
                 </p>
                 <hr />
                 <h5>Pack: {pack.type}</h5>
-                {pack.type !== "FREE" && <h5>Expires in: {pack.expiresIn}</h5>}
+                {pack.type !== "FREE" && (
+                  <h5>
+                    Expires in: {moment(pack.expiresIn).format("DD-MM-YYYY")}
+                  </h5>
+                )}
                 {pack.type === "FREE" && !upgradeDemand && (
                   <>
                     <p>upgrade to premium and benefit from our services !</p>
@@ -306,7 +309,7 @@ function Account(props) {
                       <li>RIB: 17503000000268993518</li>
                       <li>D17 / E-DINAR: 4742000268993511</li>
                     </ul>
-                    <LinearProgress />
+                    <LinearProgress color="secondary" />
                   </span>
                 ) : (
                   <XButton
@@ -324,6 +327,7 @@ function Account(props) {
                   />
                 )}
               </div>
+              <br />
               <div className={styles.row}>
                 <div className="row" style={{ justifyContent: "flex-start" }}>
                   <AccountCircleIcon sx={{ width: "70px", height: "70px" }} />

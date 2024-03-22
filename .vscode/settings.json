@@ -1,3 +1,4 @@
 {
-  "xml.format.legacy": true
+  "xml.format.legacy": true,
+  "editor.codeActionsOnSave": {}
 }

@@ -14,6 +14,9 @@ function ConnectedGuard(props) {
     if (userInfo !== null && userInfo.role === "ADMIN") {
       router.push("admin/account");
       setLoading(false);
+    } else if (userInfo !== null && userInfo.role === "SUPER-ADMIN") {
+      router.push("super-admin/shops");
+      setLoading(false);
     } else {
       setLoading(false);
     }

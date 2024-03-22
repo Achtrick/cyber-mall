@@ -1,12 +1,10 @@
-import nc from "next-connect";
-import connectDB from "../../../utils/connectDB";
-import User from "../../../models/user.model";
-import Shop from "../../../models/shop.model";
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
-import { transporter } from "../../../utils/shared/mailer";
-import { mailcss } from "../../../utils/shared/mailer";
 import crypto from "crypto";
+import nc from "next-connect";
+import Shop from "../../../models/shop.model";
+import User from "../../../models/user.model";
+import connectDB from "../../../utils/connectDB";
+import { mailcss, transporter } from "../../../utils/shared/mailer";
 
 const token = crypto.randomBytes(10).toString("hex");
 

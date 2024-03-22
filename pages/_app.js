@@ -1,16 +1,15 @@
-import "../styles/globals.scss";
 import { CacheProvider } from "@emotion/react";
-import { ThemeProvider, CssBaseline } from "@mui/material";
+import { CssBaseline, ThemeProvider } from "@mui/material";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
+import { SnackbarProvider } from "notistack";
 import PropTypes from "prop-types";
+import React from "react";
+import { Provider } from "react-redux";
+import { store, wrapper } from "../redux/store";
+import "../styles/globals.scss";
 import createEmotionCache from "../utils/config/cahce";
 import lightTheme from "../utils/theme/theme";
-import { SnackbarProvider } from "notistack";
-import { wrapper, store } from "../redux/store";
-import { Provider } from "react-redux";
-import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
-import { LocalizationProvider } from "@mui/x-date-pickers";
-import React from "react";
-import "devextreme/dist/css/dx.light.css";
 
 const clientSideEmotionCache = createEmotionCache();
 
@@ -24,7 +23,7 @@ function MyApp(props) {
             <CssBaseline />
             <LocalizationProvider dateAdapter={AdapterMoment}>
               <SnackbarProvider
-                anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+                anchorOrigin={{ vertical: "top", horizontal: "center" }}
               >
                 <Component {...pageProps} />
               </SnackbarProvider>
