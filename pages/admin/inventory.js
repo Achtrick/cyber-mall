@@ -318,7 +318,7 @@ function Inventory(props) {
                   hidden
                   type="file"
                   accept="image/*"
-                  multiple={userInfo.shop.pack.type === "PREMIUM"}
+                  multiple={userInfo?.shop.pack.type === "PREMIUM"}
                   name="images"
                   onChange={onChange}
                 />
