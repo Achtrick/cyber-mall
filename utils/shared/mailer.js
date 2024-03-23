@@ -20,7 +20,7 @@ export const mailcss = {
       padding-bottom: 5px;
       color: white !important;"`,
   body: `
-      style="background: white;
+      style="background: #3d3d3d;
       border-radius: 5px;
       padding-left: 10px;
       padding-right: 10px;

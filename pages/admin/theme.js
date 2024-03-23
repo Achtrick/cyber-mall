@@ -92,7 +92,7 @@ function Theme(props) {
           title={title}
           onClose={closeAction}
           cancelAction={closeAction}
-          size={ModalSizes.XSMALL}
+          size={ModalSizes.SMALL}
           hideControls={true}
         >
           <div className={styles.modal}>

@@ -460,12 +460,14 @@ function Inventory(props) {
                         }
                         key={product._id}
                       >
-                        <td>{product.designation}</td>
-                        <td>{product.description}</td>
-                        <td>{product.price.toLocaleString() + " DT"}</td>
-                        <td>{product.qty}</td>
-                        <td>
-                          <div className="centered-row">
+                        <td data-label="Designation">{product.designation}</td>
+                        <td data-label="Description">{product.description}</td>
+                        <td data-label="Price">
+                          {product.price.toLocaleString() + " DT"}
+                        </td>
+                        <td data-label="Qty">{product.qty}</td>
+                        <td data-label="Actions">
+                          <div>
                             <Tooltip title="Edit">
                               <IconButton
                                 color="warning"

@@ -151,6 +151,7 @@ option.hovered {
   border-collapse: collapse;
 }
 .defaultTable thead {
+  height: 30px;
   background: #f5f5f5;
   font-weight: 400;
   font-size: 13px;
@@ -169,13 +170,13 @@ option.hovered {
 }
 .defaultTable tbody tr {
   border: 1px solid #ccc;
-  height: 50px;
+  height: 40px;
   text-align: left;
 }
 .defaultTable td,
 th {
   text-align: left;
-  padding: 10px 5px;
+  padding: 0px 5px;
   border: 1px solid #ccc;
   text-overflow: ellipsis;
 }
@@ -191,8 +192,12 @@ th {
 }
 .grid-5 {
   padding: 10px 0px;
+  row-gap: 10px;
   display: grid;
   grid-template-columns: auto auto auto auto auto;
+  p {
+    margin: 2px 0px;
+  }
 }
 .grid-4 {
   padding: 20px 0px;
@@ -207,9 +212,8 @@ th {
   .icon {
     width: 80px;
     height: 80px;
-    object-fit: cover;
+    object-fit: contain;
     border-radius: 5px;
-    border: 1px solid #ccc;
   }
 }
 .centered-row {
@@ -283,5 +287,64 @@ th {
       width: 50%;
       @include flexLayout(center, center, column);
     }
+  }
+}
+
+@media (max-width: 800px) {
+  .grid-5 {
+    padding: 10px 0px;
+    display: grid;
+    grid-template-columns: auto auto auto;
+  }
+  .grid-4 {
+    grid-template-columns: auto;
+    row-gap: 20px;
+  }
+  .defaultTable {
+    border: none;
+  }
+  .defaultTable caption {
+    font-size: 1.3em;
+  }
+  .defaultTable thead {
+    border: none;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+  }
+
+  .defaultTable tr {
+    border: 1px solid #ccc;
+    display: block;
+    margin-bottom: 20px;
+    height: 100% !important;
+  }
+  .defaultTable tbody tr {
+    border: none;
+  }
+  .defaultTable td,
+  th {
+    padding: 10px 5px;
+  }
+  .defaultTable td {
+    display: block;
+    font-size: 0.8em;
+    text-align: right;
+  }
+
+  .defaultTable td::before {
+    content: attr(data-label);
+    float: left;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+  .defaultTable td:last-child {
+    border: 1px solid #ccc;
+    padding: 0px 5px;
+    @include flexLayout(center, space-between);
   }
 }

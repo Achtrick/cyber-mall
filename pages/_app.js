@@ -10,11 +10,14 @@ import { store, wrapper } from "../redux/store";
 import "../styles/globals.scss";
 import createEmotionCache from "../utils/config/cahce";
 import lightTheme from "../utils/theme/theme";
+import { useRouter } from "next/router";
 
 const clientSideEmotionCache = createEmotionCache();
 
 function MyApp(props) {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
+  const router = useRouter();
+  const isSa = router.pathname.includes("super-admin");
   return (
     <>
       <Provider store={store}>
@@ -23,8 +26,11 @@ function MyApp(props) {
             <CssBaseline />
             <LocalizationProvider dateAdapter={AdapterMoment}>
               <SnackbarProvider
-                anchorOrigin={{ vertical: "top", horizontal: "right" }}
-                style={{ marginTop: "60px" }}
+                anchorOrigin={
+                  isSa
+                    ? { vertical: "top", horizontal: "center" }
+                    : { vertical: "bottom", horizontal: "center" }
+                }
               >
                 <Component {...pageProps} />
               </SnackbarProvider>

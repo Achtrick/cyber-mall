@@ -207,18 +207,16 @@ function Categories() {
               <div className="labeledInput">
                 <label>icon (recommended resolution (250px * 250px))</label>
                 {category.icon !== "" && (
-                  <div className={styles.productImagesContainer}>
-                    <div className={styles.productImgPreview}>
-                      <img
-                        alt={category.name}
-                        src={`/api/images/${category.icon.split("/").pop()}`}
-                        onError={(e) => {
-                          e.target.src = isBase64(category.icon)
-                            ? category.icon
-                            : "/images/category.svg";
-                        }}
-                      />
-                    </div>
+                  <div className={styles.productImgPreview}>
+                    <img
+                      alt={category.name}
+                      src={`/api/images/${category.icon.split("/").pop()}`}
+                      onError={(e) => {
+                        e.target.src = isBase64(category.icon)
+                          ? category.icon
+                          : "/images/category.svg";
+                      }}
+                    />
                   </div>
                 )}
                 <input
@@ -253,7 +251,6 @@ function Categories() {
         </XModal>
         <section className={styles.container}>
           <h1>Categories</h1>
-          <div className={styles.controls}>{/* search */}</div>
           {loading ? (
             <Skeleton
               variant="rectangular"

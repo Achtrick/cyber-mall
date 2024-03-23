@@ -34,6 +34,7 @@ handler.post(async (req, res) => {
 
     const shop = await Shop.create({
       name: data.shopName.toLowerCase(),
+      pack: { type: "FREE", expiresIn: "" },
       settings: {
         headerColor: "black",
         footerColor: "black",

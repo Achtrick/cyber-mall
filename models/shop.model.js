@@ -8,10 +8,6 @@ const shopSchema = new Schema(
     logo: { type: String, default: "" },
     pack: {
       type: Object,
-      default: {
-        type: { type: String, default: "FREE" },
-        expiresIn: { type: String, default: "" },
-      },
     },
     shippingFee: { type: Number, default: 7 },
     settings: {

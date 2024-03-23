@@ -19,10 +19,11 @@
     p {
       margin: 0px;
       padding: 5px;
-      font-size: 16px;
+      font-size: 14px;
       color: black;
       text-transform: uppercase;
-      letter-spacing: 3px;
+      letter-spacing: 2px;
+      line-height: 15px;
     }
   }
   .content {
@@ -53,10 +54,29 @@
   height: 70vh;
 }
 .small {
-  width: 50vw;
-  max-height: 50vh;
+  width: 60vw;
+  max-height: 60vh;
 }
 .xsmall {
   width: 30vw;
   max-height: 30vh;
+}
+
+@media (max-width: 800px) {
+  .big {
+    width: 95vw;
+    height: 95vh;
+  }
+  .medium {
+    width: 85vw;
+    height: 85vh;
+  }
+  .small {
+    width: 70vw;
+    max-height: 70vh;
+  }
+  .xsmall {
+    width: 55vw;
+    max-height: 55vh;
+  }
 }

@@ -73,7 +73,7 @@ function Account(props) {
   }
 
   useEffect(() => {
-    setFormdata(userInfo);
+    setFormdata({ ...formData, ...userInfo });
     userInfo && getUpgradeDemand();
   }, [userInfo]);
 
@@ -139,32 +139,46 @@ function Account(props) {
   };
 
   const confirmAction = async () => {
-    if (offer) {
-      setLoadingSubscription(true);
-      try {
-        const { data } = await axios.post(
-          "/api/admin/shop/update-subscription",
-          {
-            userName: userInfo.firstName + " " + userInfo.lastName,
-            email: userInfo.email,
-            phone: userInfo.phone,
-            shop: userInfo.shop._id,
-            period: offer.period,
-          }
-        );
-        await getUpgradeDemand();
-        enqueueSnackbar(data.message, { variant: "success" });
-        setLoadingSubscription(false);
-        setOffer(null);
-        setAction("");
-      } catch (error) {
-        enqueueSnackbar(getError(error), { variant: "error" });
-        setLoadingSubscription(false);
-        setOffer(null);
-        setAction("");
+    if (userInfo.phone && userInfo.phone.length) {
+      if (offer) {
+        setLoadingSubscription(true);
+        try {
+          const { data } = await axios.post(
+            "/api/admin/shop/update-subscription",
+            {
+              userName: userInfo.firstName + " " + userInfo.lastName,
+              email: userInfo.email,
+              phone: userInfo.phone,
+              shop: userInfo.shop._id,
+              period: offer.period,
+            }
+          );
+          await getUpgradeDemand();
+          enqueueSnackbar(data.message, { variant: "success" });
+          setLoadingSubscription(false);
+          setOffer(null);
+          setAction("");
+        } catch (error) {
+          enqueueSnackbar(getError(error), { variant: "error" });
+          setLoadingSubscription(false);
+          setOffer(null);
+          setAction("");
+        }
+      } else {
+        enqueueSnackbar("Select a plan first !", { variant: "warning" });
       }
     } else {
-      enqueueSnackbar("Select a plan first !", { variant: "warning" });
+      enqueueSnackbar(
+        "Remplir Vos Coordonnées D'abord pour qu'ont peut vous contactez !",
+        { variant: "warning" }
+      );
+      setOffer(null);
+      setAction("");
+      setEditAccount(true);
+      window.scrollTo({
+        top: document.documentElement.scrollHeight,
+        behavior: "smooth",
+      });
     }
   };
 
@@ -365,7 +379,7 @@ function Account(props) {
                   )}
                 </div>
                 <p>{firstName + " " + lastName}</p>
-                <form id="account" onSubmit={updateAccount}>
+                <form autoComplete="off" id="account" onSubmit={updateAccount}>
                   <input
                     type="email"
                     className={
@@ -405,6 +419,7 @@ function Account(props) {
                       type={passwordVisible ? "text" : "password"}
                       name="password"
                       placeholder="password"
+                      autoComplete="off"
                     />
 
                     {editAccount && (
@@ -430,6 +445,7 @@ function Account(props) {
                     name="confirmPassword"
                     placeholder="confirm password"
                     onChange={onChange}
+                    autoComplete="off"
                   />
                 </form>
               </div>
