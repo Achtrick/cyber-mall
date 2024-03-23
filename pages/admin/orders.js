@@ -257,26 +257,28 @@ function Orders() {
                   {orders.map((order) => {
                     return (
                       <tr key={order._id}>
-                        <td>
+                        <td data-label="Client">
                           {order.user.firstName + " " + order.user.lastName}
                         </td>
-                        <td>{order.user.phone}</td>
-                        <td>
+                        <td data-label="Phone">{order.user.phone}</td>
+                        <td data-label="Address">
                           {order.user.address +
                             " " +
                             order.user.city +
                             " " +
                             order.user.postalCode}
                         </td>
-                        <td>{moment(order.createdAt).format("DD-MM-YYYY")}</td>
-                        <td>
+                        <td data-label="Date">
+                          {moment(order.createdAt).format("DD-MM-YYYY")}
+                        </td>
+                        <td data-label="Total">
                           {order.products
                             .reduce((sum, product) => {
                               return sum + product.price * product.qty;
                             }, 0)
                             .toLocaleString() + " DT"}
                         </td>
-                        <td>
+                        <td data-label="Article Cnt">
                           {order.products.reduce((count, product) => {
                             return count + product.qty;
                           }, 0)}
@@ -321,7 +323,7 @@ function Orders() {
                               </Tooltip>
                             ) : null}
                             {order.state === "CLOSED" ? (
-                              userInfo.shop.pack.type === "PREMIUM" ? (
+                              userInfo?.shop.pack.type === "PREMIUM" ? (
                                 <ReactToPrint
                                   onBeforeGetContent={async () => {
                                     setOrder(order);
