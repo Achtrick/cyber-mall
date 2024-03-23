@@ -1,5 +1,5 @@
 import { Check, Receipt } from "@mui/icons-material";
-import { IconButton, Skeleton } from "@mui/material";
+import { IconButton, Skeleton, Tooltip } from "@mui/material";
 import axios from "axios";
 import moment from "moment";
 import { useSnackbar } from "notistack";
@@ -294,54 +294,78 @@ function Orders() {
                         </td>
                         <td>
                           <div className="centered-row">
-                            <IconButton
-                              color="info"
-                              onClick={() => {
-                                setOrder(order);
-                                setAction("SHOW-ORDER");
-                                setTitle("Order Preview");
-                              }}
-                            >
-                              <VisibilityIcon sx={{ width: "20px" }} />
-                            </IconButton>
-                            {order.state === "WAITING" ? (
+                            <Tooltip title="View Order">
                               <IconButton
                                 color="info"
                                 onClick={() => {
                                   setOrder(order);
-                                  setAction("CLOSE-ORDER");
-                                  setTitle("close order");
+                                  setAction("SHOW-ORDER");
+                                  setTitle("Order Preview");
                                 }}
                               >
-                                <Check sx={{ width: "20px" }} />
+                                <VisibilityIcon sx={{ width: "20px" }} />
                               </IconButton>
+                            </Tooltip>
+                            {order.state === "WAITING" ? (
+                              <Tooltip title="Close Order">
+                                <IconButton
+                                  color="info"
+                                  onClick={() => {
+                                    setOrder(order);
+                                    setAction("CLOSE-ORDER");
+                                    setTitle("close order");
+                                  }}
+                                >
+                                  <Check sx={{ width: "20px" }} />
+                                </IconButton>
+                              </Tooltip>
                             ) : null}
                             {order.state === "CLOSED" ? (
-                              <ReactToPrint
-                                onBeforeGetContent={async () => {
-                                  setOrder(order);
-                                  await new Promise((resolve) => {
-                                    setTimeout(resolve, 0);
-                                  });
-                                }}
-                                trigger={() => (
-                                  <IconButton color="info">
+                              userInfo.shop.pack.type === "PREMIUM" ? (
+                                <ReactToPrint
+                                  onBeforeGetContent={async () => {
+                                    setOrder(order);
+                                    await new Promise((resolve) => {
+                                      setTimeout(resolve, 0);
+                                    });
+                                  }}
+                                  trigger={() => (
+                                    <Tooltip title="Print">
+                                      <IconButton color="info">
+                                        <Receipt sx={{ width: "20px" }} />
+                                      </IconButton>
+                                    </Tooltip>
+                                  )}
+                                  content={() => receiptRef.current}
+                                />
+                              ) : (
+                                <Tooltip title="Print">
+                                  <IconButton
+                                    onClick={() =>
+                                      enqueueSnackbar(
+                                        "Upgrade to PREMIUM to get this functionnality !",
+                                        { variant: "warning" }
+                                      )
+                                    }
+                                    color="info"
+                                  >
                                     <Receipt sx={{ width: "20px" }} />
                                   </IconButton>
-                                )}
-                                content={() => receiptRef.current}
-                              />
+                                </Tooltip>
+                              )
                             ) : null}
-                            <IconButton
-                              color="error"
-                              onClick={() => {
-                                setOrder(order);
-                                setAction("DELETE-ORDER");
-                                setTitle("delete order");
-                              }}
-                            >
-                              <DeleteIcon sx={{ width: "20px" }} />
-                            </IconButton>
+                            <Tooltip title="Delete Order">
+                              <IconButton
+                                color="error"
+                                onClick={() => {
+                                  setOrder(order);
+                                  setAction("DELETE-ORDER");
+                                  setTitle("delete order");
+                                }}
+                              >
+                                <DeleteIcon sx={{ width: "20px" }} />
+                              </IconButton>
+                            </Tooltip>
                           </div>
                         </td>
                       </tr>

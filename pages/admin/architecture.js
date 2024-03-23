@@ -801,7 +801,8 @@ function Architecture(props) {
                         </div>
                       );
                     })}
-                    {sliderInfo?.length < 3 ? (
+                    {sliderInfo?.length < 3 ||
+                    userInfo.shop.pack.type === "PREMIUM" ? (
                       <IconButton
                         color="success"
                         onClick={() => {

@@ -1,4 +1,4 @@
-import { CircularProgress, IconButton, Skeleton } from "@mui/material";
+import { CircularProgress, IconButton, Skeleton, Tooltip } from "@mui/material";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
@@ -129,13 +129,15 @@ function Theme(props) {
                 <CircularProgress color="black" size={"22px"} />
               </IconButton>
             ) : (
-              <IconButton
-                disabled={colors === shopInfo.settings}
-                color="info"
-                onClick={saveSettings}
-              >
-                <CheckCircleIcon />
-              </IconButton>
+              <Tooltip title="Save">
+                <IconButton
+                  disabled={colors === shopInfo.settings}
+                  color="info"
+                  onClick={saveSettings}
+                >
+                  <CheckCircleIcon />
+                </IconButton>
+              </Tooltip>
             )}
           </p>
           {loading ? (

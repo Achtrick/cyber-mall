@@ -1,4 +1,5 @@
-import { IconButton, Skeleton } from "@mui/material";
+import { Edit } from "@mui/icons-material";
+import { IconButton, Skeleton, Tooltip } from "@mui/material";
 import axios from "axios";
 import { useSnackbar } from "notistack";
 import React, { useEffect, useState } from "react";
@@ -15,10 +16,10 @@ import {
   getThumbnail,
   isBase64,
 } from "../../utils/config/convertHelper";
+import { checkPremium } from "../../utils/shared/checkPremium";
 import { getError } from "../../utils/shared/getError";
 import {
   AddIcon,
-  ChangeCircleIcon,
   DeleteIcon,
   ModeEditIcon,
   SearchIcon,
@@ -317,22 +318,26 @@ function Inventory(props) {
                   hidden
                   type="file"
                   accept="image/*"
-                  multiple
+                  multiple={userInfo.shop.pack.type === "PREMIUM"}
                   name="images"
                   onChange={onChange}
                 />
-                <IconButton color="success">
-                  <label
-                    style={{
-                      cursor: "pointer",
-                      width: "25px",
-                      height: "25px",
-                    }}
-                    htmlFor="images"
+                <Tooltip title={product.images.length ? "Edit" : "Add"}>
+                  <IconButton
+                    color={product.images.length ? "warning" : "secondary"}
                   >
-                    {product.images.length ? <ChangeCircleIcon /> : <AddIcon />}
-                  </label>
-                </IconButton>
+                    <label
+                      style={{
+                        cursor: "pointer",
+                        width: "25px",
+                        height: "25px",
+                      }}
+                      htmlFor="images"
+                    >
+                      {product.images.length ? <Edit /> : <AddIcon />}
+                    </label>
+                  </IconButton>
+                </Tooltip>
               </div>
               <div className="labeledInput">
                 <label>price</label>
@@ -397,17 +402,31 @@ function Inventory(props) {
                 : !categories.length && (
                     <p>create categories to start adding products !</p>
                   )}
-              <IconButton
-                color="secondary"
-                onClick={() => {
-                  setAction(AdminActions.ADD);
-                  setProduct({ ...product, category: categories[0]._id });
-                }}
-                icon="add"
-                disabled={!categories.length}
-              >
-                <AddIcon />
-              </IconButton>
+              <Tooltip title="Add">
+                <IconButton
+                  color="secondary"
+                  onClick={() => {
+                    if (userInfo) {
+                      checkPremium(
+                        userInfo,
+                        products.length >= 10,
+                        () => {
+                          setAction(AdminActions.ADD);
+                          setProduct({
+                            ...product,
+                            category: categories[0]._id,
+                          });
+                        },
+                        enqueueSnackbar
+                      )();
+                    }
+                  }}
+                  icon="add"
+                  disabled={!categories.length}
+                >
+                  <AddIcon />
+                </IconButton>
+              </Tooltip>
             </div>
           </div>
           {loading ? (
@@ -447,24 +466,28 @@ function Inventory(props) {
                         <td>{product.qty}</td>
                         <td>
                           <div className="centered-row">
-                            <IconButton
-                              color="warning"
-                              onClick={() => {
-                                setAction(AdminActions.UPDATE);
-                                setProduct(product);
-                              }}
-                            >
-                              <ModeEditIcon sx={{ width: "20px" }} />
-                            </IconButton>
-                            <IconButton
-                              color="error"
-                              onClick={() => {
-                                setAction(AdminActions.DELETE);
-                                setProduct(product);
-                              }}
-                            >
-                              <DeleteIcon sx={{ width: "20px" }} />
-                            </IconButton>
+                            <Tooltip title="Edit">
+                              <IconButton
+                                color="warning"
+                                onClick={() => {
+                                  setAction(AdminActions.UPDATE);
+                                  setProduct(product);
+                                }}
+                              >
+                                <ModeEditIcon sx={{ width: "20px" }} />
+                              </IconButton>
+                            </Tooltip>
+                            <Tooltip title="Delete">
+                              <IconButton
+                                color="error"
+                                onClick={() => {
+                                  setAction(AdminActions.DELETE);
+                                  setProduct(product);
+                                }}
+                              >
+                                <DeleteIcon sx={{ width: "20px" }} />
+                              </IconButton>
+                            </Tooltip>
                           </div>
                         </td>
                       </tr>

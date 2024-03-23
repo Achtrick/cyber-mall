@@ -29,6 +29,7 @@ export default function Demands(props) {
   const [count, setCount] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
+  const [loadingUpgrade, setLoadingUpgrade] = useState("");
   const [demands, setDemands] = useState([]);
 
   useEffect(() => {
@@ -63,6 +64,7 @@ export default function Demands(props) {
   };
 
   const upgradeShop = async (shopId, demandId, period) => {
+    setLoadingUpgrade(demandId);
     try {
       const { data } = await axios.put("/api/super-admin/upgrade-shop", {
         shopId: shopId,
@@ -71,8 +73,10 @@ export default function Demands(props) {
       });
       setDemands([...demands.filter((d) => d._id !== demandId)]);
       enqueueSnackbar(data.message, { variant: "info" });
+      setLoadingUpgrade("");
     } catch (error) {
       enqueueSnackbar(getError(error), { variant: "error" });
+      setLoadingUpgrade("");
     }
   };
 
@@ -155,6 +159,7 @@ export default function Demands(props) {
                         DT
                       </h4>
                       <LinearProgress />
+                      <br />
                       <p>
                         Status:{" "}
                         <span
@@ -185,6 +190,7 @@ export default function Demands(props) {
                               demand.period
                             )
                           }
+                          loading={loadingUpgrade === demand._id}
                         ></XButton>
                       </div>
                     </div>

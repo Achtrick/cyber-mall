@@ -1,12 +1,15 @@
+import { Logout } from "@mui/icons-material";
 import AddCardIcon from "@mui/icons-material/AddCard";
 import StoreIcon from "@mui/icons-material/Store";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
+import { useDispatch } from "react-redux";
 import styles from "../../styles/SuperAdmin.module.scss";
 
 function SuperAdminLayout(props) {
   const router = useRouter();
+  const dispatch = useDispatch();
 
   return (
     <>
@@ -20,7 +23,7 @@ function SuperAdminLayout(props) {
           }
         >
           <Link href="/super-admin/shops">
-            <StoreIcon sx={{ width: "100%", height: "100%" }} />
+            <StoreIcon />
           </Link>
         </div>
         <div
@@ -31,8 +34,11 @@ function SuperAdminLayout(props) {
           }
         >
           <Link href="/super-admin/demands">
-            <AddCardIcon sx={{ width: "100%", height: "100%" }} />
+            <AddCardIcon />
           </Link>
+        </div>
+        <div className={styles.navItem}>
+          <Logout onClick={() => dispatch({ type: "USER_LOGOUT" })} />
         </div>
       </div>
     </>

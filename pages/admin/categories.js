@@ -1,4 +1,5 @@
-import { IconButton, Skeleton } from "@mui/material";
+import { Edit } from "@mui/icons-material";
+import { IconButton, Skeleton, Tooltip } from "@mui/material";
 import axios from "axios";
 import { useSnackbar } from "notistack";
 import { useEffect, useState } from "react";
@@ -13,13 +14,9 @@ import {
   getThumbnail,
   isBase64,
 } from "../../utils/config/convertHelper";
+import { checkPremium } from "../../utils/shared/checkPremium";
 import { getError } from "../../utils/shared/getError";
-import {
-  AddIcon,
-  CategoryIcon,
-  DeleteIcon,
-  ModeEditIcon,
-} from "../../utils/theme/icons";
+import { AddIcon, DeleteIcon, ModeEditIcon } from "../../utils/theme/icons";
 
 function Categories() {
   const { userInfo } = useSelector((state) => state.auth);
@@ -230,17 +227,26 @@ function Categories() {
                   type="file"
                   accept="image/*"
                   name="icon"
-                  max="3"
                   onChange={onChange}
                 />
-                <IconButton>
-                  <label
-                    style={{ cursor: "pointer", width: "25px", height: "25px" }}
-                    htmlFor="icon"
+                <Tooltip
+                  title={category.icon.length ? "Edit Image" : "Add Image"}
+                >
+                  <IconButton
+                    color={category.icon.length ? "warning" : "secondary"}
                   >
-                    <AddIcon></AddIcon>
-                  </label>
-                </IconButton>
+                    <label
+                      style={{
+                        cursor: "pointer",
+                        width: "25px",
+                        height: "25px",
+                      }}
+                      htmlFor="icon"
+                    >
+                      {category.icon.length ? <Edit /> : <AddIcon />}
+                    </label>
+                  </IconButton>
+                </Tooltip>
               </div>
             </form>
           )}
@@ -272,33 +278,48 @@ function Categories() {
 
                     <p>{category.name}</p>
                     <div className="centered-row">
-                      <IconButton
-                        color="warning"
-                        onClick={() => {
-                          setAction(AdminActions.UPDATE);
-                          setCategory(category);
-                        }}
-                      >
-                        <ModeEditIcon sx={{ width: "20px" }} />
-                      </IconButton>
-                      <IconButton
-                        color="error"
-                        onClick={() => {
-                          setAction(AdminActions.DELETE);
-                          setCategory(category);
-                        }}
-                      >
-                        <DeleteIcon sx={{ width: "20px" }} />
-                      </IconButton>
+                      <Tooltip title="Edit">
+                        <IconButton
+                          color="warning"
+                          onClick={() => {
+                            setAction(AdminActions.UPDATE);
+                            setCategory(category);
+                          }}
+                        >
+                          <ModeEditIcon sx={{ width: "20px" }} />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title="Delete">
+                        <IconButton
+                          color="error"
+                          onClick={() => {
+                            setAction(AdminActions.DELETE);
+                            setCategory(category);
+                          }}
+                        >
+                          <DeleteIcon sx={{ width: "20px" }} />
+                        </IconButton>
+                      </Tooltip>
                     </div>
                   </div>
                 );
               })}
               <div className="card" key={category._id}>
                 <IconButton
-                  color="success"
+                  color="secondary"
                   sx={{ width: "40px", height: "40px" }}
-                  onClick={() => setAction(AdminActions.ADD)}
+                  onClick={() => {
+                    if (userInfo) {
+                      checkPremium(
+                        userInfo,
+                        categories.length >= 5,
+                        () => {
+                          setAction(AdminActions.ADD);
+                        },
+                        enqueueSnackbar
+                      )();
+                    }
+                  }}
                   icon="add"
                 >
                   <AddIcon />

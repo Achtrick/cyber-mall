@@ -23,7 +23,8 @@ function MyApp(props) {
             <CssBaseline />
             <LocalizationProvider dateAdapter={AdapterMoment}>
               <SnackbarProvider
-                anchorOrigin={{ vertical: "top", horizontal: "center" }}
+                anchorOrigin={{ vertical: "top", horizontal: "right" }}
+                style={{ marginTop: "60px" }}
               >
                 <Component {...pageProps} />
               </SnackbarProvider>

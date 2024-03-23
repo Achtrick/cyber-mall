@@ -45,6 +45,7 @@
     }
     p {
       font-size: 15px;
+      font-weight: 500;
       text-transform: capitalize;
       margin: 5px 0px;
     }
@@ -57,6 +58,11 @@
       color: #37a237;
       font-weight: 500;
       text-transform: uppercase;
+    }
+    p span {
+      background-color: white;
+      padding: 4px;
+      border-radius: 4px;
     }
     .controls {
       position: absolute;
