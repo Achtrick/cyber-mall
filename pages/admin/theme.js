@@ -3,7 +3,7 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import AdminLayout from "../../components/admin/AdminLayout";
 import { AdminActions, ModalSizes } from "../../components/admin/ModalSettings";
 import DisconnectedGuard from "../../components/guards/disconnectedGuard";
@@ -14,6 +14,7 @@ import XModal from "../../components/ui-components/XModal";
 import styles from "../../styles/admin/Dashboard.module.scss";
 import themeStyles from "../../styles/admin/Theme.module.scss";
 import { deduceColor } from "../../utils/config/convertHelper";
+import { checkExpirity } from "../../utils/shared/checkExpirity";
 import { getError } from "../../utils/shared/getError";
 import {
   CheckCircleIcon,
@@ -23,6 +24,7 @@ import {
 
 function Theme(props) {
   const { userInfo } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
 
@@ -55,6 +57,7 @@ function Theme(props) {
       setColors(data.settings);
       setLoading(false);
     } catch (error) {
+      checkExpirity(error, dispatch);
       enqueueSnackbar(getError(error), { variant: "error" });
       router.push("/");
     }
@@ -80,6 +83,7 @@ function Theme(props) {
       enqueueSnackbar(data.message, { variant: "success" });
       getShopInfo();
     } catch (error) {
+      checkExpirity(error, dispatch);
       enqueueSnackbar(getError(error), { variant: "error" });
     }
   };

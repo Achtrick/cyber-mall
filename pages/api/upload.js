@@ -1,5 +1,6 @@
 import multer from "multer";
 import nc from "next-connect";
+import auth from "../../middlewares/admin-auth";
 
 const upload = multer({
   storage: multer.diskStorage({
@@ -14,7 +15,7 @@ const upload = multer({
 
 const handler = nc();
 
-handler.use(upload.array("images")).post((req, res) => {
+handler.use(upload.array("images")).post(auth, (req, res) => {
   res.status(200).json(req.files);
 });
 

@@ -1,11 +1,12 @@
-import nc from "next-connect";
-import connectDB from "../../../../utils/connectDB";
-import User from "../../../../models/user.model";
 import bcrypt from "bcryptjs";
+import nc from "next-connect";
+import auth from "../../../../middlewares/admin-auth";
+import User from "../../../../models/user.model";
+import connectDB from "../../../../utils/connectDB";
 
 const handler = nc();
 
-handler.put(async (req, res) => {
+handler.put(auth, async (req, res) => {
   await connectDB();
   const userId = req.query.userId;
   const { email, phone, address, password } = req.body;

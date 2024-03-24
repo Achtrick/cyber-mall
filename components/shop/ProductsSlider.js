@@ -1,3 +1,4 @@
+import { useMediaQuery } from "@mui/material";
 import Link from "next/link";
 import React from "react";
 import { SwiperSlide } from "swiper/react";
@@ -14,11 +15,17 @@ function ProductsSlider({
   title,
   buttonAction,
 }) {
+  const isMobile = useMediaQuery("(max-width:800px)");
   return (
     <section className={styles.container}>
       <h2>{title}</h2>
       <br />
-      <XSwiper autoplay={true} loop={true} slidesPerView={4} spaceBetween={20}>
+      <XSwiper
+        autoplay={true}
+        loop={true}
+        slidesPerView={isMobile ? 2 : 4}
+        spaceBetween={20}
+      >
         {products.map((product, index) => {
           return (
             <SwiperSlide key={index}>

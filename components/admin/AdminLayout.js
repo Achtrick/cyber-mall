@@ -22,14 +22,14 @@ function AdminLayout(props) {
 
   const { userInfo } = useSelector((state) => state.auth);
 
-  const disptach = useDispatch();
+  const dispatch = useDispatch();
 
   const toggleDrawer = () => {
     setDrawerOpen(!drawerOpen);
   };
 
   const logout = () => {
-    disptach({ type: "USER_LOGOUT" });
+    dispatch({ type: "USER_LOGOUT" });
   };
 
   return (

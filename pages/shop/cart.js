@@ -1,20 +1,16 @@
+import { IconButton, Skeleton } from "@mui/material";
+import axios from "axios";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import React, { useEffect, useState } from "react";
-import { getError } from "../../utils/shared/getError";
-import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
 import LoadingScreen from "../../components/shop/LoadingScreen";
 import ShopLayout from "../../components/shop/ShopLayout";
-import styles from "../../styles/shop/Cart.module.scss";
-import { Button, IconButton, Skeleton } from "@mui/material";
-import XSwiper from "../../components/ui-components/XSwiper";
 import XButton from "../../components/ui-components/XButton";
 import XHr from "../../components/ui-components/XHr";
-import { SwiperSlide } from "swiper/react";
-import { calculateDiscount } from "../../utils/config/convertHelper";
-import ProductsSlider from "../../components/shop/ProductsSlider";
-import { useDispatch, useSelector } from "react-redux";
-import { AddIcon, DeleteIcon, RemoveIcon } from "../../utils/theme/icons";
+import styles from "../../styles/shop/Cart.module.scss";
+import { getError } from "../../utils/shared/getError";
+import { DeleteIcon } from "../../utils/theme/icons";
 
 function Cart(props) {
   const router = useRouter();
@@ -138,7 +134,7 @@ function Cart(props) {
                       cart.content.map((product) => {
                         return (
                           <tr key={product._id}>
-                            <td>
+                            <td data-label="image">
                               <img
                                 alt={product.designation}
                                 src={
@@ -154,10 +150,14 @@ function Cart(props) {
                                 }}
                               />
                             </td>
-                            <td>{product.designation}</td>
-                            <td>{product.price.toLocaleString() + " DT"}</td>
-                            <td>{product.qty}</td>
-                            <td>
+                            <td data-label="designation">
+                              {product.designation}
+                            </td>
+                            <td data-label="price">
+                              {product.price.toLocaleString() + " DT"}
+                            </td>
+                            <td data-label="qty">{product.qty}</td>
+                            <td data-label="total">
                               {(product.qty * product.price).toLocaleString() +
                                 " DT"}
                             </td>

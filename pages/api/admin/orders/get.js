@@ -1,10 +1,11 @@
 import nc from "next-connect";
-import connectDB from "../../../../utils/connectDB";
+import auth from "../../../../middlewares/admin-auth";
 import Order from "../../../../models/order.model";
+import connectDB from "../../../../utils/connectDB";
 
 const handler = nc();
 
-handler.post(async (req, res) => {
+handler.post(auth, async (req, res) => {
   const { searchTerm, page, shop } = req.body;
 
   const query = { shop: shop };

@@ -13,7 +13,7 @@ import XPagination from "../../components/ui-components/XPagination";
 import styles from "../../styles/shop/Products.module.scss";
 import { calculateDiscount } from "../../utils/config/convertHelper";
 import { getError } from "../../utils/shared/getError";
-import { CloseIcon, ResetIcon } from "../../utils/theme/icons";
+import { ResetIcon } from "../../utils/theme/icons";
 
 function Products() {
   const router = useRouter();

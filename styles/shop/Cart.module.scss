@@ -35,3 +35,11 @@
     width: 60%;
   }
 }
+
+@media (max-width: 800px) {
+  .cart {
+    form {
+      width: 100%;
+    }
+  }
+}

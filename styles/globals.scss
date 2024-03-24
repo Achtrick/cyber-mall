@@ -180,10 +180,44 @@ th {
   border: 1px solid #ccc;
   text-overflow: ellipsis;
 }
-.defaultTable td:nth-last-of-type(1) {
-  border: none;
-  @include flexLayout();
+
+.fixedTable {
+  width: 100%;
+  text-align: left;
+  border: 1px solid #ccc;
+  border-collapse: collapse;
 }
+.fixedTable thead {
+  height: 30px;
+  background: #f5f5f5;
+  font-weight: 400;
+  font-size: 13px;
+  text-align: center;
+  text-transform: uppercase;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+.fixedTable tbody {
+  background: #ffffff;
+  font-weight: 400;
+  font-size: 13px;
+  text-align: center;
+  text-transform: capitalize;
+}
+.fixedTable tbody tr {
+  border: 1px solid #ccc;
+  height: 40px;
+  text-align: left;
+}
+.fixedTable td,
+th {
+  text-align: left;
+  padding: 0px 5px;
+  border: 1px solid #ccc;
+  text-overflow: ellipsis;
+}
+
 // layout
 .row {
   display: flex;
@@ -221,9 +255,8 @@ th {
   @include flexLayout;
 }
 .adminTableContainer {
-  height: calc(100vh - 210px);
+  height: calc(100vh - 260px);
   overflow-y: auto;
-  border: 1px solid #ccc;
 }
 // components
 .loadingScreen {
@@ -252,7 +285,7 @@ th {
 }
 .swiper-button-prev,
 .swiper-button-next {
-  background-color: #ffffff79 !important;
+  background-color: #ffffff !important;
   height: 30px !important;
   width: 30px !important;
   border-radius: 50%;
@@ -297,7 +330,7 @@ th {
     grid-template-columns: auto auto auto;
   }
   .grid-4 {
-    grid-template-columns: auto;
+    grid-template-columns: auto auto;
     row-gap: 20px;
   }
   .defaultTable {

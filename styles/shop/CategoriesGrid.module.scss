@@ -9,32 +9,32 @@
     text-transform: capitalize;
   }
 }
-.grid {
-  display: flex;
-  justify-content: space-around;
 
-  .category {
-    width: 100%;
+.category {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  a {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    a {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      width: 50%;
-    }
-    p {
-      text-transform: uppercase;
-      font-weight: 500;
-      text-align: center;
-    }
-    img {
-      width: 100px;
-      height: 100px;
-      border-radius: 4px;
-      object-fit: contain;
-      border-radius: 4px;
-    }
+    width: 50%;
   }
+  p {
+    text-transform: uppercase;
+    font-weight: 500;
+    text-align: center;
+  }
+  img {
+    width: 40% !important;
+    aspect-ratio: 1/1;
+    border-radius: 4px;
+    object-fit: contain;
+    border-radius: 4px;
+  }
+}
+
+@media (max-width: 800px) {
 }

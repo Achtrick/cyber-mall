@@ -17,6 +17,7 @@ import DisconnectedGuard from "../../components/guards/disconnectedGuard";
 import XButton from "../../components/ui-components/XButton";
 import XModal from "../../components/ui-components/XModal";
 import styles from "../../styles/admin/Dashboard.module.scss";
+import { checkExpirity } from "../../utils/shared/checkExpirity";
 import { getError } from "../../utils/shared/getError";
 import {
   AccountCircleIcon,
@@ -78,10 +79,15 @@ function Account(props) {
   }, [userInfo]);
 
   const getUpgradeDemand = async () => {
-    const { data } = await axios.post("/api/admin/shop/getUpgradeDemand", {
-      shop: userInfo.shop._id,
-    });
-    setUpgradeDemand(data);
+    try {
+      const { data } = await axios.post("/api/admin/shop/getUpgradeDemand", {
+        shop: userInfo.shop._id,
+      });
+      setUpgradeDemand(data);
+    } catch (error) {
+      checkExpirity(error, dispatch);
+      enqueueSnackbar(getError(error), { variant: "error" });
+    }
   };
 
   const togglePasswordVisibility = () => {
@@ -159,6 +165,7 @@ function Account(props) {
           setOffer(null);
           setAction("");
         } catch (error) {
+          checkExpirity(error, dispatch);
           enqueueSnackbar(getError(error), { variant: "error" });
           setLoadingSubscription(false);
           setOffer(null);

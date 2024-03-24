@@ -1,11 +1,12 @@
 import nc from "next-connect";
+import auth from "../../../../middlewares/admin-auth";
 import Order from "../../../../models/order.model";
-import connectDB from "../../../../utils/connectDB";
 import Product from "../../../../models/product.model";
+import connectDB from "../../../../utils/connectDB";
 
 const handler = nc();
 
-handler.put(async (req, res) => {
+handler.put(auth, async (req, res) => {
   await connectDB();
   const { _id, products } = req.body;
   try {

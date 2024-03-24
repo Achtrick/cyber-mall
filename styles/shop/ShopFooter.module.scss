@@ -32,3 +32,12 @@
     }
   }
 }
+
+@media (max-width: 800px) {
+  .footer {
+    @include flexContainer(flex-start, flex-start, column);
+    .col {
+      width: 100%;
+    }
+  }
+}

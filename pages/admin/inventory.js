@@ -1,9 +1,9 @@
 import { Edit } from "@mui/icons-material";
-import { IconButton, Skeleton, Tooltip } from "@mui/material";
+import { CircularProgress, IconButton, Skeleton, Tooltip } from "@mui/material";
 import axios from "axios";
 import { useSnackbar } from "notistack";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import AdminLayout from "../../components/admin/AdminLayout";
 import { AdminActions, ModalSizes } from "../../components/admin/ModalSettings";
 import DisconnectedGuard from "../../components/guards/disconnectedGuard";
@@ -16,6 +16,7 @@ import {
   getThumbnail,
   isBase64,
 } from "../../utils/config/convertHelper";
+import { checkExpirity } from "../../utils/shared/checkExpirity";
 import { checkPremium } from "../../utils/shared/checkPremium";
 import { getError } from "../../utils/shared/getError";
 import {
@@ -29,6 +30,7 @@ function Inventory(props) {
   let executeSearchTimeout;
 
   const { userInfo } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
   const [page, setPage] = useState(0);
   const [count, setCount] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
@@ -38,6 +40,7 @@ function Inventory(props) {
   const [loading, setLoading] = useState(false);
   const [loadingCategories, setLoadingCategories] = useState(false);
   const [modalLoading, setModalLoading] = useState(false);
+  const [imagesLoading, setImagesLoading] = useState(false);
   const [action, setAction] = useState("");
   const [images, setImages] = useState([]);
 
@@ -70,6 +73,7 @@ function Inventory(props) {
       setCount(data.count);
       setLoading(false);
     } catch (error) {
+      checkExpirity(error, dispatch);
       enqueueSnackbar(getError(error), { variant: "error" });
       setLoading(false);
     }
@@ -85,6 +89,7 @@ function Inventory(props) {
       data.length && setProduct({ ...product, category: data[0]._id });
       setLoadingCategories(false);
     } catch (error) {
+      checkExpirity(error, dispatch);
       enqueueSnackbar(getError(error), { variant: "error" });
       setLoadingCategories(false);
     }
@@ -92,6 +97,7 @@ function Inventory(props) {
 
   const onChange = async (e) => {
     if (e.target.name === "images") {
+      setImagesLoading(true);
       let compressedImages = [];
       let imagesToUpload = [];
 
@@ -116,8 +122,10 @@ function Inventory(props) {
         ...product,
         images: compressedImages,
       });
+      setImagesLoading(false);
     } else {
       setProduct({ ...product, [e.target.name]: e.target.value });
+      setImagesLoading(false);
     }
   };
 
@@ -197,6 +205,7 @@ function Inventory(props) {
       getProducts();
     } catch (error) {
       setModalLoading(false);
+      checkExpirity(error, dispatch);
       enqueueSnackbar(getError(error), { variant: "error" });
     }
   };
@@ -296,22 +305,27 @@ function Inventory(props) {
               </div>
               <div className="labeledInput">
                 <label>images</label>
+                <br />
                 <div className={styles.productImagesContainer}>
-                  {product.images.map((image, index) => {
-                    return (
-                      <div key={index} className={styles.productImgPreview}>
-                        <img
-                          alt={index}
-                          src={`/api/images/${image.split("/").pop()}`}
-                          onError={(e) => {
-                            e.target.src = isBase64(image)
-                              ? image
-                              : "/images/image-placeholder.jpg";
-                          }}
-                        />
-                      </div>
-                    );
-                  })}
+                  {imagesLoading ? (
+                    <CircularProgress color="black" size={30} />
+                  ) : (
+                    product.images.map((image, index) => {
+                      return (
+                        <div key={index} className={styles.productImgPreview}>
+                          <img
+                            alt={index}
+                            src={`/api/images/${image.split("/").pop()}`}
+                            onError={(e) => {
+                              e.target.src = isBase64(image)
+                                ? image
+                                : "/images/image-placeholder.jpg";
+                            }}
+                          />
+                        </div>
+                      );
+                    })
+                  )}
                 </div>
                 <input
                   id="images"
@@ -334,7 +348,11 @@ function Inventory(props) {
                       }}
                       htmlFor="images"
                     >
-                      {product.images.length ? <Edit /> : <AddIcon />}
+                      {imagesLoading ? null : product.images.length ? (
+                        <Edit />
+                      ) : (
+                        <AddIcon />
+                      )}
                     </label>
                   </IconButton>
                 </Tooltip>

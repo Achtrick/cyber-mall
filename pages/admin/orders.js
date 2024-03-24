@@ -4,7 +4,7 @@ import axios from "axios";
 import moment from "moment";
 import { useSnackbar } from "notistack";
 import { useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ReactToPrint from "react-to-print";
 import AdminLayout from "../../components/admin/AdminLayout";
 import { ModalSizes } from "../../components/admin/ModalSettings";
@@ -13,6 +13,7 @@ import XHr from "../../components/ui-components/XHr";
 import XModal from "../../components/ui-components/XModal";
 import XPagination from "../../components/ui-components/XPagination";
 import styles from "../../styles/admin/Dashboard.module.scss";
+import { checkExpirity } from "../../utils/shared/checkExpirity";
 import { getError } from "../../utils/shared/getError";
 import {
   DeleteIcon,
@@ -24,6 +25,7 @@ function Orders() {
   let executeSearchTimeout;
 
   const { userInfo } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
   const [page, setPage] = useState(0);
   const [count, setCount] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
@@ -55,6 +57,7 @@ function Orders() {
       setCount(data.count);
       setLoading(false);
     } catch (error) {
+      checkExpirity(error, dispatch);
       enqueueSnackbar(getError(error), { variant: "error" });
       setLoading(false);
     }
@@ -87,6 +90,7 @@ function Orders() {
       enqueueSnackbar(data.message, { variant: "success" });
       cancelAction();
     } catch (error) {
+      checkExpirity(error, dispatch);
       enqueueSnackbar(getError(error), { variant: "error" });
     }
   };
@@ -100,6 +104,7 @@ function Orders() {
       enqueueSnackbar(data.message, { variant: "success" });
       cancelAction();
     } catch (error) {
+      checkExpirity(error, dispatch);
       enqueueSnackbar(getError(error), { variant: "error" });
     }
   };
@@ -166,12 +171,12 @@ function Orders() {
                   {order.products.map((product) => {
                     return (
                       <tr key={product._id}>
-                        <td>
+                        <td data-label="image">
                           <img
                             style={{
                               width: "80px",
                               height: "80px",
-                              objectFit: "cover",
+                              objectFit: "contain",
                             }}
                             alt={product.designation}
                             src={
@@ -186,10 +191,12 @@ function Orders() {
                             }}
                           />
                         </td>
-                        <td>{product.designation}</td>
-                        <td>{product.price.toLocaleString() + " DT"}</td>
-                        <td>{product.qty}</td>
-                        <td style={{ display: "block" }}>
+                        <td data-label="designation">{product.designation}</td>
+                        <td data-label="price">
+                          {product.price.toLocaleString() + " DT"}
+                        </td>
+                        <td data-label="qty">{product.qty}</td>
+                        <td data-label="total">
                           {(product.qty * product.price).toLocaleString() +
                             " DT"}
                         </td>
@@ -412,7 +419,7 @@ function Orders() {
                 </div>
               </div>
               <XHr color={userInfo.shop.settings.secondaryColor} />
-              <table className="defaultTable">
+              <table className="fixedTable">
                 <thead>
                   <tr>
                     <th>designation</th>
@@ -428,7 +435,7 @@ function Orders() {
                         <td>{product.designation}</td>
                         <td>{product.price.toLocaleString() + " DT"}</td>
                         <td>{product.qty}</td>
-                        <td style={{ display: "block" }}>
+                        <td>
                           {(product.qty * product.price).toLocaleString() +
                             " DT"}
                         </td>

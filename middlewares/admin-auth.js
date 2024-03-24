@@ -8,7 +8,9 @@ const auth = async (req, res, next) => {
     jwt.verify(token, secret);
     next();
   } catch (error) {
-    res.status(401).json({ message: "Session expirée" });
+    res
+      .status(401)
+      .json({ message: "Session expirée, Reconnectez Vous.", expired: true });
   }
 };
 

@@ -1,9 +1,9 @@
 import { Edit } from "@mui/icons-material";
-import { IconButton, Skeleton, Tooltip } from "@mui/material";
+import { CircularProgress, IconButton, Skeleton, Tooltip } from "@mui/material";
 import axios from "axios";
 import { useSnackbar } from "notistack";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import AdminLayout from "../../components/admin/AdminLayout";
 import { AdminActions, ModalSizes } from "../../components/admin/ModalSettings";
 import DisconnectedGuard from "../../components/guards/disconnectedGuard";
@@ -14,18 +14,21 @@ import {
   getThumbnail,
   isBase64,
 } from "../../utils/config/convertHelper";
+import { checkExpirity } from "../../utils/shared/checkExpirity";
 import { checkPremium } from "../../utils/shared/checkPremium";
 import { getError } from "../../utils/shared/getError";
 import { AddIcon, DeleteIcon, ModeEditIcon } from "../../utils/theme/icons";
 
 function Categories() {
   const { userInfo } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
 
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
   const [modalLoading, setModalLoading] = useState(false);
   const [action, setAction] = useState("");
   const [images, setImages] = useState("");
+  const [imagesLoading, setImagesLoading] = useState(false);
 
   const [category, setCategory] = useState({
     name: "",
@@ -50,6 +53,7 @@ function Categories() {
       setCategories(data);
       setLoading(false);
     } catch (error) {
+      checkExpirity(error, dispatch);
       enqueueSnackbar(getError(error), { variant: "error" });
       setLoading(false);
     }
@@ -57,6 +61,7 @@ function Categories() {
 
   const onChange = async (e) => {
     if (e.target.name === "icon") {
+      setImagesLoading(true);
       let icon = e.target.files[0];
       setImages(await compressImage(icon));
       const base64 = await getThumbnail(icon);
@@ -65,8 +70,10 @@ function Categories() {
         ...category,
         icon: icon,
       });
+      setImagesLoading(false);
     } else {
       setCategory({ ...category, [e.target.name]: e.target.value });
+      setImagesLoading(false);
     }
   };
 
@@ -131,6 +138,7 @@ function Categories() {
       getCategories();
     } catch (error) {
       setModalLoading(false);
+      checkExpirity(error, dispatch);
       enqueueSnackbar(getError(error), { variant: "error" });
     }
   };
@@ -206,18 +214,23 @@ function Categories() {
               </div>
               <div className="labeledInput">
                 <label>icon (recommended resolution (250px * 250px))</label>
-                {category.icon !== "" && (
-                  <div className={styles.productImgPreview}>
-                    <img
-                      alt={category.name}
-                      src={`/api/images/${category.icon.split("/").pop()}`}
-                      onError={(e) => {
-                        e.target.src = isBase64(category.icon)
-                          ? category.icon
-                          : "/images/category.svg";
-                      }}
-                    />
-                  </div>
+                <br />
+                {imagesLoading ? (
+                  <CircularProgress color="black" size={30} />
+                ) : (
+                  category.icon !== "" && (
+                    <div className={styles.productImgPreview}>
+                      <img
+                        alt={category.name}
+                        src={`/api/images/${category.icon.split("/").pop()}`}
+                        onError={(e) => {
+                          e.target.src = isBase64(category.icon)
+                            ? category.icon
+                            : "/images/category.svg";
+                        }}
+                      />
+                    </div>
+                  )
                 )}
                 <input
                   id="icon"
@@ -241,7 +254,13 @@ function Categories() {
                       }}
                       htmlFor="icon"
                     >
-                      {category.icon.length ? <Edit /> : <AddIcon />}
+                      {!imagesLoading ? (
+                        category.icon.length ? (
+                          <Edit />
+                        ) : (
+                          <AddIcon />
+                        )
+                      ) : null}
                     </label>
                   </IconButton>
                 </Tooltip>

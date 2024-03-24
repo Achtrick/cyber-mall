@@ -14,10 +14,9 @@ function XSwiper({
   style,
   autoplay,
   loop,
-  pagination = false,
   ...props
 }) {
-  const isMobile = useMediaQuery("(max-width:768px");
+  const isMobile = useMediaQuery("(max-width:800px");
   SwiperCore.use([Autoplay]);
 
   return (
@@ -28,8 +27,8 @@ function XSwiper({
       slidesPerView={slidesPerView}
       spaceBetween={spaceBetween}
       style={style}
-      navigation={true}
-      pagination={pagination}
+      navigation={!isMobile}
+      pagination={isMobile}
     >
       {props.children}
     </Swiper>

@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import AdminLayout from "../../components/admin/AdminLayout";
 import { ModalSizes } from "../../components/admin/ModalSettings";
 import DisconnectedGuard from "../../components/guards/disconnectedGuard";
@@ -19,6 +19,7 @@ import {
   getThumbnail,
   isBase64,
 } from "../../utils/config/convertHelper";
+import { checkExpirity } from "../../utils/shared/checkExpirity";
 import { getError } from "../../utils/shared/getError";
 import {
   AddIcon,
@@ -39,6 +40,7 @@ import XGridSkeleton from "./../../components/ui-components/XGridSkeleton";
 
 function Architecture(props) {
   const { userInfo } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
 
@@ -88,6 +90,7 @@ function Architecture(props) {
       getGalleryInfo(data.name);
       setLoading(false);
     } catch (error) {
+      checkExpirity(error, dispatch);
       enqueueSnackbar(getError(error), { variant: "error" });
       router.push("/");
     }
@@ -104,6 +107,7 @@ function Architecture(props) {
       setSliderInfo(data.architecture.home.sliderComponent);
       setLoadingSlider(false);
     } catch (error) {
+      checkExpirity(error, dispatch);
       enqueueSnackbar(getError(error), { variant: "error" });
       router.push("/");
     }
@@ -120,6 +124,7 @@ function Architecture(props) {
       setGalleryInfo(data.architecture.home.galleryComponent);
       setLoadingGallery(false);
     } catch (error) {
+      checkExpirity(error, dispatch);
       enqueueSnackbar(getError(error), { variant: "error" });
       router.push("/");
     }
@@ -132,6 +137,7 @@ function Architecture(props) {
       });
       setCategories(data);
     } catch (error) {
+      checkExpirity(error, dispatch);
       enqueueSnackbar(getError(error), { variant: "error" });
     }
   };
@@ -143,6 +149,7 @@ function Architecture(props) {
       });
       setDiscounts(data);
     } catch (error) {
+      checkExpirity(error, dispatch);
       enqueueSnackbar(getError(error), { variant: "error" });
     }
   };
@@ -198,6 +205,7 @@ function Architecture(props) {
       enqueueSnackbar(data.message, { variant: "success" });
       setLoading(false);
     } catch (error) {
+      checkExpirity(error, dispatch);
       enqueueSnackbar(getError(error), { variant: "error" });
       setLoading(false);
     }
@@ -219,6 +227,7 @@ function Architecture(props) {
       enqueueSnackbar(result.data.message, { variant: "success" });
       setLoading(false);
     } catch (error) {
+      checkExpirity(error, dispatch);
       enqueueSnackbar(getError(error), { variant: "error" });
       setLoading(false);
     }
@@ -249,6 +258,7 @@ function Architecture(props) {
         setSlideImageLoading(false);
         closeAction();
       } catch (error) {
+        checkExpirity(error, dispatch);
         enqueueSnackbar(getError(error), { variant: "error" });
         setSlideImageLoading(false);
       }
@@ -324,6 +334,7 @@ function Architecture(props) {
         setGalleryItemImageLoading(false);
         closeAction();
       } catch (error) {
+        checkExpirity(error, dispatch);
         enqueueSnackbar(getError(error), { variant: "error" });
         setGalleryItemImageLoading(false);
       }
@@ -802,7 +813,7 @@ function Architecture(props) {
                       );
                     })}
                     {sliderInfo?.length < 3 ||
-                    userInfo.shop.pack.type === "PREMIUM" ? (
+                    userInfo?.shop.pack.type === "PREMIUM" ? (
                       <IconButton
                         color="success"
                         onClick={() => {
@@ -1182,7 +1193,7 @@ function Architecture(props) {
                   setArchitecture({ ...architecture, about: e.target.value });
                 }}
                 className="defaultInput"
-                style={{ width: "500px", height: "100px" }}
+                style={{ maxWidth: "500px", height: "100px" }}
               />
             </div>
           )}

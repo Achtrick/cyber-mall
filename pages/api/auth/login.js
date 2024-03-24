@@ -1,9 +1,9 @@
-import nc from "next-connect";
-import connectDB from "../../../utils/connectDB";
-import User from "../../../models/user.model";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import nc from "next-connect";
 import Shop from "../../../models/shop.model";
+import User from "../../../models/user.model";
+import connectDB from "../../../utils/connectDB";
 
 const handler = nc();
 
@@ -59,7 +59,6 @@ handler.post(async (req, res) => {
       res.status(403).json({ message: "mot de passe incorrecte !" });
     }
   } catch (err) {
-    console.log(err);
     res.status(400).json(err);
   }
 });
