@@ -283,7 +283,7 @@ function Products() {
                       </p>
                       <XButton
                         color={shopInfo.settings.primaryColor}
-                        text={"ajouter au panier"}
+                        text={"Acheter"}
                         action={() => {
                           addTocart(shop, product);
                         }}

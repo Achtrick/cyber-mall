@@ -63,7 +63,7 @@ function ProductsSlider({
                 </p>
                 <XButton
                   color={settings.primaryColor}
-                  text={"add to cart"}
+                  text={"Acheter"}
                   action={
                     buttonAction
                       ? () => buttonAction(shopName, product)

@@ -206,7 +206,7 @@ function Product(props) {
                   </div>
                   <XButton
                     color={shopInfo.settings.primaryColor}
-                    text={"Ajouter au panier"}
+                    text={"Acheter"}
                     action={() => {
                       addTocart(shop, product);
                     }}
