@@ -27,7 +27,7 @@ handler.post(async (req, res) => {
     });
     res.status(200).json({
       message:
-        "Nous avons bien reçu votre message et nous vous contacterons dès que possible. ^^",
+        "Nous avons bien reçu votre message et nous vous contacterons dès que possible.",
     });
   } catch (error) {
     res.status(400).json(error);

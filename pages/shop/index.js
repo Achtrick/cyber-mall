@@ -1,20 +1,20 @@
-import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
-import LoadingScreen from "../../components/shop/LoadingScreen";
-import axios from "axios";
-import ShopLayout from "../../components/shop/ShopLayout";
-import styles from "../../styles/shop/Index.module.scss";
-import HomeSlider from "../../components/shop/HomeSlider";
-import CategoriesGrid from "../../components/shop/CategoriesGrid";
-import XHr from "../../components/ui-components/XHr";
-import { useSnackbar } from "notistack";
-import { getError } from "../../utils/shared/getError";
 import { Skeleton } from "@mui/material";
-import XGallery from "../../components/ui-components/XGallery";
-import ProductsSlider from "../../components/shop/ProductsSlider";
-import { calculateDiscount } from "../../utils/config/convertHelper";
+import axios from "axios";
+import { useRouter } from "next/router";
+import { useSnackbar } from "notistack";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import CategoriesGrid from "../../components/shop/CategoriesGrid";
+import HomeSlider from "../../components/shop/HomeSlider";
+import LoadingScreen from "../../components/shop/LoadingScreen";
+import ProductsSlider from "../../components/shop/ProductsSlider";
+import ShopLayout from "../../components/shop/ShopLayout";
+import XGallery from "../../components/ui-components/XGallery";
 import XGridSkeleton from "../../components/ui-components/XGridSkeleton";
+import XHr from "../../components/ui-components/XHr";
+import styles from "../../styles/shop/Index.module.scss";
+import { calculateDiscount } from "../../utils/config/convertHelper";
+import { getError } from "../../utils/shared/getError";
 
 function Shop(props) {
   const router = useRouter();
@@ -40,7 +40,7 @@ function Shop(props) {
       if (shop) {
         getShopInfo();
       } else {
-        enqueueSnackbar("invalid shop link", { variant: "error" });
+        enqueueSnackbar("Lien de shop invalide", { variant: "error" });
         router.push("/");
       }
     }
@@ -142,7 +142,7 @@ function Shop(props) {
         },
       },
     });
-    enqueueSnackbar(`added ${product.designation} to cart`, {
+    enqueueSnackbar(`${product.designation} Ajouté au panier`, {
       variant: "info",
     });
   };
@@ -201,7 +201,7 @@ function Shop(props) {
                   shopName={shop}
                 />
               ) : (
-                <XGridSkeleton title={"Discover Our Catgegories"} />
+                <XGridSkeleton title={"Découvrir Nos Catégories"} />
               )}
             </div>
 
@@ -247,11 +247,11 @@ function Shop(props) {
                   shopName={shopInfo.name}
                   products={discounts}
                   activateControls={true}
-                  title={"Get More For Less !"}
+                  title={"Obtenez plus pour moins cher !"}
                   buttonAction={addTocart}
                 />
               ) : (
-                <XGridSkeleton title={"Get More For Less !"} />
+                <XGridSkeleton title={"Obtenez plus pour moins cher !"} />
               )}
             </div>
           </section>

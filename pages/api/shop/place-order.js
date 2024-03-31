@@ -19,7 +19,7 @@ handler.post(async (req, res) => {
     const order = await Order.create(query);
     order.save();
     res.status(200).json({
-      message: "order placed, expect a call from customer service ^^",
+      message: "commande passée, attendez-vous à un appel du service client.",
     });
   } catch (err) {
     res.status(400).json(err);

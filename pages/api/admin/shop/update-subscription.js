@@ -65,7 +65,7 @@ handler.post(auth, async (req, res) => {
     });
 
     res.status(200).json({
-      message: "demande envoyée, terminez maintenant la transaction.",
+      message: "Demande envoyée, terminez maintenant la transaction.",
     });
   } catch (err) {
     console.log(err);

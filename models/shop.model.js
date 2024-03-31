@@ -10,6 +10,7 @@ const shopSchema = new Schema(
       type: Object,
     },
     shippingFee: { type: Number, default: 7 },
+    freeShipping: Number,
     settings: {
       type: Object,
       default: {

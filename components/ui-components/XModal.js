@@ -1,7 +1,7 @@
 import { Button, CircularProgress, IconButton, Modal } from "@mui/material";
 import styles from "../../styles/components/XModal.module.scss";
 import { CloseIcon } from "../../utils/theme/icons";
-import { ModalControls, ModalSizes } from "../admin/ModalSettings";
+import { ModalSizes } from "../admin/ModalSettings";
 
 function XModal({
   loading,
@@ -55,7 +55,7 @@ function XModal({
                       onClick={confirmAction ? confirmAction : null}
                       form={formId ? formId : null}
                     >
-                      {ModalControls.CONFIRM}
+                      confirmer
                     </Button>
                     &nbsp;
                     <Button
@@ -64,7 +64,7 @@ function XModal({
                       variant="contained"
                       onClick={cancelAction}
                     >
-                      {ModalControls.CANCEL}
+                      annuler
                     </Button>
                   </>
                 )}

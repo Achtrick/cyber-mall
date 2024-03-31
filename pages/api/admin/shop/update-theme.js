@@ -1,7 +1,7 @@
 import nc from "next-connect";
-import connectDB from "../../../../utils/connectDB";
-import Shop from "../../../../models/shop.model";
 import auth from "../../../../middlewares/admin-auth";
+import Shop from "../../../../models/shop.model";
+import connectDB from "../../../../utils/connectDB";
 
 const handler = nc();
 
@@ -14,7 +14,7 @@ handler.post(auth, async (req, res) => {
     shop.settings = data.settings;
     await shop.save();
 
-    res.status(200).json({ message: "updated theme" });
+    res.status(200).json({ message: "Thème Modifié" });
   } catch (err) {
     res.status(400).json(err);
   }

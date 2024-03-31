@@ -46,7 +46,7 @@ function ResetPassword(props) {
     setFormLoading(true);
     if (password !== confirmPassword) {
       return (
-        enqueueSnackbar("les mots de passes ne correspond pas !", {
+        enqueueSnackbar("Les mots de passes ne correspond pas !", {
           variant: "warning",
         }),
         setFormLoading(false)
@@ -119,7 +119,7 @@ function ResetPassword(props) {
             </div>
 
             <div className={styles.col40}>
-              <img alt="transportini-login" src={"/" + "./images/login.svg"} />
+              <img alt="cyber-mall-login" src={"/" + "./images/login.svg"} />
             </div>
           </div>
         )}

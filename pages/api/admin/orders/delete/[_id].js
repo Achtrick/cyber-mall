@@ -11,7 +11,7 @@ handler.delete(auth, async (req, res) => {
   try {
     await Order.findByIdAndDelete(_id);
 
-    res.status(200).json({ message: "order deleted" });
+    res.status(200).json({ message: "Commande supprimée" });
   } catch (err) {
     res.status(400).json(err);
   }

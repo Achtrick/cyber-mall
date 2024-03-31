@@ -19,7 +19,7 @@ handler.put(auth, async (req, res) => {
       });
     }
 
-    res.status(200).json({ message: "order closed" });
+    res.status(200).json({ message: "Commande Clôturée" });
   } catch (err) {
     res.status(400).json(err);
   }

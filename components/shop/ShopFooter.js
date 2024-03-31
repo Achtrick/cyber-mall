@@ -30,7 +30,7 @@ function ShopFooter({ shopInfo }) {
       className={styles.footer}
     >
       <div className={styles.col}>
-        <h3>socials</h3>
+        <h3>réseaux sociaux</h3>
         {shopInfo.architecture.contact.socials.facebook !== "" && (
           <Link
             rel="noreferrer"
@@ -119,7 +119,7 @@ function ShopFooter({ shopInfo }) {
         </div>
       </div>
       <div className={styles.col}>
-        <h3>about</h3>
+        <h3>à propos</h3>
         {shopInfo.architecture.about !== "" && (
           <p>{shopInfo.architecture.about}</p>
         )}

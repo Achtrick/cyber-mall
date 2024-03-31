@@ -47,10 +47,11 @@ function Contact(props) {
       <Layout>
         <section className={styles.container}>
           <p data-aos="fade-up" data-aos-offset="100">
-            Get in touch with us{" "}
+            Prenez contact avec nous{" "}
           </p>
           <p data-aos="fade-up" data-aos-offset="100">
-            we would love to answer your questions and hear your suggestions !
+            nous serions ravis de répondre à vos questions et d'entendre vos
+            suggestions !
           </p>
           <hr />
           <br />
@@ -77,7 +78,7 @@ function Contact(props) {
               data-aos-delay="700"
               className="labeledInput"
             >
-              <label>phone</label>
+              <label>téléphone</label>
               <input
                 onChange={onChange}
                 value={phone}
@@ -93,7 +94,7 @@ function Contact(props) {
               data-aos-delay="900"
               className="labeledInput"
             >
-              <label>subject</label>
+              <label>sujet</label>
 
               <input
                 onChange={onChange}
@@ -133,7 +134,11 @@ function Contact(props) {
               }}
               variant="contained"
             >
-              {loading ? <CircularProgress color="white" size={25} /> : "Send"}
+              {loading ? (
+                <CircularProgress color="white" size={25} />
+              ) : (
+                "Envoyer"
+              )}
             </Button>
           </form>
         </section>

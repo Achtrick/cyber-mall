@@ -40,11 +40,13 @@ function Register(props) {
     setLoading(true);
     if (formData.password !== formData.confirmPassword) {
       setLoading(false);
-      return enqueueSnackbar("passwords doesn't match", { variant: "warning" });
+      return enqueueSnackbar("les mots de passe ne correspondent pas", {
+        variant: "warning",
+      });
     }
     try {
       await axios.post("api/auth/register", formData);
-      enqueueSnackbar("check your email to verify your account.", {
+      enqueueSnackbar("vérifiez votre email pour vérifier votre compte.", {
         variant: "info",
       });
       setLoading(false);
@@ -62,14 +64,14 @@ function Register(props) {
           <div className={styles.row}>
             <section className={styles.col}>
               <form id="form" onSubmit={register}>
-                <h1>create your shop</h1>
+                <h1>créez votre shop</h1>
                 <input
                   className="defaultInput"
                   required
                   onChange={onChange}
                   type="text"
                   name="firstName"
-                  placeholder="first name"
+                  placeholder="Prénom"
                 />
                 <input
                   className="defaultInput"
@@ -77,7 +79,7 @@ function Register(props) {
                   onChange={onChange}
                   type="text"
                   name="lastName"
-                  placeholder="last name"
+                  placeholder="Nom"
                 />
                 <input
                   className="defaultInput"
@@ -94,7 +96,7 @@ function Register(props) {
                     onChange={onChange}
                     type={passwordVisible ? "text" : "password"}
                     name="password"
-                    placeholder="password"
+                    placeholder="mot de passe"
                   />
 
                   <IconButton
@@ -115,7 +117,7 @@ function Register(props) {
                   onChange={onChange}
                   type={passwordVisible ? "text" : "password"}
                   name="confirmPassword"
-                  placeholder="confirm password"
+                  placeholder="confirmer mot de passe"
                 />
                 <input
                   className="defaultInput"
@@ -123,7 +125,7 @@ function Register(props) {
                   onChange={onChange}
                   type="text"
                   name="shopName"
-                  placeholder="shop name"
+                  placeholder="Nom de shop"
                 />
                 <br />
                 <br />
@@ -142,13 +144,14 @@ function Register(props) {
                   {loading ? (
                     <CircularProgress style={{ color: "white" }} size={20} />
                   ) : (
-                    "register"
+                    "S'inscrire"
                   )}
                 </Button>
                 <br />
                 <br />
                 <p>
-                  already have an account ? <Link href={"/login"}>Login !</Link>
+                  Vous avez déjà un compte ?{" "}
+                  <Link href={"/login"}>Se connecter !</Link>
                 </p>
                 <br />
               </form>

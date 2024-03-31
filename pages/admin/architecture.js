@@ -184,7 +184,10 @@ function Architecture(props) {
               : galleryInfo;
           break;
         case "shippingFee":
-          body = shopInfo.shippingFee;
+          body = {
+            shippingFee: shopInfo.shippingFee,
+            freeShipping: shopInfo.freeShipping,
+          };
           break;
         case "contactComponent":
           body = architecture.contact;
@@ -263,7 +266,9 @@ function Architecture(props) {
         setSlideImageLoading(false);
       }
     } else {
-      enqueueSnackbar("slide image is required", { variant: "warning" });
+      enqueueSnackbar("l'image de la diapositive est requise", {
+        variant: "warning",
+      });
     }
   };
 
@@ -339,7 +344,9 @@ function Architecture(props) {
         setGalleryItemImageLoading(false);
       }
     } else {
-      enqueueSnackbar("gallery item image is required", { variant: "warning" });
+      enqueueSnackbar("l'image de l'élément de la galerie est requise", {
+        variant: "warning",
+      });
     }
   };
 
@@ -398,7 +405,7 @@ function Architecture(props) {
             </label>
           </IconButton>
           <p>
-            category link:{" "}
+            lien de catégorie:{" "}
             <select
               className="defaultInput"
               value={slide.category}
@@ -411,8 +418,8 @@ function Architecture(props) {
               }
             >
               <option value="">
-                Select a category (if you have a custom link it will override
-                this)
+                Sélectionnez une catégorie (si vous avez un lien personnalisé,
+                il remplacera ce)
               </option>
               {categories.map((category) => {
                 return (
@@ -424,7 +431,7 @@ function Architecture(props) {
             </select>
           </p>
           <p>
-            custom link:{" "}
+            lien personnalisé:{" "}
             <input
               type="text"
               className="defaultInput"
@@ -449,15 +456,15 @@ function Architecture(props) {
 
   const deleteSlideForm = (
     <div>
-      <p>are you sure you want to delete this slide ?</p>
+      <p>êtes-vous sûr de vouloir supprimer cette diapositive ?</p>
     </div>
   );
 
   const categoriesGridForm = (
     <form>
       <p>
-        visible index: (this will determine the display order of this section on
-        your home screen)
+        index visible : (cela déterminera l'ordre d'affichage de cette section
+        sur votre page d'accueil)
         <input
           type="number"
           min={0}
@@ -512,8 +519,8 @@ function Architecture(props) {
   const discountsSectionForm = (
     <form>
       <p>
-        visible index: (this will determine the display order of this section on
-        your home screen)
+        index visible : (cela déterminera l'ordre d'affichage de cette section
+        sur votre page d'accueil)
         <input
           type="number"
           min={0}
@@ -578,7 +585,7 @@ function Architecture(props) {
             />
           </p>
           <p>
-            category link:{" "}
+            lien de catégorie:{" "}
             <select
               className="defaultInput"
               value={galleryItem.category}
@@ -593,8 +600,8 @@ function Architecture(props) {
               }
             >
               <option value="">
-                Select a category (if you have a custom link it will override
-                this)
+                Sélectionnez une catégorie (si vous avez un lien personnalisé,
+                il remplacera ce)
               </option>
               {categories.map((category) => {
                 return (
@@ -606,7 +613,7 @@ function Architecture(props) {
             </select>
           </p>
           <p>
-            custom link:
+            lien personnalisé:
             <input
               type="text"
               className="defaultInput"
@@ -638,7 +645,7 @@ function Architecture(props) {
 
   const deleteGalleryForm = (
     <div>
-      <p>are you sure you want to delete this gallery item ?</p>
+      <p>êtes-vous sûr de vouloir supprimer cet élément de la galerie ?</p>
     </div>
   );
 
@@ -661,7 +668,7 @@ function Architecture(props) {
               ? deleteGalleryItem
               : null
           }
-          loading={slideImageLoading || loading}
+          loading={galleryItemImageLoading || slideImageLoading || loading}
           size={
             action === "ADD-SLIDE-FROM" || action === "ADD-GALLERY-FROM"
               ? ModalSizes.BIG
@@ -694,14 +701,16 @@ function Architecture(props) {
           </div>
         </XModal>
         <section className={styles.container}>
-          <h1>Configure your shop to your taste</h1>
-          <p>
-            when you finish click on the{" "}
-            <IconButton disabled>
-              <CheckCircleIcon />
-            </IconButton>{" "}
-            icon to save your settings
-          </p>
+          <div style={{ padding: "10px" }}>
+            <h1>Configurez votre shop à votre goût</h1>
+            <p>
+              lorsque vous avez terminé, cliquez sur le{" "}
+              <IconButton disabled>
+                <CheckCircleIcon />
+              </IconButton>{" "}
+              icône pour enregistrer vos paramètres
+            </p>
+          </div>
           {loading ? (
             <Skeleton
               variant="rectangular"
@@ -772,8 +781,8 @@ function Architecture(props) {
               <hr />
               <br />
               <br />
-              <h1>Home Page</h1>
-              <p>slider (recommended resolution is 1500 x 600) </p>
+              <h1>Page D&apos;Accueil</h1>
+              <p>Glissière (la résolution recommandée est de 1500 x 600)</p>
               {loadingSlider ? (
                 <Skeleton
                   variant="rectangular"
@@ -800,7 +809,7 @@ function Architecture(props) {
                               color="error"
                               onClick={() => {
                                 setSlide(slide);
-                                setTitle("delete slide");
+                                setTitle("supprimer la diapositive");
                                 setAction("DELETE-SLIDE-FORM");
                               }}
                             >
@@ -813,9 +822,9 @@ function Architecture(props) {
                               e.target.src = "/images/image-placeholder.jpg";
                             }}
                           />
-                          {slide.link.length ? <p>custom link</p> : null}
+                          {slide.link.length ? <p>lien personnalisé</p> : null}
                           {slide.category.length ? (
-                            <p>category: {slide.category}</p>
+                            <p>catégorie: {slide.category}</p>
                           ) : null}
                         </div>
                       );
@@ -825,7 +834,7 @@ function Architecture(props) {
                       <IconButton
                         color="success"
                         onClick={() => {
-                          setTitle("Add slide");
+                          setTitle("Ajouter diapositive");
                           setAction("ADD-SLIDE-FROM");
                         }}
                         sx={{
@@ -848,7 +857,7 @@ function Architecture(props) {
                   </div>
                   <br />
                   <br />
-                  <p>Preview</p>
+                  <p>Aperçu</p>
                   <HomeSlider
                     slides={
                       sliderInfo.length
@@ -871,11 +880,13 @@ function Architecture(props) {
               <br />
               <br />
               <p>
-                categories grid (select up to 6 categories){" "}
+                grille de catégories (sélectionnez jusqu&apos;à 6 catégories){" "}
                 <IconButton
                   color="info"
                   onClick={() => {
-                    setTitle("select categories to show in the grid");
+                    setTitle(
+                      "sélectionner les catégories à afficher dans la grille"
+                    );
                     setAction("CATEGORIES-GRID-FORM");
                   }}
                 >
@@ -897,7 +908,7 @@ function Architecture(props) {
                   shopName={shopInfo.name}
                 />
               ) : (
-                <XGridSkeleton title={"Discover Our Catgegories"} />
+                <XGridSkeleton title={"Découvrir Nos Catégories"} />
               )}
               <br />
               <br />
@@ -905,12 +916,14 @@ function Architecture(props) {
               <br />
               <br />
               <p>
-                discount section (this will show random discounted products for
-                fast purchase)
+                section de réduction (cela affichera des produits à prix réduits
+                aléatoires pour achat rapide)
                 <IconButton
                   color="info"
                   onClick={() => {
-                    setTitle("set the display order of the discounts section");
+                    setTitle(
+                      "définir l'ordre d'affichage de la section réductions"
+                    );
                     setAction("DISCOUNT-FORM");
                   }}
                 >
@@ -930,10 +943,10 @@ function Architecture(props) {
                   products={discounts}
                   shopName={shopInfo.name}
                   settings={shopInfo.settings}
-                  title={"Get More For Less !"}
+                  title={"Obtenez plus pour moins cher !"}
                 />
               ) : (
-                <XGridSkeleton title={"Get More For Less !"} />
+                <XGridSkeleton title={"Obtenez plus pour moins cher !"} />
               )}
               <br />
               <br />
@@ -941,8 +954,9 @@ function Architecture(props) {
               <br />
               <br />
               <p>
-                gallery component (this will show selected images with each one
-                containing a title that shows on hover)
+                composant de galerie (cela affichera les images sélectionnées
+                avec chacune d'elles contenant un titre qui s&apos;affiche au
+                survol)
               </p>
               {loadingGallery ? (
                 <Skeleton
@@ -971,7 +985,7 @@ function Architecture(props) {
                               color="error"
                               onClick={() => {
                                 setGalleryItem(block);
-                                setTitle("delete slide");
+                                setTitle("supprimer l'élément");
                                 setAction("DELETE-GALLERY-FORM");
                               }}
                             >
@@ -987,9 +1001,9 @@ function Architecture(props) {
                           {block.text?.length ? (
                             <p>text: {block.text}</p>
                           ) : null}
-                          {block.link.length ? <p>custom link</p> : null}
+                          {block.link.length ? <p>lien personnalisé</p> : null}
                           {block.category.length ? (
-                            <p>category: {block.category}</p>
+                            <p>catégorie: {block.category}</p>
                           ) : null}
                         </div>
                       );
@@ -998,7 +1012,7 @@ function Architecture(props) {
                       <IconButton
                         color="success"
                         onClick={() => {
-                          setTitle("Add gallery item");
+                          setTitle("Ajouter un élément de galerie");
                           setAction("ADD-GALLERY-FROM");
                         }}
                         sx={{
@@ -1023,7 +1037,7 @@ function Architecture(props) {
                   <br />
                   <br />
                   <br />
-                  <p>Preview</p>
+                  <p>Aperçu</p>
                   <XGallery
                     shopName={shopInfo.name}
                     content={galleryInfo.content}
@@ -1036,9 +1050,9 @@ function Architecture(props) {
               <hr />
               <br />
               <br />
-              <h1>Shipping Info</h1>
+              <h1>Informations de livraison</h1>
               <p>
-                fill your shipping fee
+                remplissez vos frais de livraison
                 <IconButton
                   color="info"
                   onClick={() => saveArchitecture("shippingFee")}
@@ -1046,14 +1060,35 @@ function Architecture(props) {
                   <CheckCircleIcon />
                 </IconButton>{" "}
               </p>
+              <div className="labeledInput">
+                <label>Frais de livraison :</label>
+                <input
+                  type="number"
+                  name="shippingFee"
+                  placeholder="Frais en DT"
+                  value={shopInfo.shippingFee}
+                  onChange={(e) => {
+                    setShopInfo({
+                      ...shopInfo,
+                      shippingFee: e.target.value,
+                    });
+                  }}
+                  className="defaultInput"
+                  style={{ width: "300px" }}
+                />
+              </div>
+              <div className="labeledInput">
+                <label>Livraison gratuite à partir de :</label>
+              </div>
               <input
-                name="shippingFee"
-                placeholder="Shipping Fee"
-                value={shopInfo.shippingFee}
+                type="number"
+                name="freeShipping"
+                placeholder="somme de commandes en DT"
+                value={shopInfo.freeShipping}
                 onChange={(e) => {
                   setShopInfo({
                     ...shopInfo,
-                    shippingFee: e.target.value,
+                    freeShipping: e.target.value,
                   });
                 }}
                 className="defaultInput"
@@ -1064,9 +1099,9 @@ function Architecture(props) {
               <hr />
               <br />
               <br />
-              <h1>Contact Info</h1>
+              <h1>Informations de contact</h1>
               <p>
-                fill your contacts infos
+                remplissez vos coordonnées
                 <IconButton
                   color="info"
                   onClick={() => saveArchitecture("contactComponent")}
@@ -1079,7 +1114,7 @@ function Architecture(props) {
                 &nbsp;
                 <input
                   name="address"
-                  placeholder="address"
+                  placeholder="adresse"
                   value={architecture.contact.address}
                   onChange={(e) => {
                     setArchitecture({
@@ -1124,7 +1159,7 @@ function Architecture(props) {
                 <input
                   type="number"
                   name="phone"
-                  placeholder="phone"
+                  placeholder="téléphone"
                   value={architecture.contact.direct.phone}
                   onChange={(e) => {
                     setArchitecture({
@@ -1207,9 +1242,9 @@ function Architecture(props) {
               <hr />
               <br />
               <br />
-              <h1>About Info</h1>
+              <h1>À propos de votre shop</h1>
               <p>
-                who are you and what do you sell ?
+                qui êtes-vous et que vendez-vous ?
                 <IconButton
                   color="info"
                   onClick={() => saveArchitecture("aboutComponent")}
@@ -1220,7 +1255,7 @@ function Architecture(props) {
               <textarea
                 rows={5}
                 name="about"
-                placeholder="i am a company and i sell awesome stuff"
+                placeholder="je suis une entreprise et je vends des trucs géniaux"
                 value={architecture.about}
                 onChange={(e) => {
                   setArchitecture({ ...architecture, about: e.target.value });

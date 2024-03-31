@@ -38,10 +38,10 @@ function Account(props) {
   const pack = userInfo?.shop.pack;
 
   const offers = [
-    { period: "1 MONTH", price: 30 },
-    { period: "3 MONTHS", price: 85 },
-    { period: "6 MONTHS", price: 160 },
-    { period: "12 MONTHS", price: 300 },
+    { period: "1 Mois", price: 30 },
+    { period: "3 Mois", price: 85 },
+    { period: "6 Mois", price: 160 },
+    { period: "12 Mois", price: 300 },
   ];
 
   const [upgradeDemand, setUpgradeDemand] = useState(null);
@@ -172,7 +172,9 @@ function Account(props) {
           setAction("");
         }
       } else {
-        enqueueSnackbar("Select a plan first !", { variant: "warning" });
+        enqueueSnackbar("Sélectionnez d'abord un forfait !", {
+          variant: "warning",
+        });
       }
     } else {
       enqueueSnackbar(
@@ -200,8 +202,8 @@ function Account(props) {
           loading={loadingSubscription}
           title={
             action === "EXTEND"
-              ? "Extend your Subscription"
-              : "Upgrade your Subscription"
+              ? "Prolongez votre abonnement"
+              : "Mettez à niveau votre abonnement"
           }
           size={ModalSizes.MEDIUM}
         >
@@ -225,13 +227,16 @@ function Account(props) {
                 );
               })}
             </div>
-            <p>after confrimation proceed to executing the transaction:</p>
+            <p>
+              après confirmation, procéder à l&apos;exécution de la transaction
+              :
+            </p>
             <br />
             {offer && (
               <span>
                 <p>
-                  Upgrading your plan, Send {offer.price}
-                  &nbsp;DT to:
+                  Mettre à niveau votre forfait, Envoyer {offer.price}
+                  &nbsp;DT à:
                 </p>
                 <ul>
                   <li>RIB: 17503000000268993518</li>
@@ -239,21 +244,23 @@ function Account(props) {
                 </ul>
               </span>
             )}
-            <p>access dashboard on the go and break from restrictions !</p>
+            <p>
+              accédez au tableau de bord en déplacement et brisez les
+              restrictions !
+            </p>
             <hr />
             <ul>
-              <li>categories: unlimited</li>
-              <li>products: unlimited</li>
-              <li>images per product: up to 3</li>
-              <li>home slides: unlimited</li>
-              <li>mobile access: allowed</li>
-              <li>invoice generation: allowed</li>
+              <li>catégories: illimité</li>
+              <li>produits: illimité</li>
+              <li>images par produit: jusqu&apos;à 3</li>
+              <li>diapositives de la page d'accueil: illimité</li>
+              <li>génération des factures: permise</li>
             </ul>
           </section>
         </XModal>
         <section className={styles.container}>
           <div className={styles.controls}>
-            <h1>Account & Suscription</h1>
+            <h1>Compte et abonnement</h1>
           </div>
           {userInfo && (
             <section className={styles.account}>
@@ -290,41 +297,37 @@ function Account(props) {
                 </div>
                 <p>
                   {pack.type === "FREE" ? <CloseIcon /> : <Check />}
-                  &nbsp;mobile dashboard
+                  &nbsp;impression de factures
                 </p>
                 <p>
                   {pack.type === "FREE" ? <CloseIcon /> : <Check />}
-                  &nbsp;printing receipts
+                  &nbsp;catégories illimité
                 </p>
                 <p>
                   {pack.type === "FREE" ? <CloseIcon /> : <Check />}
-                  &nbsp;unlimited categories
-                </p>
-                <p>
-                  {pack.type === "FREE" ? <CloseIcon /> : <Check />}
-                  &nbsp;unlimited products
+                  &nbsp;produits illimité
                 </p>
                 <hr />
                 <h5>Pack: {pack.type}</h5>
                 {pack.type !== "FREE" && (
                   <h5>
-                    Expires in: {moment(pack.expiresIn).format("DD-MM-YYYY")}
+                    Expire dans: {moment(pack.expiresIn).format("DD-MM-YYYY")}
                   </h5>
                 )}
                 {pack.type === "FREE" && !upgradeDemand && (
                   <>
-                    <p>upgrade to premium and benefit from our services !</p>
+                    <p>passez à premium et bénéficiez de nos services !</p>
                   </>
                 )}
                 {upgradeDemand ? (
                   <span>
                     <p>
-                      Upgrading your plan, Send{" "}
+                      Mettre à niveau votre forfait, Envoyer{" "}
                       {
                         offers.find((o) => o.period === upgradeDemand.period)
                           .price
                       }
-                      &nbsp;DT to:
+                      &nbsp;DT à:
                     </p>
                     <ul>
                       <li>RIB: 17503000000268993518</li>
@@ -337,8 +340,8 @@ function Account(props) {
                     color={"#ffc800"}
                     text={
                       pack.type === "FREE"
-                        ? "upgrade to premium"
-                        : "extend subscription"
+                        ? "passer à premium"
+                        : "prolonger l'abonnement"
                     }
                     action={
                       pack.type === "FREE"
@@ -357,7 +360,7 @@ function Account(props) {
                   ) : editAccount ? (
                     <div className="row">
                       <IconButton color="success" type="submit" form="account">
-                        <Tooltip title="save">
+                        <Tooltip title="sauvegarder">
                           <CheckCircleIcon />
                         </Tooltip>
                       </IconButton>
@@ -365,7 +368,7 @@ function Account(props) {
                         color="error"
                         onClick={() => setEditAccount(false)}
                       >
-                        <Tooltip title="cancel">
+                        <Tooltip title="annuler">
                           <CloseIcon />
                         </Tooltip>
                       </IconButton>
@@ -379,7 +382,7 @@ function Account(props) {
                         }, 100);
                       }}
                     >
-                      <Tooltip title="edit">
+                      <Tooltip title="modifier">
                         <SettingsIcon />
                       </Tooltip>
                     </IconButton>
@@ -394,7 +397,7 @@ function Account(props) {
                     }
                     value={email}
                     name="email"
-                    email="email"
+                    placeholder="email"
                     onChange={onChange}
                   />
                   <input
@@ -404,7 +407,7 @@ function Account(props) {
                     }
                     value={phone}
                     name="phone"
-                    placeholder="phone"
+                    placeholder="téléphone"
                     onChange={onChange}
                   />
                   <input
@@ -414,7 +417,7 @@ function Account(props) {
                     }
                     value={address}
                     name="address"
-                    placeholder="address"
+                    placeholder="adresse"
                     onChange={onChange}
                   />
                   <div className={styles.passwordContainer}>
@@ -425,7 +428,7 @@ function Account(props) {
                       onChange={onChange}
                       type={passwordVisible ? "text" : "password"}
                       name="password"
-                      placeholder="password"
+                      placeholder="mot de passe"
                       autoComplete="off"
                     />
 
@@ -450,7 +453,7 @@ function Account(props) {
                     }
                     value={confirmPassword}
                     name="confirmPassword"
-                    placeholder="confirm password"
+                    placeholder="confirmer mot de passe"
                     onChange={onChange}
                     autoComplete="off"
                   />

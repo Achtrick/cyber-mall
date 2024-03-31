@@ -14,7 +14,7 @@ handler.post(async (req, res) => {
     const user = await User.findOne({ email: data.email.toLowerCase() });
     if (!user) {
       return res.status(403).json({
-        message: "il n'y a aucun utilisateur avec cette addresse email !",
+        message: "Il n'y a aucun utilisateur avec cette addresse email !",
       });
     }
     const valid = bcrypt.compareSync(data.password, user.password);
@@ -39,7 +39,7 @@ handler.post(async (req, res) => {
         } else {
           res
             .status(401)
-            .json({ message: "vérifiez votre compte pour se connecter !" });
+            .json({ message: "Vérifiez votre compte pour se connecter !" });
         }
       } else {
         res.status(200).json({
@@ -56,7 +56,7 @@ handler.post(async (req, res) => {
         });
       }
     } else {
-      res.status(403).json({ message: "mot de passe incorrecte !" });
+      res.status(403).json({ message: "Mot de passe incorrecte !" });
     }
   } catch (err) {
     res.status(400).json(err);

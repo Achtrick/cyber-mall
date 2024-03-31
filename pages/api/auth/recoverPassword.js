@@ -2,8 +2,7 @@ import crypto from "crypto";
 import nc from "next-connect";
 import User from "../../../models/user.model";
 import connectDB from "../../../utils/connectDB";
-import { transporter } from "../../../utils/shared/mailer";
-import { mailcss } from "../../../utils/shared/mailer";
+import { mailcss, transporter } from "../../../utils/shared/mailer";
 
 const token = crypto.randomBytes(10).toString("hex");
 
@@ -72,7 +71,7 @@ handler.post(async (req, res) => {
       });
     } else {
       res.status(404).json({
-        message: "il n'y a aucun compte avec cette addresse mail !",
+        message: "Il n'y a aucun compte avec cette addresse mail !",
       });
     }
   } catch (err) {

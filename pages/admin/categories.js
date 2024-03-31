@@ -90,7 +90,7 @@ function Categories() {
         case AdminActions.ADD:
           if (images === "") {
             setModalLoading(false);
-            return enqueueSnackbar("category image is required", {
+            return enqueueSnackbar("l'image de la catégorie est requise", {
               variant: "error",
             });
           }
@@ -170,26 +170,26 @@ function Categories() {
           }
           title={
             action === AdminActions.ADD
-              ? "add category"
+              ? "ajouter catégorie"
               : action === AdminActions.UPDATE
-              ? "update category"
+              ? "modifier catégorie"
               : action === AdminActions.DELETE
-              ? "delete category"
+              ? "supprimer catégorie"
               : null
           }
         >
           {action === AdminActions.DELETE ? (
             <>
               <p>
-                if you delete &quot;{category.name}&quot; category all of the
-                products under it will be deleted.
+                si vous supprimez la catégorie &quot;{category.name}&quot; ,
+                tous les les produits en dessous seront supprimés.
               </p>
-              <p>are you sure ?</p>
+              <p>êtes-vous sûr ?</p>
             </>
           ) : (
             <form id="product_category_form" onSubmit={handleCategory}>
               <div className="labeledInput">
-                <label>name</label>
+                <label>nom</label>
                 <input
                   value={category.name}
                   className="defaultInput"
@@ -213,7 +213,7 @@ function Categories() {
                 />
               </div>
               <div className="labeledInput">
-                <label>icon (recommended resolution (250px * 250px))</label>
+                <label>icon (résolution recommandée (250px * 250px))</label>
                 <br />
                 {imagesLoading ? (
                   <CircularProgress color="black" size={30} />
@@ -241,7 +241,9 @@ function Categories() {
                   onChange={onChange}
                 />
                 <Tooltip
-                  title={category.icon.length ? "Edit Image" : "Add Image"}
+                  title={
+                    category.icon.length ? "Modifier Image" : "Ajouter Image"
+                  }
                 >
                   <IconButton
                     color={category.icon.length ? "warning" : "secondary"}
@@ -269,7 +271,7 @@ function Categories() {
           )}
         </XModal>
         <section className={styles.container}>
-          <h1>Categories</h1>
+          <h1>Catégories</h1>
           {loading ? (
             <Skeleton
               variant="rectangular"
@@ -294,7 +296,7 @@ function Categories() {
 
                     <p>{category.name}</p>
                     <div className="centered-row">
-                      <Tooltip title="Edit">
+                      <Tooltip title="Modifier">
                         <IconButton
                           color="warning"
                           onClick={() => {
@@ -305,7 +307,7 @@ function Categories() {
                           <ModeEditIcon sx={{ width: "20px" }} />
                         </IconButton>
                       </Tooltip>
-                      <Tooltip title="Delete">
+                      <Tooltip title="Supprimer">
                         <IconButton
                           color="error"
                           onClick={() => {

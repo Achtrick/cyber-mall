@@ -5,10 +5,10 @@ function HomeHedaer(props) {
   return (
     <section className={styles.container}>
       <div className={styles.overlay}>
-        <h1>Making Commerce Better for Everyone</h1>
+        <h1>Rendre le commerce meilleur pour tous</h1>
         <p>
-          Shopify is supporting the next generation of entrepreneurs, the
-          world&apos;s biggest brands, and everyone in between
+          Cyber-Mall accompagne la prochaine génération d&apos;entrepreneurs,
+          les plus grandes marques du monde, et tout entre les deux.
         </p>
       </div>
       <video

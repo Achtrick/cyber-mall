@@ -35,7 +35,7 @@ function Product(props) {
       if (shop) {
         getShopInfo();
       } else {
-        enqueueSnackbar("invalid shop link", { variant: "error" });
+        enqueueSnackbar("Lien de shop invalide", { variant: "error" });
         router.push("/");
       }
     }
@@ -46,7 +46,10 @@ function Product(props) {
       if (router.query.id) {
         getProduct(shopInfo._id);
       } else {
-        enqueueSnackbar({ message: "invalid shop link !", variant: "error" });
+        enqueueSnackbar({
+          message: "Lien de shop invalide !",
+          variant: "error",
+        });
         router.push("/");
       }
     }
@@ -114,7 +117,7 @@ function Product(props) {
         },
       },
     });
-    enqueueSnackbar(`added ${product.designation} to cart`, {
+    enqueueSnackbar(`${product.designation} Ajouté au panier`, {
       variant: "info",
     });
   };
@@ -203,7 +206,7 @@ function Product(props) {
                   </div>
                   <XButton
                     color={shopInfo.settings.primaryColor}
-                    text={"add to cart"}
+                    text={"Ajouter au panier"}
                     action={() => {
                       addTocart(shop, product);
                     }}
@@ -213,7 +216,7 @@ function Product(props) {
               </div>
             )}
             <div className="row">
-              <XHr color={shopInfo.settings.primaryColor} width="40%" />
+              <XHr color={shopInfo.settings.primaryColor} width="20%" />
             </div>
             {loadingSimilars ? (
               <Skeleton
@@ -228,7 +231,7 @@ function Product(props) {
                 shopName={shopInfo.name}
                 products={similars}
                 activateControls={true}
-                title={"Checkout Similar Products !"}
+                title={"Découvrir des produits similaires !"}
                 buttonAction={addTocart}
               />
             )}

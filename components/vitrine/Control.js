@@ -5,12 +5,13 @@ function Control(props) {
     <section className="vitrine-block">
       <div className="row">
         <div className="col">
-          <p data-aos="fade-up">all in one solution</p>
+          <p data-aos="fade-up">solution tout en un</p>
           <p data-aos="fade-up">
-            take control over your inventory, orders and clients
+            prenez le contrôle de votre inventaire, de vos commandes et de vos
+            clients
           </p>
           <p data-aos="fade-up">
-            with a clear, mobile friendly and fast access dashboard !
+            avec un tableau de bord clair, mobile et d'accès rapide !
           </p>
         </div>
         <div className="col">

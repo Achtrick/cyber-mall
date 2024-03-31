@@ -1,7 +1,7 @@
 import nc from "next-connect";
-import connectDB from "../../../../utils/connectDB";
-import Product from "../../../../models/product.model";
 import auth from "../../../../middlewares/admin-auth";
+import Product from "../../../../models/product.model";
+import connectDB from "../../../../utils/connectDB";
 
 const handler = nc();
 
@@ -11,7 +11,7 @@ handler.post(auth, async (req, res) => {
   try {
     await Product.create(data);
 
-    res.status(200).json({ message: "created product" });
+    res.status(200).json({ message: "Produit Ajouté" });
   } catch (err) {
     res.status(400).json(err);
   }

@@ -38,7 +38,7 @@ function Cart(props) {
         getShopInfo();
         setCart(carts.find((cart) => cart.shop === shop));
       } else {
-        enqueueSnackbar("invalid shop link", { variant: "error" });
+        enqueueSnackbar("Lien de shop invalide", { variant: "error" });
         router.push("/");
       }
     }
@@ -122,10 +122,10 @@ function Cart(props) {
                   <thead>
                     <tr>
                       <th>image</th>
-                      <th>designation</th>
-                      <th>price</th>
-                      <th>qty</th>
-                      <th>unit total</th>
+                      <th>désignation</th>
+                      <th>prix</th>
+                      <th>qté</th>
+                      <th>total unitaire</th>
                       <th></th>
                     </tr>
                   </thead>
@@ -150,13 +150,13 @@ function Cart(props) {
                                 }}
                               />
                             </td>
-                            <td data-label="designation">
+                            <td data-label="désignation">
                               {product.designation}
                             </td>
-                            <td data-label="price">
+                            <td data-label="prix">
                               {product.price.toLocaleString() + " DT"}
                             </td>
-                            <td data-label="qty">{product.qty}</td>
+                            <td data-label="qté">{product.qty}</td>
                             <td data-label="total">
                               {(product.qty * product.price).toLocaleString() +
                                 " DT"}
@@ -183,7 +183,14 @@ function Cart(props) {
                               return sum + product.price * product.qty;
                             }, 0)
                             .toLocaleString()}{" "}
-                        DT + shipping fee: {shopInfo.shippingFee} DT
+                        DT +{" "}
+                        {cart.content.reduce((sum, product) => {
+                          return sum + product.price * product.qty;
+                        }, 0) > shopInfo.freeShipping
+                          ? "Livraison gratuite"
+                          : "frais de livraison : " +
+                            shopInfo.shippingFee +
+                            "DT"}
                       </th>
                     </tr>
                   </tbody>
@@ -192,7 +199,7 @@ function Cart(props) {
                   <XButton
                     color={shopInfo.settings.primaryColor}
                     inversed={true}
-                    text={"empty cart"}
+                    text={"vider le panier"}
                     action={emptyCart}
                   />
                 </div>
@@ -204,7 +211,7 @@ function Cart(props) {
                   <div className="row">
                     <input
                       name="firstName"
-                      placeholder="First Name"
+                      placeholder="Prénom"
                       type="text"
                       className="defaultInput"
                       value={user.firstName}
@@ -214,7 +221,7 @@ function Cart(props) {
                     &nbsp;
                     <input
                       name="lastName"
-                      placeholder="Last Name"
+                      placeholder="Nom"
                       type="text"
                       className="defaultInput"
                       value={user.lastName}
@@ -225,7 +232,7 @@ function Cart(props) {
                   <div className="row">
                     <input
                       name="address"
-                      placeholder="Address"
+                      placeholder="Adresse"
                       type="text"
                       className="defaultInput"
                       value={user.address}
@@ -236,7 +243,7 @@ function Cart(props) {
                   <div className="row">
                     <input
                       name="postalCode"
-                      placeholder="Postal Code"
+                      placeholder="Code Postal"
                       type="text"
                       className="defaultInput"
                       value={user.postalCode}
@@ -246,7 +253,7 @@ function Cart(props) {
                     &nbsp;
                     <input
                       name="city"
-                      placeholder="City"
+                      placeholder="Ville"
                       type="text"
                       className="defaultInput"
                       value={user.city}
@@ -257,7 +264,7 @@ function Cart(props) {
                   <div className="row">
                     <input
                       name="phone"
-                      placeholder="Phone"
+                      placeholder="Téléphone"
                       type="number"
                       className="defaultInput"
                       value={user.phone}
@@ -269,7 +276,7 @@ function Cart(props) {
                     <XButton
                       color={shopInfo.settings.primaryColor}
                       inversed={true}
-                      text={"place order"}
+                      text={"Passer la commande"}
                       loading={loadingOrder}
                     />
                   </div>
@@ -277,13 +284,13 @@ function Cart(props) {
               </div>
             ) : (
               <div className={styles.emptyContainer}>
-                <h2>your cart is empty !</h2>
+                <h2>Votre panier est vide !</h2>
                 <div className="row">
                   <XHr color={shopInfo.settings.primaryColor} width="250px" />
                 </div>
                 <XButton
                   color={shopInfo.settings.primaryColor}
-                  text={"go shopping"}
+                  text={"allez faire du shopping"}
                   action={() => router.push(`/shop/products?shop=${shop}`)}
                 />
               </div>

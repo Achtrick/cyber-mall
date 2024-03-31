@@ -130,7 +130,7 @@ function Orders() {
           {action === "CLOSE-ORDER" ? (
             <>
               <p>
-                are you sure to close order for client &apos;
+                êtes-vous sûr de clôturer la commande pour le client &apos;
                 {order.user.firstName + " " + order.user.lastName}&apos; ?
               </p>
               <br />
@@ -138,7 +138,7 @@ function Orders() {
           ) : action === "DELETE-ORDER" ? (
             <>
               <p>
-                are you sure to delete order for client &apos;
+                êtes-vous sûr de supprimer la commande pour le client &apos;
                 {order.user.firstName + " " + order.user.lastName}&apos; ?
               </p>
               <br />
@@ -161,10 +161,10 @@ function Orders() {
                 <thead>
                   <tr>
                     <th>image</th>
-                    <th>designation</th>
-                    <th>price</th>
-                    <th>qty</th>
-                    <th>unit total</th>
+                    <th>désignation</th>
+                    <th>prix</th>
+                    <th>qté</th>
+                    <th>total unitaire</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -191,11 +191,11 @@ function Orders() {
                             }}
                           />
                         </td>
-                        <td data-label="designation">{product.designation}</td>
-                        <td data-label="price">
+                        <td data-label="désignation">{product.designation}</td>
+                        <td data-label="prix">
                           {product.price.toLocaleString() + " DT"}
                         </td>
-                        <td data-label="qty">{product.qty}</td>
+                        <td data-label="qté">{product.qty}</td>
                         <td data-label="total">
                           {(product.qty * product.price).toLocaleString() +
                             " DT"}
@@ -211,7 +211,14 @@ function Orders() {
                           return sum + product.price * product.qty;
                         }, 0)
                         .toLocaleString()}{" "}
-                      DT + shipping fee: {userInfo.shop.shippingFee} DT
+                      DT{" "}
+                      {order.products.reduce((sum, product) => {
+                        return sum + product.price * product.qty;
+                      }, 0) > userInfo.shop.freeShipping
+                        ? ""
+                        : "+ frais de livraison : " +
+                          userInfo.shop.shippingFee +
+                          "DT"}
                     </th>
                   </tr>
                 </tbody>
@@ -220,7 +227,7 @@ function Orders() {
           ) : null}
         </XModal>
         <section className={styles.container}>
-          <h1>Orders</h1>
+          <h1>Commandes</h1>
           <div className={styles.controls}>
             <XPagination
               color="secondary"
@@ -251,12 +258,12 @@ function Orders() {
                 <thead>
                   <tr>
                     <th>Client</th>
-                    <th>Phone</th>
-                    <th>Address</th>
+                    <th>Téléphone</th>
+                    <th>Adresse</th>
                     <th>Date</th>
                     <th>Total</th>
-                    <th>Article Cnt</th>
-                    <th>State</th>
+                    <th>Nbr Articles</th>
+                    <th>État</th>
                     <th>actions</th>
                   </tr>
                 </thead>
@@ -267,8 +274,8 @@ function Orders() {
                         <td data-label="Client">
                           {order.user.firstName + " " + order.user.lastName}
                         </td>
-                        <td data-label="Phone">{order.user.phone}</td>
-                        <td data-label="Address">
+                        <td data-label="Téléphone">{order.user.phone}</td>
+                        <td data-label="Adresse">
                           {order.user.address +
                             " " +
                             order.user.city +
@@ -285,7 +292,7 @@ function Orders() {
                             }, 0)
                             .toLocaleString() + " DT"}
                         </td>
-                        <td data-label="Article Cnt">
+                        <td data-label="Nbr Articles">
                           {order.products.reduce((count, product) => {
                             return count + product.qty;
                           }, 0)}
@@ -298,31 +305,33 @@ function Orders() {
                                 : styles.closed
                             }
                           >
-                            {order.state}
+                            {order.state === "WAITING"
+                              ? "En Attente"
+                              : "Clôturée"}
                           </p>
                         </td>
                         <td>
                           <div className="centered-row">
-                            <Tooltip title="View Order">
+                            <Tooltip title="Voir Commande">
                               <IconButton
                                 color="info"
                                 onClick={() => {
                                   setOrder(order);
                                   setAction("SHOW-ORDER");
-                                  setTitle("Order Preview");
+                                  setTitle("Aperçu de la commande");
                                 }}
                               >
                                 <VisibilityIcon sx={{ width: "20px" }} />
                               </IconButton>
                             </Tooltip>
                             {order.state === "WAITING" ? (
-                              <Tooltip title="Close Order">
+                              <Tooltip title="Clôturer">
                                 <IconButton
                                   color="info"
                                   onClick={() => {
                                     setOrder(order);
                                     setAction("CLOSE-ORDER");
-                                    setTitle("close order");
+                                    setTitle("Clôturer La Commande");
                                   }}
                                 >
                                   <Check sx={{ width: "20px" }} />
@@ -339,7 +348,7 @@ function Orders() {
                                     });
                                   }}
                                   trigger={() => (
-                                    <Tooltip title="Print">
+                                    <Tooltip title="Imprimer">
                                       <IconButton color="info">
                                         <Receipt sx={{ width: "20px" }} />
                                       </IconButton>
@@ -348,11 +357,11 @@ function Orders() {
                                   content={() => receiptRef.current}
                                 />
                               ) : (
-                                <Tooltip title="Print">
+                                <Tooltip title="Imprimer">
                                   <IconButton
                                     onClick={() =>
                                       enqueueSnackbar(
-                                        "Upgrade to PREMIUM to get this functionnality !",
+                                        "Passez à PREMIUM pour bénéficier de cette fonctionnalité !",
                                         { variant: "warning" }
                                       )
                                     }
@@ -363,13 +372,13 @@ function Orders() {
                                 </Tooltip>
                               )
                             ) : null}
-                            <Tooltip title="Delete Order">
+                            <Tooltip title="Supprimer">
                               <IconButton
                                 color="error"
                                 onClick={() => {
                                   setOrder(order);
                                   setAction("DELETE-ORDER");
-                                  setTitle("delete order");
+                                  setTitle("Supprimer la commande");
                                 }}
                               >
                                 <DeleteIcon sx={{ width: "20px" }} />
@@ -422,10 +431,10 @@ function Orders() {
               <table className="fixedTable">
                 <thead>
                   <tr>
-                    <th>designation</th>
-                    <th>price</th>
-                    <th>qty</th>
-                    <th>unit total</th>
+                    <th>désignation</th>
+                    <th>prix</th>
+                    <th>qté</th>
+                    <th>total unitaire</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -451,7 +460,14 @@ function Orders() {
                             return sum + product.price * product.qty;
                           }, 0)
                           .toLocaleString()}{" "}
-                      DT + shipping fee: {userInfo.shop.shippingFee} DT
+                      DT{" "}
+                      {order.products.reduce((sum, product) => {
+                        return sum + product.price * product.qty;
+                      }, 0) > userInfo.shop.freeShipping
+                        ? ""
+                        : "+ frais de livraison : " +
+                          userInfo.shop.shippingFee +
+                          "DT"}
                     </th>
                   </tr>
                 </tbody>
@@ -459,7 +475,7 @@ function Orders() {
               <br />
               <div className={styles.row}>
                 <p></p>
-                <p>Created At: {moment().format("DD-MM-YYYY")}</p>
+                <p>créé à: {moment().format("DD-MM-YYYY")}</p>
               </div>
             </>
           )}

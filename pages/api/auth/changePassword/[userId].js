@@ -1,7 +1,7 @@
-import nc from "next-connect";
-import connectDB from "../../../../utils/connectDB";
-import User from "../../../../models/user.model";
 import bcrypt from "bcryptjs";
+import nc from "next-connect";
+import User from "../../../../models/user.model";
+import connectDB from "../../../../utils/connectDB";
 
 const handler = nc();
 
@@ -15,7 +15,7 @@ handler.put(async (req, res) => {
     user.password = bcrypt.hashSync(password, salt);
     user.token = "";
     await user.save();
-    res.status(200).json({ message: "votre mot de passe a été changée" });
+    res.status(200).json({ message: "Votre mot de passe a été changée" });
   } catch (err) {
     res.status(400).json({ message: err });
   }

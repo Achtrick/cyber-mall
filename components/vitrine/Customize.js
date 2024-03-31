@@ -3,13 +3,13 @@ import React from "react";
 function Customize(props) {
   return (
     <section className="vitrine-block">
-      <p data-aos="fade-up">Customize your shop to your taste</p>
+      <p data-aos="fade-up">Personnalisez votre shop à votre goût</p>
       <p data-aos="fade-up">
-        change your website theme colors ans manage components visibility and
-        more
+        changez les couleurs du thème de votre site Web et gérez la répartition
+        des composants et plus
       </p>
       <p data-aos="fade-up">
-        with a flexible layout and user friendly interface !
+        avec une mise en page flexible et une interface conviviale !
       </p>
       <br />
       <br />

@@ -1,7 +1,7 @@
 import nc from "next-connect";
-import connectDB from "../../../../../utils/connectDB";
-import Product from "../../../../../models/product.model";
 import auth from "../../../../../middlewares/admin-auth";
+import Product from "../../../../../models/product.model";
+import connectDB from "../../../../../utils/connectDB";
 import { removeFile } from "../../../../../utils/shared/removeFile";
 
 const handler = nc();
@@ -16,7 +16,7 @@ handler.delete(auth, async (req, res) => {
       removeFile(image.split("/").pop());
     }
 
-    res.status(200).json({ message: "deleted product" });
+    res.status(200).json({ message: "Produit Supprimé" });
   } catch (err) {
     res.status(400).json(err);
   }

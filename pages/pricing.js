@@ -11,10 +11,11 @@ function Pricing(props) {
       <Layout>
         <section className={styles.container}>
           <p data-aos="fade-up" data-aos-offset="100">
-            Choose a plan to grow your business
+            Choisissez un plan pour développer votre entreprise
           </p>
           <p data-aos="fade-up" data-aos-offset="100">
-            we provide different flexible packs to suit your needs !
+            nous proposons différents packs flexibles pour répondre à vos
+            besoins !
           </p>
           <hr />
           <br />
@@ -24,26 +25,26 @@ function Pricing(props) {
               data-aos-offset="100"
               className={styles.pack}
             >
-              <p>basic</p>
+              <p>basique</p>
               <br />
               <p>
-                create your website for free and start selling your products !
+                créez votre shop gratuitement et commencez à vendre vos produits
+                !
               </p>
               <hr />
               <ul>
-                <li>website creation</li>
-                <li>add logo</li>
-                <li>customize website theme</li>
-                <li>customize website structure</li>
-                <li>categories: 5</li>
-                <li>products: 10</li>
-                <li>images per product: 1</li>
-                <li>home slides: 3</li>
-                <li>mobile access: restricted</li>
-                <li>invoice generation: restricted</li>
+                <li>création de shop</li>
+                <li>ajouter un logo</li>
+                <li>personnaliser le thème</li>
+                <li>personnaliser la structure</li>
+                <li>catégories : 5</li>
+                <li>produits : 10</li>
+                <li>images par produit : 1</li>
+                <li>diapositives d'accueil : 3</li>
+                <li>Génération de facture : restreinte</li>
               </ul>
               <hr />
-              <p>Free</p>
+              <p>Gratuit</p>
               <Link href={"/register"}>
                 <Button
                   style={{
@@ -53,7 +54,7 @@ function Pricing(props) {
                   }}
                   variant="contained"
                 >
-                  get started
+                  Commencer
                 </Button>
               </Link>
             </div>
@@ -64,22 +65,24 @@ function Pricing(props) {
             >
               <p>premium</p>
               <br />
-              <p>access dashboard on the go and break from restrictions !</p>
+              <p>
+                accédez au tableau de bord en déplacement et brisez les
+                restrictions !
+              </p>
               <hr />
               <ul>
-                <li>website creation</li>
-                <li>add logo</li>
-                <li>customize website theme</li>
-                <li>customize website structure</li>
-                <li>categories: unlimited</li>
-                <li>products: unlimited</li>
-                <li>images per product: 3</li>
-                <li>home slides: unlimited</li>
-                <li>mobile access: allowed</li>
-                <li>invoice generation: allowed</li>
+                <li>création de shop</li>
+                <li>ajouter un logo</li>
+                <li>personnaliser le thème</li>
+                <li>personnaliser la structure</li>
+                <li>catégories : illimitées</li>
+                <li>produits : illimité</li>
+                <li>images par produit : 3</li>
+                <li>diapositives d&apos;accueil : illimitées</li>
+                <li>génération de facture : autorisée</li>
               </ul>
               <hr />
-              <p>30 DT / Month</p>
+              <p>30 DT / Mois</p>
               <Link href={"/register"}>
                 <Button
                   style={{
@@ -89,7 +92,7 @@ function Pricing(props) {
                   }}
                   variant="contained"
                 >
-                  get started
+                  Commencer
                 </Button>
               </Link>
             </div>

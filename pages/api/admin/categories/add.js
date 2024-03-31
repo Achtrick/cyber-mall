@@ -1,7 +1,7 @@
 import nc from "next-connect";
-import connectDB from "../../../../utils/connectDB";
-import ProductCategory from "../../../../models/productCategory.model";
 import auth from "../../../../middlewares/admin-auth";
+import ProductCategory from "../../../../models/productCategory.model";
+import connectDB from "../../../../utils/connectDB";
 
 const handler = nc();
 
@@ -11,7 +11,7 @@ handler.post(auth, async (req, res) => {
   try {
     await ProductCategory.create(data);
 
-    res.status(200).json({ message: "created catgegory" });
+    res.status(200).json({ message: "Catégorie Ajoutée" });
   } catch (err) {
     res.status(400).json(err);
   }

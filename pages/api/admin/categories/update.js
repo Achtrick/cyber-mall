@@ -1,7 +1,7 @@
 import nc from "next-connect";
-import connectDB from "../../../../utils/connectDB";
-import ProductCategory from "../../../../models/productCategory.model";
 import auth from "../../../../middlewares/admin-auth";
+import ProductCategory from "../../../../models/productCategory.model";
+import connectDB from "../../../../utils/connectDB";
 import { removeFile } from "../../../../utils/shared/removeFile";
 
 const handler = nc();
@@ -23,7 +23,7 @@ handler.put(auth, async (req, res) => {
 
     await category.save();
 
-    res.status(200).json({ message: "updated category" });
+    res.status(200).json({ message: "Catégorie Modifiée" });
   } catch (err) {
     console.log(err);
     res.status(400).json(err);

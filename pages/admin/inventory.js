@@ -110,7 +110,7 @@ function Inventory(props) {
           compressedImages.push(base64);
           imagesToUpload.push(compressedImage);
         } else {
-          enqueueSnackbar("can't exceed 3 images per product.", {
+          enqueueSnackbar("Ne dépasser pas 3 images par produit.", {
             variant: "warning",
           });
         }
@@ -251,23 +251,23 @@ function Inventory(props) {
           }
           title={
             action === AdminActions.ADD
-              ? "add product"
+              ? "ajouter produit"
               : action === AdminActions.UPDATE
-              ? "update product"
+              ? "modifier produit"
               : action === AdminActions.DELETE
-              ? "delete product"
+              ? "supprimer produit"
               : null
           }
         >
           {action === AdminActions.DELETE ? (
             <>
-              <p>deleting &quot;{product.designation}&quot;.</p>
-              <p>are you sure ?</p>
+              <p>suppression de &quot;{product.designation}&quot;.</p>
+              <p>êtes-vous sûr ?</p>
             </>
           ) : (
             <form id="product_category_form" onSubmit={handleProduct}>
               <div className="labeledInput">
-                <label>category</label>
+                <label>catégorie</label>
                 <XAutoComplete
                   options={categories}
                   optionDisplayExpr={"name"}
@@ -280,7 +280,7 @@ function Inventory(props) {
                 />
               </div>
               <div className="labeledInput">
-                <label>designation</label>
+                <label>désignation</label>
                 <input
                   className="defaultInput"
                   type="text"
@@ -336,7 +336,7 @@ function Inventory(props) {
                   name="images"
                   onChange={onChange}
                 />
-                <Tooltip title={product.images.length ? "Edit" : "Add"}>
+                <Tooltip title={product.images.length ? "Modifier" : "Ajouter"}>
                   <IconButton
                     color={product.images.length ? "warning" : "secondary"}
                   >
@@ -358,7 +358,7 @@ function Inventory(props) {
                 </Tooltip>
               </div>
               <div className="labeledInput">
-                <label>price</label>
+                <label>prix</label>
                 <input
                   className="defaultInput"
                   type="number"
@@ -370,7 +370,7 @@ function Inventory(props) {
                 />
               </div>
               <div className="labeledInput">
-                <label>discount (%)</label>
+                <label>remise (%)</label>
                 <input
                   className="defaultInput"
                   type="number"
@@ -381,7 +381,7 @@ function Inventory(props) {
                 />
               </div>
               <div className="labeledInput">
-                <label>quantity</label>
+                <label>quantité</label>
                 <input
                   className="defaultInput"
                   type="number"
@@ -396,13 +396,13 @@ function Inventory(props) {
         </XModal>
         <section className={styles.container}>
           <div className={styles.controls}>
-            <h1>Inventory</h1>
+            <h1>Inventaire</h1>
             <div className="row">
               <SearchIcon color="secondary" style={{ marginRight: "-30px" }} />
               <input
                 style={{ paddingLeft: "30px" }}
                 className="defaultInput"
-                placeholder="Designation..."
+                placeholder="Désignation..."
                 onChange={onSearchTermChange}
               />
             </div>
@@ -418,9 +418,12 @@ function Inventory(props) {
               {loadingCategories
                 ? null
                 : !categories.length && (
-                    <p>create categories to start adding products !</p>
+                    <p>
+                      créez des catégories pour commencer à ajouter des produits
+                      !
+                    </p>
                   )}
-              <Tooltip title="Add">
+              <Tooltip title="Ajouter">
                 <IconButton
                   color="secondary"
                   onClick={() => {
@@ -458,10 +461,10 @@ function Inventory(props) {
               <table className="defaultTable">
                 <thead>
                   <tr>
-                    <th>designation</th>
+                    <th>désignation</th>
                     <th>description</th>
-                    <th>price</th>
-                    <th>quantity</th>
+                    <th>prix</th>
+                    <th>quantité</th>
                     <th>actions</th>
                   </tr>
                 </thead>
@@ -478,15 +481,15 @@ function Inventory(props) {
                         }
                         key={product._id}
                       >
-                        <td data-label="Designation">{product.designation}</td>
+                        <td data-label="Désignation">{product.designation}</td>
                         <td data-label="Description">{product.description}</td>
-                        <td data-label="Price">
+                        <td data-label="Prix">
                           {product.price.toLocaleString() + " DT"}
                         </td>
-                        <td data-label="Qty">{product.qty}</td>
+                        <td data-label="Qté">{product.qty}</td>
                         <td data-label="Actions">
                           <div>
-                            <Tooltip title="Edit">
+                            <Tooltip title="Modifier">
                               <IconButton
                                 color="warning"
                                 onClick={() => {
@@ -497,7 +500,7 @@ function Inventory(props) {
                                 <ModeEditIcon sx={{ width: "20px" }} />
                               </IconButton>
                             </Tooltip>
-                            <Tooltip title="Delete">
+                            <Tooltip title="Supprimer">
                               <IconButton
                                 color="error"
                                 onClick={() => {

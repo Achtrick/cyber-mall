@@ -51,7 +51,7 @@ function Login(props) {
           <div className={styles.row}>
             <div className={styles.col}>
               <section className={styles.form}>
-                <h1>login</h1>
+                <h1>Se connecter</h1>
                 <form id="form" onSubmit={login}>
                   <input
                     className="defaultInput"
@@ -68,7 +68,7 @@ function Login(props) {
                       onChange={onChange}
                       type={passwordVisible ? "text" : "password"}
                       name="password"
-                      placeholder="password"
+                      placeholder="mot de passe"
                     />
 
                     <IconButton
@@ -92,25 +92,25 @@ function Login(props) {
                       background: "black",
                       color: "white",
                       height: "35px",
-                      width: "100px",
+                      width: "160px",
                     }}
                     variant="contained"
                   >
                     {loading ? (
                       <CircularProgress style={{ color: "white" }} size={20} />
                     ) : (
-                      "login"
+                      "se connecter"
                     )}
                   </Button>
                 </form>
                 <br />
                 <p>
-                  don&apos;t have an account ?{" "}
-                  <Link href={"/register"}>Register !</Link>
+                  Vous n&apos;avez pas de compte ?{" "}
+                  <Link href={"/register"}>S&apos;inscrire !</Link>
                 </p>
                 <p>
-                  forgot your password ?{" "}
-                  <Link href={"/forgot-password"}>Recover it !</Link>
+                  Mot de passe oublié ?{" "}
+                  <Link href={"/forgot-password"}>Récupérez-le !</Link>
                 </p>
               </section>
             </div>

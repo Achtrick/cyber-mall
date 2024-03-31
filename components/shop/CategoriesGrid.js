@@ -15,7 +15,7 @@ function CategoriesGrid({
   const isMobile = useMediaQuery("(max-width:800px)");
   return (
     <section className={styles.container}>
-      <h2>discover our categories</h2>
+      <h2>découvrir nos catégories</h2>
       <br />
       {categories?.filter((category) =>
         architecture.home.categoriesComponent.selectedCategoriesIds.includes(

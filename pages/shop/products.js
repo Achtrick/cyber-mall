@@ -46,7 +46,7 @@ function Products() {
       if (shop) {
         getShopInfo();
       } else {
-        enqueueSnackbar("invalid shop link", { variant: "error" });
+        enqueueSnackbar("Lien de shop invalide", { variant: "error" });
         router.push("/");
       }
     }
@@ -113,9 +113,7 @@ function Products() {
   const filter = async (filterOption, filterValue) => {
     const pathname = router.pathname;
     let query = router.query;
-
     query = { ...query, [filterOption]: filterValue };
-
     router.push({ pathname: pathname, query: query });
   };
 
@@ -133,7 +131,7 @@ function Products() {
         },
       },
     });
-    enqueueSnackbar(`added ${product.designation} to cart`, {
+    enqueueSnackbar(`${product.designation} ajouté au panier`, {
       variant: "info",
     });
   };
@@ -197,7 +195,7 @@ function Products() {
                         : null
                     }
                   >
-                    Results for: {searchTerm}{" "}
+                    Résultats Pour : {searchTerm}{" "}
                     <IconButton onClick={() => resetSearch()}>
                       <ResetIcon />
                     </IconButton>
@@ -214,7 +212,7 @@ function Products() {
                   <>
                     {" "}
                     <XAutoComplete
-                      placeholder="category"
+                      placeholder="Catégorie"
                       options={categories}
                       value={
                         categories.find((c) => c.name === category)?.name || ""
@@ -227,7 +225,7 @@ function Products() {
                     />
                     &nbsp;
                     <XAutoComplete
-                      placeholder="sort by price"
+                      placeholder="Trier Par Prix"
                       options={[
                         { name: "ascending", value: 1 },
                         { name: "descending", value: -1 },
@@ -285,7 +283,7 @@ function Products() {
                       </p>
                       <XButton
                         color={shopInfo.settings.primaryColor}
-                        text={"add to cart"}
+                        text={"ajouter au panier"}
                         action={() => {
                           addTocart(shop, product);
                         }}

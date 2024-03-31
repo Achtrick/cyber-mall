@@ -1,6 +1,6 @@
+import Link from "next/link";
 import React from "react";
 import styles from "../../styles/vitrine/Footer.module.scss";
-import Link from "next/link";
 import {
   FacebookIcon,
   InstagramIcon,
@@ -10,7 +10,7 @@ function Footer(props) {
   return (
     <section className={styles.container}>
       <div className={styles.col}>
-        <p>Socials</p>
+        <p>réseaux sociaux</p>
         <Link href={"https://facebook.com/"}>
           <FacebookIcon />
         </Link>
@@ -26,22 +26,22 @@ function Footer(props) {
       <div className={styles.col}>
         <p>Services</p>
         <p>
-          <Link href={"/#customize"}>Customize your shop</Link>
+          <Link href={"/#customize"}>Personnalisez votre shop</Link>
         </p>
         <p>
-          <Link href={"/#dashboard"}>AIO Dashboard</Link>
+          <Link href={"/#dashboard"}>Tableau de bord tout-en-un</Link>
         </p>
         <p>
-          <Link href={"/#receipts"}>Generate Invoices</Link>
+          <Link href={"/#receipts"}>Générer des factures</Link>
         </p>
       </div>
       <div className={styles.col}>
-        <p>Security</p>
+        <p>Sécurité</p>
         <p>
-          <Link href={"/#customize"}>Terms of service</Link>
+          <Link href={"/condition-of-use"}>Conditions d'utilisation</Link>
         </p>
         <p>
-          <Link href={"/#dashboard"}>Conditions</Link>
+          <Link href={"/privacy-policy"}>Politique de confidentialité</Link>
         </p>
       </div>
     </section>

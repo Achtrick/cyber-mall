@@ -117,23 +117,24 @@ function Theme(props) {
         </XModal>
         <section className={styles.container}>
           <div className={styles.controls} style={{ justifyContent: "center" }}>
-            <h1>Theme</h1>
+            <h1>Thème</h1>
           </div>
           <p>
-            - click on the{" "}
+            cliquer sur{" "}
             <IconButton disabled>
               <PaletteIcon color="warning" />
             </IconButton>{" "}
-            to change appearance
+            pour changer d'apparence
           </p>
           <p>
-            - when you finish click here to save your settings{" "}
+            lorsque vous avez terminé, cliquez ici pour enregistrer vos
+            paramètres{" "}
             {loading ? (
               <IconButton>
                 <CircularProgress color="black" size={"22px"} />
               </IconButton>
             ) : (
-              <Tooltip title="Save">
+              <Tooltip title="Sauvegarder">
                 <IconButton
                   disabled={colors === shopInfo.settings}
                   color="info"
@@ -161,10 +162,10 @@ function Theme(props) {
                     color: deduceColor(colors.headerColor),
                   }}
                 >
-                  this is what your navbar will look like
+                  voici à quoi ressemblera votre barre de navigation
                   <IconButton
                     onClick={() => {
-                      setTitle("change header color");
+                      setTitle("changer la couleur de l'en-tête");
                       setCurrentColor("headerColor");
                       setAction(AdminActions.UPDATE);
                     }}
@@ -174,7 +175,7 @@ function Theme(props) {
                 </div>
                 <br />
                 <div className={themeStyles.bodyPreview}>
-                  <p>- main color will look like this:</p>
+                  <p>la couleur principale ressemblera à ceci :</p>
                   <br />
                   <div className="row" style={{ justifyContent: "flex-start" }}>
                     <div
@@ -185,7 +186,7 @@ function Theme(props) {
                     />
                     <IconButton
                       onClick={() => {
-                        setTitle("change primary color");
+                        setTitle("changer la couleur primaire");
                         setCurrentColor("primaryColor");
                         setAction(AdminActions.UPDATE);
                       }}
@@ -194,7 +195,7 @@ function Theme(props) {
                     </IconButton>
                   </div>
                   <br />
-                  <p>- secondary color will look like this:</p>
+                  <p>la couleur secondaire ressemblera à ceci :</p>
                   <br />
                   <div className="row" style={{ justifyContent: "flex-start" }}>
                     <div
@@ -205,7 +206,7 @@ function Theme(props) {
                     />
                     <IconButton
                       onClick={() => {
-                        setTitle("change secondary color");
+                        setTitle("changer la couleur secondaire");
                         setCurrentColor("secondaryColor");
                         setAction(AdminActions.UPDATE);
                       }}
@@ -214,7 +215,7 @@ function Theme(props) {
                     </IconButton>
                   </div>
                   <br />
-                  <p>- controls will look like this:</p>
+                  <p>les contrôles ressembleront à ceci :</p>
                   <br />
                   <div className="row" style={{ justifyContent: "flex-start" }}>
                     <XButton text="action" color={colors.primaryColor} />
@@ -233,7 +234,7 @@ function Theme(props) {
                     />
                   </div>
                   <br />
-                  <p>- accents will look like this:</p>
+                  <p>les accents ressembleront à ceci</p>
                   <br />
                   <div className="row" style={{ justifyContent: "flex-start" }}>
                     <XHr color={colors.secondaryColor} />
@@ -249,10 +250,10 @@ function Theme(props) {
                     border: `1px solid ${deduceColor(colors.footerColor)}`,
                   }}
                 >
-                  this is what your footer will look like
+                  voici à quoi ressemblera votre pied de page
                   <IconButton
                     onClick={() => {
-                      setTitle("change footer color");
+                      setTitle("changer la couleur du pied de page");
                       setCurrentColor("footerColor");
                       setAction(AdminActions.UPDATE);
                     }}

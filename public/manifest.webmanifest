@@ -1,0 +1,26 @@
+{
+  "short_name": "Cyber-mall",
+  "name": "Cyber-mall",
+  "icons": [
+    {
+      "src": "cyber-mall-192.png",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "cyber-mall-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "cyber-mall-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/",
+  "theme_color": "#4fb9bd",
+  "background_color": "#808080",
+  "display": "standalone",
+  "scope": "/"
+}

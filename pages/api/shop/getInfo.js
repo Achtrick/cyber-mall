@@ -20,12 +20,12 @@ handler.post(async (req, res) => {
       .exec();
     if (shopInfo) {
       if (shopInfo.banned) {
-        res.status(400).json({ message: "shop is banned !" });
+        res.status(400).json({ message: "Cette shop est interdite !" });
       } else {
         res.status(200).json(shopInfo);
       }
     } else {
-      res.status(400).json({ message: "shop not found !" });
+      res.status(400).json({ message: "Shop introuvable !" });
     }
   } catch (err) {
     res.status(400).json(err);

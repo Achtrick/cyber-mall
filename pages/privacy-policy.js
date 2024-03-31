@@ -6,9 +6,9 @@ export default function Privacy(props) {
   return (
     <ConnectedGuard>
       <Layout>
-        <div style={{ padding: "20px" }}>
+        <div style={{ padding: "20px", fontSize: "13px" }}>
           <h1>Politique de confidentialité</h1>
-          <p>Dernière mise à jour : 25 janvier 2022</p>
+          <p>Dernière mise à jour : 31 mars 2024</p>
           <p>
             Cette politique de confidentialité décrit nos politiques et
             procédures sur le la collecte, l&apos;utilisation et la divulgation
@@ -53,7 +53,7 @@ export default function Privacy(props) {
               <p>
                 <strong>Société</strong> (appelée soit &quot;la Société&quot;,
                 &quot;Nous&quot;, &quot;Nous&quot; ou &quot;Notre&quot; dans le
-                présent Accord) fait référence à Transportini, Sousse 4000,
+                présent Accord) fait référence à cyber-mall, Sousse 4000,
                 Tunisie.
               </p>
             </li>
@@ -112,14 +112,14 @@ export default function Privacy(props) {
             </li>
             <li>
               <p>
-                <strong>Site Web</strong> fait référence à Transportini,
+                <strong>Site Web</strong> fait référence à cyber-mall,
                 accessible à partir de{" "}
                 <Link
-                  href="https://www.Transportini.tn"
+                  href="https://www.cyber-mall.tn"
                   rel="noreferrer"
                   target="_blank"
                 >
-                  https://www.Transportini.tn
+                  https://www.cyber-mall.tn
                 </Link>
               </p>
             </li>
@@ -515,8 +515,8 @@ export default function Privacy(props) {
             <li>
               <p>
                 Par email:{" "}
-                <Link href="mailto:contact@transportini.tn">
-                  contact@transportini.tn
+                <Link href="mailto:cyber-mall.tn@gmail.com">
+                  cyber-mall.tn@gmail.com
                 </Link>
               </p>
             </li>
@@ -524,18 +524,18 @@ export default function Privacy(props) {
               <p>
                 En visitant cette page sur notre site :{" "}
                 <Link
-                  href="https://Transportini.tn"
+                  href="https://cyber-mall.tn"
                   rel="noreferrer"
                   target="_blank"
                 >
-                  https://Transportini.tn
+                  https://cyber-mall.tn
                 </Link>
               </p>
             </li>
             <li>
               <p>
                 Par numéro de téléphone :{" "}
-                <Link href="tel:+216 55 040 536">+216 55 040 536</Link>
+                <Link href="tel:+216 47 010 114">+216 47 010 114</Link>
               </p>
             </li>
           </ul>

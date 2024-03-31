@@ -32,19 +32,19 @@ function Navbar() {
       >
         <div className={styles.drawer}>
           <Link href={"/"}>
-            <p>Home</p>
+            <p>Accueil</p>
           </Link>
           <Link href={"/pricing"}>
-            <p>Pricing</p>
+            <p>Tarifs</p>
           </Link>
           <Link href={"/contact"}>
             <p>Contact</p>
           </Link>
           <Link href={"/login"}>
-            <p>login</p>
+            <p>se connecter</p>
           </Link>
           <Link href={"/register"}>
-            <p>register</p>
+            <p>s'inscrire</p>
           </Link>
           <IconButton
             sx={{ padding: "20px" }}
@@ -80,10 +80,10 @@ function Navbar() {
         </Link>
         <ul>
           <li>
-            <Link href="/">Home</Link>
+            <Link href="/">Accueil</Link>
           </li>
           <li>
-            <Link href="/pricing">Pricing</Link>
+            <Link href="/pricing">Tarifs</Link>
           </li>
           <li>
             <Link href="/contact">Contact</Link>
@@ -91,11 +91,11 @@ function Navbar() {
         </ul>
         <div className={styles.buttons}>
           <Link href={"/login"}>
-            <Button className={styles.login}>login</Button>
+            <Button className={styles.login}>se&nbsp;connecter</Button>
           </Link>
           &nbsp;&nbsp;
           <Link href={"/register"}>
-            <Button className={styles.register}>register</Button>
+            <Button className={styles.register}>s'inscrire</Button>
           </Link>
         </div>
       </section>

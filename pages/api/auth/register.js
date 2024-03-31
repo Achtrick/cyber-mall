@@ -21,7 +21,7 @@ handler.post(async (req, res) => {
     if (userExists) {
       return res
         .status(403)
-        .json({ message: "il y a un utilisateur avec cette addresse email !" });
+        .json({ message: "Il y a un utilisateur avec cette addresse email !" });
     }
 
     const shopExists = await Shop.findOne({
@@ -29,7 +29,7 @@ handler.post(async (req, res) => {
     });
 
     if (shopExists) {
-      return res.status(403).json({ message: "il y a un shop avec ce nom !" });
+      return res.status(403).json({ message: "Il y a une shop avec ce nom !" });
     }
 
     const shop = await Shop.create({

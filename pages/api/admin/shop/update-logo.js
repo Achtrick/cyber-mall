@@ -1,7 +1,7 @@
 import nc from "next-connect";
-import connectDB from "../../../../utils/connectDB";
-import Shop from "../../../../models/shop.model";
 import auth from "../../../../middlewares/admin-auth";
+import Shop from "../../../../models/shop.model";
+import connectDB from "../../../../utils/connectDB";
 import { removeFile } from "../../../../utils/shared/removeFile";
 
 const handler = nc();
@@ -19,7 +19,7 @@ handler.post(auth, async (req, res) => {
 
     await shop.save();
 
-    res.status(200).json({ message: "updated logo" });
+    res.status(200).json({ message: "Logo Modifié" });
   } catch (err) {
     res.status(400).json(err);
   }

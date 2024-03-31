@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 import { SnackbarProvider } from "notistack";
 import PropTypes from "prop-types";
 import React, { useEffect } from "react";
+import CookieConsent from "react-cookie-consent";
 import { Provider } from "react-redux";
 import { store, wrapper } from "../redux/store";
 import "../styles/globals.scss";
@@ -31,6 +32,17 @@ function MyApp(props) {
 
   return (
     <>
+      <CookieConsent
+        location="bottom"
+        buttonText="Je Comprend"
+        cookieName="cyber-mall-cookies-consent"
+        style={{ background: "#000", borderTop: "1px solid #ccc" }}
+        buttonStyle={{ backgroundColor: "#fff", fontSize: "15px" }}
+        expires={150}
+      >
+        Ce site utilise des cookies pour améliorer l&apos;expérience
+        utilisateur.
+      </CookieConsent>
       <Provider store={store}>
         <CacheProvider value={emotionCache}>
           <ThemeProvider theme={lightTheme}>

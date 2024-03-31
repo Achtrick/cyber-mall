@@ -157,7 +157,7 @@ function ShopHeader({ shopInfo, ...props }) {
                   e.target.style.color = "black";
                 }}
               >
-                home
+                Accueil
               </div>
             </Link>
             <Link
