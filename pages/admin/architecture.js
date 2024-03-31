@@ -463,8 +463,8 @@ function Architecture(props) {
   const categoriesGridForm = (
     <form>
       <p>
-        index visible : (cela déterminera l'ordre d'affichage de cette section
-        sur votre page d'accueil)
+        index visible : (cela déterminera l&apos;ordre d&apos;affichage de cette
+        section sur votre page d&apos;accueil)
         <input
           type="number"
           min={0}
@@ -519,8 +519,8 @@ function Architecture(props) {
   const discountsSectionForm = (
     <form>
       <p>
-        index visible : (cela déterminera l'ordre d'affichage de cette section
-        sur votre page d'accueil)
+        index visible : (cela déterminera l&apos;ordre d&apos;affichage de cette
+        section sur votre page d&apos;accueil)
         <input
           type="number"
           min={0}
@@ -955,8 +955,8 @@ function Architecture(props) {
               <br />
               <p>
                 composant de galerie (cela affichera les images sélectionnées
-                avec chacune d'elles contenant un titre qui s&apos;affiche au
-                survol)
+                avec chacune d&apos;elles contenant un titre qui s&apos;affiche
+                au survol)
               </p>
               {loadingGallery ? (
                 <Skeleton

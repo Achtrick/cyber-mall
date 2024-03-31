@@ -124,7 +124,7 @@ function Theme(props) {
             <IconButton disabled>
               <PaletteIcon color="warning" />
             </IconButton>{" "}
-            pour changer d'apparence
+            pour changer d&apos;apparence
           </p>
           <p>
             lorsque vous avez terminé, cliquez ici pour enregistrer vos

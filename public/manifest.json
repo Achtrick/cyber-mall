@@ -1,24 +1,24 @@
 {
-  "short_name": "Cyber-mall",
-  "name": "Cyber-mall",
+  "short_name": "cybermall",
+  "name": "cybermall",
   "icons": [
     {
-      "src": "cyber-mall-192.png",
+      "src": "favicon.ico",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
     },
     {
-      "src": "cyber-mall-192.png",
+      "src": "cybermall-192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "cyber-mall-512.png",
+      "src": "cybermall-512.png",
       "type": "image/png",
       "sizes": "512x512"
     }
   ],
-  "start_url": ".",
+  "start_url": "/",
   "display": "standalone",
   "theme_color": "#000000",
   "background_color": "#ffffff"

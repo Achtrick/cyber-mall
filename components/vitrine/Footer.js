@@ -38,7 +38,7 @@ function Footer(props) {
       <div className={styles.col}>
         <p>Sécurité</p>
         <p>
-          <Link href={"/condition-of-use"}>Conditions d'utilisation</Link>
+          <Link href={"/condition-of-use"}>Conditions d&apos;utilisation</Link>
         </p>
         <p>
           <Link href={"/privacy-policy"}>Politique de confidentialité</Link>

@@ -11,7 +11,7 @@ function Control(props) {
             clients
           </p>
           <p data-aos="fade-up">
-            avec un tableau de bord clair, mobile et d'accès rapide !
+            avec un tableau de bord clair, mobile et d&apos;accès rapide !
           </p>
         </div>
         <div className="col">

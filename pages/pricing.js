@@ -40,7 +40,7 @@ function Pricing(props) {
                 <li>catégories : 5</li>
                 <li>produits : 10</li>
                 <li>images par produit : 1</li>
-                <li>diapositives d'accueil : 3</li>
+                <li>diapositives d&apos;accueil : 3</li>
                 <li>Génération de facture : restreinte</li>
               </ul>
               <hr />

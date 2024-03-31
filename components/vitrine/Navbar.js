@@ -44,7 +44,7 @@ function Navbar() {
             <p>se connecter</p>
           </Link>
           <Link href={"/register"}>
-            <p>s'inscrire</p>
+            <p>s&apos;inscrire</p>
           </Link>
           <IconButton
             sx={{ padding: "20px" }}
@@ -95,7 +95,7 @@ function Navbar() {
           </Link>
           &nbsp;&nbsp;
           <Link href={"/register"}>
-            <Button className={styles.register}>s'inscrire</Button>
+            <Button className={styles.register}>s&apos;inscrire</Button>
           </Link>
         </div>
       </section>

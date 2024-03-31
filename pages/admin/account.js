@@ -253,7 +253,7 @@ function Account(props) {
               <li>catégories: illimité</li>
               <li>produits: illimité</li>
               <li>images par produit: jusqu&apos;à 3</li>
-              <li>diapositives de la page d'accueil: illimité</li>
+              <li>diapositives de la page d&apos;accueil: illimité</li>
               <li>génération des factures: permise</li>
             </ul>
           </section>

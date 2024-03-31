@@ -50,8 +50,8 @@ function Contact(props) {
             Prenez contact avec nous{" "}
           </p>
           <p data-aos="fade-up" data-aos-offset="100">
-            nous serions ravis de répondre à vos questions et d'entendre vos
-            suggestions !
+            nous serions ravis de répondre à vos questions et d&apos;entendre
+            vos suggestions !
           </p>
           <hr />
           <br />
