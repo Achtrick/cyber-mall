@@ -4,9 +4,9 @@ import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import ConnectedGuard from "../../components/guards/connectedGuard";
 import Layout from "../../components/vitrine/Layout";
 import styles from "../../styles/vitrine/PasswordRecover.module.scss";
-import ConnectedGuard from "../../components/guards/connectedGuard";
 
 function ResetPassword(props) {
   const { userInfo } = useSelector((state) => state.auth);
@@ -98,6 +98,7 @@ function ResetPassword(props) {
                 </div>
                 &nbsp;
                 <Button
+                  disabled={formLoading}
                   type="submit"
                   form="form"
                   style={{

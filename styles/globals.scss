@@ -15,6 +15,7 @@ a {
 /* Scrollbar Track */
 ::-webkit-scrollbar {
   width: 4px;
+  height: 4px;
   border-radius: 5px !important;
 }
 
@@ -53,7 +54,10 @@ a {
 input[type="number"] {
   -moz-appearance: textfield; /* Firefox */
 }
-
+input::placeholder,
+textarea::placeholder {
+  text-transform: capitalize;
+}
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none; /* WebKit browsers like Chrome and Safari */
@@ -400,12 +404,12 @@ th {
       font-size: 24px;
     }
     p {
-      font-size: 15px;
+      font-size: 13px;
     }
     .row {
       margin-left: 0%;
       width: 100%;
-      @include flexLayout();
+      flex-direction: column;
       .col {
         img {
           width: 100%;

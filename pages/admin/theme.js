@@ -173,50 +173,7 @@ function Theme(props) {
                   </IconButton>
                 </div>
                 <br />
-                <div
-                  className={themeStyles.popupPreview}
-                  style={{
-                    backgroundColor: colors.headerColor,
-                    border: `1px solid ${deduceColor(colors.headerColor)}`,
-                    color: deduceColor(colors.headerColor),
-                  }}
-                >
-                  this is what popups will look like
-                </div>
-                <br />
                 <div className={themeStyles.bodyPreview}>
-                  <p>- tables color will look like this:</p>
-                  <br />
-                  <table>
-                    <thead
-                      style={{
-                        backgroundColor: colors.headerColor,
-                        color: deduceColor(colors.headerColor),
-                      }}
-                    >
-                      <tr>
-                        <th>attribute 1</th>
-                        <th>attribute 2</th>
-                        <th>attribute 3</th>
-                        <th>attribute 4</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>value 1</td>
-                        <td>value 2</td>
-                        <td>value 3</td>
-                        <td>value 4</td>
-                      </tr>
-                      <tr>
-                        <td>value 1</td>
-                        <td>value 2</td>
-                        <td>value 3</td>
-                        <td>value 4</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  <br />
                   <p>- main color will look like this:</p>
                   <br />
                   <div className="row" style={{ justifyContent: "flex-start" }}>

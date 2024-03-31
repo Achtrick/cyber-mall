@@ -5,12 +5,16 @@ function Control(props) {
     <section className="vitrine-block">
       <div className="row">
         <div className="col">
-          <p>all in one solution</p>
-          <p>take control over your inventory, orders and clients</p>
-          <p>with a clear, mobile friendly and fast access dashboard !</p>
+          <p data-aos="fade-up">all in one solution</p>
+          <p data-aos="fade-up">
+            take control over your inventory, orders and clients
+          </p>
+          <p data-aos="fade-up">
+            with a clear, mobile friendly and fast access dashboard !
+          </p>
         </div>
         <div className="col">
-          <img src="/images/dashboard.svg" />
+          <img data-aos="fade-in" src="/images/dashboard_animated.gif" />
         </div>
       </div>
     </section>

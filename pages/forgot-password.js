@@ -60,6 +60,7 @@ function ForgotPassword(props) {
               </div>
               &nbsp;
               <Button
+                disabled={loading}
                 type="submit"
                 form="form"
                 style={{
@@ -85,7 +86,7 @@ function ForgotPassword(props) {
           </div>
 
           <div className={styles.col40}>
-            <img alt="transportini-login" src="./images/login.svg" />
+            <img alt="transportini-login" src="./images/forgot_animated.gif" />
           </div>
         </div>
       </Layout>

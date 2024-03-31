@@ -38,6 +38,7 @@
     overflow-x: hidden;
     p {
       margin: 0px;
+      text-transform: capitalize;
     }
   }
   .controls {
@@ -84,5 +85,12 @@
   .xsmall {
     width: 90vw;
     max-height: 55vh;
+  }
+  .modal {
+    .content {
+      p {
+        font-size: 13px;
+      }
+    }
   }
 }

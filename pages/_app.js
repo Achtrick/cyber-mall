@@ -2,15 +2,17 @@ import { CacheProvider } from "@emotion/react";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
+import AOS from "aos";
+import "aos/dist/aos.css";
+import { useRouter } from "next/router";
 import { SnackbarProvider } from "notistack";
 import PropTypes from "prop-types";
-import React from "react";
+import React, { useEffect } from "react";
 import { Provider } from "react-redux";
 import { store, wrapper } from "../redux/store";
 import "../styles/globals.scss";
 import createEmotionCache from "../utils/config/cahce";
 import lightTheme from "../utils/theme/theme";
-import { useRouter } from "next/router";
 
 const clientSideEmotionCache = createEmotionCache();
 
@@ -18,6 +20,15 @@ function MyApp(props) {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
   const router = useRouter();
   const isSa = router.pathname.includes("super-admin");
+
+  useEffect(() => {
+    AOS.init({
+      once: true,
+      duration: 1500,
+      delay: 500,
+    });
+  }, []);
+
   return (
     <>
       <Provider store={store}>

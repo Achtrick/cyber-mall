@@ -1,15 +1,14 @@
 import { Button, CircularProgress, IconButton } from "@mui/material";
 import axios from "axios";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
 import ConnectedGuard from "../components/guards/connectedGuard";
 import Layout from "../components/vitrine/Layout";
 import styles from "../styles/vitrine/RegisterShop.module.scss";
 import { getError } from "../utils/shared/getError";
 import { VisibilityIcon, VisibilityOffIcon } from "../utils/theme/icons";
-import { useRouter } from "next/router";
 
 function Register(props) {
   const router = useRouter();
@@ -129,6 +128,7 @@ function Register(props) {
                 <br />
                 <br />
                 <Button
+                  disabled={loading}
                   type="submit"
                   form="form"
                   style={{
@@ -154,7 +154,7 @@ function Register(props) {
               </form>
             </section>
             <div className={styles.col}>
-              <img src="/images/register.svg" />
+              <img src="/images/register_animated.gif" />
             </div>
           </div>
         </section>

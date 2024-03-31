@@ -6,13 +6,15 @@ import styles from "../../styles/vitrine/BecomeMember.module.scss";
 function BecomeMember(props) {
   return (
     <section className={styles.container}>
-      <h1 className={styles.title}>
+      <h1 data-aos="fade-up" data-aos-offset="100" className={styles.title}>
         Become a <span className={styles.title__stress}>member</span>
         .<br />
         Create <span className={styles.title__stress}>your shop</span> now.
       </h1>
       <Link href={"/register"}>
         <Button
+          data-aos="fade-up"
+          data-aos-offset="100"
           style={{
             backgroundColor: "black",
             color: "white",

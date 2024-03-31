@@ -85,6 +85,7 @@ function Login(props) {
                   </div>
                   <br />
                   <Button
+                    disabled={loading}
                     type="submit"
                     form="form"
                     style={{
@@ -114,7 +115,7 @@ function Login(props) {
               </section>
             </div>
             <div className={styles.col}>
-              <img src="images/login.svg" />
+              <img src="images/login_animated.gif" />
             </div>
           </div>
         </section>

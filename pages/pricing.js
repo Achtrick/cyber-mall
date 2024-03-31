@@ -1,21 +1,29 @@
+import { Button } from "@mui/material";
+import Link from "next/link";
 import React from "react";
 import ConnectedGuard from "../components/guards/connectedGuard";
 import Layout from "../components/vitrine/Layout";
 import styles from "../styles/vitrine/Pricing.module.scss";
-import Link from "next/link";
-import { Button } from "@mui/material";
 
 function Pricing(props) {
   return (
     <ConnectedGuard>
       <Layout>
         <section className={styles.container}>
-          <p>Choose a plan to grow your business</p>
-          <p>we provide different flexible packs to suit your needs !</p>
+          <p data-aos="fade-up" data-aos-offset="100">
+            Choose a plan to grow your business
+          </p>
+          <p data-aos="fade-up" data-aos-offset="100">
+            we provide different flexible packs to suit your needs !
+          </p>
           <hr />
           <br />
           <div className={styles.packs}>
-            <div className={styles.pack}>
+            <div
+              data-aos="fade-right"
+              data-aos-offset="100"
+              className={styles.pack}
+            >
               <p>basic</p>
               <br />
               <p>
@@ -49,7 +57,11 @@ function Pricing(props) {
                 </Button>
               </Link>
             </div>
-            <div className={styles.pack}>
+            <div
+              data-aos="fade-left"
+              data-aos-offset="100"
+              className={styles.pack}
+            >
               <p>premium</p>
               <br />
               <p>access dashboard on the go and break from restrictions !</p>

@@ -696,7 +696,7 @@ function Architecture(props) {
         <section className={styles.container}>
           <h1>Configure your shop to your taste</h1>
           <p>
-            - when you finish click on the{" "}
+            when you finish click on the{" "}
             <IconButton disabled>
               <CheckCircleIcon />
             </IconButton>{" "}
@@ -773,7 +773,7 @@ function Architecture(props) {
               <br />
               <br />
               <h1>Home Page</h1>
-              <p>- slider (recommended resolution is 1500 x 600) </p>
+              <p>slider (recommended resolution is 1500 x 600) </p>
               {loadingSlider ? (
                 <Skeleton
                   variant="rectangular"
@@ -871,7 +871,7 @@ function Architecture(props) {
               <br />
               <br />
               <p>
-                - categories grid (select up to 6 categories){" "}
+                categories grid (select up to 6 categories){" "}
                 <IconButton
                   color="info"
                   onClick={() => {
@@ -905,8 +905,8 @@ function Architecture(props) {
               <br />
               <br />
               <p>
-                - discount section (this will show random discounted products
-                for fast purchase)
+                discount section (this will show random discounted products for
+                fast purchase)
                 <IconButton
                   color="info"
                   onClick={() => {
@@ -941,8 +941,8 @@ function Architecture(props) {
               <br />
               <br />
               <p>
-                - gallery component (this will show selected images with each
-                one containing a title that shows on hover)
+                gallery component (this will show selected images with each one
+                containing a title that shows on hover)
               </p>
               {loadingGallery ? (
                 <Skeleton
@@ -1038,7 +1038,7 @@ function Architecture(props) {
               <br />
               <h1>Shipping Info</h1>
               <p>
-                - fill your shipping fee
+                fill your shipping fee
                 <IconButton
                   color="info"
                   onClick={() => saveArchitecture("shippingFee")}
@@ -1066,7 +1066,7 @@ function Architecture(props) {
               <br />
               <h1>Contact Info</h1>
               <p>
-                - fill your contacts infos
+                fill your contacts infos
                 <IconButton
                   color="info"
                   onClick={() => saveArchitecture("contactComponent")}
@@ -1209,7 +1209,7 @@ function Architecture(props) {
               <br />
               <h1>About Info</h1>
               <p>
-                - who are you and what do you sell ?
+                who are you and what do you sell ?
                 <IconButton
                   color="info"
                   onClick={() => saveArchitecture("aboutComponent")}

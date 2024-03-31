@@ -46,14 +46,21 @@ function Contact(props) {
     <ConnectedGuard>
       <Layout>
         <section className={styles.container}>
-          <p>Get in touch with us </p>
-          <p>
+          <p data-aos="fade-up" data-aos-offset="100">
+            Get in touch with us{" "}
+          </p>
+          <p data-aos="fade-up" data-aos-offset="100">
             we would love to answer your questions and hear your suggestions !
           </p>
           <hr />
           <br />
           <form id="email" onSubmit={sendMail}>
-            <div className="labeledInput">
+            <div
+              data-aos="fade-up"
+              data-aos-offset="100"
+              data-aos-delay="500"
+              className="labeledInput"
+            >
               <label>email</label>
               <input
                 onChange={onChange}
@@ -64,7 +71,12 @@ function Contact(props) {
                 required
               />
             </div>
-            <div className="labeledInput">
+            <div
+              data-aos="fade-up"
+              data-aos-offset="100"
+              data-aos-delay="700"
+              className="labeledInput"
+            >
               <label>phone</label>
               <input
                 onChange={onChange}
@@ -75,7 +87,12 @@ function Contact(props) {
                 required
               />
             </div>
-            <div className="labeledInput">
+            <div
+              data-aos="fade-up"
+              data-aos-offset="100"
+              data-aos-delay="900"
+              className="labeledInput"
+            >
               <label>subject</label>
 
               <input
@@ -87,7 +104,12 @@ function Contact(props) {
                 required
               />
             </div>
-            <div className="labeledInput">
+            <div
+              data-aos="fade-up"
+              data-aos-offset="100"
+              data-aos-delay="1100"
+              className="labeledInput"
+            >
               <label>message</label>
               <textarea
                 style={{ height: "105px" }}
@@ -99,6 +121,8 @@ function Contact(props) {
               />
             </div>
             <Button
+              data-aos="fade-up"
+              data-aos-offset="100"
               type="submit"
               form="email"
               style={{
