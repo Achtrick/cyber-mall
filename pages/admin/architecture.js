@@ -768,7 +768,10 @@ function Architecture(props) {
                 </IconButton>{" "}
               </div>
               <br />
+              <br />
               <hr />
+              <br />
+              <br />
               <h1>Home Page</h1>
               <p>- slider (recommended resolution is 1500 x 600) </p>
               {loadingSlider ? (
@@ -785,7 +788,12 @@ function Architecture(props) {
                         <div
                           key={slide.image}
                           className={styles.imgPreview}
-                          style={{ width: "90%" }}
+                          style={{
+                            width: "90%",
+                            border: "1px solid #ccc",
+                            textAlign: "center",
+                            padding: "10px",
+                          }}
                         >
                           <span className={styles.closeIcon}>
                             <IconButton
@@ -857,7 +865,11 @@ function Architecture(props) {
                 </>
               )}
               <br />
+              <br />
               <hr />
+              <br />
+              <br />
+              <br />
               <p>
                 - categories grid (select up to 6 categories){" "}
                 <IconButton
@@ -888,7 +900,10 @@ function Architecture(props) {
                 <XGridSkeleton title={"Discover Our Catgegories"} />
               )}
               <br />
+              <br />
               <hr />
+              <br />
+              <br />
               <p>
                 - discount section (this will show random discounted products
                 for fast purchase)
@@ -921,7 +936,10 @@ function Architecture(props) {
                 <XGridSkeleton title={"Get More For Less !"} />
               )}
               <br />
+              <br />
               <hr />
+              <br />
+              <br />
               <p>
                 - gallery component (this will show selected images with each
                 one containing a title that shows on hover)
@@ -940,7 +958,13 @@ function Architecture(props) {
                         <div
                           key={block.image}
                           className={styles.imgPreview}
-                          style={{ width: "90%" }}
+                          style={{
+                            width: "90%",
+                            border: "1px solid #ccc",
+                            padding: "20px",
+                            textAlign: "center",
+                            textTransform: "capitalize",
+                          }}
                         >
                           <span className={styles.closeIcon}>
                             <IconButton
@@ -1008,7 +1032,10 @@ function Architecture(props) {
               )}
 
               <br />
+              <br />
               <hr />
+              <br />
+              <br />
               <h1>Shipping Info</h1>
               <p>
                 - fill your shipping fee
@@ -1033,7 +1060,10 @@ function Architecture(props) {
                 style={{ width: "300px" }}
               />
               <br />
+              <br />
               <hr />
+              <br />
+              <br />
               <h1>Contact Info</h1>
               <p>
                 - fill your contacts infos
@@ -1173,7 +1203,10 @@ function Architecture(props) {
                 />
               </div>
               <br />
+              <br />
               <hr />
+              <br />
+              <br />
               <h1>About Info</h1>
               <p>
                 - who are you and what do you sell ?

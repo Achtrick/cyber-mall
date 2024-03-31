@@ -10,7 +10,7 @@ function Control(props) {
           <p>with a clear, mobile friendly and fast access dashboard !</p>
         </div>
         <div className="col">
-          <img style={{ width: "60%" }} src="/images/dashboard.svg" />
+          <img src="/images/dashboard.svg" />
         </div>
       </div>
     </section>

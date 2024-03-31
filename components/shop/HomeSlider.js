@@ -18,7 +18,7 @@ function HomeSlider({ slides, shopName, ...props }) {
             return (
               <SwiperSlide key={index}>
                 {slide.link && slide.link !== "" ? (
-                  <Link href={slide.link} rel="noreferrer" target="_blank">
+                  <a href={slide.link} rel="noreferrer" target="_blank">
                     <img
                       src={
                         slide.image !== "image-placeholder.jpg"
@@ -30,7 +30,7 @@ function HomeSlider({ slides, shopName, ...props }) {
                       }}
                       alt={slide.link}
                     />
-                  </Link>
+                  </a>
                 ) : slide.category && slide.category !== "" ? (
                   <Link
                     href={`/shop/products?shop=${shopName}&category=${slide.category}`}

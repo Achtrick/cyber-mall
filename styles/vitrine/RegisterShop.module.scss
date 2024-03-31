@@ -42,13 +42,25 @@
 .passwordVisibilityIcon {
   margin-left: -45px;
 }
-@media (max-width: 900px) {
+@media (max-width: 800px) {
   .container {
     h1 {
       font-size: 1.8rem;
     }
     .form {
       width: 100%;
+    }
+    .row {
+      width: 100%;
+      flex-direction: column;
+    }
+    .col {
+      width: 100%;
+    }
+    img {
+      opacity: 0.3;
+      margin-top: -450px;
+      z-index: -1;
     }
   }
 }

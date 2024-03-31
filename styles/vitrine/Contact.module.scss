@@ -1,10 +1,11 @@
 .container {
   width: 100%;
-  padding: 30px;
+  padding: 20px;
   text-align: center;
   p:nth-of-type(1) {
     font-weight: 700;
     font-size: 35px;
+    margin: 0px;
     color: black;
     text-transform: capitalize;
   }
@@ -16,5 +17,23 @@
   form {
     margin-left: 25%;
     width: 50%;
+    margin-bottom: 50px;
+  }
+}
+
+@media (max-width: 800px) {
+  .container {
+    p:nth-of-type(1) {
+      font-size: 30px;
+    }
+    p {
+      margin-bottom: 40px;
+      text-transform: capitalize;
+      font-size: 15px;
+    }
+    form {
+      margin-left: 0%;
+      width: 100%;
+    }
   }
 }

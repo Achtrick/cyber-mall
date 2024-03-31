@@ -291,6 +291,9 @@ th {
   border-radius: 50%;
   box-shadow: 0px 0px 5px #ccc;
 }
+.swiper-pagination {
+  margin-top: -20px !important;
+}
 .swiper-pagination-bullet-active {
   background-color: black !important;
 }
@@ -298,6 +301,9 @@ th {
   padding: 20px;
   margin: 20px 0px;
   text-align: center;
+  img {
+    width: 30%;
+  }
   p:nth-of-type(1) {
     text-transform: capitalize;
     color: rgb(26, 26, 26);
@@ -317,6 +323,9 @@ th {
     width: 80%;
     @include flexLayout();
     .col {
+      img {
+        width: 60%;
+      }
       width: 50%;
       @include flexLayout(center, center, column);
     }
@@ -379,5 +388,31 @@ th {
     border: 1px solid #ccc;
     padding: 0px 5px;
     @include flexLayout(center, space-between);
+  }
+  .vitrine-block {
+    padding: 20px;
+    margin: 20px 0px;
+    text-align: center;
+    img {
+      width: 80%;
+    }
+    p:nth-of-type(1) {
+      font-size: 24px;
+    }
+    p {
+      font-size: 15px;
+    }
+    .row {
+      margin-left: 0%;
+      width: 100%;
+      @include flexLayout();
+      .col {
+        img {
+          width: 100%;
+        }
+        width: 100%;
+        @include flexLayout(center, center, column);
+      }
+    }
   }
 }

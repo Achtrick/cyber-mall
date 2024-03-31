@@ -41,12 +41,16 @@ function Navbar() {
             <p>Contact</p>
           </Link>
           <Link href={"/login"}>
-            <p className={styles.login}>login</p>
+            <p>login</p>
           </Link>
           <Link href={"/register"}>
-            <p className={styles.register}>register</p>
+            <p>register</p>
           </Link>
-          <IconButton onClick={toggleMenu}>
+          <IconButton
+            sx={{ padding: "20px" }}
+            color="white"
+            onClick={toggleMenu}
+          >
             <CloseIcon />
           </IconButton>
         </div>

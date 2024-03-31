@@ -36,9 +36,10 @@ export const getThumbnail = async (file) =>
 
 export const compressImage = async (file) => {
   const options = {
-    maxSizeMB: 0.25,
-    maxWidthOrHeight: 2000,
+    maxSizeMB: 0.5,
+    maxWidthOrHeight: 1920,
     useWebWorker: true,
+    fileType: "image/webp",
   };
   return await imageCompression(file, options);
 };

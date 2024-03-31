@@ -5,7 +5,7 @@ function Receipts(props) {
     <section className="vitrine-block">
       <div className="row">
         <div className="col">
-          <img style={{ width: "60%" }} src="/images/receipts.svg" />
+          <img src="/images/receipts.svg" />
         </div>
         <div className="col">
           <p>generate receipts</p>

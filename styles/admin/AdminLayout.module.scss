@@ -41,7 +41,9 @@
     align-items: center;
     justify-content: flex-start;
     p {
-      margin-left: 5px;
+      text-transform: capitalize;
+      margin-left: 10px;
+      font-weight: 500;
     }
   }
 }

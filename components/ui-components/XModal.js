@@ -33,7 +33,7 @@ function XModal({
         >
           <div className={styles.header}>
             <p>{title}</p>
-            <IconButton color="error" onClick={onClose}>
+            <IconButton color="white" onClick={onClose}>
               <CloseIcon></CloseIcon>
             </IconButton>
           </div>
@@ -48,7 +48,8 @@ function XModal({
                 ) : (
                   <>
                     <Button
-                      color="white"
+                      color="black"
+                      style={{ color: "white" }}
                       variant="contained"
                       type={confirmAction ? "" : "submit"}
                       onClick={confirmAction ? confirmAction : null}
@@ -58,7 +59,8 @@ function XModal({
                     </Button>
                     &nbsp;
                     <Button
-                      color="white"
+                      color="black"
+                      style={{ color: "white" }}
                       variant="contained"
                       onClick={cancelAction}
                     >

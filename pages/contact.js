@@ -1,12 +1,11 @@
+import { Button, CircularProgress } from "@mui/material";
+import axios from "axios";
+import { useSnackbar } from "notistack";
 import React, { useState } from "react";
 import ConnectedGuard from "../components/guards/connectedGuard";
 import Layout from "../components/vitrine/Layout";
 import styles from "../styles/vitrine/Contact.module.scss";
-import Link from "next/link";
-import { Button, CircularProgress } from "@mui/material";
 import { getError } from "../utils/shared/getError";
-import { useSnackbar } from "notistack";
-import axios from "axios";
 
 function Contact(props) {
   const { enqueueSnackbar } = useSnackbar();

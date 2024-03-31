@@ -45,8 +45,9 @@
     background-position: 200% 0;
   }
 }
-@media (max-width: 900px) {
-  .free {
-    padding: 100px 10px;
+@media (max-width: 800px) {
+  .container {
+    padding: 10px;
+    margin-bottom: 50px;
   }
 }

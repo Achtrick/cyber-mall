@@ -127,6 +127,7 @@ function Register(props) {
                   placeholder="shop name"
                 />
                 <br />
+                <br />
                 <Button
                   type="submit"
                   form="form"
@@ -149,6 +150,7 @@ function Register(props) {
                 <p>
                   already have an account ? <Link href={"/login"}>Login !</Link>
                 </p>
+                <br />
               </form>
             </section>
             <div className={styles.col}>

@@ -17,12 +17,15 @@
   }
   p:nth-of-type(1) {
     font-size: large;
-    font-weight: 400;
+    font-weight: 900;
   }
 }
-@media (max-width: 900px) {
+@media (max-width: 800px) {
   .container {
     padding: 20px;
     flex-direction: column;
+  }
+  .col {
+    width: 100%;
   }
 }

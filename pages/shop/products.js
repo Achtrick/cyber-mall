@@ -1,4 +1,9 @@
-import { CircularProgress, IconButton, Skeleton } from "@mui/material";
+import {
+  CircularProgress,
+  IconButton,
+  Skeleton,
+  useMediaQuery,
+} from "@mui/material";
 import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -22,6 +27,8 @@ function Products() {
   const dispatch = useDispatch();
 
   const { enqueueSnackbar } = useSnackbar();
+
+  const isMobile = useMediaQuery("(max-width:800px)");
 
   const [loading, setLoading] = useState(true);
   const [loadingCategories, setLoadingCategories] = useState(true);
@@ -154,8 +161,26 @@ function Products() {
       ) : (
         <ShopLayout shopInfo={shopInfo}>
           <section className={styles.container}>
-            <div className={styles.header}>
-              <div className="row">
+            <div
+              className={styles.header}
+              style={
+                isMobile
+                  ? {
+                      flexDirection: "column-reverse",
+                    }
+                  : null
+              }
+            >
+              <div
+                className="row"
+                style={
+                  isMobile
+                    ? {
+                        flexDirection: "column-reverse",
+                      }
+                    : null
+                }
+              >
                 <XPagination
                   page={page}
                   count={count}
@@ -163,7 +188,15 @@ function Products() {
                 />
                 &nbsp;
                 {searchTerm?.length ? (
-                  <p>
+                  <p
+                    style={
+                      isMobile
+                        ? {
+                            marginBottom: "-15px",
+                          }
+                        : null
+                    }
+                  >
                     Results for: {searchTerm}{" "}
                     <IconButton onClick={() => resetSearch()}>
                       <ResetIcon />

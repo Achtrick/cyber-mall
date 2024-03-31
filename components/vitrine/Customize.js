@@ -9,7 +9,7 @@ function Customize(props) {
         more
       </p>
       <p>with a flexible layout and user friendly interface !</p>
-      <img style={{ width: "30%" }} src="/images/customize.svg" />
+      <img src="/images/customize.svg" />
     </section>
   );
 }

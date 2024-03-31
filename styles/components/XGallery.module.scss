@@ -85,3 +85,26 @@
     object-fit: cover;
   }
 }
+
+@media (max-width: 800px) {
+  .container {
+    .square .overlay {
+      opacity: 0.8;
+      align-items: flex-end;
+      .text {
+        opacity: 1;
+        font-size: clamp(15px, 10vw, 25px);
+        color: white;
+      }
+    }
+    .rectangle .overlay {
+      opacity: 0.8;
+      align-items: flex-end;
+      .text {
+        opacity: 1;
+        font-size: clamp(15px, 10vw, 25px);
+        color: white;
+      }
+    }
+  }
+}
