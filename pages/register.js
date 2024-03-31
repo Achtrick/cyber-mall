@@ -59,7 +59,11 @@ function Register(props) {
 
   return (
     <ConnectedGuard>
-      <Layout>
+      <Layout
+        title={"S'inscrire"}
+        description={"Inscrivez-vous et bonne vente"}
+        image={"/images/register_animated.gif"}
+      >
         <section className={styles.container}>
           <div className={styles.row}>
             <section className={styles.col}>

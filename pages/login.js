@@ -46,7 +46,11 @@ function Login(props) {
 
   return (
     <ConnectedGuard>
-      <Layout>
+      <Layout
+        title={"Se connecter"}
+        description={"Connecter-vous et bonne vente"}
+        image={"/images/login_animated.gif"}
+      >
         <section className={styles.container}>
           <div className={styles.row}>
             <div className={styles.col}>

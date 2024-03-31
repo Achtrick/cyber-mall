@@ -43,7 +43,13 @@ function ForgotPassword(props) {
 
   return (
     <ConnectedGuard>
-      <Layout>
+      <Layout
+        title={"Mot de passe oublié"}
+        description={
+          "Vous avez oubliée votre mot de passe, ce n'est pas un problème, ont est là !."
+        }
+        image={"/images/forgot_animated.gif"}
+      >
         <div className={styles.row}>
           <div className={styles.container}>
             <form id="form" onSubmit={recoverPassword} className={styles.form}>

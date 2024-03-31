@@ -16,7 +16,6 @@ import {
   Subscription,
   TravelExploreIcon,
 } from "../../utils/theme/icons";
-import PWA from "../PWA";
 
 function AdminLayout(props) {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -35,10 +34,6 @@ function AdminLayout(props) {
 
   return (
     <>
-      <PWA
-        appName={userInfo?.shop.name}
-        accentColor={userInfo?.shop.settings.secondaryColor}
-      />
       <section className={styles.navbar}>
         <IconButton color="white" onClick={toggleDrawer}>
           {drawerOpen ? <CloseIcon /> : <MenuIcon />}

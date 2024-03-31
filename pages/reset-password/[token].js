@@ -66,7 +66,11 @@ function ResetPassword(props) {
 
   return (
     <ConnectedGuard>
-      <Layout>
+      <Layout
+        title={"Chnager le mot de passe"}
+        description={"Entrez votre nouveau mot de passe"}
+        image={"/images/forgot_animated.gif"}
+      >
         {loading ? (
           <div className="spinner">
             <CircularProgress />
@@ -119,7 +123,10 @@ function ResetPassword(props) {
             </div>
 
             <div className={styles.col40}>
-              <img alt="cyber-mall-login" src={"/" + "./images/login.svg"} />
+              <img
+                alt="cyber-mall-login"
+                src={"/" + "./images/forgot_animated.gif"}
+              />
             </div>
           </div>
         )}

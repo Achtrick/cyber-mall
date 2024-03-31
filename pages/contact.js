@@ -44,7 +44,11 @@ function Contact(props) {
 
   return (
     <ConnectedGuard>
-      <Layout>
+      <Layout
+        title={"Contact"}
+        description={"Nous contacter pour répondre à vos questions."}
+        image={"/images/contact_animated.gif"}
+      >
         <section className={styles.container}>
           <p data-aos="fade-up" data-aos-offset="100">
             Prenez contact avec nous{" "}

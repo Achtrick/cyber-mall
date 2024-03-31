@@ -5,7 +5,13 @@ import Layout from "../components/vitrine/Layout";
 export default function Privacy(props) {
   return (
     <ConnectedGuard>
-      <Layout>
+      <Layout
+        title={"Condition d'utilisation"}
+        description={
+          "Protéger leurs comptes contre le bannissement de nos mentors"
+        }
+        image={"/images/login_animated.gif"}
+      >
         <div style={{ padding: "20px", fontSize: "13px" }}>
           <h1>Condition d&apos;utilisation</h1>
           <p>Dernière mise à jour : 31 mars 2024</p>

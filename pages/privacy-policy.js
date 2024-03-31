@@ -5,7 +5,12 @@ import Layout from "../components/vitrine/Layout";
 export default function Privacy(props) {
   return (
     <ConnectedGuard>
-      <Layout>
+      <Layout
+        title={"Politique de confidentialité"}
+        description={
+          "l'utilisation et la divulgation de vos informations lorsque vous utilisez le service et vous informe de vos droits à la vie privée et de la manière dont la loi Vous protège."
+        }
+      >
         <div style={{ padding: "20px", fontSize: "13px" }}>
           <h1>Politique de confidentialité</h1>
           <p>Dernière mise à jour : 31 mars 2024</p>

@@ -8,7 +8,13 @@ import styles from "../styles/vitrine/Pricing.module.scss";
 function Pricing(props) {
   return (
     <ConnectedGuard>
-      <Layout>
+      <Layout
+        title={"Tarifs et abonnements"}
+        description={
+          "nous proposons différents packs flexibles pour répondre à vos besoins !"
+        }
+        image={"/images/pricing_animated.gif"}
+      >
         <section className={styles.container}>
           <p data-aos="fade-up" data-aos-offset="100">
             Choisissez un plan pour développer votre entreprise

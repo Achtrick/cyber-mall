@@ -11,7 +11,10 @@ import Receipts from "../components/vitrine/Receipts";
 export default function Home() {
   return (
     <ConnectedGuard>
-      <Layout>
+      <Layout
+        description={"Rendre le commerce meilleur pour tous"}
+        image={"/logo-512.png"}
+      >
         <HomeHedaer />
         <br />
         <XHr width="20%" marginLeft="40%" color={"var(--second-color)"} />
