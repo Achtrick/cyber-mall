@@ -53,8 +53,15 @@ function ForgotPassword(props) {
         <div className={styles.row}>
           <div className={styles.container}>
             <form id="form" onSubmit={recoverPassword} className={styles.form}>
-              <h1>récupérer votre mot de passe</h1>
-              <div className="labeledInput">
+              <h1 data-aos="fade-up" data-aos-offset="100" data-aos-delay="100">
+                récupérer votre mot de passe
+              </h1>
+              <div
+                data-aos="fade-up"
+                data-aos-offset="100"
+                data-aos-delay="200"
+                className="labeledInput"
+              >
                 <label>email</label>
                 <input
                   required
@@ -66,6 +73,9 @@ function ForgotPassword(props) {
               </div>
               &nbsp;
               <Button
+                data-aos="fade-up"
+                data-aos-offset="100"
+                data-aos-delay="300"
                 disabled={loading}
                 type="submit"
                 form="form"
@@ -84,15 +94,28 @@ function ForgotPassword(props) {
                 )}
               </Button>
             </form>
-            <p>un lien de récupération vas être envoyer à votre email.</p>
-            <p style={{ color: "red" }}>
+            <p data-aos="fade-up" data-aos-offset="100" data-aos-delay="400">
+              un lien de récupération vas être envoyer à votre email.
+            </p>
+            <p
+              data-aos="fade-up"
+              data-aos-offset="100"
+              data-aos-delay="500"
+              style={{ color: "red" }}
+            >
               S&apos;il vous plaît vérifiez votre dossier spam si vous ne
               recevez pas le lien dans votre Inbox pour quelques raisons !
             </p>
           </div>
 
           <div className={styles.col40}>
-            <img alt="transportini-login" src="./images/forgot_animated.gif" />
+            <img
+              data-aos="fade-up"
+              data-aos-offset="100"
+              data-aos-delay="100"
+              alt="transportini-login"
+              src="./images/forgot_animated.gif"
+            />
           </div>
         </div>
       </Layout>

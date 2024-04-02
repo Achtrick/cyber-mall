@@ -8,7 +8,7 @@ function Layout({ children, title, description, tags, image }) {
   return (
     <>
       <Head>
-        <title>{title ? `${title} - Cyber-Mall` : "Cyber-Mall"}</title>
+        <title>{title ? `${title} | Cyber-Mall` : "Cyber-Mall"}</title>
         {description && <meta name="description" content={description}></meta>}
         {tags && (
           <meta

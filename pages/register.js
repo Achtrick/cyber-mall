@@ -68,7 +68,13 @@ function Register(props) {
           <div className={styles.row}>
             <section className={styles.col}>
               <form id="form" onSubmit={register}>
-                <h1>créez votre shop</h1>
+                <h1
+                  data-aos="fade-up"
+                  data-aos-offset="100"
+                  data-aos-delay="100"
+                >
+                  créez votre shop
+                </h1>
                 <input
                   className="defaultInput"
                   required
@@ -76,6 +82,9 @@ function Register(props) {
                   type="text"
                   name="firstName"
                   placeholder="Prénom"
+                  data-aos="fade-up"
+                  data-aos-offset="100"
+                  data-aos-delay="200"
                 />
                 <input
                   className="defaultInput"
@@ -84,6 +93,9 @@ function Register(props) {
                   type="text"
                   name="lastName"
                   placeholder="Nom"
+                  data-aos="fade-up"
+                  data-aos-offset="100"
+                  data-aos-delay="300"
                 />
                 <input
                   className="defaultInput"
@@ -92,8 +104,16 @@ function Register(props) {
                   type="email"
                   name="email"
                   placeholder="email"
+                  data-aos="fade-up"
+                  data-aos-offset="100"
+                  data-aos-delay="400"
                 />
-                <div className={styles.passwordContainer}>
+                <div
+                  data-aos="fade-up"
+                  data-aos-offset="100"
+                  data-aos-delay="500"
+                  className={styles.passwordContainer}
+                >
                   <input
                     className="defaultInput"
                     required
@@ -122,6 +142,9 @@ function Register(props) {
                   type={passwordVisible ? "text" : "password"}
                   name="confirmPassword"
                   placeholder="confirmer mot de passe"
+                  data-aos="fade-up"
+                  data-aos-offset="100"
+                  data-aos-delay="600"
                 />
                 <input
                   className="defaultInput"
@@ -130,30 +153,44 @@ function Register(props) {
                   type="text"
                   name="shopName"
                   placeholder="Nom de shop"
+                  data-aos="fade-up"
+                  data-aos-offset="100"
+                  data-aos-delay="700"
                 />
                 <br />
                 <br />
-                <Button
-                  disabled={loading}
-                  type="submit"
-                  form="form"
-                  style={{
-                    background: "black",
-                    color: "white",
-                    height: "35px",
-                    width: "100px",
-                  }}
-                  variant="contained"
+                <div
+                  data-aos="fade-up"
+                  data-aos-offset="100"
+                  data-aos-delay="800"
                 >
-                  {loading ? (
-                    <CircularProgress style={{ color: "white" }} size={20} />
-                  ) : (
-                    "S'inscrire"
-                  )}
-                </Button>
+                  <Button
+                    disabled={loading}
+                    type="submit"
+                    form="form"
+                    style={{
+                      background: "black",
+                      color: "white",
+                      height: "35px",
+                      width: "100px",
+                    }}
+                    variant="contained"
+                  >
+                    {loading ? (
+                      <CircularProgress style={{ color: "white" }} size={20} />
+                    ) : (
+                      "S'inscrire"
+                    )}
+                  </Button>
+                </div>
+
                 <br />
                 <br />
-                <p>
+                <p
+                  data-aos="fade-up"
+                  data-aos-offset="100"
+                  data-aos-delay="900"
+                >
                   Vous avez déjà un compte ?{" "}
                   <Link href={"/login"}>Se connecter !</Link>
                 </p>
@@ -161,7 +198,12 @@ function Register(props) {
               </form>
             </section>
             <div className={styles.col}>
-              <img src="/images/register_animated.gif" />
+              <img
+                data-aos="fade-up"
+                data-aos-offset="100"
+                data-aos-delay="100"
+                src="/images/register_animated.gif"
+              />
             </div>
           </div>
         </section>

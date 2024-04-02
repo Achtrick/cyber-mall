@@ -127,7 +127,16 @@ function Product(props) {
       {loading ? (
         <LoadingScreen />
       ) : (
-        <ShopLayout shopInfo={shopInfo}>
+        <ShopLayout
+          title={product?.designation}
+          description={product?.description}
+          image={
+            product?.image
+              ? `/api/images/${product?.image.split("/").pop()}`
+              : "/logo-512.png"
+          }
+          shopInfo={shopInfo}
+        >
           <div className={styles.container}>
             {loadingProduct ? (
               <Skeleton

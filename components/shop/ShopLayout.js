@@ -16,7 +16,13 @@ function ShopLayout({
     <>
       <Head>
         <title>
-          {title ? `${title} - ${shopInfo.name}` : `${shopInfo.name}`}
+          {title
+            ? `${title} | ${
+                shopInfo.name.charAt(0).toUpperCase() + shopInfo.name.slice(1)
+              }`
+            : `${
+                shopInfo.name.charAt(0).toUpperCase() + shopInfo.name.slice(1)
+              }`}
         </title>
         {description && <meta name="description" content={description}></meta>}
         {tags && (

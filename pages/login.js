@@ -55,7 +55,13 @@ function Login(props) {
           <div className={styles.row}>
             <div className={styles.col}>
               <section className={styles.form}>
-                <h1>Se connecter</h1>
+                <h1
+                  data-aos="fade-up"
+                  data-aos-offset="100"
+                  data-aos-delay="100"
+                >
+                  Se connecter
+                </h1>
                 <form id="form" onSubmit={login}>
                   <input
                     className="defaultInput"
@@ -64,8 +70,16 @@ function Login(props) {
                     type="email"
                     name="email"
                     placeholder="email"
+                    data-aos="fade-up"
+                    data-aos-offset="100"
+                    data-aos-delay="300"
                   />
-                  <div className={styles.passwordContainer}>
+                  <div
+                    data-aos="fade-up"
+                    data-aos-offset="100"
+                    data-aos-delay="500"
+                    className={styles.passwordContainer}
+                  >
                     <input
                       className="defaultInput"
                       required
@@ -88,38 +102,60 @@ function Login(props) {
                     </IconButton>
                   </div>
                   <br />
-                  <Button
-                    disabled={loading}
-                    type="submit"
-                    form="form"
-                    style={{
-                      background: "black",
-                      color: "white",
-                      height: "35px",
-                      width: "160px",
-                    }}
-                    variant="contained"
+                  <div
+                    data-aos="fade-up"
+                    data-aos-offset="100"
+                    data-aos-delay="700"
                   >
-                    {loading ? (
-                      <CircularProgress style={{ color: "white" }} size={20} />
-                    ) : (
-                      "se connecter"
-                    )}
-                  </Button>
+                    <Button
+                      disabled={loading}
+                      type="submit"
+                      form="form"
+                      style={{
+                        background: "black",
+                        color: "white",
+                        height: "35px",
+                        width: "160px",
+                      }}
+                      variant="contained"
+                    >
+                      {loading ? (
+                        <CircularProgress
+                          style={{ color: "white" }}
+                          size={20}
+                        />
+                      ) : (
+                        "se connecter"
+                      )}
+                    </Button>
+                  </div>
                 </form>
                 <br />
-                <p>
+                <p
+                  data-aos="fade-up"
+                  data-aos-offset="100"
+                  data-aos-delay="900"
+                >
                   Vous n&apos;avez pas de compte ?{" "}
                   <Link href={"/register"}>S&apos;inscrire !</Link>
                 </p>
-                <p>
+                <p
+                  data-aos="fade-up"
+                  data-aos-offset="100"
+                  data-aos-delay="1100"
+                >
                   Mot de passe oublié ?{" "}
                   <Link href={"/forgot-password"}>Récupérez-le !</Link>
                 </p>
               </section>
             </div>
             <div className={styles.col}>
-              <img src="images/login_animated.gif" />
+              <img
+                data-aos="fade-up"
+                data-aos-offset="100"
+                data-aos-delay="500"
+                src="images/login_animated.gif"
+              />
             </div>
           </div>
         </section>

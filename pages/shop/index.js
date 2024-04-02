@@ -152,7 +152,13 @@ function Shop(props) {
       {loading ? (
         <LoadingScreen />
       ) : (
-        <ShopLayout shopInfo={shopInfo}>
+        <ShopLayout
+          description={
+            "Laissez-nous tenir votre café pendant que vous faites vos shopping !"
+          }
+          image={"/logo-512.png"}
+          shopInfo={shopInfo}
+        >
           <section>
             <div style={{ marginBottom: "20px", width: "100%" }}>
               {loadingSlider ? (

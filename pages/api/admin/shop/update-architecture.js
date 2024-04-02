@@ -75,7 +75,7 @@ handler.post(auth, async (req, res) => {
     }
     await shop.save();
 
-    res.status(200).json({ message: "Architecture Modifiée" });
+    res.status(200).json({ message: "Architecture Modifiée", shopInfo: shop });
   } catch (err) {
     console.log(err);
     res.status(400).json(err);

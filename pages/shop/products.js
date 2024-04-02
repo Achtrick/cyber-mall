@@ -157,7 +157,20 @@ function Products() {
       {loading ? (
         <LoadingScreen />
       ) : (
-        <ShopLayout shopInfo={shopInfo}>
+        <ShopLayout
+          title={
+            searchTerm?.length
+              ? `Résultats de recherche pour "${searchTerm}"`
+              : category?.length
+              ? category[0].toUpperCase() + category.substring(1)
+              : "Nos produits"
+          }
+          description={
+            "Laissez-nous tenir votre café pendant que vous faites vos shopping !"
+          }
+          image={"/logo-512.png"}
+          shopInfo={shopInfo}
+        >
           <section className={styles.container}>
             <div
               className={styles.header}

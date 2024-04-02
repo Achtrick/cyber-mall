@@ -125,25 +125,25 @@ function Contact(props) {
                 required
               />
             </div>
-            <Button
-              data-aos="fade-up"
-              data-aos-offset="100"
-              type="submit"
-              form="email"
-              style={{
-                backgroundColor: "black",
-                color: "white",
-                textTransform: "capitalize",
-                width: "100px",
-              }}
-              variant="contained"
-            >
-              {loading ? (
-                <CircularProgress color="white" size={25} />
-              ) : (
-                "Envoyer"
-              )}
-            </Button>
+            <div data-aos="fade-up" data-aos-offset="100">
+              <Button
+                type="submit"
+                form="email"
+                style={{
+                  backgroundColor: "black",
+                  color: "white",
+                  textTransform: "capitalize",
+                  width: "100px",
+                }}
+                variant="contained"
+              >
+                {loading ? (
+                  <CircularProgress color="white" size={25} />
+                ) : (
+                  "Envoyer"
+                )}
+              </Button>
+            </div>
           </form>
         </section>
       </Layout>

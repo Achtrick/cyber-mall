@@ -26,7 +26,6 @@ function MyApp(props) {
     AOS.init({
       once: true,
       duration: 1500,
-      delay: 500,
     });
   }, []);
 

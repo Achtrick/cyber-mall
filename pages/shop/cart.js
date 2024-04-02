@@ -108,7 +108,14 @@ function Cart(props) {
       {loading ? (
         <LoadingScreen />
       ) : (
-        <ShopLayout shopInfo={shopInfo}>
+        <ShopLayout
+          title={"Mon panier"}
+          description={
+            "Laissez-nous tenir votre café pendant que vous faites vos shopping !"
+          }
+          image={"/logo-512.png"}
+          shopInfo={shopInfo}
+        >
           <div className={styles.container}>
             {loading ? (
               <Skeleton

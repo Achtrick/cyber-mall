@@ -205,6 +205,13 @@ function Architecture(props) {
         component: component,
         body: body,
       });
+      dispatch({
+        type: "USER_LOGIN",
+        payload: {
+          ...userInfo,
+          shop: data.shopInfo,
+        },
+      });
       enqueueSnackbar(data.message, { variant: "success" });
       setLoading(false);
     } catch (error) {
@@ -225,6 +232,13 @@ function Architecture(props) {
       const result = await axios.post("/api/admin/shop/update-logo", {
         shopId: shopInfo._id,
         logo: "/uploads/" + data[0].filename,
+      });
+      dispatch({
+        type: "USER_LOGIN",
+        payload: {
+          ...userInfo,
+          shop: { ...userInfo.shop, logo: "/uploads/" + data[0].filename },
+        },
       });
       setCompressedLogo(null);
       enqueueSnackbar(result.data.message, { variant: "success" });
