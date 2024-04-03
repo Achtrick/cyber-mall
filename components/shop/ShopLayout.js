@@ -1,5 +1,6 @@
 import Head from "next/head";
 import React from "react";
+import InstallPWA from "../installPwa";
 import ShopFooter from "./ShopFooter";
 import ShopHeader from "./ShopHeader";
 
@@ -14,6 +15,7 @@ function ShopLayout({
 }) {
   return (
     <>
+      <InstallPWA top="23px" color={shopInfo.settings.secondaryColor} />
       <Head>
         <title>
           {title

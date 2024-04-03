@@ -1058,7 +1058,6 @@ function Architecture(props) {
                   />
                 </>
               )}
-
               <br />
               <br />
               <hr />
@@ -1076,21 +1075,22 @@ function Architecture(props) {
               </p>
               <div className="labeledInput">
                 <label>Frais de livraison :</label>
-                <input
-                  type="number"
-                  name="shippingFee"
-                  placeholder="Frais en DT"
-                  value={shopInfo.shippingFee}
-                  onChange={(e) => {
-                    setShopInfo({
-                      ...shopInfo,
-                      shippingFee: e.target.value,
-                    });
-                  }}
-                  className="defaultInput"
-                  style={{ width: "300px" }}
-                />
               </div>
+              <input
+                type="number"
+                name="shippingFee"
+                placeholder="Frais en DT"
+                value={shopInfo.shippingFee}
+                onChange={(e) => {
+                  setShopInfo({
+                    ...shopInfo,
+                    shippingFee: e.target.value,
+                  });
+                }}
+                className="defaultInput"
+                style={{ width: "50px" }}
+              />{" "}
+              DT
               <div className="labeledInput">
                 <label>Livraison gratuite à partir de :</label>
               </div>
@@ -1106,8 +1106,9 @@ function Architecture(props) {
                   });
                 }}
                 className="defaultInput"
-                style={{ width: "300px" }}
-              />
+                style={{ width: "50px" }}
+              />{" "}
+              DT
               <br />
               <br />
               <hr />

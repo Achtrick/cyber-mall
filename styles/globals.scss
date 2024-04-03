@@ -66,9 +66,6 @@ input[type="number"]::-webkit-outer-spin-button {
 .SnackbarContent-root {
   text-transform: uppercase;
 }
-.downloadBtn {
-  background-color: #bb84e8;
-}
 
 // functions
 @mixin flexLayout(
@@ -340,6 +337,14 @@ th {
       @include flexLayout(center, center, column);
     }
   }
+}
+.downloadBtn {
+  color: white;
+  background-color: black;
+  @include flexLayout;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
 @media (max-width: 800px) {
