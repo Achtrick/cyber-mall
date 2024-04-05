@@ -13,19 +13,13 @@ function ShopLayout({
   url,
   ...props
 }) {
+  const shopNameCap =
+    shopInfo.name.charAt(0).toUpperCase() + shopInfo.name.slice(1);
   return (
     <>
       <InstallPWA top="23px" color={shopInfo.settings.secondaryColor} />
       <Head>
-        <title>
-          {title
-            ? `${title} | ${
-                shopInfo.name.charAt(0).toUpperCase() + shopInfo.name.slice(1)
-              }`
-            : `${
-                shopInfo.name.charAt(0).toUpperCase() + shopInfo.name.slice(1)
-              }`}
-        </title>
+        <title>{title ? `${title} | ${shopNameCap}` : `${shopNameCap}`}</title>
         {description && <meta name="description" content={description}></meta>}
         {tags && (
           <meta
@@ -58,7 +52,7 @@ function ShopLayout({
         />
         <link rel="icon" type="image/ico" sizes="32x32" href="/favicon.ico" />
         <link rel="icon" type="image/ico" sizes="16x16" href="/favicon.ico" />
-        <link rel="manifest" href="/manifest.webmanifest" />
+        <link rel="manifest" href={`/manifests/${shopInfo.name}.webmanifest`} />
         <link rel="mask-icon" href="/cybermall-192.png" />
         <link rel="shortcut icon" href="/cybermall-192.png" />
         <meta name="author" content={shopInfo.name} />

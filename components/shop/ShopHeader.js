@@ -103,7 +103,7 @@ function ShopHeader({ shopInfo, ...props }) {
             <input
               id="searchInput"
               type="text"
-              placeholder="what are you looking for ?"
+              placeholder="Qu'est-ce que vous cherchez ?"
               className="defaultInput"
               style={{
                 border: `1px solid ${shopInfo.settings.primaryColor}`,

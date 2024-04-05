@@ -1,5 +1,5 @@
-import Resizer from "react-image-file-resizer";
 import imageCompression from "browser-image-compression";
+import Resizer from "react-image-file-resizer";
 
 export function isColorDark(color) {
   const rgb = parseInt(color.slice(1), 16);
@@ -34,12 +34,12 @@ export const getThumbnail = async (file) =>
     );
   });
 
-export const compressImage = async (file) => {
+export const compressImage = async (file, ext, maxWidthOrHeight) => {
   const options = {
     maxSizeMB: 0.5,
-    maxWidthOrHeight: 1920,
+    maxWidthOrHeight: maxWidthOrHeight ? maxWidthOrHeight : 1920,
     useWebWorker: true,
-    fileType: "image/webp",
+    fileType: ext ? `image/${ext}` : "image/webp",
   };
   return await imageCompression(file, options);
 };

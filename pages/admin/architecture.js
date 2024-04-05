@@ -763,7 +763,11 @@ function Architecture(props) {
                   name="logo"
                   onChange={async (e) => {
                     const base64 = await getThumbnail(e.target.files[0]);
-                    const compressed = await compressImage(e.target.files[0]);
+                    const compressed = await compressImage(
+                      e.target.files[0],
+                      "png",
+                      198
+                    );
                     setLogo(base64);
                     setCompressedLogo(compressed);
                   }}
