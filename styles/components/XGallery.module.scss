@@ -34,6 +34,7 @@
         transition: all 0.5s;
         font-size: 47px;
         text-transform: uppercase;
+        text-align: center;
       }
     }
   }
@@ -68,6 +69,7 @@
         transition: all 0.5s;
         font-size: 47px;
         text-transform: uppercase;
+        text-align: center;
       }
     }
   }
@@ -93,7 +95,7 @@
       align-items: flex-end;
       .text {
         opacity: 1;
-        font-size: clamp(15px, 10vw, 25px);
+        font-size: clamp(15px, 10vw, 20px);
         color: white;
       }
     }
@@ -102,7 +104,7 @@
       align-items: flex-end;
       .text {
         opacity: 1;
-        font-size: clamp(15px, 10vw, 25px);
+        font-size: clamp(15px, 10vw, 20px);
         color: white;
       }
     }

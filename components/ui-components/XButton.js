@@ -5,6 +5,7 @@ import { deduceColor } from "../../utils/config/convertHelper";
 function XButton({
   text,
   color,
+  width,
   inversed,
   loading = false,
   action = () => {},
@@ -26,6 +27,7 @@ function XButton({
               ? {
                   backgroundColor: deduceColor(color),
                   color: color,
+                  width: width ?? "auto",
                   margin: "10px 0px",
                   border: `1px solid ${color}`,
                   transition: "0.1s",
@@ -33,6 +35,7 @@ function XButton({
               : {
                   backgroundColor: color,
                   color: deduceColor(color),
+                  width: width ?? "auto",
                   margin: "10px 0px",
                   border: `1px solid ${color}`,
                   transition: "0.1s",

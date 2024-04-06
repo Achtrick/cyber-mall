@@ -27,6 +27,7 @@ handler.post(auth, async (req, res) => {
 
     const orders = await Order.find(query)
       .sort({ state: -1 })
+      .sort({ createdAt: -1 })
       .limit(20)
       .skip((page - 1) * 20);
 

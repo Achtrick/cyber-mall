@@ -21,10 +21,25 @@ export default (
         product = cart.content.find(
           (product) => product._id === action.payload.product._id
         );
-        if (product) {
-          product.qty += action.payload.product.qty;
+        if (action.payload.qtyAction) {
+          switch (action.payload.qtyAction) {
+            case "PLUS":
+              product.qty += 1;
+              break;
+
+            case "MINUS":
+              product.qty -= 1;
+              break;
+
+            default:
+              break;
+          }
         } else {
-          cart.content.push(action.payload.product);
+          if (product) {
+            product.qty += action.payload.product.qty;
+          } else {
+            cart.content.push(action.payload.product);
+          }
         }
       } else {
         carts.push({
@@ -32,11 +47,11 @@ export default (
           content: [{ ...action.payload.product }],
         });
       }
-
       typeof window !== "undefined"
         ? localStorage.setItem("carts", JSON.stringify(carts))
         : null;
       return { state, carts: carts };
+
     case actionType.EMPTY_CART:
       let _carts =
         typeof window !== "undefined"

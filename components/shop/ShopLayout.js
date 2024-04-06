@@ -17,7 +17,7 @@ function ShopLayout({
     shopInfo.name.charAt(0).toUpperCase() + shopInfo.name.slice(1);
   return (
     <>
-      <InstallPWA top="23px" color={shopInfo.settings.secondaryColor} />
+      <InstallPWA top="90px" color={shopInfo.settings.secondaryColor} />
       <Head>
         <title>{title ? `${title} | ${shopNameCap}` : `${shopNameCap}`}</title>
         {description && <meta name="description" content={description}></meta>}

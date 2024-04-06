@@ -17,10 +17,10 @@ export default function Demands(props) {
   let executeSearchTimeout;
 
   const offers = [
-    { period: "1 MONTH", price: 30 },
-    { period: "3 MONTHS", price: 85 },
-    { period: "6 MONTHS", price: 160 },
-    { period: "12 MONTHS", price: 300 },
+    { period: "1 Mois", price: 30 },
+    { period: "3 Mois", price: 85 },
+    { period: "6 Mois", price: 160 },
+    { period: "12 Mois", price: 300 },
   ];
 
   const { enqueueSnackbar } = useSnackbar();

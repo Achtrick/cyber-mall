@@ -24,6 +24,8 @@ function Products() {
   const router = useRouter();
   const { shop, category, searchTerm, sort } = router.query;
 
+  const sortOptions = [{ name: "ascending" }, { name: "descending" }];
+
   const dispatch = useDispatch();
 
   const { enqueueSnackbar } = useSnackbar();
@@ -223,7 +225,6 @@ function Products() {
                   />
                 ) : (
                   <>
-                    {" "}
                     <XAutoComplete
                       placeholder="Catégorie"
                       options={categories}
@@ -239,15 +240,12 @@ function Products() {
                     &nbsp;
                     <XAutoComplete
                       placeholder="Trier Par Prix"
-                      options={[
-                        { name: "ascending", value: 1 },
-                        { name: "descending", value: -1 },
-                      ]}
+                      options={sortOptions}
                       value={sort}
                       optionDisplayExpr="name"
-                      optionValueExpr="value"
+                      optionValueExpr="name"
                       onChange={(e, val) => {
-                        filter("sort", val?.value || "");
+                        filter("sort", val?.name || "");
                       }}
                     />
                   </>
@@ -256,53 +254,60 @@ function Products() {
             </div>
             {loadingProducts ? (
               <Skeleton
+                style={{ marginTop: "20px" }}
                 variant="rectangular"
                 width={"100%"}
-                height={"calc(100vh - 200px)"}
+                height={"calc(100vh - 250px)"}
               />
             ) : (
               <div className="grid-4">
-                {products.map((product) => {
-                  return (
-                    <div className={styles.product} key={product._id}>
-                      <Link
-                        href={`product/?shop=${shopInfo.name}&id=${product._id}`}
+                {products.map((product, index) => {
+                  if (!(shopInfo.pack.type !== "PREMIUM" && index > 9)) {
+                    return (
+                      <div
+                        className={styles.product}
+                        style={{ alignItems: "flex-start" }}
+                        key={product._id}
                       >
-                        <img
-                          alt={product.designation}
-                          src={
-                            product.images[0]
-                              ? `/api/images/${product.images[0]
-                                  .split("/")
-                                  .pop()}`
-                              : "/images/image-placeholder.jpg"
-                          }
-                          onError={(e) => {
-                            e.target.src = "/images/image-placeholder.jpg";
+                        <Link
+                          href={`product/?shop=${shopInfo.name}&id=${product._id}`}
+                        >
+                          <img
+                            alt={product.designation}
+                            src={
+                              product.images[0]
+                                ? `/api/images/${product.images[0]
+                                    .split("/")
+                                    .pop()}`
+                                : "/images/image-placeholder.jpg"
+                            }
+                            onError={(e) => {
+                              e.target.src = "/images/image-placeholder.jpg";
+                            }}
+                          />
+                        </Link>
+                        <p>{product.designation}</p>
+                        {product.discount && product.discount !== 0 ? (
+                          <p className={styles.oldPrice}>
+                            {product.price.toLocaleString() + " DT"}
+                          </p>
+                        ) : null}
+                        <p className={styles.price}>
+                          {calculateDiscount(
+                            product.price,
+                            product.discount
+                          ).toLocaleString() + " DT"}
+                        </p>
+                        <XButton
+                          color={shopInfo.settings.primaryColor}
+                          text={"Acheter"}
+                          action={() => {
+                            addTocart(shop, product);
                           }}
                         />
-                      </Link>
-                      <p>{product.designation}</p>
-                      {product.discount && product.discount !== 0 ? (
-                        <p className={styles.oldPrice}>
-                          {product.price.toLocaleString() + " DT"}
-                        </p>
-                      ) : null}
-                      <p className={styles.price}>
-                        {calculateDiscount(
-                          product.price,
-                          product.discount
-                        ).toLocaleString() + " DT"}
-                      </p>
-                      <XButton
-                        color={shopInfo.settings.primaryColor}
-                        text={"Acheter"}
-                        action={() => {
-                          addTocart(shop, product);
-                        }}
-                      />
-                    </div>
-                  );
+                      </div>
+                    );
+                  }
                 })}
               </div>
             )}

@@ -10,6 +10,7 @@ import ProductsSlider from "../../components/shop/ProductsSlider";
 import ShopLayout from "../../components/shop/ShopLayout";
 import XButton from "../../components/ui-components/XButton";
 import XHr from "../../components/ui-components/XHr";
+import XMagnifier from "../../components/ui-components/XMagnifier";
 import XSwiper from "../../components/ui-components/XSwiper";
 import styles from "../../styles/shop/Product.module.scss";
 import { calculateDiscount } from "../../utils/config/convertHelper";
@@ -142,7 +143,7 @@ function Product(props) {
               <Skeleton
                 variant="rectangular"
                 width={"100%"}
-                height={"calc(100vh - 200px)"}
+                height={"calc(100vh - 250px)"}
               />
             ) : (
               <div className={styles.row}>
@@ -156,13 +157,16 @@ function Product(props) {
                       product.images.map((image, index) => {
                         return (
                           <SwiperSlide key={index}>
-                            <img
-                              src={`/api/images/${image.split("/").pop()}`}
-                              onError={(e) => {
-                                e.target.src = "/images/image-placeholder.jpg";
-                              }}
-                              alt={`Image ${index}`}
-                            />
+                            <XMagnifier image={image} alt={product.designation}>
+                              <img
+                                src={`/api/images/${image.split("/").pop()}`}
+                                onError={(e) => {
+                                  e.target.src =
+                                    "/images/image-placeholder.jpg";
+                                }}
+                                alt={product.designation}
+                              />
+                            </XMagnifier>
                           </SwiperSlide>
                         );
                       })
@@ -215,12 +219,13 @@ function Product(props) {
                   </div>
                   <XButton
                     color={shopInfo.settings.primaryColor}
+                    width={"100px"}
                     text={"Acheter"}
                     action={() => {
                       addTocart(shop, product);
                     }}
                   />
-                  <h2>{product.description}</h2>
+                  <pre>{product.description}</pre>
                 </div>
               </div>
             )}

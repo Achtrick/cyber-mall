@@ -1,10 +1,5 @@
 import { Check } from "@mui/icons-material";
-import {
-  CircularProgress,
-  IconButton,
-  LinearProgress,
-  Tooltip,
-} from "@mui/material";
+import { CircularProgress, IconButton, Tooltip } from "@mui/material";
 import axios from "axios";
 import moment from "moment";
 import Image from "next/image";
@@ -240,7 +235,7 @@ function Account(props) {
                 </p>
                 <ul>
                   <li>RIB: 17503000000268993518</li>
-                  <li>D17 / E-DINAR: 4742000268993511</li>
+                  <li>E-DINAR: 4742000268993511</li>
                 </ul>
               </span>
             )}
@@ -321,19 +316,22 @@ function Account(props) {
                 )}
                 {upgradeDemand ? (
                   <span>
-                    <p>
+                    <h4>
                       Mettre à niveau votre forfait, Envoyer{" "}
                       {
                         offers.find((o) => o.period === upgradeDemand.period)
                           .price
                       }
                       &nbsp;DT à:
-                    </p>
+                    </h4>
                     <ul>
-                      <li>RIB: 17503000000268993518</li>
-                      <li>D17 / E-DINAR: 4742000268993511</li>
+                      <li>
+                        <h4>RIB: 17503000000268993518</h4>
+                      </li>
+                      <li>
+                        <h4>E-DINAR: 4742000268993511</h4>
+                      </li>
                     </ul>
-                    <LinearProgress color="secondary" />
                   </span>
                 ) : (
                   <XButton

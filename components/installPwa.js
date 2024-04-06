@@ -7,10 +7,22 @@ const InstallPWA = ({ top }) => {
   const [promptInstall, setPromptInstall] = useState(null);
   const isMobile = useMediaQuery("(max-width:800px)");
 
+  function isCookiePresent(cookieName) {
+    const cookies = document.cookie.split(";");
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      if (cookie.startsWith(cookieName + "=")) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   useEffect(() => {
     const handler = (e) => {
       e.preventDefault();
-      setSupportsPWA(true);
+      setSupportsPWA(isCookiePresent("cyber-mall-cookies-consent") && true);
       setPromptInstall(e);
     };
     window.addEventListener("beforeinstallprompt", handler);
@@ -36,17 +48,17 @@ const InstallPWA = ({ top }) => {
               position: "fixed",
               bottom: "10px",
               right: "10px",
-              zIndex: "3000",
+              zIndex: "1300",
               height: "30px",
-              width: "30px",
+              width: "calc(100% - 20px)",
             }
           : {
               position: "fixed",
-              top: top,
+              bottom: "10px",
               right: "10px",
-              zIndex: "3000",
+              zIndex: "1300",
               height: "30px",
-              width: "30px",
+              width: "300px",
             }
       }
       className="downloadBtn"
@@ -55,6 +67,7 @@ const InstallPWA = ({ top }) => {
       title="Installer l'application"
       onClick={onClick}
     >
+      Téléchargez notre application&nbsp;
       <Download />
     </button>
   );

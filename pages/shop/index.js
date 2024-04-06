@@ -202,7 +202,11 @@ function Shop(props) {
                 />
               ) : categories.length ? (
                 <CategoriesGrid
-                  categories={categories}
+                  categories={
+                    shopInfo.pack.type !== "PREMIUM"
+                      ? categories.slice(0, 5)
+                      : categories
+                  }
                   architecture={architecture}
                   shopName={shop}
                 />

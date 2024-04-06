@@ -44,6 +44,7 @@ function ShopHeader({ shopInfo, ...props }) {
       const { data } = await axios.post("/api/admin/categories/get", {
         shop: shopId,
       });
+
       setCategories(data);
       setLoadingCategories(false);
     } catch (error) {
@@ -78,6 +79,19 @@ function ShopHeader({ shopInfo, ...props }) {
     }
 
     setSearchOpen(false);
+  };
+
+  const getCategoryPath = (categoryName) => {
+    const pathname = router.pathname;
+    let query = router.query;
+
+    query = { ...query, category: categoryName };
+
+    if (pathname.includes("products")) {
+      return { pathname: pathname, query: query };
+    } else {
+      return `/shop/products/?shop=${shopInfo.name}&category=${categoryName}`;
+    }
   };
 
   const restSearch = async () => {
@@ -191,7 +205,7 @@ function ShopHeader({ shopInfo, ...props }) {
                 return (
                   <Link
                     key={category._id}
-                    href={`/shop/products/?shop=${shopInfo.name}&category=${category.name}`}
+                    href={getCategoryPath(category.name)}
                     onClick={() => toggleDrawer()}
                   >
                     <div

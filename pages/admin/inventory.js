@@ -462,7 +462,6 @@ function Inventory(props) {
                 <thead>
                   <tr>
                     <th>désignation</th>
-                    <th>description</th>
                     <th>prix</th>
                     <th>quantité</th>
                     <th>actions</th>
@@ -482,7 +481,6 @@ function Inventory(props) {
                         key={product._id}
                       >
                         <td data-label="Désignation">{product.designation}</td>
-                        <td data-label="Description">{product.description}</td>
                         <td data-label="Prix">
                           {product.price.toLocaleString() + " DT"}
                         </td>
