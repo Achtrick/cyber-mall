@@ -23,7 +23,9 @@ function XGallery({ shopName, content, props }) {
           <img
             src={
               content[0]?.image.length
-                ? `/api/images/${content[0]?.image.split("/").pop()}`
+                ? `/api/images/${content[0]?.image
+                    .split("/")
+                    .pop()}?width=900&height=900`
                 : "/images/image-placeholder.jpg"
             }
             onError={(e) => {
@@ -49,7 +51,9 @@ function XGallery({ shopName, content, props }) {
           <img
             src={
               content[1]?.image.length
-                ? `/api/images/${content[1]?.image.split("/").pop()}`
+                ? `/api/images/${content[1]?.image
+                    .split("/")
+                    .pop()}?width=900&height=900`
                 : "/images/image-placeholder.jpg"
             }
             onError={(e) => {
@@ -77,7 +81,9 @@ function XGallery({ shopName, content, props }) {
           <img
             src={
               content[2]?.image.length
-                ? `/api/images/${content[2]?.image.split("/").pop()}`
+                ? `/api/images/${content[2]?.image
+                    .split("/")
+                    .pop()}?width=900&height=900`
                 : "/images/image-placeholder.jpg"
             }
             onError={(e) => {
@@ -103,7 +109,9 @@ function XGallery({ shopName, content, props }) {
           <img
             src={
               content[3]?.image.length
-                ? `/api/images/${content[3]?.image.split("/").pop()}`
+                ? `/api/images/${content[3]?.image
+                    .split("/")
+                    .pop()}?width=900&height=900`
                 : "/images/image-placeholder.jpg"
             }
             onError={(e) => {

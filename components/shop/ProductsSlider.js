@@ -29,7 +29,10 @@ function ProductsSlider({
         {products.map((product, index) => {
           return (
             <SwiperSlide key={index}>
-              <div className={styles.product}>
+              <div
+                className={styles.product}
+                style={{ alignItems: "flex-start" }}
+              >
                 <Link
                   href={
                     activateControls

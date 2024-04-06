@@ -22,7 +22,9 @@ function HomeSlider({ slides, shopName, ...props }) {
                     <img
                       src={
                         slide.image !== "image-placeholder.jpg"
-                          ? `/api/images/${slide.image.split("/").pop()}`
+                          ? `/api/images/${slide.image
+                              .split("/")
+                              .pop()}?width=900&height=900`
                           : "/images/image-placeholder.jpg"
                       }
                       onError={(e) => {
@@ -38,7 +40,9 @@ function HomeSlider({ slides, shopName, ...props }) {
                     <img
                       src={
                         slide.image !== "image-placeholder.jpg"
-                          ? `/api/images/${slide.image.split("/").pop()}`
+                          ? `/api/images/${slide.image
+                              .split("/")
+                              .pop()}?width=900&height=900`
                           : "/images/image-placeholder.jpg"
                       }
                       onError={(e) => {
@@ -51,7 +55,9 @@ function HomeSlider({ slides, shopName, ...props }) {
                   <img
                     src={
                       slide.image !== "image-placeholder.jpg"
-                        ? `/api/images/${slide.image.split("/").pop()}`
+                        ? `/api/images/${slide.image
+                            .split("/")
+                            .pop()}?width=900&height=900`
                         : "/images/image-placeholder.jpg"
                     }
                     onError={(e) => {

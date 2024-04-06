@@ -1,5 +1,5 @@
 import { ZoomIn } from "@mui/icons-material";
-import { IconButton, Modal } from "@mui/material";
+import { CircularProgress, IconButton, Modal } from "@mui/material";
 import React, { useRef, useState } from "react";
 import styles from "../../styles/components/XMagnifier.module.scss";
 import { CloseIcon } from "../../utils/theme/icons";
@@ -7,6 +7,7 @@ import { CloseIcon } from "../../utils/theme/icons";
 function XMagnifier({ image, alt, ...props }) {
   const view = useRef(null);
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [zoomed, setZoomed] = useState(false);
   const [isMouseDown, setIsMouseDown] = useState(false);
   const [startX, setStartX] = useState(0);
@@ -63,7 +64,7 @@ function XMagnifier({ image, alt, ...props }) {
         <div
           id="view"
           ref={view}
-          className={`${styles.view} + ${zoomed ? "grabCursor" : ""}`}
+          className={`${styles.view} + ${zoomed ? "zoomOut" : ""}`}
           onMouseDown={handleMouseDown}
           onMouseUp={handleMouseUp}
           onMouseLeave={handleMouseLeave}
@@ -85,13 +86,24 @@ function XMagnifier({ image, alt, ...props }) {
               <CloseIcon />
             </IconButton>
           </div>
+          {loading && (
+            <div className="row" style={{ height: "100%" }}>
+              <IconButton size="small" style={{ backgroundColor: "white" }}>
+                <CircularProgress color="black" size={30} />
+              </IconButton>
+            </div>
+          )}
           <img
-            src={`/api/images/${image.split("/").pop()}`}
+            src={`/api/images/${image.split("/").pop()}?width=900&height=900`}
+            onLoad={() => {
+              setLoading(false);
+            }}
             onError={(e) => {
               e.target.src = "/images/image-placeholder.jpg";
             }}
             alt={alt}
             style={{
+              display: loading ? "none" : "block",
               width: zoomed ? "200%" : "100%",
               height: zoomed ? "200%" : "100%",
               cursor: zoomed ? "zoom-out" : "zoom-in",
