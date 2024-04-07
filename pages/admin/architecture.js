@@ -718,11 +718,11 @@ function Architecture(props) {
           <div style={{ padding: "10px" }}>
             <h1>Configurez votre shop à votre goût</h1>
             <p>
-              lorsque vous avez terminé, cliquez sur le{" "}
+              lorsque vous avez terminé, cliquez sur{" "}
               <IconButton disabled>
                 <CheckCircleIcon />
               </IconButton>{" "}
-              icône pour enregistrer vos paramètres
+              pour enregistrer vos paramètres
             </p>
           </div>
           {loading ? (
@@ -830,6 +830,7 @@ function Architecture(props) {
                                 setTitle("supprimer la diapositive");
                                 setAction("DELETE-SLIDE-FORM");
                               }}
+                              size="small"
                             >
                               <CloseIcon />
                             </IconButton>
@@ -1006,6 +1007,7 @@ function Architecture(props) {
                                 setTitle("supprimer l'élément");
                                 setAction("DELETE-GALLERY-FORM");
                               }}
+                              size="small"
                             >
                               <CloseIcon />
                             </IconButton>

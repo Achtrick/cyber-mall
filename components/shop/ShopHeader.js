@@ -169,9 +169,14 @@ function ShopHeader({ shopInfo, ...props }) {
                   );
                 }}
                 onMouseLeave={(e) => {
-                  e.target.style.backgroundColor = "transparent";
+                  e.target.style.backgroundColor = !router.pathname.includes(
+                    "products"
+                  )
+                    ? "#25252521"
+                    : "transparent";
                   e.target.style.color = "black";
                 }}
+                aria-selected={!router.pathname.includes("products")}
               >
                 Accueil
               </div>
@@ -190,9 +195,17 @@ function ShopHeader({ shopInfo, ...props }) {
                   );
                 }}
                 onMouseLeave={(e) => {
-                  e.target.style.backgroundColor = "transparent";
+                  e.target.style.backgroundColor =
+                    router.pathname.includes("products") &&
+                    !router.query["category"]
+                      ? "#25252521"
+                      : "transparent";
                   e.target.style.color = "black";
                 }}
+                aria-selected={
+                  router.pathname.includes("products") &&
+                  !router.query["category"]
+                }
               >
                 shop
               </div>
@@ -220,9 +233,13 @@ function ShopHeader({ shopInfo, ...props }) {
                         );
                       }}
                       onMouseLeave={(e) => {
-                        e.target.style.backgroundColor = "transparent";
+                        e.target.style.backgroundColor =
+                          router.query["category"] === category.name
+                            ? "#25252521"
+                            : "transparent";
                         e.target.style.color = "black";
                       }}
+                      aria-selected={router.query["category"] === category.name}
                     >
                       {category.name}
                     </div>
@@ -288,7 +305,7 @@ function ShopHeader({ shopInfo, ...props }) {
         style={{
           backgroundColor: shopInfo.settings.headerColor,
           color: deduceColor(shopInfo.settings.headerColor),
-          borderBottom: `1px solid ${deduceColor(
+          boxShadow: `0px 0px 2px ${deduceColor(
             shopInfo.settings.headerColor
           )}`,
         }}

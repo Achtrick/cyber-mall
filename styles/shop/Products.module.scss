@@ -26,11 +26,16 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
+  overflow: hidden;
   p {
     text-transform: uppercase;
     font-weight: 300;
     font-size: 15px;
     margin: 0px;
+    text-overflow: ellipsis;
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
   }
   .oldPrice {
     text-decoration: line-through;

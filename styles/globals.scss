@@ -366,9 +366,16 @@ th {
   }
 }
 
-.css-ar2l7m-MuiAutocomplete-listbox
+.css-ar2l7m-MuiAutocomplete-listbox {
+  text-transform: capitalize !important;
   .MuiAutocomplete-option[aria-selected="true"] {
-  background-color: rgba(0, 0, 0, 0.04) !important;
+    background-color: rgba(0, 0, 0, 0.04) !important;
+  }
+}
+.css-thzw3c-MuiAutocomplete-root
+  .MuiOutlinedInput-root.MuiInputBase-sizeSmall
+  .MuiAutocomplete-input {
+  text-transform: capitalize;
 }
 
 @media (max-width: 800px) {

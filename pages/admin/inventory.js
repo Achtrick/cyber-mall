@@ -1,5 +1,11 @@
 import { Edit } from "@mui/icons-material";
-import { CircularProgress, IconButton, Skeleton, Tooltip } from "@mui/material";
+import {
+  CircularProgress,
+  IconButton,
+  Skeleton,
+  Tooltip,
+  useMediaQuery,
+} from "@mui/material";
 import axios from "axios";
 import { useSnackbar } from "notistack";
 import React, { useEffect, useState } from "react";
@@ -55,6 +61,8 @@ function Inventory(props) {
   });
 
   const { enqueueSnackbar } = useSnackbar();
+
+  const isMobile = useMediaQuery("(max-width:800px)");
 
   useEffect(() => {
     getCategories();
@@ -247,6 +255,8 @@ function Inventory(props) {
           size={
             action === AdminActions.DELETE
               ? ModalSizes.SMALL
+              : isMobile
+              ? ModalSizes.BIG
               : ModalSizes.MEDIUM
           }
           title={
@@ -297,7 +307,6 @@ function Inventory(props) {
                   style={{ height: "70px" }}
                   className="defaultInput"
                   type="text"
-                  required
                   name="description"
                   onChange={onChange}
                   value={product.description}

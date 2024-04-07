@@ -31,30 +31,34 @@
 }
 .drawer {
   width: clamp(300px, 80vw, 400px);
-  height: calc(100vh - 10px);
+  height: calc(100vh);
   overflow: hidden;
-  padding-top: 100px;
+  padding-top: 80px;
   .container {
     width: 100%;
     height: 100%;
-    padding-bottom: 100px;
+    padding-bottom: 80px;
     overflow: auto;
     position: relative;
     .link {
       padding: 15px 20px;
       font-size: 13px;
+      font-weight: 600;
       font-family: sans-serif;
       margin: 10px 0px;
       transition: all 0.2s;
-      text-transform: capitalize;
+      text-transform: uppercase;
     }
     .link:hover {
       padding-left: 40px;
     }
+    .link[aria-selected="true"] {
+      background-color: #25252521;
+    }
 
     .socials {
       width: clamp(300px, 80vw, 400px);
-      height: 100px;
+      height: 80px;
       position: fixed;
       bottom: 0px;
       left: 0px;
@@ -62,6 +66,7 @@
       @include flexContainer(center, space-around);
       a {
         transition: all 0.3s;
+        transform: scale(1.2);
       }
       a:hover {
         transform: scale(1.5);

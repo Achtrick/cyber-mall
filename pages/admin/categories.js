@@ -1,5 +1,11 @@
 import { Edit } from "@mui/icons-material";
-import { CircularProgress, IconButton, Skeleton, Tooltip } from "@mui/material";
+import {
+  CircularProgress,
+  IconButton,
+  Skeleton,
+  Tooltip,
+  useMediaQuery,
+} from "@mui/material";
 import axios from "axios";
 import { useSnackbar } from "notistack";
 import { useEffect, useState } from "react";
@@ -37,6 +43,8 @@ function Categories() {
   });
 
   const { enqueueSnackbar } = useSnackbar();
+
+  const isMobile = useMediaQuery("(max-width:800px)");
 
   useEffect(() => {
     if (!categories.length) {
@@ -166,6 +174,8 @@ function Categories() {
           size={
             action === AdminActions.DELETE
               ? ModalSizes.SMALL
+              : isMobile
+              ? ModalSizes.BIG
               : ModalSizes.MEDIUM
           }
           title={
@@ -207,7 +217,6 @@ function Categories() {
                   style={{ height: "70px" }}
                   className="defaultInput"
                   type="text"
-                  required
                   name="description"
                   onChange={onChange}
                 />
