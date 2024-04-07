@@ -11,7 +11,7 @@ handler.post(async (req, res) => {
 
   try {
     await connectDB();
-    const product = await Product.findOne(query);
+    const product = await Product.findOne(query).populate({ path: "category" });
     res.status(200).json(product);
   } catch (err) {
     res.status(400).json(err);

@@ -1,24 +1,24 @@
 {
-  "short_name": "Gucci",
-  "name": "Gucci",
+  "short_name": "Scar",
+  "name": "Scar",
   "icons": [
     {
-      "src": "/api/images/fill/1712339194035.png",
+      "src": "/api/images/fill/1712497373543.png",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
     },
     {
-      "src": "/api/images/fill/1712339194035.png",
+      "src": "/api/images/fill/1712497373543.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "/api/images/fill/1712339194035.png",
+      "src": "/api/images/fill/1712497373543.png",
       "type": "image/png",
       "sizes": "512x512"
     }
   ],
-  "start_url": "/shop/?shop=gucci",
+  "start_url": "/shop/?shop=scar",
   "theme_color": "#000000",
   "background_color": "#808080",
   "display": "standalone",

@@ -40,29 +40,49 @@ function ShopLayout({
         {description && (
           <meta property="og:description" content={description} />
         )}
-        {image !== "" ? (
-          <meta property="og:image" content={image} />
-        ) : (
-          <meta property="og:image" content={"/" + "./logo-512.png"} />
-        )}
+        <meta
+          property="og:image"
+          content={
+            image ?? `/api/images/fill/${shopInfo.logo.split("/").pop()}`
+          }
+        />
         <link
           rel="apple-touch-icon"
           sizes="180x180"
-          href="/cybermall-192.png"
+          href={image ?? `/api/images/fill/${shopInfo.logo.split("/").pop()}`}
         />
-        <link rel="icon" type="image/ico" sizes="32x32" href="/favicon.ico" />
-        <link rel="icon" type="image/ico" sizes="16x16" href="/favicon.ico" />
+        <link
+          rel="icon"
+          type="image/ico"
+          sizes="32x32"
+          href={image ?? `/api/images/fill/${shopInfo.logo.split("/").pop()}`}
+        />
+        <link
+          rel="icon"
+          type="image/ico"
+          sizes="16x16"
+          href={image ?? `/api/images/fill/${shopInfo.logo.split("/").pop()}`}
+        />
         <link rel="manifest" href={`/manifests/${shopInfo.name}.webmanifest`} />
-        <link rel="mask-icon" href="/cybermall-192.png" />
-        <link rel="shortcut icon" href="/cybermall-192.png" />
+        <link
+          rel="mask-icon"
+          href={image ?? `/api/images/fill/${shopInfo.logo.split("/").pop()}`}
+        />
+        <link
+          rel="shortcut icon"
+          href={image ?? `/api/images/fill/${shopInfo.logo.split("/").pop()}`}
+        />
         <meta name="author" content={shopInfo.name} />
         <meta name="geo.region" content="TN" />
         <meta name="geo.placename" content="Tunisia" />
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content={`http://cyber-mall.tn/${url}`} />
-        <meta name="msapplication-TileColor" content="#000000" />
+        <meta
+          name="msapplication-TileColor"
+          content={shopInfo.settings.headerColor}
+        />
         <meta name="msapplication-config" content="/browserconfig.xml" />
-        <meta name="theme-color" content="#000" />
+        <meta name="theme-color" content={shopInfo.settings.primaryColor} />
         <meta charSet="utf-8" />
         <link rel="canonical" href={`http://cyber-mall.tn/${url}`} />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />

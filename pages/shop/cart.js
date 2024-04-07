@@ -128,7 +128,6 @@ function Cart(props) {
           description={
             "Laissez-nous tenir votre café pendant que vous faites vos shopping !"
           }
-          image={"/logo-512.png"}
           shopInfo={shopInfo}
         >
           <XModal

@@ -45,8 +45,7 @@ const XAutoComplete = ({
               border: "1px solid #ccc !important",
             },
             "& .MuiAutocomplete-input": {
-              fontFamily:
-                "-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif",
+              fontFamily: "sans-serif",
               padding: " 4px 0px !important",
               fontWeight: "400",
               fontSize: "14px",

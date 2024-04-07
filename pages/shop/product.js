@@ -82,7 +82,7 @@ function Product(props) {
 
       setProduct(data);
       setLoadingProduct(false);
-      !similars.length && (await getSimilars(data.shop, data.category));
+      !similars.length && (await getSimilars(data.shop, data.category._id));
     } catch (error) {
       enqueueSnackbar(getError(error), { variant: "error" });
       setLoadingProduct(false);
@@ -132,10 +132,9 @@ function Product(props) {
           title={product?.designation}
           description={product?.description}
           image={
-            product?.image
-              ? `/api/images/${product?.image.split("/").pop()}`
-              : "/logo-512.png"
+            product?.image && `/api/images/${product?.image.split("/").pop()}`
           }
+          tags={[product?.designation, product?.category.name]}
           shopInfo={shopInfo}
         >
           <div className={styles.container}>

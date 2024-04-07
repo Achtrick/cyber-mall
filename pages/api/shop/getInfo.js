@@ -66,7 +66,7 @@ handler.post(async (req, res) => {
       } else {
         createManifest(
           shopInfo.name,
-          `..${shopInfo.logo}`,
+          `/api/images/fill/${shopInfo.logo.split("/").pop()}`,
           shopInfo.settings.primaryColor
         );
         res.status(200).json(shopInfo);

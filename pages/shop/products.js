@@ -170,7 +170,6 @@ function Products() {
           description={
             "Laissez-nous tenir votre café pendant que vous faites vos shopping !"
           }
-          image={"/logo-512.png"}
           shopInfo={shopInfo}
         >
           <section className={styles.container}>

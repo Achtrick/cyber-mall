@@ -659,7 +659,7 @@ function Architecture(props) {
 
   const deleteGalleryForm = (
     <div>
-      <p>êtes-vous sûr de vouloir supprimer cet élément de la galerie ?</p>
+      <p>voulez vous supprimer cet élément de la galerie ?</p>
     </div>
   );
 

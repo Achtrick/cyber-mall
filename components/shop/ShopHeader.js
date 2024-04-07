@@ -121,6 +121,8 @@ function ShopHeader({ shopInfo, ...props }) {
               className="defaultInput"
               style={{
                 border: `1px solid ${shopInfo.settings.primaryColor}`,
+                fontSize: "12px",
+                fontStyle: "italic",
               }}
               value={searchTerm}
               onChange={(e) => {

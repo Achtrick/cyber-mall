@@ -42,10 +42,16 @@
     position: relative;
     .link {
       padding: 15px 20px;
+      font-size: 13px;
+      font-family: sans-serif;
       margin: 10px 0px;
       transition: all 0.2s;
       text-transform: capitalize;
     }
+    .link:hover {
+      padding-left: 40px;
+    }
+
     .socials {
       width: clamp(300px, 80vw, 400px);
       height: 100px;

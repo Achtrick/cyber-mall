@@ -366,6 +366,11 @@ th {
   }
 }
 
+.css-ar2l7m-MuiAutocomplete-listbox
+  .MuiAutocomplete-option[aria-selected="true"] {
+  background-color: rgba(0, 0, 0, 0.04) !important;
+}
+
 @media (max-width: 800px) {
   .grid-5 {
     padding: 10px 0px;

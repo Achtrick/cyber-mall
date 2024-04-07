@@ -36,10 +36,10 @@ handler.post(async (req, res) => {
       name: data.shopName.toLowerCase(),
       pack: { type: "FREE", expiresIn: "" },
       settings: {
-        headerColor: "black",
+        headerColor: "white",
         footerColor: "black",
-        primaryColor: "#bb84e8",
-        secondaryColor: "#ec008c",
+        primaryColor: "black",
+        secondaryColor: "black",
       },
       architecture: {
         home: {
