@@ -152,6 +152,7 @@ function Register(props) {
                   onChange={onChange}
                   type="text"
                   name="shopName"
+                  pattern="[^\s][A-Za-z0-9-_]*"
                   placeholder="Nom de shop"
                   data-aos="fade-up"
                   data-aos-offset="100"
