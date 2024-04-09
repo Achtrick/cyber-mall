@@ -16,7 +16,10 @@ import XAutoComplete from "../../components/ui-components/XAutoComplete";
 import XButton from "../../components/ui-components/XButton";
 import XPagination from "../../components/ui-components/XPagination";
 import styles from "../../styles/shop/Products.module.scss";
-import { calculateDiscount } from "../../utils/config/convertHelper";
+import {
+  calculateDiscount,
+  deduceColor,
+} from "../../utils/config/convertHelper";
 import { getError } from "../../utils/shared/getError";
 import { ResetIcon } from "../../utils/theme/icons";
 
@@ -42,6 +45,9 @@ function Products() {
   const [products, setProducts] = useState([]);
   const [page, setPage] = useState(0);
   const [count, setCount] = useState(0);
+
+  const [selectedVariant, setSelectedVariant] = useState(null);
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
   useEffect(() => {
     if (router.isReady && router.query) {
@@ -138,6 +144,16 @@ function Products() {
     });
   };
 
+  const checkVariants = (product) => {
+    if (!product.variants?.length) {
+      setSelectedVariant(null);
+      setSelectedProduct(null);
+      addTocart(shopInfo.name, product);
+    } else {
+      setSelectedProduct(product);
+    }
+  };
+
   const resetSearch = (searchTerm) => {
     const pathname = router.pathname;
     let query = router.query;
@@ -152,6 +168,26 @@ function Products() {
         }`
       );
     }
+  };
+
+  const tagStyle = {
+    color: shopInfo?.settings.primaryColor,
+    border: `1px solid ${shopInfo?.settings.primaryColor}`,
+  };
+
+  const activeTagStyle = {
+    color: shopInfo && deduceColor(shopInfo?.settings.primaryColor),
+    backgroundColor: shopInfo?.settings.primaryColor,
+  };
+
+  const tagMouseOver = (e) => {
+    e.target.style.backgroundColor = shopInfo?.settings.primaryColor;
+    e.target.style.color = deduceColor(shopInfo?.settings.primaryColor);
+  };
+
+  const tagMouseLeave = (e) => {
+    e.target.style.backgroundColor = "transparent";
+    e.target.style.color = shopInfo?.settings.primaryColor;
   };
 
   return (
@@ -297,13 +333,59 @@ function Products() {
                             product.discount
                           ).toLocaleString() + " DT"}
                         </p>
-                        <XButton
-                          color={shopInfo.settings.primaryColor}
-                          text={"Acheter"}
-                          action={() => {
-                            addTocart(shop, product);
-                          }}
-                        />
+                        <div className="variantPickerContainer">
+                          <div
+                            className={
+                              product._id === selectedProduct?._id
+                                ? `variantPicker variantPickerActive`
+                                : `variantPicker`
+                            }
+                          >
+                            {product.variants?.map((variant, key) => {
+                              return (
+                                <span
+                                  style={
+                                    selectedVariant === variant
+                                      ? activeTagStyle
+                                      : tagStyle
+                                  }
+                                  onMouseOver={
+                                    selectedVariant === variant
+                                      ? null
+                                      : tagMouseOver
+                                  }
+                                  onMouseLeave={
+                                    selectedVariant === variant
+                                      ? null
+                                      : tagMouseLeave
+                                  }
+                                  className="tag"
+                                  key={key}
+                                  onClick={() => {
+                                    setSelectedVariant(variant);
+                                    setTimeout(() => {
+                                      addTocart(shopInfo.name, {
+                                        ...product,
+                                        designation:
+                                          product.designation + " | " + variant,
+                                      });
+                                      setSelectedProduct(null);
+                                      setSelectedVariant(null);
+                                    }, 100);
+                                  }}
+                                >
+                                  {variant}
+                                </span>
+                              );
+                            })}
+                          </div>
+
+                          <XButton
+                            color={shopInfo.settings.primaryColor}
+                            text={"Acheter"}
+                            action={() => checkVariants(product)}
+                          />
+                        </div>
                       </div>
                     );
                   }

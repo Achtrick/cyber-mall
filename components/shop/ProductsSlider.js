@@ -1,27 +1,63 @@
 import { useMediaQuery } from "@mui/material";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 import { SwiperSlide } from "swiper/react";
 import styles from "../../styles/shop/ProductsSlider.module.scss";
-import { calculateDiscount } from "../../utils/config/convertHelper";
+import {
+  calculateDiscount,
+  deduceColor,
+} from "../../utils/config/convertHelper";
 import XButton from "../ui-components/XButton";
 import XSwiper from "../ui-components/XSwiper";
 
 function ProductsSlider({
   activateControls = true,
   products,
-  shopName,
-  settings,
+  shopInfo,
   title,
   buttonAction,
 }) {
+  const [selectedVariant, setSelectedVariant] = useState(null);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+
   const isMobile = useMediaQuery("(max-width:800px)");
+
+  const checkVariants = (product) => {
+    if (!product.variants?.length) {
+      setSelectedVariant(null);
+      setSelectedProduct(null);
+      buttonAction(shopInfo.name, product);
+    } else {
+      setSelectedProduct(product);
+    }
+  };
+
+  const tagStyle = {
+    color: shopInfo?.settings.primaryColor,
+    border: `1px solid ${shopInfo?.settings.primaryColor}`,
+  };
+
+  const activeTagStyle = {
+    color: shopInfo && deduceColor(shopInfo?.settings.primaryColor),
+    backgroundColor: shopInfo?.settings.primaryColor,
+  };
+
+  const tagMouseOver = (e) => {
+    e.target.style.backgroundColor = shopInfo?.settings.primaryColor;
+    e.target.style.color = deduceColor(shopInfo?.settings.primaryColor);
+  };
+
+  const tagMouseLeave = (e) => {
+    e.target.style.backgroundColor = "transparent";
+    e.target.style.color = shopInfo?.settings.primaryColor;
+  };
+
   return (
     <section className={styles.container}>
       <h2>{title}</h2>
       <br />
       <XSwiper
-        autoplay={true}
+        autoplay={false}
         loop={true}
         slidesPerView={isMobile ? 2 : 4}
         spaceBetween={20}
@@ -36,7 +72,7 @@ function ProductsSlider({
                 <Link
                   href={
                     activateControls
-                      ? `/shop/product/?shop=${shopName}&id=${product._id}`
+                      ? `/shop/product/?shop=${shopInfo.name}&id=${product._id}`
                       : ""
                   }
                 >
@@ -64,15 +100,57 @@ function ProductsSlider({
                     product.discount
                   ).toLocaleString() + " DT"}
                 </p>
-                <XButton
-                  color={settings.primaryColor}
-                  text={"Acheter"}
-                  action={
-                    buttonAction
-                      ? () => buttonAction(shopName, product)
-                      : () => {}
-                  }
-                />
+                <div className="variantPickerContainer">
+                  <div
+                    className={
+                      product._id === selectedProduct?._id
+                        ? `variantPicker variantPickerActive`
+                        : `variantPicker`
+                    }
+                  >
+                    {product.variants?.map((variant, key) => {
+                      return (
+                        <span
+                          style={
+                            selectedVariant === variant
+                              ? activeTagStyle
+                              : tagStyle
+                          }
+                          onMouseOver={
+                            selectedVariant === variant ? null : tagMouseOver
+                          }
+                          onMouseLeave={
+                            selectedVariant === variant ? null : tagMouseLeave
+                          }
+                          className="tag"
+                          key={key}
+                          onClick={() => {
+                            setSelectedVariant(variant);
+                            setTimeout(() => {
+                              buttonAction(shopInfo.name, {
+                                ...product,
+                                designation:
+                                  product.designation + " | " + variant,
+                              });
+                              setSelectedProduct(null);
+                              setSelectedVariant(null);
+                            }, 100);
+                          }}
+                        >
+                          {variant}
+                        </span>
+                      );
+                    })}
+                  </div>
+
+                  <XButton
+                    color={shopInfo.settings.primaryColor}
+                    text={"Acheter"}
+                    action={
+                      buttonAction ? () => checkVariants(product) : () => {}
+                    }
+                  />
+                </div>
               </div>
             </SwiperSlide>
           );

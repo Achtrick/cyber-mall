@@ -32,6 +32,8 @@ function Orders() {
 
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [loadingCloseOrder, setLoadingCloseOrder] = useState(false);
+  const [loadingDeleteOrder, setLoadingDeleteOrder] = useState(false);
   const [action, setAction] = useState("");
   const [title, setTitle] = useState("");
 
@@ -81,6 +83,7 @@ function Orders() {
   };
 
   const closeOrder = async () => {
+    setLoadingCloseOrder(true);
     try {
       const { data } = await axios.put("/api/admin/orders/close", {
         _id: order._id,
@@ -89,13 +92,16 @@ function Orders() {
       orders.find((o) => o._id === order._id).state = "CLOSED";
       enqueueSnackbar(data.message, { variant: "success" });
       cancelAction();
+      setLoadingCloseOrder(false);
     } catch (error) {
       checkExpirity(error, dispatch);
       enqueueSnackbar(getError(error), { variant: "error" });
+      setLoadingCloseOrder(false);
     }
   };
 
   const deleteOrder = async () => {
+    setLoadingDeleteOrder(true);
     try {
       const { data } = await axios.delete(
         `/api/admin/orders/delete/${order._id}`
@@ -103,9 +109,11 @@ function Orders() {
       setOrders(orders.filter((o) => o._id !== order._id));
       enqueueSnackbar(data.message, { variant: "success" });
       cancelAction();
+      setLoadingDeleteOrder(false);
     } catch (error) {
       checkExpirity(error, dispatch);
       enqueueSnackbar(getError(error), { variant: "error" });
+      setLoadingDeleteOrder(false);
     }
   };
 
@@ -122,6 +130,13 @@ function Orders() {
               ? closeOrder
               : action === "DELETE-ORDER"
               ? deleteOrder
+              : null
+          }
+          loading={
+            action === "CLOSE-ORDER"
+              ? loadingCloseOrder
+              : action === "DELETE-ORDER"
+              ? loadingDeleteOrder
               : null
           }
           hideControls={action === "SHOW-ORDER"}
@@ -168,14 +183,14 @@ function Orders() {
                   </tr>
                 </thead>
                 <tbody>
-                  {order.products.map((product) => {
+                  {order.products.map((product, key) => {
                     return (
-                      <tr key={product._id}>
+                      <tr key={key}>
                         <td data-label="image">
                           <img
                             style={{
-                              width: "80px",
-                              height: "80px",
+                              width: "60px",
+                              height: "60px",
                               objectFit: "contain",
                             }}
                             alt={product.designation}
@@ -183,7 +198,7 @@ function Orders() {
                               product.images[0]
                                 ? `/api/images/${product.images[0]
                                     .split("/")
-                                    .pop()}`
+                                    .pop()}?width=60&height=60`
                                 : "/images/image-placeholder.jpg"
                             }
                             onError={(e) => {
@@ -400,7 +415,9 @@ function Orders() {
             <>
               <div className="row">
                 <img
-                  src={`/api/images/${userInfo.shop.logo.split("/").pop()}`}
+                  src={`/api/images/${userInfo.shop.logo
+                    .split("/")
+                    .pop()}?width=200&height=200`}
                   onError={(e) => {
                     e.target.src = "/images/default-store.png";
                   }}
@@ -438,9 +455,9 @@ function Orders() {
                   </tr>
                 </thead>
                 <tbody>
-                  {order.products.map((product) => {
+                  {order.products.map((product, key) => {
                     return (
-                      <tr key={product._id}>
+                      <tr key={key}>
                         <td>{product.designation}</td>
                         <td>{product.price.toLocaleString() + " DT"}</td>
                         <td>{product.qty}</td>

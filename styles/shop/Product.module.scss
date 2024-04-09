@@ -64,6 +64,11 @@
     margin: 0px 0px;
     @include flexLayout(center, flex-start, row);
   }
+  label {
+    text-transform: capitalize;
+    font-size: 14px;
+    color: #878787 !important;
+  }
 }
 
 @media (max-width: 800px) {

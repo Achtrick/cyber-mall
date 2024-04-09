@@ -16,6 +16,7 @@ import DisconnectedGuard from "../../components/guards/disconnectedGuard";
 import XAutoComplete from "../../components/ui-components/XAutoComplete";
 import XModal from "../../components/ui-components/XModal";
 import XPagination from "../../components/ui-components/XPagination";
+import XTag from "../../components/ui-components/XTag";
 import styles from "../../styles/admin/Dashboard.module.scss";
 import {
   compressImage,
@@ -54,6 +55,7 @@ function Inventory(props) {
     category: "",
     designation: "",
     description: "",
+    variants: [],
     price: 0,
     discount: 0,
     qty: 0,
@@ -114,11 +116,11 @@ function Inventory(props) {
       for (let image of files) {
         const base64 = await getThumbnail(image);
         const compressedImage = await compressImage(image);
-        if (compressedImages.length < 3) {
+        if (compressedImages.length < 6) {
           compressedImages.push(base64);
           imagesToUpload.push(compressedImage);
         } else {
-          enqueueSnackbar("Ne dépasser pas 3 images par produit.", {
+          enqueueSnackbar("Ne dépasser pas 6 images par produit.", {
             variant: "warning",
           });
         }
@@ -132,9 +134,40 @@ function Inventory(props) {
       });
       setImagesLoading(false);
     } else {
+      expandTextArea(e);
       setProduct({ ...product, [e.target.name]: e.target.value });
       setImagesLoading(false);
     }
+  };
+
+  const expandTextArea = (e) => {
+    if (e.target.name === "description") {
+      e.target.style.height = "auto";
+      e.target.style.height = `${e.target.scrollHeight}px`;
+    }
+  };
+
+  const addTag = (e) => {
+    if (e.key === "Enter" || e.key === ",") {
+      e.preventDefault();
+      e.stopPropagation();
+      if (!product[e.target.name].some((x) => x.label === e.target.value)) {
+        setProduct({
+          ...product,
+          [e.target.name]: [...product[e.target.name], e.target.value],
+        });
+        e.target.value = "";
+      }
+    }
+  };
+
+  const deleteTag = (forEntry, entry) => {
+    setProduct({
+      ...product,
+      [forEntry]: [
+        ...product[forEntry].filter((tag) => tag.label !== entry.label),
+      ],
+    });
   };
 
   const handleProduct = async (e) => {
@@ -191,6 +224,7 @@ function Inventory(props) {
               category: product.category,
               designation: product.designation,
               description: product.description,
+              variants: product.variants,
               price: product.price,
               discount: product.discount,
               qty: product.qty,
@@ -223,6 +257,7 @@ function Inventory(props) {
       category: "",
       designation: "",
       description: "",
+      variants: [],
       price: 0,
       discount: 0,
       qty: 0,
@@ -303,12 +338,11 @@ function Inventory(props) {
               <div className="labeledInput">
                 <label>description</label>
                 <textarea
-                  rows={3}
-                  style={{ height: "70px" }}
                   className="defaultInput"
                   type="text"
                   name="description"
                   onChange={onChange}
+                  onClick={expandTextArea}
                   value={product.description}
                 />
               </div>
@@ -365,6 +399,22 @@ function Inventory(props) {
                     </label>
                   </IconButton>
                 </Tooltip>
+              </div>
+              <div className="labeledInput">
+                <label>variantes (tailles, couleurs ...)</label>
+                <input
+                  className="defaultInput"
+                  type="tag"
+                  name="variants"
+                  onKeyPress={addTag}
+                />
+                {product.variants.length ? (
+                  <XTag
+                    forEntry="variants"
+                    entries={product.variants}
+                    action={deleteTag}
+                  />
+                ) : null}
               </div>
               <div className="labeledInput">
                 <label>prix</label>

@@ -1,4 +1,5 @@
 import imageCompression from "browser-image-compression";
+import crypto from "crypto";
 import Resizer from "react-image-file-resizer";
 
 export function isColorDark(color) {
@@ -46,4 +47,11 @@ export const compressImage = async (file, ext, maxWidthOrHeight) => {
 
 export const isBase64 = (image) => {
   return image.includes("data:image/webp;base64,");
+};
+
+export const generateId = (text) => {
+  const hash = crypto.createHash("sha256");
+  hash.update(text);
+  const hashHex = hash.digest("hex");
+  return hashHex.slice(0, 24);
 };

@@ -960,8 +960,7 @@ function Architecture(props) {
                 <ProductsSlider
                   activateControls={false}
                   products={discounts}
-                  shopName={shopInfo.name}
-                  settings={shopInfo.settings}
+                  shopInfo={shopInfo}
                   title={"Obtenez plus pour moins cher !"}
                 />
               ) : (
@@ -1085,7 +1084,7 @@ function Architecture(props) {
               <input
                 type="number"
                 name="shippingFee"
-                placeholder="Frais en DT"
+                placeholder="0,0 DT"
                 value={shopInfo.shippingFee}
                 onChange={(e) => {
                   setShopInfo({
@@ -1103,7 +1102,7 @@ function Architecture(props) {
               <input
                 type="number"
                 name="freeShipping"
-                placeholder="somme de commandes en DT"
+                placeholder="0,0 DT"
                 value={shopInfo.freeShipping}
                 onChange={(e) => {
                   setShopInfo({

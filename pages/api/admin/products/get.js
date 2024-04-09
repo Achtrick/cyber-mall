@@ -1,7 +1,7 @@
 import nc from "next-connect";
+import auth from "../../../../middlewares/admin-auth";
 import Product from "../../../../models/product.model";
 import connectDB from "../../../../utils/connectDB";
-import auth from "../../../../middlewares/admin-auth";
 
 const handler = nc();
 
@@ -18,6 +18,7 @@ handler.post(auth, async (req, res) => {
   try {
     await connectDB();
     const products = await Product.find(query)
+      .sort({ qty: 1 })
       .sort({ createdAt: -1 })
       .limit(20)
       .skip((page - 1) * 20);

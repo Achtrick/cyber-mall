@@ -1,5 +1,10 @@
 import { Check } from "@mui/icons-material";
-import { CircularProgress, IconButton, Tooltip } from "@mui/material";
+import {
+  CircularProgress,
+  IconButton,
+  Tooltip,
+  useMediaQuery,
+} from "@mui/material";
 import axios from "axios";
 import moment from "moment";
 import Image from "next/image";
@@ -29,6 +34,8 @@ function Account(props) {
   const { enqueueSnackbar } = useSnackbar();
 
   const dispatch = useDispatch();
+
+  const isMobile = useMediaQuery("(max-width:800px)");
 
   const pack = userInfo?.shop.pack;
 
@@ -179,10 +186,10 @@ function Account(props) {
       setOffer(null);
       setAction("");
       setEditAccount(true);
-      window.scrollTo({
-        top: document.documentElement.scrollHeight,
-        behavior: "smooth",
-      });
+
+      setTimeout(() => {
+        document.getElementById("phone").focus();
+      }, 100);
     }
   };
 
@@ -200,7 +207,7 @@ function Account(props) {
               ? "Prolongez votre abonnement"
               : "Mettez à niveau votre abonnement"
           }
-          size={ModalSizes.MEDIUM}
+          size={isMobile ? ModalSizes.BIG : ModalSizes.MEDIUM}
         >
           <section className={styles.modal}>
             <div className="grid-4">
@@ -244,12 +251,27 @@ function Account(props) {
               restrictions !
             </p>
             <hr />
-            <ul>
-              <li>catégories: illimité</li>
-              <li>produits: illimité</li>
-              <li>images par produit: jusqu&apos;à 3</li>
-              <li>diapositives de la page d&apos;accueil: illimité</li>
-              <li>génération des factures: permise</li>
+            <ul style={{ listStyle: "none", marginLeft: "-20px" }}>
+              <li>
+                <CheckCircleIcon color="primary" fontSize="12px" /> catégories:
+                illimité
+              </li>
+              <li>
+                <CheckCircleIcon color="primary" fontSize="12px" /> produits:
+                illimité
+              </li>
+              <li>
+                <CheckCircleIcon color="primary" fontSize="12px" /> images par
+                produit: jusqu&apos;à 6
+              </li>
+              <li>
+                <CheckCircleIcon color="primary" fontSize="12px" /> diapositives
+                de la page d&apos;accueil: illimité
+              </li>
+              <li>
+                <CheckCircleIcon color="primary" fontSize="12px" /> génération
+                des factures: permise
+              </li>
             </ul>
           </section>
         </XModal>
@@ -301,6 +323,14 @@ function Account(props) {
                 <p>
                   {pack.type === "FREE" ? <CloseIcon /> : <Check />}
                   &nbsp;produits illimité
+                </p>
+                <p>
+                  {pack.type === "FREE" ? <CloseIcon /> : <Check />}
+                  &nbsp;jusqu&apos;à 6 images par produit
+                </p>
+                <p>
+                  {pack.type === "FREE" ? <CloseIcon /> : <Check />}
+                  &nbsp;diapositives illimité
                 </p>
                 <hr />
                 <h5>Pack: {pack.type}</h5>
@@ -405,6 +435,7 @@ function Account(props) {
                     }
                     value={phone}
                     name="phone"
+                    id="phone"
                     placeholder="téléphone"
                     onChange={onChange}
                   />

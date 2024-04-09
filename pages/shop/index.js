@@ -252,8 +252,7 @@ function Shop(props) {
                 />
               ) : discounts.length ? (
                 <ProductsSlider
-                  settings={shopInfo.settings}
-                  shopName={shopInfo.name}
+                  shopInfo={shopInfo}
                   products={discounts}
                   activateControls={true}
                   title={"Obtenez plus pour moins cher !"}

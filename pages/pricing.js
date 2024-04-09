@@ -83,7 +83,7 @@ function Pricing(props) {
                 <li>personnaliser la structure</li>
                 <li>catégories : illimitées</li>
                 <li>produits : illimité</li>
-                <li>images par produit : 3</li>
+                <li>images par produit : 6</li>
                 <li>diapositives d&apos;accueil : illimitées</li>
                 <li>génération de facture : autorisée</li>
               </ul>

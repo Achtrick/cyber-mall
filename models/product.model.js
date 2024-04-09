@@ -5,6 +5,7 @@ const productSchema = new Schema(
     designation: String,
     images: [String],
     price: { type: Number, default: 0 },
+    variants: { type: [String], default: [] },
     discount: { type: Number, default: 0 },
     description: String,
     qty: { type: Number, default: 0 },

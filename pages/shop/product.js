@@ -13,7 +13,10 @@ import XHr from "../../components/ui-components/XHr";
 import XMagnifier from "../../components/ui-components/XMagnifier";
 import XSwiper from "../../components/ui-components/XSwiper";
 import styles from "../../styles/shop/Product.module.scss";
-import { calculateDiscount } from "../../utils/config/convertHelper";
+import {
+  calculateDiscount,
+  deduceColor,
+} from "../../utils/config/convertHelper";
 import { getError } from "../../utils/shared/getError";
 import { AddIcon, RemoveIcon } from "../../utils/theme/icons";
 
@@ -25,6 +28,7 @@ function Product(props) {
 
   const [shopInfo, setShopInfo] = useState(null);
   const [product, setProduct] = useState(null);
+  const [selectedVariant, setSelectedVariant] = useState("");
   const [similars, setSimilars] = useState([]);
   const [loading, setLoading] = useState(true);
   const [loadingProduct, setLoadingProduct] = useState(true);
@@ -81,6 +85,7 @@ function Product(props) {
       });
 
       setProduct(data);
+      data.variants && setSelectedVariant(data.variants[0]);
       setLoadingProduct(false);
       !similars.length && (await getSimilars(data.shop, data.category._id));
     } catch (error) {
@@ -121,6 +126,26 @@ function Product(props) {
     enqueueSnackbar(`${product.designation} Ajouté au panier`, {
       variant: "info",
     });
+  };
+
+  const tagStyle = {
+    color: shopInfo?.settings.primaryColor,
+    border: `1px solid ${shopInfo?.settings.primaryColor}`,
+  };
+
+  const activeTagStyle = {
+    color: shopInfo && deduceColor(shopInfo?.settings.primaryColor),
+    backgroundColor: shopInfo?.settings.primaryColor,
+  };
+
+  const tagMouseOver = (e) => {
+    e.target.style.backgroundColor = shopInfo?.settings.primaryColor;
+    e.target.style.color = deduceColor(shopInfo?.settings.primaryColor);
+  };
+
+  const tagMouseLeave = (e) => {
+    e.target.style.backgroundColor = "white";
+    e.target.style.color = shopInfo?.settings.primaryColor;
   };
 
   return (
@@ -189,6 +214,43 @@ function Product(props) {
                       product.discount
                     ).toLocaleString() + " DT"}
                   </p>
+                  {product.variants.length ? (
+                    <>
+                      <br />
+                      <label>variantes</label>
+                      <div className="tagsRow">
+                        {product.variants.map((variant, key) => {
+                          return (
+                            <span
+                              style={
+                                selectedVariant === variant
+                                  ? activeTagStyle
+                                  : tagStyle
+                              }
+                              onMouseOver={
+                                selectedVariant === variant
+                                  ? null
+                                  : tagMouseOver
+                              }
+                              onMouseLeave={
+                                selectedVariant === variant
+                                  ? null
+                                  : tagMouseLeave
+                              }
+                              className="tag"
+                              key={key}
+                              onClick={() => setSelectedVariant(variant)}
+                            >
+                              {variant}
+                            </span>
+                          );
+                        })}
+                      </div>
+                    </>
+                  ) : null}
+
+                  <br />
+                  <label>quantité</label>
                   <div className={styles.quantity}>
                     <Button
                       style={{
@@ -210,7 +272,7 @@ function Product(props) {
                         height: "30px",
                       }}
                       onClick={() => {
-                        qty < product.qty && setQty(qty + 1);
+                        setQty(qty + 1);
                       }}
                     >
                       <AddIcon />
@@ -221,7 +283,11 @@ function Product(props) {
                     width={"100px"}
                     text={"Acheter"}
                     action={() => {
-                      addTocart(shop, product);
+                      addTocart(shop, {
+                        ...product,
+                        designation:
+                          product.designation + " | " + selectedVariant,
+                      });
                     }}
                   />
                   <pre>{product.description}</pre>
@@ -240,8 +306,7 @@ function Product(props) {
               />
             ) : (
               <ProductsSlider
-                settings={shopInfo.settings}
-                shopName={shopInfo.name}
+                shopInfo={shopInfo}
                 products={similars}
                 activateControls={true}
                 title={"Découvrir des produits similaires !"}

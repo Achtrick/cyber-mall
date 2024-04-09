@@ -19,7 +19,8 @@ export default (
       let product;
       if (cart) {
         product = cart.content.find(
-          (product) => product._id === action.payload.product._id
+          (product) =>
+            product.designation === action.payload.product.designation
         );
         if (action.payload.qtyAction) {
           switch (action.payload.qtyAction) {
@@ -70,7 +71,7 @@ export default (
           : [];
       let $cart = $carts.find((cart) => cart.shop === action.payload.shop);
       $cart.content = $cart.content.filter(
-        (p) => p._id !== action.payload.productId
+        (p) => p.designation !== action.payload.designation
       );
       $carts.find((cart) => cart.shop === action.payload.shop).content =
         $cart.content;

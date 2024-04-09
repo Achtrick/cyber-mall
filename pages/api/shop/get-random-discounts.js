@@ -20,6 +20,7 @@ handler.post(async (req, res) => {
           designation: 1,
           price: 1,
           discount: 1,
+          variants: 1,
           images: { $slice: ["$images", 1] },
         },
       },

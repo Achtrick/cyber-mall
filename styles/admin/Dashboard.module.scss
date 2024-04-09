@@ -133,11 +133,13 @@
   .silver {
     background-image: url(/images/silver-bg.svg);
     background-position: 0%;
+    background-position-y: -50px;
   }
 
   .gold {
     background-image: url(/images/gold-bg.svg);
     background-position: 0%;
+    background-position-y: -50px;
   }
 
   .passwordContainer {
@@ -229,8 +231,8 @@
     padding: 20px;
     border: 1px solid #ccc;
     img {
-      width: 100px;
-      height: 100px;
+      width: 150px;
+      height: 150px;
       object-fit: contain;
     }
     .row {

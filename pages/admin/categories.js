@@ -80,8 +80,16 @@ function Categories() {
       });
       setImagesLoading(false);
     } else {
+      expandTextArea(e);
       setCategory({ ...category, [e.target.name]: e.target.value });
       setImagesLoading(false);
+    }
+  };
+
+  const expandTextArea = (e) => {
+    if (e.target.name === "description") {
+      e.target.style.height = "auto";
+      e.target.style.height = `${e.target.scrollHeight}px`;
     }
   };
 
@@ -213,12 +221,11 @@ function Categories() {
                 <label>description</label>
                 <textarea
                   value={category.description}
-                  rows={3}
-                  style={{ height: "70px" }}
                   className="defaultInput"
                   type="text"
                   name="description"
                   onChange={onChange}
+                  onClick={expandTextArea}
                 />
               </div>
               <div className="labeledInput">

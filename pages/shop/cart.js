@@ -82,12 +82,12 @@ function Cart(props) {
     });
   };
 
-  const deleteProduct = (productId) => {
+  const deleteProduct = (designation) => {
     dispatch({
       type: "DELETE_PRODUCT_CART",
       payload: {
         shop: shop,
-        productId,
+        designation,
       },
     });
   };
@@ -137,7 +137,7 @@ function Cart(props) {
             onClose={() => setProduct(null)}
             cancelAction={() => setProduct(null)}
             confirmAction={() => {
-              deleteProduct(product._id);
+              deleteProduct(product.designation);
               setProduct(null);
             }}
           >
@@ -165,9 +165,9 @@ function Cart(props) {
                   </thead>
                   <tbody>
                     {cart.content &&
-                      cart.content.map((product) => {
+                      cart.content.map((product, index) => {
                         return (
-                          <tr key={product._id}>
+                          <tr key={index}>
                             <td data-label="image">
                               <img
                                 alt={product.designation}

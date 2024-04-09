@@ -108,6 +108,9 @@ input[type="number"]::-webkit-outer-spin-button {
   }
   textarea {
     resize: none;
+    height: 100px;
+    max-height: 300px;
+    min-height: 100px;
   }
 }
 option {
@@ -276,7 +279,49 @@ th {
   align-items: center;
   justify-content: center;
 }
-
+.variantPickerContainer {
+  position: relative;
+  width: 100%;
+}
+.variantPicker {
+  position: absolute;
+  z-index: 1000;
+  top: -42.5px;
+  left: 0px;
+  backdrop-filter: blur(15px);
+  box-shadow: 0px 0px 2px #ccc;
+  border-radius: 4px;
+  height: 50px;
+  width: 220px;
+  padding: 5px;
+  transition: all 0.3s;
+  opacity: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+.variantPickerActive {
+  opacity: 1;
+  width: 100%;
+}
+.tagsRow {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  overflow-y: auto;
+}
+.tag {
+  border-radius: 25px;
+  border: 1px solid transparent;
+  padding: 5px 10px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: 0.1s;
+}
 // defaults
 .swiper-slide {
   img {
@@ -347,6 +392,7 @@ th {
   border-radius: 4px;
   cursor: pointer;
   animation: hover 2s infinite;
+  text-transform: uppercase;
   transition: all 0.3s;
 }
 .downloadBtn:hover {
@@ -379,6 +425,13 @@ th {
 }
 
 @media (max-width: 800px) {
+  .variantPicker {
+    margin-top: -45px;
+    height: 90px;
+    flex-direction: column;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
   .grid-5 {
     padding: 10px 0px;
     display: grid;
