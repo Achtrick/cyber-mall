@@ -107,6 +107,7 @@ function ShopHeader({ shopInfo, ...props }) {
 
   const toggleDrawer = () => {
     setDrawerOpen(!drawerOpen);
+    dispatch({ type: "CLOSE_CART_PREVIEW" });
   };
 
   const toggleCartPreview = () => {

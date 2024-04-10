@@ -1,8 +1,9 @@
-import { Button, IconButton } from "@mui/material";
+import { Button, IconButton, useMediaQuery } from "@mui/material";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import styles from "../../styles/shop/Cart.module.scss";
+import { deduceColor } from "../../utils/config/convertHelper";
 import { AddIcon, DeleteIcon, RemoveIcon } from "../../utils/theme/icons";
 import { ModalSizes } from "../admin/ModalSettings";
 import XButton from "../ui-components/XButton";
@@ -20,16 +21,15 @@ function CartContent({
   const [emptyCartAction, setEmptyCartAction] = useState(false);
   const router = useRouter();
 
-  const { cartPreviewOpen } = useSelector((state) => state.ui);
-
   const dispatch = useDispatch();
+  const isMobile = useMediaQuery("(max-width:800px)");
 
   return (
     <div className={styles.cart}>
       <XModal
         size={ModalSizes.SMALL}
-        title={` Voulez vous retirez "${product?.designation}" de votre panier ?`}
         open={product !== null}
+        title={"Retirer De panier"}
         onClose={() => setProduct(null)}
         cancelAction={() => setProduct(null)}
         confirmAction={() => {
@@ -37,7 +37,7 @@ function CartContent({
           setProduct(null);
         }}
       >
-        <p></p>
+        <p>{` Voulez vous retirez "${product?.designation}" de votre panier ?`}</p>
       </XModal>
       <XModal
         size={ModalSizes.SMALL}
@@ -51,6 +51,57 @@ function CartContent({
       >
         <p></p>
       </XModal>
+      {shopInfo.freeShipping ? (
+        <div
+          className={styles.shippingCounterContainer}
+          style={{
+            backgroundColor: shopInfo.settings.headerColor,
+            color: shopInfo.settings.headerColor,
+          }}
+        >
+          <p
+            style={{
+              color: deduceColor(shopInfo.settings.headerColor),
+            }}
+          >
+            {shopInfo.freeShipping -
+              cart.content.reduce((sum, product) => {
+                return sum + product.price * product.qty;
+              }, 0) >
+            0
+              ? (
+                  shopInfo.freeShipping -
+                  cart.content.reduce((sum, product) => {
+                    return sum + product.price * product.qty;
+                  }, 0)
+                ).toLocaleString() + " DT reste pour la livraison gratuite"
+              : "✓ Livraison gratuite"}
+          </p>
+          <br />
+          <div className={styles.track}>
+            <div
+              className={styles.bar}
+              style={{
+                backgroundColor: shopInfo.settings.primaryColor,
+                width:
+                  (cart.content.reduce((sum, product) => {
+                    return sum + product.price * product.qty;
+                  }, 0) /
+                    shopInfo.freeShipping) *
+                    100 <
+                  100
+                    ? (cart.content.reduce((sum, product) => {
+                        return sum + product.price * product.qty;
+                      }, 0) /
+                        shopInfo.freeShipping) *
+                        100 +
+                      "%"
+                    : "100%",
+              }}
+            ></div>
+          </div>
+        </div>
+      ) : null}
       <table className="defaultTable" style={{ overflow: "hidden" }}>
         <thead>
           <tr>
@@ -58,7 +109,7 @@ function CartContent({
             <th>désignation</th>
             <th>prix</th>
             <th>qté</th>
-            <th>total unitaire</th>
+            <th>t.u</th>
             <th></th>
           </tr>
         </thead>
@@ -85,35 +136,42 @@ function CartContent({
                     {product.price.toLocaleString() + " DT"}
                   </td>
                   <td data-label="qté">
-                    <Button
+                    <div
+                      className="row"
                       style={{
-                        color: shopInfo.settings.primaryColor,
-                        width: "25px",
-                        height: "25px",
+                        justifyContent: isMobile ? "flex-end" : "flex-start",
                       }}
-                      onClick={() => {
-                        product.qty > 1 && updateCart(product, "MINUS");
-                      }}
-                      size="small"
                     >
-                      <RemoveIcon />
-                    </Button>
-                    &nbsp;
-                    <span>{product.qty}</span>
-                    &nbsp;
-                    <Button
-                      style={{
-                        color: shopInfo.settings.primaryColor,
-                        width: "25px",
-                        height: "25px",
-                      }}
-                      onClick={() => {
-                        updateCart(product, "PLUS");
-                      }}
-                      size="small"
-                    >
-                      <AddIcon />
-                    </Button>
+                      <Button
+                        style={{
+                          color: shopInfo.settings.primaryColor,
+                          width: "25px",
+                          height: "25px",
+                        }}
+                        onClick={() => {
+                          product.qty > 1 && updateCart(product, "MINUS");
+                        }}
+                        size="small"
+                      >
+                        <RemoveIcon />
+                      </Button>
+                      &nbsp;
+                      <span>{product.qty}</span>
+                      &nbsp;
+                      <Button
+                        style={{
+                          color: shopInfo.settings.primaryColor,
+                          width: "25px",
+                          height: "25px",
+                        }}
+                        onClick={() => {
+                          updateCart(product, "PLUS");
+                        }}
+                        size="small"
+                      >
+                        <AddIcon />
+                      </Button>
+                    </div>
                   </td>
                   <td data-label="total">
                     {(product.qty * product.price).toLocaleString() + " DT"}

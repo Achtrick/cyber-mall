@@ -277,6 +277,34 @@ function Inventory(props) {
     }, 600);
   };
 
+  const controls = (
+    <>
+      {" "}
+      <Tooltip title="Modifier">
+        <IconButton
+          color="warning"
+          onClick={() => {
+            setAction(AdminActions.UPDATE);
+            setProduct(product);
+          }}
+        >
+          <ModeEditIcon sx={{ width: "20px" }} />
+        </IconButton>
+      </Tooltip>
+      <Tooltip title="Supprimer">
+        <IconButton
+          color="error"
+          onClick={() => {
+            setAction(AdminActions.DELETE);
+            setProduct(product);
+          }}
+        >
+          <DeleteIcon sx={{ width: "20px" }} />
+        </IconButton>
+      </Tooltip>
+    </>
+  );
+
   return (
     <AdminLayout>
       <DisconnectedGuard>
@@ -527,7 +555,7 @@ function Inventory(props) {
                   </tr>
                 </thead>
                 <tbody>
-                  {products.map((product) => {
+                  {products.map((product, index) => {
                     return (
                       <tr
                         className={
@@ -538,6 +566,20 @@ function Inventory(props) {
                             : null
                         }
                         key={product._id}
+                        style={{
+                          opacity:
+                            userInfo?.shop.pack.type === "PREMIUM"
+                              ? "1"
+                              : index > 9
+                              ? "0.5"
+                              : "1",
+                          pointerEvents:
+                            userInfo?.shop.pack.type === "PREMIUM"
+                              ? "all"
+                              : index > 9
+                              ? "none"
+                              : "all",
+                        }}
                       >
                         <td data-label="Désignation">{product.designation}</td>
                         <td data-label="Prix">
@@ -546,28 +588,11 @@ function Inventory(props) {
                         <td data-label="Qté">{product.qty}</td>
                         <td data-label="Actions">
                           <div>
-                            <Tooltip title="Modifier">
-                              <IconButton
-                                color="warning"
-                                onClick={() => {
-                                  setAction(AdminActions.UPDATE);
-                                  setProduct(product);
-                                }}
-                              >
-                                <ModeEditIcon sx={{ width: "20px" }} />
-                              </IconButton>
-                            </Tooltip>
-                            <Tooltip title="Supprimer">
-                              <IconButton
-                                color="error"
-                                onClick={() => {
-                                  setAction(AdminActions.DELETE);
-                                  setProduct(product);
-                                }}
-                              >
-                                <DeleteIcon sx={{ width: "20px" }} />
-                              </IconButton>
-                            </Tooltip>
+                            {userInfo?.shop.pack.type === "PREMIUM"
+                              ? controls
+                              : index > 9
+                              ? "Activer Premium Pour Prendre Contrôle de nouveau"
+                              : controls}
                           </div>
                         </td>
                       </tr>

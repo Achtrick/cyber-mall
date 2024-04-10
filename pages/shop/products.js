@@ -378,8 +378,11 @@ function Products() {
                                     setTimeout(() => {
                                       addTocart(shopInfo.name, {
                                         ...product,
-                                        designation:
-                                          product.designation + " | " + variant,
+                                        designation: variant
+                                          ? product.designation +
+                                            " | " +
+                                            variant
+                                          : product.designation,
                                       });
                                       setSelectedProduct(null);
                                       setSelectedVariant(null);

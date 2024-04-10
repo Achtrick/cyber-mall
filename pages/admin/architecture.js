@@ -800,7 +800,11 @@ function Architecture(props) {
               <br />
               <br />
               <h1>Page D&apos;Accueil</h1>
-              <p>Glissière (la résolution recommandée est de 1500 x 600)</p>
+              <p>
+                Glissière, il faut que les images soit la même résolution pour
+                un affichage optimale (la résolution recommandée est de 1500 x
+                600)
+              </p>
               {loadingSlider ? (
                 <Skeleton
                   variant="rectangular"
@@ -884,7 +888,7 @@ function Architecture(props) {
                         : [
                             {
                               link: "",
-                              image: "image-placeholder.jpg",
+                              image: "slider-placeholder.jpg",
                             },
                           ]
                     }

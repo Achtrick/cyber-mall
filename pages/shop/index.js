@@ -176,7 +176,7 @@ function Shop(props) {
                       : [
                           {
                             link: "",
-                            image: "image-placeholder.jpg",
+                            image: "slider-placeholder.jpg",
                           },
                         ]
                   }

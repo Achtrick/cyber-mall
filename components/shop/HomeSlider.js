@@ -12,7 +12,7 @@ function HomeSlider({ slides, shopName, ...props }) {
           spaceBetween={0}
           loop={true}
           autoplay={slides.length > 1}
-          style={{ width: "100%", height: "80vh" }}
+          style={{ width: "100%", height: "100%" }}
         >
           {slides.map((slide, index) => {
             return (
@@ -21,14 +21,14 @@ function HomeSlider({ slides, shopName, ...props }) {
                   <a href={slide.link} rel="noreferrer" target="_blank">
                     <img
                       src={
-                        slide.image !== "image-placeholder.jpg"
+                        slide.image !== "slider-placeholder.jpg"
                           ? `/api/images/${slide.image
                               .split("/")
-                              .pop()}?width=900&height=900`
-                          : "/images/image-placeholder.jpg"
+                              .pop()}?width=1080&height=1080`
+                          : "/images/slider-placeholder.jpg"
                       }
                       onError={(e) => {
-                        e.target.src = "/images/image-placeholder.jpg";
+                        e.target.src = "/images/slider-placeholder.jpg";
                       }}
                       alt={slide.link}
                     />
@@ -39,14 +39,14 @@ function HomeSlider({ slides, shopName, ...props }) {
                   >
                     <img
                       src={
-                        slide.image !== "image-placeholder.jpg"
+                        slide.image !== "slider-placeholder.jpg"
                           ? `/api/images/${slide.image
                               .split("/")
-                              .pop()}?width=900&height=900`
-                          : "/images/image-placeholder.jpg"
+                              .pop()}?width=1080&height=1080`
+                          : "/images/slider-placeholder.jpg"
                       }
                       onError={(e) => {
-                        e.target.src = "/images/image-placeholder.jpg";
+                        e.target.src = "/images/slider-placeholder.jpg";
                       }}
                       alt={slide.category}
                     />
@@ -54,14 +54,14 @@ function HomeSlider({ slides, shopName, ...props }) {
                 ) : (
                   <img
                     src={
-                      slide.image !== "image-placeholder.jpg"
+                      slide.image !== "slider-placeholder.jpg"
                         ? `/api/images/${slide.image
                             .split("/")
                             .pop()}?width=900&height=900`
-                        : "/images/image-placeholder.jpg"
+                        : "/images/slider-placeholder.jpg"
                     }
                     onError={(e) => {
-                      e.target.src = "/images/image-placeholder.jpg";
+                      e.target.src = "/images/slider-placeholder.jpg";
                     }}
                     alt="slide"
                   />

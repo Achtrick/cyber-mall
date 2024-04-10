@@ -174,7 +174,7 @@ function Product(props) {
               <div className={styles.row}>
                 <div className={styles.images}>
                   <XSwiper
-                    autoplay={product.images.length > 1}
+                    autoplay={false}
                     loop={product.images.length > 1}
                     pagination={product.images.length > 1}
                   >
@@ -286,8 +286,9 @@ function Product(props) {
                     action={() => {
                       addTocart(shop, {
                         ...product,
-                        designation:
-                          product.designation + " | " + selectedVariant,
+                        designation: selectedVariant
+                          ? product.designation + " | " + selectedVariant
+                          : product.designation,
                       });
                     }}
                   />

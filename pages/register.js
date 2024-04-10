@@ -24,10 +24,18 @@ function Register(props) {
 
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [labelColor, setLabelColor] = useState("blue");
 
   const { enqueueSnackbar } = useSnackbar();
 
   const onChange = (e) => {
+    if (e.target.name === "shopName") {
+      if (/^[a-zA-Z0-9_-]+$/.test(e.target.value)) {
+        setLabelColor("green");
+      } else {
+        setLabelColor("red");
+      }
+    }
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
@@ -37,6 +45,9 @@ function Register(props) {
 
   const register = async (e) => {
     e.preventDefault();
+    if (!/^[a-zA-Z0-9_-]+$/.test(formData.shopName)) {
+      return document.getElementById("shopName").focus();
+    }
     setLoading(true);
     if (formData.password !== formData.confirmPassword) {
       setLoading(false);
@@ -146,19 +157,26 @@ function Register(props) {
                   data-aos-offset="100"
                   data-aos-delay="600"
                 />
-                <input
-                  className="defaultInput"
-                  required
-                  onChange={onChange}
-                  type="text"
-                  name="shopName"
-                  pattern="[^\s][A-Za-z0-9-_]*"
-                  placeholder="Nom de shop"
+                <div
                   data-aos="fade-up"
                   data-aos-offset="100"
                   data-aos-delay="700"
-                />
-                <br />
+                  className="labeledInput"
+                >
+                  <label style={{ color: labelColor }}>
+                    Choisissez un nom unique qui ne contient pas de caractères
+                    spéciaux et pas d'espaces.
+                  </label>
+                  <input
+                    id="shopName"
+                    className="defaultInput"
+                    required
+                    onChange={onChange}
+                    type="text"
+                    name="shopName"
+                    placeholder="Nom de shop"
+                  />
+                </div>
                 <br />
                 <div
                   data-aos="fade-up"
