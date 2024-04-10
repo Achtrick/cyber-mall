@@ -172,7 +172,7 @@ function Orders() {
                 </p>
               </div>
               <br />
-              <table className="defaultTable">
+              <table className="defaultTable" style={{ overflow: "hidden" }}>
                 <thead>
                   <tr>
                     <th>image</th>

@@ -29,6 +29,11 @@ function ProductsSlider({
       buttonAction(shopInfo.name, product);
     } else {
       setSelectedProduct(product);
+      isMobile &&
+        setTimeout(() => {
+          setSelectedVariant(null);
+          setSelectedProduct(null);
+        }, 5000);
     }
   };
 
@@ -100,7 +105,13 @@ function ProductsSlider({
                     product.discount
                   ).toLocaleString() + " DT"}
                 </p>
-                <div className="variantPickerContainer">
+                <div
+                  onMouseLeave={() => {
+                    setSelectedVariant(null);
+                    setSelectedProduct(null);
+                  }}
+                  className="variantPickerContainer"
+                >
                   <div
                     className={
                       product._id === selectedProduct?._id

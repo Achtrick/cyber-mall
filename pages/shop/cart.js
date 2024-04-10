@@ -1,18 +1,16 @@
-import { Button, IconButton, Skeleton } from "@mui/material";
+import { Skeleton } from "@mui/material";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { ModalSizes } from "../../components/admin/ModalSettings";
+import CartContent from "../../components/shop/CartContent";
 import LoadingScreen from "../../components/shop/LoadingScreen";
 import ShopLayout from "../../components/shop/ShopLayout";
 import XButton from "../../components/ui-components/XButton";
 import XHr from "../../components/ui-components/XHr";
-import XModal from "../../components/ui-components/XModal";
 import styles from "../../styles/shop/Cart.module.scss";
 import { getError } from "../../utils/shared/getError";
-import { AddIcon, DeleteIcon, RemoveIcon } from "../../utils/theme/icons";
 
 function Cart(props) {
   const router = useRouter();
@@ -24,7 +22,6 @@ function Cart(props) {
   const [shopInfo, setShopInfo] = useState(null);
   const [cart, setCart] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [product, setProduct] = useState(null);
   const [user, setUser] = useState({
     firstName: "",
     lastName: "",
@@ -130,19 +127,6 @@ function Cart(props) {
           }
           shopInfo={shopInfo}
         >
-          <XModal
-            size={ModalSizes.SMALL}
-            title={` Voulez vous retirez "${product?.designation}" de votre panier ?`}
-            open={product !== null}
-            onClose={() => setProduct(null)}
-            cancelAction={() => setProduct(null)}
-            confirmAction={() => {
-              deleteProduct(product.designation);
-              setProduct(null);
-            }}
-          >
-            <p></p>
-          </XModal>
           <div className={styles.container}>
             {loading ? (
               <Skeleton
@@ -151,124 +135,15 @@ function Cart(props) {
                 height={"calc(100vh - 200px)"}
               />
             ) : cart && cart.content?.length ? (
-              <div className={styles.cart}>
-                <table className="defaultTable">
-                  <thead>
-                    <tr>
-                      <th>image</th>
-                      <th>désignation</th>
-                      <th>prix</th>
-                      <th>qté</th>
-                      <th>total unitaire</th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {cart.content &&
-                      cart.content.map((product, index) => {
-                        return (
-                          <tr key={index}>
-                            <td data-label="image">
-                              <img
-                                alt={product.designation}
-                                src={
-                                  product.images[0]
-                                    ? `/api/images/${product.images[0]
-                                        .split("/")
-                                        .pop()}`
-                                    : "/images/image-placeholder.jpg"
-                                }
-                                onError={(e) => {
-                                  e.target.src =
-                                    "/images/image-placeholder.jpg";
-                                }}
-                              />
-                            </td>
-                            <td data-label="désignation">
-                              {product.designation}
-                            </td>
-                            <td data-label="prix">
-                              {product.price.toLocaleString() + " DT"}
-                            </td>
-                            <td data-label="qté">
-                              <Button
-                                style={{
-                                  color: shopInfo.settings.primaryColor,
-                                  width: "25px",
-                                  height: "25px",
-                                }}
-                                onClick={() => {
-                                  product.qty > 1 &&
-                                    updateCart(product, "MINUS");
-                                }}
-                                size="small"
-                              >
-                                <RemoveIcon />
-                              </Button>
-                              &nbsp;
-                              <span>{product.qty}</span>
-                              &nbsp;
-                              <Button
-                                style={{
-                                  color: shopInfo.settings.primaryColor,
-                                  width: "25px",
-                                  height: "25px",
-                                }}
-                                onClick={() => {
-                                  updateCart(product, "PLUS");
-                                }}
-                                size="small"
-                              >
-                                <AddIcon />
-                              </Button>
-                            </td>
-                            <td data-label="total">
-                              {(product.qty * product.price).toLocaleString() +
-                                " DT"}
-                            </td>
-                            <td>
-                              <IconButton
-                                color="error"
-                                onClick={() => {
-                                  setProduct(product);
-                                }}
-                                size="small"
-                              >
-                                <DeleteIcon />
-                              </IconButton>
-                            </td>
-                          </tr>
-                        );
-                      })}
-                    <tr>
-                      <th colSpan={4}>TOTAL</th>
-                      <th colSpan={2}>
-                        {cart.content &&
-                          cart.content
-                            .reduce((sum, product) => {
-                              return sum + product.price * product.qty;
-                            }, 0)
-                            .toLocaleString()}{" "}
-                        DT +{" "}
-                        {cart.content.reduce((sum, product) => {
-                          return sum + product.price * product.qty;
-                        }, 0) > shopInfo.freeShipping
-                          ? "Livraison gratuite"
-                          : "frais de livraison : " +
-                            shopInfo.shippingFee +
-                            "DT"}
-                      </th>
-                    </tr>
-                  </tbody>
-                </table>
-                <div className="row" style={{ justifyContent: "flex-start" }}>
-                  <XButton
-                    color={shopInfo.settings.primaryColor}
-                    inversed={true}
-                    text={"vider le panier"}
-                    action={emptyCart}
-                  />
-                </div>
+              <CartContent
+                cart={cart}
+                shopInfo={shopInfo}
+                deleteProduct={deleteProduct}
+                emptyCart={emptyCart}
+                updateCart={updateCart}
+                proceedToCheckout={false}
+                freeShippingCounter={false}
+              >
                 <br />
                 <div className="row">
                   <XHr color={shopInfo.settings.primaryColor} width="50%" />
@@ -347,7 +222,7 @@ function Cart(props) {
                     />
                   </div>
                 </form>
-              </div>
+              </CartContent>
             ) : (
               <div className={styles.emptyContainer}>
                 <h2>Votre panier est vide !</h2>

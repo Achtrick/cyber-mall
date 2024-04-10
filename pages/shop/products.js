@@ -139,6 +139,7 @@ function Products() {
         },
       },
     });
+    dispatch({ type: "TOGGLE_CART_PREVIEW" });
     enqueueSnackbar(`${product.designation} ajouté au panier`, {
       variant: "info",
     });
@@ -151,6 +152,11 @@ function Products() {
       addTocart(shopInfo.name, product);
     } else {
       setSelectedProduct(product);
+      isMobile &&
+        setTimeout(() => {
+          setSelectedVariant(null);
+          setSelectedProduct(null);
+        }, 5000);
     }
   };
 
@@ -333,7 +339,13 @@ function Products() {
                             product.discount
                           ).toLocaleString() + " DT"}
                         </p>
-                        <div className="variantPickerContainer">
+                        <div
+                          onMouseLeave={() => {
+                            setSelectedVariant(null);
+                            setSelectedProduct(null);
+                          }}
+                          className="variantPickerContainer"
+                        >
                           <div
                             className={
                               product._id === selectedProduct?._id

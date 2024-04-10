@@ -1,10 +1,15 @@
-import { CircularProgress, Drawer, IconButton } from "@mui/material";
+import {
+  CircularProgress,
+  Drawer,
+  IconButton,
+  useMediaQuery,
+} from "@mui/material";
 import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import XBadge from "../../components/ui-components/XBadge";
 import XHr from "../../components/ui-components/XHr";
 import styles from "../../styles/shop/ShopHeader.module.scss";
@@ -21,14 +26,20 @@ import {
   TiktokIcon,
   YouTubeIcon,
 } from "../../utils/theme/icons";
+import CartContent from "../shop/CartContent";
 
 function ShopHeader({ shopInfo, ...props }) {
   const router = useRouter();
+  const isMobile = useMediaQuery("(max-width:800px)");
+  const dispatch = useDispatch();
   const { carts } = useSelector((state) => state.cart);
+  const { cartPreviewOpen } = useSelector((state) => state.ui);
+  const { shop } = router.query;
 
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [cart, setCart] = useState(null);
 
   const [loadingCategories, setLoadingCategories] = useState(true);
   const [categories, setCategories] = useState([]);
@@ -37,6 +48,17 @@ function ShopHeader({ shopInfo, ...props }) {
     if (router.isReady) setSearchTerm(router.query.searchTerm);
     !categories.length && getCategories(shopInfo._id);
   }, [router]);
+
+  useEffect(() => {
+    if (router.isReady && router.query) {
+      if (shop) {
+        setCart(carts?.find((cart) => cart.shop === shop));
+      } else {
+        enqueueSnackbar("Lien de shop invalide", { variant: "error" });
+        router.push("/");
+      }
+    }
+  }, [router, carts]);
 
   const getCategories = async (shopId) => {
     setLoadingCategories(true);
@@ -52,8 +74,43 @@ function ShopHeader({ shopInfo, ...props }) {
     }
   };
 
+  const emptyCart = () => {
+    dispatch({
+      type: "EMPTY_CART",
+      payload: {
+        shop: shop,
+      },
+    });
+    setCart(null);
+  };
+
+  const updateCart = async (product, action) => {
+    dispatch({
+      type: "UPDATE_CARTS",
+      payload: {
+        shop: shop,
+        product: product,
+        qtyAction: action,
+      },
+    });
+  };
+
+  const deleteProduct = (designation) => {
+    dispatch({
+      type: "DELETE_PRODUCT_CART",
+      payload: {
+        shop: shop,
+        designation,
+      },
+    });
+  };
+
   const toggleDrawer = () => {
     setDrawerOpen(!drawerOpen);
+  };
+
+  const toggleCartPreview = () => {
+    dispatch({ type: "TOGGLE_CART_PREVIEW" });
   };
 
   const toggleSearch = () => {
@@ -300,6 +357,36 @@ function ShopHeader({ shopInfo, ...props }) {
           </div>
         </section>
       </Drawer>
+      <Drawer
+        open={cartPreviewOpen}
+        anchor={"right"}
+        onClose={toggleCartPreview}
+      >
+        <div
+          style={{
+            overflowY: "auto",
+            padding: "90px 10px 10px 10px",
+            width: isMobile ? "85vw" : "50vw",
+          }}
+        >
+          {cart?.content?.length ? (
+            <CartContent
+              cart={cart}
+              shopInfo={shopInfo}
+              deleteProduct={deleteProduct}
+              updateCart={updateCart}
+              emptyCart={emptyCart}
+              proceedToCheckout={true}
+              freeShippingCounter={true}
+            />
+          ) : (
+            <>
+              <h2>Votre panier est vide !</h2>
+              <XHr width="60px" color={shopInfo.settings.primaryColor} />
+            </>
+          )}
+        </div>
+      </Drawer>
       <div
         className={styles.header}
         style={{
@@ -369,19 +456,33 @@ function ShopHeader({ shopInfo, ...props }) {
             <SearchIcon />
           </IconButton>
           &nbsp;&nbsp;
-          <XBadge
-            color={shopInfo.settings.primaryColor}
-            content={
-              carts.find((cart) => cart.shop === shopInfo.name)?.content
-                ?.length || 0
-            }
-          >
-            <Link href={`/shop/cart?shop=${shopInfo.name}`}>
-              <IconButton color={deduceColor(shopInfo.settings.headerColor)}>
+          {cartPreviewOpen ? (
+            <IconButton
+              onClick={() =>
+                !router.pathname.includes("cart") && toggleCartPreview()
+              }
+              color={deduceColor(shopInfo.settings.headerColor)}
+            >
+              <CloseIcon />
+            </IconButton>
+          ) : (
+            <XBadge
+              color={shopInfo.settings.primaryColor}
+              content={
+                carts?.find((cart) => cart.shop === shopInfo.name)?.content
+                  ?.length || 0
+              }
+            >
+              <IconButton
+                onClick={() =>
+                  !router.pathname.includes("cart") && toggleCartPreview()
+                }
+                color={deduceColor(shopInfo.settings.headerColor)}
+              >
                 <ShoppingCartIcon />
               </IconButton>
-            </Link>
-          </XBadge>
+            </XBadge>
+          )}
         </div>
       </div>
     </>

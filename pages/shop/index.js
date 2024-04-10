@@ -142,6 +142,7 @@ function Shop(props) {
         },
       },
     });
+    dispatch({ type: "TOGGLE_CART_PREVIEW" });
     enqueueSnackbar(`${product.designation} Ajouté au panier`, {
       variant: "info",
     });

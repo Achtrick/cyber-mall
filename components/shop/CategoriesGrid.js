@@ -26,7 +26,7 @@ function CategoriesGrid({
           slidesPerView={isMobile ? 1 : 3}
           spaceBetween={20}
           loop={true}
-          autoplay={true}
+          autoplay={false}
           style={{ width: "100%", height: "250px" }}
         >
           {categories
