@@ -23,7 +23,7 @@ function CategoriesGrid({
         )
       ).length ? (
         <XSwiper
-          slidesPerView={isMobile ? 1 : 3}
+          slidesPerView={isMobile ? 2 : 5}
           spaceBetween={20}
           loop={true}
           autoplay={false}

@@ -417,8 +417,8 @@ function ShopHeader({ shopInfo, ...props }) {
                 }}
                 style={{
                   objectFit: "contain",
-                  width: "100px",
-                  height: "60px",
+                  width: "150px",
+                  height: "80px",
                 }}
               />
             </Link>
@@ -428,8 +428,8 @@ function ShopHeader({ shopInfo, ...props }) {
                 <Image
                   alt="logo"
                   src={"/images/default-store.png"}
-                  width={"40"}
-                  height={"40"}
+                  width={"60"}
+                  height={"60"}
                   style={{
                     objectFit: "contain",
                     backgroundColor: "white",

@@ -742,8 +742,8 @@ function Architecture(props) {
                     onError={(e) => {
                       setLogo("/images/default-store.png");
                     }}
-                    width={"100"}
-                    height={"100"}
+                    width={"150"}
+                    height={"80"}
                     style={{ objectFit: "contain" }}
                   />
                 ) : (
@@ -1056,9 +1056,6 @@ function Architecture(props) {
                       </IconButton>
                     ) : null}
                   </div>
-                  <br />
-                  <br />
-                  <br />
                   <br />
                   <p>Aperçu</p>
                   <XGallery

@@ -15,10 +15,10 @@ function XGridSkeleton({ title }) {
         <h2 align="center">{title}</h2>
 
         <XSwiper
-          slidesPerView={isMobile ? 1 : 3}
+          slidesPerView={isMobile ? 2 : 5}
           spaceBetween={20}
           loop={true}
-          autoplay={true}
+          autoplay={false}
           style={{ width: "100%", height: "250px" }}
         >
           {[1, 2, 3, 4, 5, 6].map((_, index) => {

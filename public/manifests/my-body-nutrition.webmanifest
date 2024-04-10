@@ -1,24 +1,24 @@
 {
-  "short_name": "My body nutrition",
-  "name": "My body nutrition",
+  "short_name": "My-body-nutrition",
+  "name": "My-body-nutrition",
   "icons": [
     {
-      "src": "/api/images/fill/1712509487070.png",
+      "src": "/api/images/fill/1712772137511.png",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
     },
     {
-      "src": "/api/images/fill/1712509487070.png",
+      "src": "/api/images/fill/1712772137511.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "/api/images/fill/1712509487070.png",
+      "src": "/api/images/fill/1712772137511.png",
       "type": "image/png",
       "sizes": "512x512"
     }
   ],
-  "start_url": "/shop/?shop=my body nutrition",
+  "start_url": "/shop/?shop=my-body-nutrition",
   "theme_color": "#dd6602",
   "background_color": "#808080",
   "display": "standalone",
