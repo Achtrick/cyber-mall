@@ -202,7 +202,6 @@ function Register(props) {
                     )}
                   </Button>
                 </div>
-
                 <br />
                 <br />
                 <p

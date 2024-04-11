@@ -277,34 +277,6 @@ function Inventory(props) {
     }, 600);
   };
 
-  const controls = (
-    <>
-      {" "}
-      <Tooltip title="Modifier">
-        <IconButton
-          color="warning"
-          onClick={() => {
-            setAction(AdminActions.UPDATE);
-            setProduct(product);
-          }}
-        >
-          <ModeEditIcon sx={{ width: "20px" }} />
-        </IconButton>
-      </Tooltip>
-      <Tooltip title="Supprimer">
-        <IconButton
-          color="error"
-          onClick={() => {
-            setAction(AdminActions.DELETE);
-            setProduct(product);
-          }}
-        >
-          <DeleteIcon sx={{ width: "20px" }} />
-        </IconButton>
-      </Tooltip>
-    </>
-  );
-
   return (
     <AdminLayout>
       <DisconnectedGuard>
@@ -588,11 +560,61 @@ function Inventory(props) {
                         <td data-label="Qté">{product.qty}</td>
                         <td data-label="Actions">
                           <div>
-                            {userInfo?.shop.pack.type === "PREMIUM"
-                              ? controls
-                              : index > 9
-                              ? "Activer Premium Pour Prendre Contrôle de nouveau"
-                              : controls}
+                            {userInfo?.shop.pack.type === "PREMIUM" ? (
+                              <>
+                                {" "}
+                                <Tooltip title="Modifier">
+                                  <IconButton
+                                    color="warning"
+                                    onClick={() => {
+                                      setProduct(product);
+                                      setAction(AdminActions.UPDATE);
+                                    }}
+                                  >
+                                    <ModeEditIcon sx={{ width: "20px" }} />
+                                  </IconButton>
+                                </Tooltip>
+                                <Tooltip title="Supprimer">
+                                  <IconButton
+                                    color="error"
+                                    onClick={() => {
+                                      setProduct(product);
+                                      setAction(AdminActions.DELETE);
+                                    }}
+                                  >
+                                    <DeleteIcon sx={{ width: "20px" }} />
+                                  </IconButton>
+                                </Tooltip>
+                              </>
+                            ) : index > 9 ? (
+                              "Activer Premium Pour Prendre Contrôle de nouveau"
+                            ) : (
+                              <>
+                                {" "}
+                                <Tooltip title="Modifier">
+                                  <IconButton
+                                    color="warning"
+                                    onClick={() => {
+                                      setProduct(product);
+                                      setAction(AdminActions.UPDATE);
+                                    }}
+                                  >
+                                    <ModeEditIcon sx={{ width: "20px" }} />
+                                  </IconButton>
+                                </Tooltip>
+                                <Tooltip title="Supprimer">
+                                  <IconButton
+                                    color="error"
+                                    onClick={() => {
+                                      setProduct(product);
+                                      setAction(AdminActions.DELETE);
+                                    }}
+                                  >
+                                    <DeleteIcon sx={{ width: "20px" }} />
+                                  </IconButton>
+                                </Tooltip>
+                              </>
+                            )}
                           </div>
                         </td>
                       </tr>
