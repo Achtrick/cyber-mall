@@ -165,7 +165,7 @@ function Register(props) {
                 >
                   <label style={{ color: labelColor }}>
                     Choisissez un nom unique qui ne contient pas de caractères
-                    spéciaux et pas d'espaces.
+                    spéciaux et pas d&apos;espaces.
                   </label>
                   <input
                     id="shopName"
