@@ -18,7 +18,7 @@
       "sizes": "512x512"
     }
   ],
-  "start_url": "/shop/?shop=scar",
+  "start_url": "/shop/scar",
   "theme_color": "#000000",
   "background_color": "#808080",
   "display": "standalone",

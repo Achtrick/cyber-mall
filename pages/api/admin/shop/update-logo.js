@@ -29,7 +29,7 @@ const createManifest = (shopName, logo, themeColor) => {
         sizes: "512x512",
       },
     ],
-    start_url: `/shop/?shop=${shopName}`,
+    start_url: `/shop/${shopName}`,
     theme_color: themeColor,
     background_color: "#808080",
     display: "standalone",

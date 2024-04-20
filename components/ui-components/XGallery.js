@@ -14,7 +14,7 @@ function XGallery({ shopName, content, props }) {
             content[0]?.link.length
               ? content[0]?.link
               : content[0]?.category.length
-              ? `/shop/products/?shop=${shopName}&category=${content[0]?.category}`
+              ? `/shop/products/${shopName}?category=${content[0]?.category}`
               : router.asPath
           }
           rel={content[0]?.link.length ? "noreferrer" : null}
@@ -42,7 +42,7 @@ function XGallery({ shopName, content, props }) {
             content[1]?.link.length
               ? content[1]?.link
               : content[1]?.category.length
-              ? `/shop/products/?shop=${shopName}&category=${content[1]?.category}`
+              ? `/shop/products/${shopName}?category=${content[1]?.category}`
               : router.asPath
           }
           rel={content[1]?.link.length ? "noreferrer" : null}
@@ -72,7 +72,7 @@ function XGallery({ shopName, content, props }) {
             content[2]?.link.length
               ? content[2]?.link
               : content[2]?.category.length
-              ? `/shop/products/?shop=${shopName}&category=${content[2]?.category}`
+              ? `/shop/products/${shopName}?category=${content[2]?.category}`
               : router.asPath
           }
           rel={content[2]?.link.length ? "noreferrer" : null}
@@ -100,7 +100,7 @@ function XGallery({ shopName, content, props }) {
             content[3]?.link.length
               ? content[3]?.link
               : content[3]?.category.length
-              ? `/shop/products/?shop=${shopName}&category=${content[3]?.category}`
+              ? `/shop/products/${shopName}?category=${content[3]?.category}`
               : router.asPath
           }
           rel={content[3]?.link.length ? "noreferrer" : null}

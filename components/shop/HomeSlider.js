@@ -35,7 +35,7 @@ function HomeSlider({ slides, shopName, ...props }) {
                   </a>
                 ) : slide.category && slide.category !== "" ? (
                   <Link
-                    href={`/shop/products?shop=${shopName}&category=${slide.category}`}
+                    href={`/shop/products/${shopName}?category=${slide.category}`}
                   >
                     <img
                       src={

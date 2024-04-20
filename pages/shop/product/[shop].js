@@ -5,24 +5,24 @@ import { useSnackbar } from "notistack";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { SwiperSlide } from "swiper/react";
-import LoadingScreen from "../../components/shop/LoadingScreen";
-import ProductsSlider from "../../components/shop/ProductsSlider";
-import ShopLayout from "../../components/shop/ShopLayout";
-import XButton from "../../components/ui-components/XButton";
-import XHr from "../../components/ui-components/XHr";
-import XMagnifier from "../../components/ui-components/XMagnifier";
-import XSwiper from "../../components/ui-components/XSwiper";
-import styles from "../../styles/shop/Product.module.scss";
+import LoadingScreen from "../../../components/shop/LoadingScreen";
+import ProductsSlider from "../../../components/shop/ProductsSlider";
+import ShopLayout from "../../../components/shop/ShopLayout";
+import XButton from "../../../components/ui-components/XButton";
+import XHr from "../../../components/ui-components/XHr";
+import XMagnifier from "../../../components/ui-components/XMagnifier";
+import XSwiper from "../../../components/ui-components/XSwiper";
+import styles from "../../../styles/shop/Product.module.scss";
 import {
   calculateDiscount,
   deduceColor,
-} from "../../utils/config/convertHelper";
-import { getError } from "../../utils/shared/getError";
-import { AddIcon, RemoveIcon } from "../../utils/theme/icons";
+} from "../../../utils/config/convertHelper";
+import { getError } from "../../../utils/shared/getError";
+import { AddIcon, RemoveIcon } from "../../../utils/theme/icons";
 
-function Product(props) {
+function Product({ shop }) {
   const router = useRouter();
-  const { shop, id } = router.query;
+  const { id } = router.query;
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
 
@@ -36,15 +36,13 @@ function Product(props) {
   const [qty, setQty] = useState(1);
 
   useEffect(() => {
-    if (router.isReady && router.query) {
-      if (shop) {
-        getShopInfo();
-      } else {
-        enqueueSnackbar("Lien de shop invalide", { variant: "error" });
-        router.push("/");
-      }
+    if (shop) {
+      getShopInfo();
+    } else {
+      enqueueSnackbar("Lien de shop invalide", { variant: "error" });
+      router.push("/");
     }
-  }, [router]);
+  }, []);
 
   useEffect(() => {
     if (router.isReady && shopInfo) {
@@ -323,3 +321,9 @@ function Product(props) {
 }
 
 export default Product;
+
+export function getServerSideProps(context) {
+  return {
+    props: { shop: context.params.shop },
+  };
+}

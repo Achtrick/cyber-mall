@@ -18,7 +18,7 @@
       "sizes": "512x512"
     }
   ],
-  "start_url": "/shop/?shop=my-body-nutrition",
+  "start_url": "/shop/my-body-nutrition",
   "theme_color": "#dd6602",
   "background_color": "#808080",
   "display": "standalone",

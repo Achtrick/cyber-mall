@@ -16,9 +16,8 @@ import styles from "../../styles/shop/Index.module.scss";
 import { calculateDiscount } from "../../utils/config/convertHelper";
 import { getError } from "../../utils/shared/getError";
 
-function Shop(props) {
+function Shop({ shop }) {
   const router = useRouter();
-  const { shop } = router.query;
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
 
@@ -36,15 +35,13 @@ function Shop(props) {
   const [discounts, setDiscounts] = useState([]);
 
   useEffect(() => {
-    if (router.isReady && router.query) {
-      if (shop) {
-        getShopInfo();
-      } else {
-        enqueueSnackbar("Lien de shop invalide", { variant: "error" });
-        router.push("/");
-      }
+    if (shop) {
+      getShopInfo();
+    } else {
+      enqueueSnackbar("Lien de shop invalide", { variant: "error" });
+      router.push("/");
     }
-  }, [router]);
+  }, []);
 
   const getShopInfo = async () => {
     try {
@@ -154,10 +151,8 @@ function Shop(props) {
         <LoadingScreen />
       ) : (
         <ShopLayout
-          description={
-            "Laissez-nous tenir votre café pendant que vous faites vos shopping !"
-          }
           shopInfo={shopInfo}
+          description={shopInfo.architecture.about}
         >
           <section>
             <div style={{ marginBottom: "20px", width: "100%" }}>
@@ -271,3 +266,9 @@ function Shop(props) {
 }
 
 export default Shop;
+
+export function getServerSideProps(context) {
+  return {
+    props: { shop: context.params.shop },
+  };
+}

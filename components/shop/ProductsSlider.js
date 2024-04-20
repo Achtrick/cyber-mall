@@ -77,7 +77,7 @@ function ProductsSlider({
                 <Link
                   href={
                     activateControls
-                      ? `/shop/product/?shop=${shopInfo.name}&id=${product._id}`
+                      ? `/shop/product/${shopInfo.name}?id=${product._id}`
                       : ""
                   }
                 >

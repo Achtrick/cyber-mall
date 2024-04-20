@@ -224,7 +224,7 @@ function CartContent({
             text={"Finir Vos Achats"}
             action={() => {
               dispatch({ type: "TOGGLE_CART_PREVIEW" });
-              router.push(`/shop/cart?shop=${shopInfo.name}`);
+              router.push(`/shop/cart/${shopInfo.name}`);
             }}
           />
         ) : null}

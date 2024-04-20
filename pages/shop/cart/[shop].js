@@ -4,17 +4,16 @@ import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import CartContent from "../../components/shop/CartContent";
-import LoadingScreen from "../../components/shop/LoadingScreen";
-import ShopLayout from "../../components/shop/ShopLayout";
-import XButton from "../../components/ui-components/XButton";
-import XHr from "../../components/ui-components/XHr";
-import styles from "../../styles/shop/Cart.module.scss";
-import { getError } from "../../utils/shared/getError";
+import CartContent from "../../../components/shop/CartContent";
+import LoadingScreen from "../../../components/shop/LoadingScreen";
+import ShopLayout from "../../../components/shop/ShopLayout";
+import XButton from "../../../components/ui-components/XButton";
+import XHr from "../../../components/ui-components/XHr";
+import styles from "../../../styles/shop/Cart.module.scss";
+import { getError } from "../../../utils/shared/getError";
 
-function Cart(props) {
+function Cart({ shop }) {
   const router = useRouter();
-  const { shop } = router.query;
   const { carts } = useSelector((state) => state.cart);
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
@@ -33,16 +32,14 @@ function Cart(props) {
   const [loadingOrder, setLoadingOrder] = useState(false);
 
   useEffect(() => {
-    if (router.isReady && router.query) {
-      if (shop) {
-        getShopInfo();
-        setCart(carts.find((cart) => cart.shop === shop));
-      } else {
-        enqueueSnackbar("Lien de shop invalide", { variant: "error" });
-        router.push("/");
-      }
+    if (shop) {
+      getShopInfo();
+      setCart(carts.find((cart) => cart.shop === shop));
+    } else {
+      enqueueSnackbar("Lien de shop invalide", { variant: "error" });
+      router.push("/");
     }
-  }, [router, carts]);
+  }, [carts]);
 
   const getShopInfo = async () => {
     try {
@@ -122,9 +119,7 @@ function Cart(props) {
       ) : (
         <ShopLayout
           title={"Mon panier"}
-          description={
-            "Laissez-nous tenir votre café pendant que vous faites vos shopping !"
-          }
+          description={shopInfo.architecture.about}
           shopInfo={shopInfo}
         >
           <div className={styles.container}>
@@ -232,7 +227,7 @@ function Cart(props) {
                 <XButton
                   color={shopInfo.settings.primaryColor}
                   text={"allez faire du shopping"}
-                  action={() => router.push(`/shop/products?shop=${shop}`)}
+                  action={() => router.push(`/shop/${shop}/products`)}
                 />
               </div>
             )}
@@ -244,3 +239,9 @@ function Cart(props) {
 }
 
 export default Cart;
+
+export function getServerSideProps(context) {
+  return {
+    props: { shop: context.params.shop },
+  };
+}

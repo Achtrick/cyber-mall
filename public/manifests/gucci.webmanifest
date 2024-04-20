@@ -18,7 +18,7 @@
       "sizes": "512x512"
     }
   ],
-  "start_url": "/shop/?shop=gucci",
+  "start_url": "/shop/gucci",
   "theme_color": "#000000",
   "background_color": "#808080",
   "display": "standalone",

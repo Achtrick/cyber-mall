@@ -10,22 +10,22 @@ import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import LoadingScreen from "../../components/shop/LoadingScreen";
-import ShopLayout from "../../components/shop/ShopLayout";
-import XAutoComplete from "../../components/ui-components/XAutoComplete";
-import XButton from "../../components/ui-components/XButton";
-import XPagination from "../../components/ui-components/XPagination";
-import styles from "../../styles/shop/Products.module.scss";
+import LoadingScreen from "../../../components/shop/LoadingScreen";
+import ShopLayout from "../../../components/shop/ShopLayout";
+import XAutoComplete from "../../../components/ui-components/XAutoComplete";
+import XButton from "../../../components/ui-components/XButton";
+import XPagination from "../../../components/ui-components/XPagination";
+import styles from "../../../styles/shop/Products.module.scss";
 import {
   calculateDiscount,
   deduceColor,
-} from "../../utils/config/convertHelper";
-import { getError } from "../../utils/shared/getError";
-import { ResetIcon } from "../../utils/theme/icons";
+} from "../../../utils/config/convertHelper";
+import { getError } from "../../../utils/shared/getError";
+import { ResetIcon } from "../../../utils/theme/icons";
 
-function Products() {
+function Products({ shop }) {
   const router = useRouter();
-  const { shop, category, searchTerm, sort } = router.query;
+  const { category, searchTerm, sort } = router.query;
 
   const sortOptions = [{ name: "ascending" }, { name: "descending" }];
 
@@ -50,15 +50,13 @@ function Products() {
   const [selectedProduct, setSelectedProduct] = useState(null);
 
   useEffect(() => {
-    if (router.isReady && router.query) {
-      if (shop) {
-        getShopInfo();
-      } else {
-        enqueueSnackbar("Lien de shop invalide", { variant: "error" });
-        router.push("/");
-      }
+    if (shop) {
+      getShopInfo();
+    } else {
+      enqueueSnackbar("Lien de shop invalide", { variant: "error" });
+      router.push("/");
     }
-  }, [router]);
+  }, []);
 
   useEffect(() => {
     if (router.isReady && shopInfo && !loadingCategories) getProducts();
@@ -169,7 +167,7 @@ function Products() {
       router.push({ pathname: pathname, query: query });
     } else {
       router.push(
-        `/shop/products/?shop=${shopInfo.name}&searchTerm=${
+        `/shop/products/${shopInfo.name}?searchTerm=${
           searchTerm ? searchTerm : ""
         }`
       );
@@ -311,7 +309,7 @@ function Products() {
                         key={product._id}
                       >
                         <Link
-                          href={`product/?shop=${shopInfo.name}&id=${product._id}`}
+                          href={`/shop/product/${shopInfo.name}?id=${product._id}`}
                         >
                           <img
                             alt={product.designation}
@@ -422,3 +420,9 @@ function Products() {
   );
 }
 export default Products;
+
+export function getServerSideProps(context) {
+  return {
+    props: { shop: context.params.shop },
+  };
+}

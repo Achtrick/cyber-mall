@@ -8,6 +8,7 @@ import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useSnackbar } from "notistack";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import XBadge from "../../components/ui-components/XBadge";
@@ -29,12 +30,13 @@ import {
 import CartContent from "../shop/CartContent";
 
 function ShopHeader({ shopInfo, ...props }) {
+  const shop = shopInfo.name;
   const router = useRouter();
   const isMobile = useMediaQuery("(max-width:800px)");
   const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
   const { carts } = useSelector((state) => state.cart);
   const { cartPreviewOpen } = useSelector((state) => state.ui);
-  const { shop } = router.query;
 
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -50,15 +52,13 @@ function ShopHeader({ shopInfo, ...props }) {
   }, [router]);
 
   useEffect(() => {
-    if (router.isReady && router.query) {
-      if (shop) {
-        setCart(carts?.find((cart) => cart.shop === shop));
-      } else {
-        enqueueSnackbar("Lien de shop invalide", { variant: "error" });
-        router.push("/");
-      }
+    if (shop) {
+      setCart(carts?.find((cart) => cart.shop === shop));
+    } else {
+      enqueueSnackbar("Lien de shop invalide", { variant: "error" });
+      router.push("/");
     }
-  }, [router, carts]);
+  }, [carts]);
 
   const getCategories = async (shopId) => {
     setLoadingCategories(true);
@@ -130,7 +130,7 @@ function ShopHeader({ shopInfo, ...props }) {
       router.push({ pathname: pathname, query: query });
     } else {
       router.push(
-        `/shop/products/?shop=${shopInfo.name}&searchTerm=${
+        `/shop/products/${shopInfo.name}?searchTerm=${
           searchTerm ? searchTerm : ""
         }`
       );
@@ -148,7 +148,7 @@ function ShopHeader({ shopInfo, ...props }) {
     if (pathname.includes("products")) {
       return { pathname: pathname, query: query };
     } else {
-      return `/shop/products/?shop=${shopInfo.name}&category=${categoryName}`;
+      return `/shop/products/${shopInfo.name}?category=${categoryName}`;
     }
   };
 
@@ -216,7 +216,7 @@ function ShopHeader({ shopInfo, ...props }) {
       <Drawer open={drawerOpen} anchor={"left"} onClose={toggleDrawer}>
         <section className={styles.drawer}>
           <div className={styles.container}>
-            <Link href={`/shop?shop=${shopInfo.name}`} onClick={toggleDrawer}>
+            <Link href={`/shop/${shopInfo.name}`} onClick={toggleDrawer}>
               <div
                 className={styles.link}
                 onMouseOver={(e) => {
@@ -240,7 +240,7 @@ function ShopHeader({ shopInfo, ...props }) {
               </div>
             </Link>
             <Link
-              href={`/shop/products?shop=${shopInfo.name}`}
+              href={`/shop/products/${shopInfo.name}`}
               onClick={toggleDrawer}
             >
               <div
@@ -408,7 +408,7 @@ function ShopHeader({ shopInfo, ...props }) {
         </div>
         <div className={styles.logo}>
           {shopInfo.logo ? (
-            <Link href={`/shop?shop=${shopInfo.name}`}>
+            <Link href={`/shop/${shopInfo.name}`}>
               <img
                 alt={shopInfo.name}
                 src={`/api/images/${shopInfo.logo.split("/").pop()}`}
@@ -423,7 +423,7 @@ function ShopHeader({ shopInfo, ...props }) {
               />
             </Link>
           ) : (
-            <Link href={`/shop?shop=${shopInfo.name}`}>
+            <Link href={`/shop/${shopInfo.name}`}>
               <div className="row">
                 <Image
                   alt="logo"
@@ -491,3 +491,9 @@ function ShopHeader({ shopInfo, ...props }) {
 }
 
 export default ShopHeader;
+
+export function getServerSideProps(context) {
+  return {
+    props: { shop: context.params.shop },
+  };
+}
