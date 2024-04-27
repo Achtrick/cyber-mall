@@ -31,6 +31,7 @@ function XGallery({ shopName, content, props }) {
             onError={(e) => {
               e.target.src = "/images/image-placeholder.jpg";
             }}
+            alt="gallery-item"
           />
           <div className={styles.overlay}>
             <p className={styles.text}>{content[0]?.text ?? "text"}</p>
@@ -59,6 +60,7 @@ function XGallery({ shopName, content, props }) {
             onError={(e) => {
               e.target.src = "/images/image-placeholder.jpg";
             }}
+            alt="gallery-item"
           />
           <div className={styles.overlay}>
             <p className={styles.text}>{content[1]?.text ?? "text"}</p>
@@ -89,6 +91,7 @@ function XGallery({ shopName, content, props }) {
             onError={(e) => {
               e.target.src = "/images/image-placeholder.jpg";
             }}
+            alt="gallery-item"
           />
           <div className={styles.overlay}>
             <p className={styles.text}>{content[2]?.text ?? "text"}</p>
@@ -117,6 +120,7 @@ function XGallery({ shopName, content, props }) {
             onError={(e) => {
               e.target.src = "/images/image-placeholder.jpg";
             }}
+            alt="gallery-item"
           />
           <div className={styles.overlay}>
             <p className={styles.text}>{content[3]?.text ?? "text"}</p>

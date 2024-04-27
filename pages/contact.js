@@ -47,7 +47,7 @@ function Contact(props) {
       <Layout
         title={"Contact"}
         description={"Nous contacter pour répondre à vos questions."}
-        image={"/images/contact_animated.gif"}
+        image={"/images/contact.svg"}
       >
         <section className={styles.container}>
           <p data-aos="fade-up" data-aos-offset="100">

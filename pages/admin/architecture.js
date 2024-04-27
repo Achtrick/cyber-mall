@@ -840,6 +840,7 @@ function Architecture(props) {
                             </IconButton>
                           </span>
                           <img
+                            alt={slide.category}
                             src={`/api/images/${slide.image.split("/").pop()}`}
                             onError={(e) => {
                               e.target.src = "/images/image-placeholder.jpg";
@@ -1016,6 +1017,7 @@ function Architecture(props) {
                             </IconButton>
                           </span>
                           <img
+                            alt={block.category}
                             src={`/api/images/${block.image.split("/").pop()}`}
                             onError={(e) => {
                               e.target.src = "/images/image-placeholder.jpg";

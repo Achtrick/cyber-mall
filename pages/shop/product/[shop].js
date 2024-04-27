@@ -195,7 +195,10 @@ function Product({ shop }) {
                       })
                     ) : (
                       <SwiperSlide>
-                        <img src={"/images/image-placeholder.jpg"} />
+                        <img
+                          alt={product.designation}
+                          src={"/images/image-placeholder.jpg"}
+                        />
                       </SwiperSlide>
                     )}
                   </XSwiper>

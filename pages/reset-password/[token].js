@@ -69,7 +69,7 @@ function ResetPassword(props) {
       <Layout
         title={"Chnager le mot de passe"}
         description={"Entrez votre nouveau mot de passe"}
-        image={"/images/forgot_animated.gif"}
+        image={"/images/forgot_password.svg"}
       >
         {loading ? (
           <div className="spinner">
@@ -125,7 +125,7 @@ function ResetPassword(props) {
             <div className={styles.col40}>
               <img
                 alt="cyber-mall-login"
-                src={"/" + "./images/forgot_animated.gif"}
+                src={"/" + "./images/forgot_password.svg"}
               />
             </div>
           </div>

@@ -10,7 +10,7 @@ export default function Privacy(props) {
         description={
           "Protéger leurs comptes contre le bannissement de nos mentors"
         }
-        image={"/images/login_animated.gif"}
+        image={"/images/login.svg"}
       >
         <div style={{ padding: "20px", fontSize: "13px" }}>
           <h1>Condition d&apos;utilisation</h1>

@@ -366,7 +366,7 @@ function ShopHeader({ shopInfo, ...props }) {
         <div
           style={{
             overflowY: "auto",
-            padding: "90px 10px 10px 10px",
+            padding: "90px 10px 40px 10px",
             width: isMobile ? "85vw" : "50vw",
           }}
         >

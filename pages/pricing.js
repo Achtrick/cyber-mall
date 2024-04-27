@@ -13,7 +13,7 @@ function Pricing(props) {
         description={
           "nous proposons différents packs flexibles pour répondre à vos besoins !"
         }
-        image={"/images/pricing_animated.gif"}
+        image={"/images/pricing.svg"}
       >
         <section className={styles.container}>
           <p data-aos="fade-up" data-aos-offset="100">

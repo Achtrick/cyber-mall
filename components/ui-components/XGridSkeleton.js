@@ -27,12 +27,12 @@ function XGridSkeleton({ title }) {
                 <div className={styles.category}>
                   {title.includes("Catégories") ? (
                     <>
-                      <img src="/images/category.svg" />
+                      <img src="/images/category.svg" alt={title} />
                       <p>Catégorie</p>
                     </>
                   ) : (
                     <>
-                      <img src="/images/image-placeholder.jpg" />
+                      <img src="/images/image-placeholder.jpg" alt={title} />
                       <h4 style={{ margin: "5px 0px" }}>Designation</h4>
                       <p>prix</p>
                     </>

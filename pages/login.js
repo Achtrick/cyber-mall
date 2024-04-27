@@ -49,7 +49,7 @@ function Login(props) {
       <Layout
         title={"Se connecter"}
         description={"Connecter-vous et bonne vente"}
-        image={"/images/login_animated.gif"}
+        image={"/images/login.svg"}
       >
         <section className={styles.container}>
           <div className={styles.row}>
@@ -154,7 +154,8 @@ function Login(props) {
                 data-aos="fade-up"
                 data-aos-offset="100"
                 data-aos-delay="500"
-                src="images/login_animated.gif"
+                alt="cyber-mall-login"
+                src="images/login.svg"
               />
             </div>
           </div>

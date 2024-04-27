@@ -48,7 +48,7 @@ function ForgotPassword(props) {
         description={
           "Vous avez oubliée votre mot de passe, ce n'est pas un problème, ont est là !."
         }
-        image={"/images/forgot_animated.gif"}
+        image={"/images/forgot_password.svg"}
       >
         <div className={styles.row}>
           <div className={styles.container}>
@@ -113,8 +113,8 @@ function ForgotPassword(props) {
               data-aos="fade-up"
               data-aos-offset="100"
               data-aos-delay="100"
-              alt="transportini-login"
-              src="./images/forgot_animated.gif"
+              alt="cyber-mall-forgot-password"
+              src="./images/forgot_password.svg"
             />
           </div>
         </div>

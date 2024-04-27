@@ -15,7 +15,11 @@ function Control(props) {
           </p>
         </div>
         <div className="col">
-          <img data-aos="fade-in" src="/images/dashboard_animated.gif" />
+          <img
+            data-aos="fade-in"
+            src="/images/all_in_one.svg"
+            alt="all_in_one"
+          />
         </div>
       </div>
     </section>

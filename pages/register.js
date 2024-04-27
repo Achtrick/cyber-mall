@@ -73,7 +73,7 @@ function Register(props) {
       <Layout
         title={"S'inscrire"}
         description={"Inscrivez-vous et bonne vente"}
-        image={"/images/register_animated.gif"}
+        image={"/images/register.svg"}
       >
         <section className={styles.container}>
           <div className={styles.row}>
@@ -220,7 +220,8 @@ function Register(props) {
                 data-aos="fade-up"
                 data-aos-offset="100"
                 data-aos-delay="100"
-                src="/images/register_animated.gif"
+                src="/images/signup.svg"
+                alt="cyber-mall-signup"
               />
             </div>
           </div>

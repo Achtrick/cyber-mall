@@ -5,7 +5,7 @@ function Receipts(props) {
     <section className="vitrine-block">
       <div className="row">
         <div className="col">
-          <img data-aos="fade-in" src="/images/receipts_animated.gif" />
+          <img data-aos="fade-in" src="/images/invoices.svg" alt="receipts" />
         </div>
         <div className="col">
           <p data-aos="fade-up">générer les factures</p>
