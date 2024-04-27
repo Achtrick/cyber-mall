@@ -23,7 +23,7 @@ function BecomeMember(props) {
           }}
           variant="contained"
         >
-          Devenir Membre
+          S&apos;inscrire
         </Button>
       </Link>
     </section>
