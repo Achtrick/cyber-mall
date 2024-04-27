@@ -130,9 +130,7 @@ function ShopHeader({ shopInfo, ...props }) {
       router.push({ pathname: pathname, query: query });
     } else {
       router.push(
-        `/shop/products/${shopInfo.name}?searchTerm=${
-          searchTerm ? searchTerm : ""
-        }`
+        `/${shopInfo.name}/products?searchTerm=${searchTerm ? searchTerm : ""}`
       );
     }
 
@@ -148,7 +146,7 @@ function ShopHeader({ shopInfo, ...props }) {
     if (pathname.includes("products")) {
       return { pathname: pathname, query: query };
     } else {
-      return `/shop/products/${shopInfo.name}?category=${categoryName}`;
+      return `/${shopInfo.name}/products?category=${categoryName}`;
     }
   };
 
@@ -216,7 +214,7 @@ function ShopHeader({ shopInfo, ...props }) {
       <Drawer open={drawerOpen} anchor={"left"} onClose={toggleDrawer}>
         <section className={styles.drawer}>
           <div className={styles.container}>
-            <Link href={`/shop/${shopInfo.name}`} onClick={toggleDrawer}>
+            <Link href={`/${shopInfo.name}`} onClick={toggleDrawer}>
               <div
                 className={styles.link}
                 onMouseOver={(e) => {
@@ -239,10 +237,7 @@ function ShopHeader({ shopInfo, ...props }) {
                 Accueil
               </div>
             </Link>
-            <Link
-              href={`/shop/products/${shopInfo.name}`}
-              onClick={toggleDrawer}
-            >
+            <Link href={`/${shopInfo.name}/products`} onClick={toggleDrawer}>
               <div
                 className={styles.link}
                 onMouseOver={(e) => {
@@ -408,7 +403,7 @@ function ShopHeader({ shopInfo, ...props }) {
         </div>
         <div className={styles.logo}>
           {shopInfo.logo ? (
-            <Link href={`/shop/${shopInfo.name}`}>
+            <Link href={`/${shopInfo.name}`}>
               <img
                 alt={shopInfo.name}
                 src={`/api/images/${shopInfo.logo.split("/").pop()}`}
@@ -423,7 +418,7 @@ function ShopHeader({ shopInfo, ...props }) {
               />
             </Link>
           ) : (
-            <Link href={`/shop/${shopInfo.name}`}>
+            <Link href={`/${shopInfo.name}`}>
               <div className="row">
                 <Image
                   alt="logo"

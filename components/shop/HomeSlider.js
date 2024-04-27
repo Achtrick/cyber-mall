@@ -1,9 +1,11 @@
-import { Link } from "@mui/material";
+import { Link, useMediaQuery } from "@mui/material";
 import React from "react";
 import { SwiperSlide } from "swiper/react";
 import XSwiper from "../ui-components/XSwiper";
 
 function HomeSlider({ slides, shopName, ...props }) {
+  const isMobile = useMediaQuery("(max-width:800px)");
+
   return (
     <>
       {slides.length ? (
@@ -22,9 +24,11 @@ function HomeSlider({ slides, shopName, ...props }) {
                     <img
                       src={
                         slide.image !== "slider-placeholder.jpg"
-                          ? `/api/images/${slide.image
-                              .split("/")
-                              .pop()}?width=1080&height=1080`
+                          ? `/api/images/${slide.image.split("/").pop()}${
+                              isMobile
+                                ? "?width=450&height=450"
+                                : "?width=900&height=900"
+                            }`
                           : "/images/slider-placeholder.jpg"
                       }
                       onError={(e) => {
@@ -35,14 +39,16 @@ function HomeSlider({ slides, shopName, ...props }) {
                   </a>
                 ) : slide.category && slide.category !== "" ? (
                   <Link
-                    href={`/shop/products/${shopName}?category=${slide.category}`}
+                    href={`/${shopName}/products?category=${slide.category}`}
                   >
                     <img
                       src={
                         slide.image !== "slider-placeholder.jpg"
-                          ? `/api/images/${slide.image
-                              .split("/")
-                              .pop()}?width=1080&height=1080`
+                          ? `/api/images/${slide.image.split("/").pop()}${
+                              isMobile
+                                ? "?width=450&height=450"
+                                : "?width=900&height=900"
+                            }`
                           : "/images/slider-placeholder.jpg"
                       }
                       onError={(e) => {
@@ -55,9 +61,11 @@ function HomeSlider({ slides, shopName, ...props }) {
                   <img
                     src={
                       slide.image !== "slider-placeholder.jpg"
-                        ? `/api/images/${slide.image
-                            .split("/")
-                            .pop()}?width=900&height=900`
+                        ? `/api/images/${slide.image.split("/").pop()}${
+                            isMobile
+                              ? "?width=450&height=450"
+                              : "?width=900&height=900"
+                          }`
                         : "/images/slider-placeholder.jpg"
                     }
                     onError={(e) => {

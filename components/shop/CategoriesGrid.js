@@ -22,7 +22,7 @@ function CategoriesGrid({
         )
       ).length ? (
         <XSwiper
-          slidesPerView={isMobile ? 2 : 5}
+          slidesPerView={isMobile ? 3 : 5}
           spaceBetween={20}
           loop={true}
           autoplay={false}
@@ -40,14 +40,16 @@ function CategoriesGrid({
                   <Link
                     href={
                       activateControls
-                        ? `/shop/products/${shopName}?category=${category.name}`
+                        ? `/${shopName}/products?category=${category.name}`
                         : ""
                     }
                   >
                     <div className={styles.category}>
                       <img
                         alt={index}
-                        src={`/api/images/${category.icon.split("/").pop()}`}
+                        src={`/api/images/${category.icon
+                          .split("/")
+                          .pop()}?width=200&height=200`}
                         onError={(e) => {
                           e.target.src = "/images/category.svg";
                         }}

@@ -76,16 +76,16 @@ function ProductsSlider({
               >
                 <Link
                   href={
-                    activateControls
-                      ? `/shop/product/${shopInfo.name}?id=${product._id}`
-                      : ""
+                    activateControls ? `/${shopInfo.name}/${product.slug}` : ""
                   }
                 >
                   <img
                     alt={index}
                     src={
                       product.images[0]
-                        ? `/api/images/${product.images[0].split("/").pop()}`
+                        ? `/api/images/${product.images[0]
+                            .split("/")
+                            .pop()}?width=200&height=200`
                         : "/images/image-placeholder.jpg"
                     }
                     onError={(e) => {

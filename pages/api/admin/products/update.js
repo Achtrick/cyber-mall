@@ -19,6 +19,7 @@ handler.put(auth, async (req, res) => {
 
     product.category = data.category;
     product.designation = data.designation;
+    product.slug = data.slug;
     product.description = data.description;
     product.variants = data.variants;
     product.price = data.price;

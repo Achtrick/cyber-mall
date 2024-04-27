@@ -5,24 +5,23 @@ import { useSnackbar } from "notistack";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { SwiperSlide } from "swiper/react";
-import LoadingScreen from "../../../components/shop/LoadingScreen";
-import ProductsSlider from "../../../components/shop/ProductsSlider";
-import ShopLayout from "../../../components/shop/ShopLayout";
-import XButton from "../../../components/ui-components/XButton";
-import XHr from "../../../components/ui-components/XHr";
-import XMagnifier from "../../../components/ui-components/XMagnifier";
-import XSwiper from "../../../components/ui-components/XSwiper";
-import styles from "../../../styles/shop/Product.module.scss";
+import LoadingScreen from "../../components/shop/LoadingScreen";
+import ProductsSlider from "../../components/shop/ProductsSlider";
+import ShopLayout from "../../components/shop/ShopLayout";
+import XButton from "../../components/ui-components/XButton";
+import XHr from "../../components/ui-components/XHr";
+import XMagnifier from "../../components/ui-components/XMagnifier";
+import XSwiper from "../../components/ui-components/XSwiper";
+import styles from "../../styles/shop/Product.module.scss";
 import {
   calculateDiscount,
   deduceColor,
-} from "../../../utils/config/convertHelper";
-import { getError } from "../../../utils/shared/getError";
-import { AddIcon, RemoveIcon } from "../../../utils/theme/icons";
+} from "../../utils/config/convertHelper";
+import { getError } from "../../utils/shared/getError";
+import { AddIcon, RemoveIcon } from "../../utils/theme/icons";
 
-function Product({ shop }) {
+function Product({ shop, slug }) {
   const router = useRouter();
-  const { id } = router.query;
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
 
@@ -30,80 +29,53 @@ function Product({ shop }) {
   const [product, setProduct] = useState(null);
   const [selectedVariant, setSelectedVariant] = useState("");
   const [similars, setSimilars] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [loadingProduct, setLoadingProduct] = useState(true);
-  const [loadingSimilars, setLoadingSimilars] = useState(true);
   const [qty, setQty] = useState(1);
 
   useEffect(() => {
-    if (shop) {
-      getShopInfo();
-    } else {
-      enqueueSnackbar("Lien de shop invalide", { variant: "error" });
-      router.push("/");
-    }
+    shop && getShopInfo();
   }, []);
 
   useEffect(() => {
-    if (router.isReady && shopInfo) {
-      if (router.query.id) {
-        getProduct(shopInfo._id);
-      } else {
-        enqueueSnackbar({
-          message: "Lien de shop invalide !",
-          variant: "error",
-        });
-        router.push("/");
-      }
-    }
-  }, [router]);
+    shopInfo && getProduct();
+  }, [shopInfo]);
 
   const getShopInfo = async () => {
     try {
       const { data } = await axios.post("/api/shop/getInfo", {
-        shopName: router.query.shop,
+        shopName: shop,
       });
-
       setShopInfo(data);
-      setLoading(false);
-
-      await getProduct(data._id);
     } catch (error) {
       enqueueSnackbar(getError(error), { variant: "error" });
       router.push("/");
     }
   };
 
-  const getProduct = async (shopId) => {
-    setLoadingProduct(true);
+  const getProduct = async () => {
     try {
       const { data } = await axios.post("/api/shop/get-product", {
-        shopId: shopId,
-        id: id,
+        shop: shopInfo._id,
+        slug: slug,
       });
 
       setProduct(data);
-      data.variants && setSelectedVariant(data.variants[0]);
-      setLoadingProduct(false);
-      !similars.length && (await getSimilars(data.shop, data.category._id));
+      data?.variants && setSelectedVariant(data.variants[0]);
+      !similars.length && (await getSimilars(data?.shop, data?.category._id));
     } catch (error) {
       enqueueSnackbar(getError(error), { variant: "error" });
-      setLoadingProduct(false);
+      router.push(`/${shop}`);
     }
   };
 
   const getSimilars = async (shopId, categoryId) => {
-    setLoadingSimilars(true);
     try {
       const { data } = await axios.post("/api/shop/get-similar-products", {
         shopId: shopId,
         categoryId: categoryId,
       });
       setSimilars(data);
-      setLoadingSimilars(false);
     } catch (error) {
       enqueueSnackbar(getError(error), { variant: "error" });
-      setLoadingSimilars(false);
     }
   };
 
@@ -149,20 +121,23 @@ function Product({ shop }) {
 
   return (
     <>
-      {loading ? (
+      {!shopInfo ? (
         <LoadingScreen />
       ) : (
         <ShopLayout
           title={product?.designation}
           description={product?.description}
           image={
-            product?.image && `/api/images/${product?.image.split("/").pop()}`
+            product?.image &&
+            `/api/images/${product?.image
+              .split("/")
+              .pop()}?width=200&height=200`
           }
           tags={[product?.designation, product?.category.name]}
           shopInfo={shopInfo}
         >
           <div className={styles.container}>
-            {loadingProduct ? (
+            {!product ? (
               <Skeleton
                 variant="rectangular"
                 width={"100%"}
@@ -182,7 +157,9 @@ function Product({ shop }) {
                           <SwiperSlide key={index}>
                             <XMagnifier image={image} alt={product.designation}>
                               <img
-                                src={`/api/images/${image.split("/").pop()}`}
+                                src={`/api/images/${image
+                                  .split("/")
+                                  .pop()}?width=500&height=500`}
                                 onError={(e) => {
                                   e.target.src =
                                     "/images/image-placeholder.jpg";
@@ -300,7 +277,7 @@ function Product({ shop }) {
             <div className="row">
               <XHr color={shopInfo.settings.primaryColor} width="20%" />
             </div>
-            {loadingSimilars ? (
+            {!similars.length ? (
               <Skeleton
                 variant="rectangular"
                 width={"100%"}
@@ -327,6 +304,9 @@ export default Product;
 
 export function getServerSideProps(context) {
   return {
-    props: { shop: context.params.shop },
+    props: {
+      shop: context.params.shop,
+      slug: context.params.product_slug,
+    },
   };
 }

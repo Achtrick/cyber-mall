@@ -54,6 +54,7 @@ function Inventory(props) {
   const [product, setProduct] = useState({
     category: "",
     designation: "",
+    slug: "",
     description: "",
     variants: [],
     price: 0,
@@ -194,6 +195,16 @@ function Inventory(props) {
             uploads.push("/uploads/" + uploaded.filename);
           }
 
+          product.slug =
+            product.designation +
+            "-" +
+            Date.now()
+              .toString()
+              .slice(
+                Date.now().toString().length - 5,
+                Date.now().toString().length
+              );
+
           result = await axios.post("/api/admin/products/add", {
             shop: userInfo.shop._id,
             ...product,
@@ -223,6 +234,7 @@ function Inventory(props) {
               _id: product._id,
               category: product.category,
               designation: product.designation,
+              slug: product.slug,
               description: product.description,
               variants: product.variants,
               price: product.price,
@@ -256,6 +268,7 @@ function Inventory(props) {
     setProduct({
       category: "",
       designation: "",
+      slug: "",
       description: "",
       variants: [],
       price: 0,

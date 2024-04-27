@@ -10,18 +10,18 @@ import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import LoadingScreen from "../../../components/shop/LoadingScreen";
-import ShopLayout from "../../../components/shop/ShopLayout";
-import XAutoComplete from "../../../components/ui-components/XAutoComplete";
-import XButton from "../../../components/ui-components/XButton";
-import XPagination from "../../../components/ui-components/XPagination";
-import styles from "../../../styles/shop/Products.module.scss";
+import LoadingScreen from "../../components/shop/LoadingScreen";
+import ShopLayout from "../../components/shop/ShopLayout";
+import XAutoComplete from "../../components/ui-components/XAutoComplete";
+import XButton from "../../components/ui-components/XButton";
+import XPagination from "../../components/ui-components/XPagination";
+import styles from "../../styles/shop/Products.module.scss";
 import {
   calculateDiscount,
   deduceColor,
-} from "../../../utils/config/convertHelper";
-import { getError } from "../../../utils/shared/getError";
-import { ResetIcon } from "../../../utils/theme/icons";
+} from "../../utils/config/convertHelper";
+import { getError } from "../../utils/shared/getError";
+import { ResetIcon } from "../../utils/theme/icons";
 
 function Products({ shop }) {
   const router = useRouter();
@@ -167,9 +167,7 @@ function Products({ shop }) {
       router.push({ pathname: pathname, query: query });
     } else {
       router.push(
-        `/shop/products/${shopInfo.name}?searchTerm=${
-          searchTerm ? searchTerm : ""
-        }`
+        `/${shopInfo.name}/products?searchTerm=${searchTerm ? searchTerm : ""}`
       );
     }
   };
@@ -308,16 +306,14 @@ function Products({ shop }) {
                         style={{ alignItems: "flex-start" }}
                         key={product._id}
                       >
-                        <Link
-                          href={`/shop/product/${shopInfo.name}?id=${product._id}`}
-                        >
+                        <Link href={`/${shopInfo.name}/${product.slug}`}>
                           <img
                             alt={product.designation}
                             src={
                               product.images[0]
                                 ? `/api/images/${product.images[0]
                                     .split("/")
-                                    .pop()}`
+                                    .pop()}?width=200&height=200`
                                 : "/images/image-placeholder.jpg"
                             }
                             onError={(e) => {

@@ -4,13 +4,13 @@ import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import CartContent from "../../../components/shop/CartContent";
-import LoadingScreen from "../../../components/shop/LoadingScreen";
-import ShopLayout from "../../../components/shop/ShopLayout";
-import XButton from "../../../components/ui-components/XButton";
-import XHr from "../../../components/ui-components/XHr";
-import styles from "../../../styles/shop/Cart.module.scss";
-import { getError } from "../../../utils/shared/getError";
+import CartContent from "../../components/shop/CartContent";
+import LoadingScreen from "../../components/shop/LoadingScreen";
+import ShopLayout from "../../components/shop/ShopLayout";
+import XButton from "../../components/ui-components/XButton";
+import XHr from "../../components/ui-components/XHr";
+import styles from "../../styles/shop/Cart.module.scss";
+import { getError } from "../../utils/shared/getError";
 
 function Cart({ shop }) {
   const router = useRouter();
@@ -227,7 +227,7 @@ function Cart({ shop }) {
                 <XButton
                   color={shopInfo.settings.primaryColor}
                   text={"allez faire du shopping"}
-                  action={() => router.push(`/shop/${shop}/products`)}
+                  action={() => router.push(`/${shop}/products`)}
                 />
               </div>
             )}

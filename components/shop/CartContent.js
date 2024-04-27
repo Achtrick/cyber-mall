@@ -123,7 +123,9 @@ function CartContent({
                       alt={product.designation}
                       src={
                         product.images[0]
-                          ? `/api/images/${product.images[0].split("/").pop()}`
+                          ? `/api/images/${product.images[0]
+                              .split("/")
+                              .pop()}?width=100&height=100`
                           : "/images/image-placeholder.jpg"
                       }
                       onError={(e) => {
@@ -224,7 +226,7 @@ function CartContent({
             text={"Finir Vos Achats"}
             action={() => {
               dispatch({ type: "TOGGLE_CART_PREVIEW" });
-              router.push(`/shop/cart/${shopInfo.name}`);
+              router.push(`/${shopInfo.name}/cart`);
             }}
           />
         ) : null}

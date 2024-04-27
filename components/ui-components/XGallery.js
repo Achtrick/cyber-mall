@@ -1,3 +1,4 @@
+import { useMediaQuery } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
@@ -5,6 +6,7 @@ import styles from "../../styles/components/XGallery.module.scss";
 
 function XGallery({ shopName, content, props }) {
   const router = useRouter();
+  const isMobile = useMediaQuery("(max-width:800px)");
   return (
     <section className={styles.container}>
       <div className={styles.col}>
@@ -14,7 +16,7 @@ function XGallery({ shopName, content, props }) {
             content[0]?.link.length
               ? content[0]?.link
               : content[0]?.category.length
-              ? `/shop/products/${shopName}?category=${content[0]?.category}`
+              ? `/${shopName}/products?category=${content[0]?.category}`
               : router.asPath
           }
           rel={content[0]?.link.length ? "noreferrer" : null}
@@ -23,9 +25,9 @@ function XGallery({ shopName, content, props }) {
           <img
             src={
               content[0]?.image.length
-                ? `/api/images/${content[0]?.image
-                    .split("/")
-                    .pop()}?width=900&height=900`
+                ? `/api/images/${content[0]?.image.split("/").pop()}${
+                    isMobile ? "?width=450&height=450" : "?width=900&height=900"
+                  }`
                 : "/images/image-placeholder.jpg"
             }
             onError={(e) => {
@@ -43,7 +45,7 @@ function XGallery({ shopName, content, props }) {
             content[1]?.link.length
               ? content[1]?.link
               : content[1]?.category.length
-              ? `/shop/products/${shopName}?category=${content[1]?.category}`
+              ? `/${shopName}/products?category=${content[1]?.category}`
               : router.asPath
           }
           rel={content[1]?.link.length ? "noreferrer" : null}
@@ -52,9 +54,9 @@ function XGallery({ shopName, content, props }) {
           <img
             src={
               content[1]?.image.length
-                ? `/api/images/${content[1]?.image
-                    .split("/")
-                    .pop()}?width=900&height=900`
+                ? `/api/images/${content[1]?.image.split("/").pop()}${
+                    isMobile ? "?width=450&height=450" : "?width=900&height=900"
+                  }`
                 : "/images/image-placeholder.jpg"
             }
             onError={(e) => {
@@ -74,7 +76,7 @@ function XGallery({ shopName, content, props }) {
             content[2]?.link.length
               ? content[2]?.link
               : content[2]?.category.length
-              ? `/shop/products/${shopName}?category=${content[2]?.category}`
+              ? `/${shopName}/products?category=${content[2]?.category}`
               : router.asPath
           }
           rel={content[2]?.link.length ? "noreferrer" : null}
@@ -83,9 +85,9 @@ function XGallery({ shopName, content, props }) {
           <img
             src={
               content[2]?.image.length
-                ? `/api/images/${content[2]?.image
-                    .split("/")
-                    .pop()}?width=900&height=900`
+                ? `/api/images/${content[2]?.image.split("/").pop()}${
+                    isMobile ? "?width=450&height=450" : "?width=900&height=900"
+                  }`
                 : "/images/image-placeholder.jpg"
             }
             onError={(e) => {
@@ -103,7 +105,7 @@ function XGallery({ shopName, content, props }) {
             content[3]?.link.length
               ? content[3]?.link
               : content[3]?.category.length
-              ? `/shop/products/${shopName}?category=${content[3]?.category}`
+              ? `/${shopName}/products?category=${content[3]?.category}`
               : router.asPath
           }
           rel={content[3]?.link.length ? "noreferrer" : null}
@@ -112,9 +114,9 @@ function XGallery({ shopName, content, props }) {
           <img
             src={
               content[3]?.image.length
-                ? `/api/images/${content[3]?.image
-                    .split("/")
-                    .pop()}?width=900&height=900`
+                ? `/api/images/${content[3]?.image.split("/").pop()}${
+                    isMobile ? "?width=450&height=450" : "?width=900&height=900"
+                  }`
                 : "/images/image-placeholder.jpg"
             }
             onError={(e) => {
