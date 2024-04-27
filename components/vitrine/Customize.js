@@ -13,7 +13,7 @@ function Customize(props) {
       </p>
       <br />
       <br />
-      <img data-aos="fade-in" src="/images/Customize.svg" alt="Customize" />
+      <img data-aos="fade-in" src="/images/customize.svg" alt="Customize" />
     </section>
   );
 }
