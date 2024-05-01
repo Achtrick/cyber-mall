@@ -1,4 +1,4 @@
-import { IconButton, Skeleton } from "@mui/material";
+import { IconButton, Skeleton, Tooltip } from "@mui/material";
 import axios from "axios";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -214,6 +214,7 @@ function Architecture(props) {
       });
       enqueueSnackbar(data.message, { variant: "success" });
       setLoading(false);
+      setAction("");
     } catch (error) {
       checkExpirity(error, dispatch);
       enqueueSnackbar(getError(error), { variant: "error" });
@@ -403,21 +404,23 @@ function Architecture(props) {
               }}
             />
           ) : null}
-          <IconButton
-            color="success"
-            style={{ width: "35px", height: "35px", marginBottom: "20px" }}
-          >
-            <label
-              style={{ cursor: "pointer", width: "25px", height: "25px" }}
-              htmlFor="slide"
+          <Tooltip title="Insérer image">
+            <IconButton
+              color="success"
+              style={{ width: "35px", height: "35px", marginBottom: "20px" }}
             >
-              {slide.image.length ? (
-                <ChangeCircleIcon></ChangeCircleIcon>
-              ) : (
-                <AddIcon></AddIcon>
-              )}
-            </label>
-          </IconButton>
+              <label
+                style={{ cursor: "pointer", width: "25px", height: "25px" }}
+                htmlFor="slide"
+              >
+                {slide.image.length ? (
+                  <ChangeCircleIcon></ChangeCircleIcon>
+                ) : (
+                  <AddIcon></AddIcon>
+                )}
+              </label>
+            </IconButton>
+          </Tooltip>
           <p>
             lien de catégorie:{" "}
             <select
@@ -495,26 +498,28 @@ function Architecture(props) {
           return (
             <div key={index} className={styles.imgPreview}>
               <div className={styles.closeIcon}>
-                <IconButton
-                  style={{ width: "30px", height: "30px" }}
-                  onClick={(e) => {
-                    updateCategoriesGrid(
-                      e,
-                      "selectedCategoriesIds",
-                      category._id
-                    );
-                  }}
-                >
-                  <CheckCircleIcon
-                    color={
-                      architecture?.home?.categoriesComponent?.selectedCategoriesIds?.includes(
+                <Tooltip title="Selectionner">
+                  <IconButton
+                    style={{ width: "30px", height: "30px" }}
+                    onClick={(e) => {
+                      updateCategoriesGrid(
+                        e,
+                        "selectedCategoriesIds",
                         category._id
-                      )
-                        ? "info"
-                        : "default"
-                    }
-                  />
-                </IconButton>
+                      );
+                    }}
+                  >
+                    <CheckCircleIcon
+                      color={
+                        architecture?.home?.categoriesComponent?.selectedCategoriesIds?.includes(
+                          category._id
+                        )
+                          ? "info"
+                          : "default"
+                      }
+                    />
+                  </IconButton>
+                </Tooltip>
               </div>
               <img
                 alt={index}
@@ -557,6 +562,27 @@ function Architecture(props) {
     </form>
   );
 
+  const galleryOrderForm = (
+    <form>
+      <p>
+        index visible : (cela déterminera l&apos;ordre d&apos;affichage de cette
+        section sur votre page d&apos;accueil)
+        <input
+          type="number"
+          min={0}
+          className="defaultInput"
+          value={galleryInfo?.visibleIndex}
+          onChange={(e) => {
+            setGalleryInfo({
+              ...galleryInfo,
+              visibleIndex: e.target.value,
+            });
+          }}
+        />
+      </p>
+    </form>
+  );
+
   const addGalleryForm = (
     <form>
       <div className={styles.slideContainer}>
@@ -572,21 +598,23 @@ function Architecture(props) {
               }}
             />
           ) : null}
-          <IconButton
-            color="success"
-            style={{ width: "35px", height: "35px", marginBottom: "20px" }}
-          >
-            <label
-              style={{ cursor: "pointer", width: "25px", height: "25px" }}
-              htmlFor="item"
+          <Tooltip title="Insérer image">
+            <IconButton
+              color="success"
+              style={{ width: "35px", height: "35px", marginBottom: "20px" }}
             >
-              {galleryItem.image.length ? (
-                <ChangeCircleIcon></ChangeCircleIcon>
-              ) : (
-                <AddIcon></AddIcon>
-              )}
-            </label>
-          </IconButton>
+              <label
+                style={{ cursor: "pointer", width: "25px", height: "25px" }}
+                htmlFor="item"
+              >
+                {galleryItem.image.length ? (
+                  <ChangeCircleIcon></ChangeCircleIcon>
+                ) : (
+                  <AddIcon></AddIcon>
+                )}
+              </label>
+            </IconButton>
+          </Tooltip>
           <p>
             text:
             <input
@@ -680,6 +708,12 @@ function Architecture(props) {
               ? addGalleryItem
               : action === "DELETE-GALLERY-FORM"
               ? deleteGalleryItem
+              : action === "CATEGORIES-GRID-FORM"
+              ? () => saveArchitecture("categoriesComponent")
+              : action === "DISCOUNT-FORM"
+              ? () => saveArchitecture("discountComponent")
+              : action === "GALLERY-ORDER-FORM"
+              ? () => saveArchitecture("galleryComponent")
               : null
           }
           loading={galleryItemImageLoading || slideImageLoading || loading}
@@ -690,12 +724,10 @@ function Architecture(props) {
               ? ModalSizes.MEDIUM
               : action === "DISCOUNT-FORM" ||
                 action === "DELETE-SLIDE-FORM" ||
-                action === "DELETE-GALLERY-FORM"
+                action === "DELETE-GALLERY-FORM" ||
+                action === "GALLERY-ORDER-FORM"
               ? ModalSizes.SMALL
               : null
-          }
-          hideControls={
-            action === "CATEGORIES-GRID-FORM" || action === "DISCOUNT-FORM"
           }
         >
           <div className={styles.modal}>
@@ -703,6 +735,8 @@ function Architecture(props) {
               ? addSliderForm
               : action === "DELETE-SLIDE-FORM"
               ? deleteSlideForm
+              : action === "GALLERY-ORDER-FORM"
+              ? galleryOrderForm
               : action === "ADD-GALLERY-FROM"
               ? addGalleryForm
               : action === "DELETE-GALLERY-FORM"
@@ -725,7 +759,7 @@ function Architecture(props) {
               pour enregistrer vos paramètres
             </p>
           </div>
-          {loading ? (
+          {loading && !architecture.home ? (
             <Skeleton
               variant="rectangular"
               width={"100%"}
@@ -773,26 +807,39 @@ function Architecture(props) {
                   }}
                 />
                 &nbsp;&nbsp;
-                <IconButton color="info">
-                  <label
-                    style={{ cursor: "pointer", width: "25px", height: "25px" }}
-                    htmlFor="logo"
-                  >
-                    <SettingsIcon />
-                  </label>
-                </IconButton>{" "}
+                <Tooltip title="Modifier logo">
+                  <IconButton color="info">
+                    <label
+                      style={{
+                        cursor: "pointer",
+                        width: "25px",
+                        height: "25px",
+                      }}
+                      htmlFor="logo"
+                    >
+                      <SettingsIcon />
+                    </label>
+                  </IconButton>
+                </Tooltip>{" "}
                 |{" "}
-                <IconButton
-                  disabled={!compressedLogo}
-                  color="info"
-                  onClick={updateLogo}
-                >
-                  <label
-                    style={{ cursor: "pointer", width: "25px", height: "25px" }}
+                <Tooltip title="Enregistrer">
+                  {" "}
+                  <IconButton
+                    disabled={!compressedLogo}
+                    color="info"
+                    onClick={updateLogo}
                   >
-                    <CheckCircleIcon />
-                  </label>
-                </IconButton>{" "}
+                    <label
+                      style={{
+                        cursor: "pointer",
+                        width: "25px",
+                        height: "25px",
+                      }}
+                    >
+                      <CheckCircleIcon />
+                    </label>
+                  </IconButton>
+                </Tooltip>{" "}
               </div>
               <br />
               <br />
@@ -827,17 +874,19 @@ function Architecture(props) {
                           }}
                         >
                           <span className={styles.closeIcon}>
-                            <IconButton
-                              color="error"
-                              onClick={() => {
-                                setSlide(slide);
-                                setTitle("supprimer la diapositive");
-                                setAction("DELETE-SLIDE-FORM");
-                              }}
-                              size="small"
-                            >
-                              <CloseIcon />
-                            </IconButton>
+                            <Tooltip title="Supprimer diapositive">
+                              <IconButton
+                                color="error"
+                                onClick={() => {
+                                  setSlide(slide);
+                                  setTitle("supprimer la diapositive");
+                                  setAction("DELETE-SLIDE-FORM");
+                                }}
+                                size="small"
+                              >
+                                <CloseIcon />
+                              </IconButton>
+                            </Tooltip>
                           </span>
                           <img
                             alt={slide.category}
@@ -855,28 +904,30 @@ function Architecture(props) {
                     })}
                     {sliderInfo?.length < 3 ||
                     userInfo?.shop.pack.type === "PREMIUM" ? (
-                      <IconButton
-                        color="success"
-                        onClick={() => {
-                          setTitle("Ajouter diapositive");
-                          setAction("ADD-SLIDE-FROM");
-                        }}
-                        sx={{
-                          width: "45px",
-                          height: "45px",
-                          margin: "30px",
-                        }}
-                      >
-                        <label
-                          style={{
-                            cursor: "pointer",
-                            width: "25px",
-                            height: "25px",
+                      <Tooltip title="Ajouter diapositive">
+                        <IconButton
+                          color="success"
+                          onClick={() => {
+                            setTitle("Ajouter diapositive");
+                            setAction("ADD-SLIDE-FROM");
+                          }}
+                          sx={{
+                            width: "45px",
+                            height: "45px",
+                            margin: "30px",
                           }}
                         >
-                          <AddIcon></AddIcon>
-                        </label>
-                      </IconButton>
+                          <label
+                            style={{
+                              cursor: "pointer",
+                              width: "25px",
+                              height: "25px",
+                            }}
+                          >
+                            <AddIcon></AddIcon>
+                          </label>
+                        </IconButton>
+                      </Tooltip>
                     ) : null}
                   </div>
                   <br />
@@ -904,25 +955,20 @@ function Architecture(props) {
               <br />
               <br />
               <p>
-                grille de catégories (sélectionnez jusqu&apos;à 6 catégories){" "}
-                <IconButton
-                  color="info"
-                  onClick={() => {
-                    setTitle(
-                      "sélectionner les catégories à afficher dans la grille"
-                    );
-                    setAction("CATEGORIES-GRID-FORM");
-                  }}
-                >
-                  <SettingsIcon />
-                </IconButton>{" "}
-                |{" "}
-                <IconButton
-                  color="info"
-                  onClick={() => saveArchitecture("categoriesComponent")}
-                >
-                  <CheckCircleIcon />
-                </IconButton>{" "}
+                grille de catégories (sélectionnez les catégories à afficher){" "}
+                <Tooltip title="Modifier">
+                  <IconButton
+                    color="info"
+                    onClick={() => {
+                      setTitle(
+                        "sélectionner les catégories à afficher dans la grille"
+                      );
+                      setAction("CATEGORIES-GRID-FORM");
+                    }}
+                  >
+                    <SettingsIcon />
+                  </IconButton>
+                </Tooltip>{" "}
               </p>
               {categories.length ? (
                 <CategoriesGrid
@@ -942,24 +988,19 @@ function Architecture(props) {
               <p>
                 section de réduction (cela affichera des produits à prix réduits
                 aléatoires pour achat rapide)
-                <IconButton
-                  color="info"
-                  onClick={() => {
-                    setTitle(
-                      "définir l'ordre d'affichage de la section réductions"
-                    );
-                    setAction("DISCOUNT-FORM");
-                  }}
-                >
-                  <SettingsIcon />
-                </IconButton>{" "}
-                |{" "}
-                <IconButton
-                  color="info"
-                  onClick={() => saveArchitecture("discountComponent")}
-                >
-                  <CheckCircleIcon />
-                </IconButton>{" "}
+                <Tooltip title="Modifier">
+                  <IconButton
+                    color="info"
+                    onClick={() => {
+                      setTitle(
+                        "définir l'ordre d'affichage de la section réductions"
+                      );
+                      setAction("DISCOUNT-FORM");
+                    }}
+                  >
+                    <SettingsIcon />
+                  </IconButton>
+                </Tooltip>{" "}
               </p>
               {discounts.length ? (
                 <ProductsSlider
@@ -979,7 +1020,20 @@ function Architecture(props) {
               <p>
                 composant de galerie (cela affichera les images sélectionnées
                 avec chacune d&apos;elles contenant un titre qui s&apos;affiche
-                au survol)
+                au survol){" "}
+                <Tooltip title="Ordre d'affichage">
+                  <IconButton
+                    color="info"
+                    onClick={() => {
+                      setTitle(
+                        "définir l'ordre d'affichage de la section galerie"
+                      );
+                      setAction("GALLERY-ORDER-FORM");
+                    }}
+                  >
+                    <SettingsIcon />
+                  </IconButton>
+                </Tooltip>
               </p>
               {loadingGallery ? (
                 <Skeleton
@@ -1004,17 +1058,19 @@ function Architecture(props) {
                           }}
                         >
                           <span className={styles.closeIcon}>
-                            <IconButton
-                              color="error"
-                              onClick={() => {
-                                setGalleryItem(block);
-                                setTitle("supprimer l'élément");
-                                setAction("DELETE-GALLERY-FORM");
-                              }}
-                              size="small"
-                            >
-                              <CloseIcon />
-                            </IconButton>
+                            <Tooltip title="Supprimer">
+                              <IconButton
+                                color="error"
+                                onClick={() => {
+                                  setGalleryItem(block);
+                                  setTitle("supprimer l'élément");
+                                  setAction("DELETE-GALLERY-FORM");
+                                }}
+                                size="small"
+                              >
+                                <CloseIcon />
+                              </IconButton>
+                            </Tooltip>
                           </span>
                           <img
                             alt={block.category}
@@ -1034,28 +1090,30 @@ function Architecture(props) {
                       );
                     })}
                     {galleryInfo?.content?.length < 4 ? (
-                      <IconButton
-                        color="success"
-                        onClick={() => {
-                          setTitle("Ajouter un élément de galerie");
-                          setAction("ADD-GALLERY-FROM");
-                        }}
-                        sx={{
-                          width: "45px",
-                          height: "45px",
-                          margin: "30px",
-                        }}
-                      >
-                        <label
-                          style={{
-                            cursor: "pointer",
-                            width: "25px",
-                            height: "25px",
+                      <Tooltip title="Ajouter">
+                        <IconButton
+                          color="success"
+                          onClick={() => {
+                            setTitle("Ajouter un élément de galerie");
+                            setAction("ADD-GALLERY-FROM");
+                          }}
+                          sx={{
+                            width: "45px",
+                            height: "45px",
+                            margin: "30px",
                           }}
                         >
-                          <AddIcon></AddIcon>
-                        </label>
-                      </IconButton>
+                          <label
+                            style={{
+                              cursor: "pointer",
+                              width: "25px",
+                              height: "25px",
+                            }}
+                          >
+                            <AddIcon></AddIcon>
+                          </label>
+                        </IconButton>
+                      </Tooltip>
                     ) : null}
                   </div>
                   <br />
@@ -1074,12 +1132,14 @@ function Architecture(props) {
               <h1>Informations de livraison</h1>
               <p>
                 remplissez vos frais de livraison
-                <IconButton
-                  color="info"
-                  onClick={() => saveArchitecture("shippingFee")}
-                >
-                  <CheckCircleIcon />
-                </IconButton>{" "}
+                <Tooltip title="Enregistrer">
+                  <IconButton
+                    color="info"
+                    onClick={() => saveArchitecture("shippingFee")}
+                  >
+                    <CheckCircleIcon />
+                  </IconButton>
+                </Tooltip>{" "}
               </p>
               <div className="labeledInput">
                 <label>Frais de livraison :</label>
@@ -1125,12 +1185,14 @@ function Architecture(props) {
               <h1>Informations de contact</h1>
               <p>
                 remplissez vos coordonnées
-                <IconButton
-                  color="info"
-                  onClick={() => saveArchitecture("contactComponent")}
-                >
-                  <CheckCircleIcon />
-                </IconButton>{" "}
+                <Tooltip title="Enregistrer">
+                  <IconButton
+                    color="info"
+                    onClick={() => saveArchitecture("contactComponent")}
+                  >
+                    <CheckCircleIcon />
+                  </IconButton>
+                </Tooltip>{" "}
               </p>
               <div className="row" style={{ justifyContent: "flex-start" }}>
                 <AddressIcon />
@@ -1268,12 +1330,14 @@ function Architecture(props) {
               <h1>À propos de votre shop</h1>
               <p>
                 qui êtes-vous et que vendez-vous ?
-                <IconButton
-                  color="info"
-                  onClick={() => saveArchitecture("aboutComponent")}
-                >
-                  <CheckCircleIcon />
-                </IconButton>{" "}
+                <Tooltip title="Enregistrer">
+                  <IconButton
+                    color="info"
+                    onClick={() => saveArchitecture("aboutComponent")}
+                  >
+                    <CheckCircleIcon />
+                  </IconButton>
+                </Tooltip>{" "}
               </p>
               <textarea
                 rows={5}

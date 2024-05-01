@@ -21,7 +21,7 @@ handler.get(async (req, res) => {
       <div style="width: calc(100vw - 16px); height: calc(100vh - 16px); display: flex; flex-direction: column; align-items:center; justify-content:center;">
         <img alt="cyber-mall" src="/images/logo.png" style="width: 300px" />
         <h1 style="font-size: 45px; color:white;">Erreur lors de l'activation de votre shop, nous contactez pour plus d&apos;information. </h1>
-        <button style="border: none; background-color: white; color: black; padding: 5px 10px;"><a style="text-decoration: none; color: black; font-size: 35px;" href="/contact">Nous contactez<a/></button>
+        <button style="border-radius: 15px; border: none; background-color: white; color: black; padding: 5px 10px;"><a style="text-decoration: none; color: black; font-size: 35px;" href="/contact">Nous contactez<a/></button>
         </div>
     </html>`;
 

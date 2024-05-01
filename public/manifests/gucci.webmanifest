@@ -3,22 +3,22 @@
   "name": "Gucci",
   "icons": [
     {
-      "src": "/api/images/fill/1712529212903.png",
+      "src": "/api/images/fill/1714560723804.png",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
     },
     {
-      "src": "/api/images/fill/1712529212903.png",
+      "src": "/api/images/fill/1714560723804.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "/api/images/fill/1712529212903.png",
+      "src": "/api/images/fill/1714560723804.png",
       "type": "image/png",
       "sizes": "512x512"
     }
   ],
-  "start_url": "/shop/gucci",
+  "start_url": "/gucci",
   "theme_color": "#000000",
   "background_color": "#808080",
   "display": "standalone",

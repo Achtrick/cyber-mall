@@ -16,11 +16,7 @@ import themeStyles from "../../styles/admin/Theme.module.scss";
 import { deduceColor } from "../../utils/config/convertHelper";
 import { checkExpirity } from "../../utils/shared/checkExpirity";
 import { getError } from "../../utils/shared/getError";
-import {
-  CheckCircleIcon,
-  PaletteIcon,
-  ShoppingCartIcon,
-} from "../../utils/theme/icons";
+import { PaletteIcon, ShoppingCartIcon } from "../../utils/theme/icons";
 
 function Theme(props) {
   const { userInfo } = useSelector((state) => state.auth);
@@ -82,6 +78,7 @@ function Theme(props) {
 
       enqueueSnackbar(data.message, { variant: "success" });
       getShopInfo();
+      setAction("");
     } catch (error) {
       checkExpirity(error, dispatch);
       enqueueSnackbar(getError(error), { variant: "error" });
@@ -96,8 +93,8 @@ function Theme(props) {
           title={title}
           onClose={closeAction}
           cancelAction={closeAction}
+          confirmAction={saveSettings}
           size={ModalSizes.SMALL}
-          hideControls={true}
         >
           <div className={styles.modal}>
             <form>
@@ -126,30 +123,12 @@ function Theme(props) {
             </IconButton>{" "}
             pour changer d&apos;apparence
           </p>
-          <p>
-            lorsque vous avez terminé, cliquez ici pour enregistrer vos
-            paramètres{" "}
-            {loading ? (
-              <IconButton>
-                <CircularProgress color="black" size={"22px"} />
-              </IconButton>
-            ) : (
-              <Tooltip title="Sauvegarder">
-                <IconButton
-                  disabled={colors === shopInfo.settings}
-                  color="info"
-                  onClick={saveSettings}
-                >
-                  <CheckCircleIcon />
-                </IconButton>
-              </Tooltip>
-            )}
-          </p>
+
           {loading ? (
             <Skeleton
               variant="rectangular"
               width={"100%"}
-              height={"calc(100vh - 300px)"}
+              height={"calc(100vh - 250px)"}
             />
           ) : (
             <section>
@@ -163,15 +142,17 @@ function Theme(props) {
                   }}
                 >
                   voici à quoi ressemblera votre barre de navigation
-                  <IconButton
-                    onClick={() => {
-                      setTitle("changer la couleur de l'en-tête");
-                      setCurrentColor("headerColor");
-                      setAction(AdminActions.UPDATE);
-                    }}
-                  >
-                    <PaletteIcon color="warning" />
-                  </IconButton>
+                  <Tooltip title="Modifier">
+                    <IconButton
+                      onClick={() => {
+                        setTitle("changer la couleur de l'en-tête");
+                        setCurrentColor("headerColor");
+                        setAction(AdminActions.UPDATE);
+                      }}
+                    >
+                      <PaletteIcon color="warning" />
+                    </IconButton>
+                  </Tooltip>
                 </div>
                 <br />
                 <div className={themeStyles.bodyPreview}>
@@ -184,35 +165,17 @@ function Theme(props) {
                         backgroundColor: colors.primaryColor,
                       }}
                     />
-                    <IconButton
-                      onClick={() => {
-                        setTitle("changer la couleur primaire");
-                        setCurrentColor("primaryColor");
-                        setAction(AdminActions.UPDATE);
-                      }}
-                    >
-                      <PaletteIcon color="warning" />
-                    </IconButton>
-                  </div>
-                  <br />
-                  <p>la couleur secondaire ressemblera à ceci :</p>
-                  <br />
-                  <div className="row" style={{ justifyContent: "flex-start" }}>
-                    <div
-                      className={themeStyles.secondaryColor}
-                      style={{
-                        backgroundColor: colors.secondaryColor,
-                      }}
-                    />
-                    <IconButton
-                      onClick={() => {
-                        setTitle("changer la couleur secondaire");
-                        setCurrentColor("secondaryColor");
-                        setAction(AdminActions.UPDATE);
-                      }}
-                    >
-                      <PaletteIcon color="warning" />
-                    </IconButton>
+                    <Tooltip title="Modifier">
+                      <IconButton
+                        onClick={() => {
+                          setTitle("changer la couleur primaire");
+                          setCurrentColor("primaryColor");
+                          setAction(AdminActions.UPDATE);
+                        }}
+                      >
+                        <PaletteIcon color="warning" />
+                      </IconButton>
+                    </Tooltip>
                   </div>
                   <br />
                   <p>les contrôles ressembleront à ceci :</p>
@@ -234,6 +197,28 @@ function Theme(props) {
                     />
                   </div>
                   <br />
+                  <p>la couleur secondaire ressemblera à ceci :</p>
+                  <br />
+                  <div className="row" style={{ justifyContent: "flex-start" }}>
+                    <div
+                      className={themeStyles.secondaryColor}
+                      style={{
+                        backgroundColor: colors.secondaryColor,
+                      }}
+                    />
+                    <Tooltip title="Modifier">
+                      <IconButton
+                        onClick={() => {
+                          setTitle("changer la couleur secondaire");
+                          setCurrentColor("secondaryColor");
+                          setAction(AdminActions.UPDATE);
+                        }}
+                      >
+                        <PaletteIcon color="warning" />
+                      </IconButton>
+                    </Tooltip>
+                  </div>
+                  <br />
                   <p>les accents ressembleront à ceci</p>
                   <br />
                   <div className="row" style={{ justifyContent: "flex-start" }}>
@@ -251,15 +236,17 @@ function Theme(props) {
                   }}
                 >
                   voici à quoi ressemblera votre pied de page
-                  <IconButton
-                    onClick={() => {
-                      setTitle("changer la couleur du pied de page");
-                      setCurrentColor("footerColor");
-                      setAction(AdminActions.UPDATE);
-                    }}
-                  >
-                    <PaletteIcon color="warning" />
-                  </IconButton>
+                  <Tooltip title="Modifier">
+                    <IconButton
+                      onClick={() => {
+                        setTitle("changer la couleur du pied de page");
+                        setCurrentColor("footerColor");
+                        setAction(AdminActions.UPDATE);
+                      }}
+                    >
+                      <PaletteIcon color="warning" />
+                    </IconButton>
+                  </Tooltip>
                 </div>
               </div>
             </section>

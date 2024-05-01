@@ -187,7 +187,7 @@ function Shop({ shop }) {
                 order: architecture.home.categoriesComponent.visibleIndex,
               }}
             >
-              <XHr color={shopInfo.settings.secondaryColor} width="30%" />
+              <XHr color={shopInfo.settings.secondaryColor} width="150px" />
               {loadingCategories ? (
                 <Skeleton
                   variant="rectangular"
@@ -224,7 +224,7 @@ function Shop({ shop }) {
                   order: galleryInfo.visibleIndex,
                 }}
               >
-                <XHr color={shopInfo.settings.secondaryColor} width="30%" />
+                <XHr color={shopInfo.settings.secondaryColor} width="150px" />
                 <XGallery
                   shopName={shopInfo.name}
                   content={galleryInfo.content}
@@ -238,7 +238,7 @@ function Shop({ shop }) {
                 order: architecture.home.discountComponent.visibleIndex,
               }}
             >
-              <XHr color={shopInfo.settings.secondaryColor} width="30%" />
+              <XHr color={shopInfo.settings.secondaryColor} width="150px" />
               {loadingDiscounts ? (
                 <Skeleton
                   variant="rectangular"

@@ -378,7 +378,11 @@ function ShopHeader({ shopInfo, ...props }) {
           ) : (
             <>
               <h2>Votre panier est vide !</h2>
-              <XHr width="60px" color={shopInfo.settings.primaryColor} />
+              <XHr
+                width="60px"
+                height="2px"
+                color={shopInfo.settings.secondaryColor}
+              />
             </>
           )}
         </div>

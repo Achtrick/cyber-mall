@@ -1,11 +1,8 @@
-import React from "react";
-
-function XHr({ color, width = "100%", marginLeft, height = "1px" }) {
+function XHr({ color, width = "100%", marginLeft, height = "2px" }) {
   return (
     <div
       style={{
-        backgroundColor: color,
-        height: height,
+        borderTop: `${height} solid ${color}`,
         width: width,
         margin: "20px 0px",
         marginLeft: marginLeft,

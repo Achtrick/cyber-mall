@@ -141,7 +141,7 @@ function Cart({ shop }) {
               >
                 <br />
                 <div className="row">
-                  <XHr color={shopInfo.settings.primaryColor} width="50%" />
+                  <XHr color={shopInfo.settings.secondaryColor} width="150px" />
                 </div>
                 <form onSubmit={placeOrder}>
                   <div className="row">
