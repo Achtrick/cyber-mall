@@ -197,7 +197,7 @@ function Product({ shop, slug }) {
                     <>
                       <br />
                       <label>variantes</label>
-                      <div className="tagsRow">
+                      <div style={{ marginTop: "5px" }} className="tagsRow">
                         {product.variants.map((variant, key) => {
                           return (
                             <span
