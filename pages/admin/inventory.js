@@ -41,6 +41,7 @@ function Inventory(props) {
   const [page, setPage] = useState(0);
   const [count, setCount] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
+  const [tag, setTag] = useState("");
 
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -157,7 +158,7 @@ function Inventory(props) {
           ...product,
           [e.target.name]: [...product[e.target.name], e.target.value],
         });
-        e.target.value = "";
+        setTag("");
       }
     }
   };
@@ -196,7 +197,7 @@ function Inventory(props) {
           }
 
           product.slug =
-            product.designation +
+            product.designation.split("").join("-") +
             "-" +
             Date.now()
               .toString()
@@ -276,6 +277,7 @@ function Inventory(props) {
       qty: 0,
       images: [],
     });
+    setTag("");
     setAction("");
   };
 
@@ -413,14 +415,38 @@ function Inventory(props) {
                   </IconButton>
                 </Tooltip>
               </div>
-              <div className="labeledInput">
-                <label>variantes (tailles, couleurs ...)</label>
+              <div style={{ position: "relative" }} className="labeledInput">
+                <label>
+                  variantes (tailles, couleurs ...)
+                  {isMobile
+                    ? ""
+                    : " cliquer sur 'entrée' ou ',' pour confirmer"}
+                </label>
                 <input
                   className="defaultInput"
                   type="tag"
                   name="variants"
+                  value={tag}
+                  onChange={(e) => setTag(e.target.value)}
                   onKeyPress={addTag}
                 />
+                {isMobile && tag.length ? (
+                  <span
+                    className="addTag"
+                    style={{ left: `${tag.length}px` }}
+                    onClick={(e) => {
+                      if (!product.variants.some((x) => x.label === tag)) {
+                        setProduct({
+                          ...product,
+                          variants: [...product.variants, tag],
+                        });
+                        setTag("");
+                      }
+                    }}
+                  >
+                    <AddIcon />
+                  </span>
+                ) : null}
                 {product.variants.length ? (
                   <XTag
                     forEntry="variants"
