@@ -448,6 +448,9 @@ th {
     td {
       border: none;
     }
+    td:first-child {
+      display: flex;
+    }
     td:last-child {
       border: none !important;
       border-bottom: 1px solid #ccc !important;
@@ -522,9 +525,6 @@ th {
     border: 1px solid #ccc;
     padding: 0px 5px;
     @include flexLayout(center, space-between);
-  }
-  .defaultTable td:first-child {
-    display: flex;
   }
   .vitrine-block {
     padding: 20px;
