@@ -37,7 +37,7 @@ function Product({ shop, slug }) {
 
   useEffect(() => {
     shopInfo && getProduct();
-  }, [shopInfo]);
+  }, [shopInfo, slug]);
 
   const getShopInfo = async () => {
     try {

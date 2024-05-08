@@ -2,7 +2,7 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import React from "react";
 import styles from "../../styles/components/XTag.module.scss";
 
-function XTag({ entries, forEntry, action, displayExpr, ...props }) {
+function XTag({ entries, action, displayExpr, ...props }) {
   return (
     <div className={styles.tagsContainer}>
       {entries?.map((entry, index) => {
@@ -12,7 +12,7 @@ function XTag({ entries, forEntry, action, displayExpr, ...props }) {
             <CancelIcon
               sx={{ cursor: "pointer" }}
               fontSize="15px"
-              onClick={() => action(forEntry, entry)}
+              onClick={() => action(entry)}
             />
           </span>
         );

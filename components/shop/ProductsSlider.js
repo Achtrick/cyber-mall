@@ -57,6 +57,20 @@ function ProductsSlider({
     e.target.style.color = shopInfo?.settings.primaryColor;
   };
 
+  const handleMouseMove = (e) => {
+    const container = e.target;
+    const mouseX = e.clientX - container.getBoundingClientRect().left;
+    const scrollThreshold = 50; // Adjust this value as needed
+
+    if (mouseX < scrollThreshold) {
+      // Mouse is closer to the left, scroll left
+      container.scrollLeft -= 5; // Adjust scrolling speed as needed
+    } else if (mouseX > container.offsetWidth - scrollThreshold) {
+      // Mouse is closer to the right, scroll right
+      container.scrollLeft += 5; // Adjust scrolling speed as needed
+    }
+  };
+
   return (
     <section className={styles.container}>
       <h2>{title}</h2>
@@ -111,6 +125,7 @@ function ProductsSlider({
                     setSelectedProduct(null);
                   }}
                   className="variantPickerContainer"
+                  onMouseMove={handleMouseMove}
                 >
                   <div
                     className={
@@ -121,7 +136,7 @@ function ProductsSlider({
                   >
                     {product.variants?.map((variant, key) => {
                       return (
-                        <span
+                        <pre
                           style={
                             selectedVariant === variant
                               ? activeTagStyle
@@ -149,7 +164,7 @@ function ProductsSlider({
                           }}
                         >
                           {variant}
-                        </span>
+                        </pre>
                       );
                     })}
                   </div>

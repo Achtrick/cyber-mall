@@ -72,27 +72,30 @@ function ForgotPassword(props) {
                 />
               </div>
               &nbsp;
-              <Button
+              <div
                 data-aos="fade-up"
                 data-aos-offset="100"
                 data-aos-delay="300"
-                disabled={loading}
-                type="submit"
-                form="form"
-                style={{
-                  background: "black",
-                  color: "white",
-                  height: "35px",
-                  width: "100%",
-                }}
-                variant="contained"
               >
-                {loading ? (
-                  <CircularProgress style={{ color: "white" }} size={20} />
-                ) : (
-                  "récupérer"
-                )}
-              </Button>
+                <Button
+                  disabled={loading}
+                  type="submit"
+                  form="form"
+                  style={{
+                    background: "black",
+                    color: "white",
+                    height: "35px",
+                    width: "100%",
+                  }}
+                  variant="contained"
+                >
+                  {loading ? (
+                    <CircularProgress style={{ color: "white" }} size={20} />
+                  ) : (
+                    "récupérer"
+                  )}
+                </Button>
+              </div>
             </form>
             <p data-aos="fade-up" data-aos-offset="100" data-aos-delay="400">
               un lien de récupération vas être envoyer à votre email.

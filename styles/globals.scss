@@ -296,13 +296,14 @@ th {
   padding: 5px;
   transition: all 0.3s;
   opacity: 0;
-  display: flex;
+  display: none;
   align-items: center;
   gap: 10px;
   overflow-x: auto;
   overflow-y: hidden;
 }
 .variantPickerActive {
+  display: flex;
   opacity: 1;
   width: 100%;
 }
@@ -313,6 +314,7 @@ th {
   justify-content: flex-start;
   gap: 10px;
   overflow-y: auto;
+  scrollbar-width: 10px !important;
 }
 .tag {
   border-radius: 25px;
@@ -322,6 +324,7 @@ th {
   cursor: pointer;
   transition: 0.1s;
   font-size: 12px !important;
+  margin: 0px;
 }
 .addTag {
   position: absolute;
@@ -441,6 +444,22 @@ th {
 }
 
 @media (max-width: 800px) {
+  .cart-content {
+    td {
+      border: none;
+    }
+    td:last-child {
+      border: none !important;
+      border-bottom: 1px solid #ccc !important;
+    }
+    tr:last-child {
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      th {
+        border: none !important;
+      }
+    }
+  }
   .variantPicker {
     margin-top: -45px;
     height: 90px;
@@ -503,6 +522,9 @@ th {
     border: 1px solid #ccc;
     padding: 0px 5px;
     @include flexLayout(center, space-between);
+  }
+  .defaultTable td:first-child {
+    display: flex;
   }
   .vitrine-block {
     padding: 20px;

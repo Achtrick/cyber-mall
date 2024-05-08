@@ -153,22 +153,20 @@ function Inventory(props) {
     if (e.key === "Enter" || e.key === ",") {
       e.preventDefault();
       e.stopPropagation();
-      if (!product[e.target.name].some((x) => x.label === e.target.value)) {
+      if (!product.variants.some((x) => x === e.target.value)) {
         setProduct({
           ...product,
-          [e.target.name]: [...product[e.target.name], e.target.value],
+          variants: [...product.variants, e.target.value],
         });
         setTag("");
       }
     }
   };
 
-  const deleteTag = (forEntry, entry) => {
+  const deleteTag = (entry) => {
     setProduct({
       ...product,
-      [forEntry]: [
-        ...product[forEntry].filter((tag) => tag.label !== entry.label),
-      ],
+      variants: [...product.variants.filter((tag) => tag !== entry)],
     });
   };
 
@@ -197,7 +195,7 @@ function Inventory(props) {
           }
 
           product.slug =
-            product.designation.split("").join("-") +
+            product.designation.split(" ").join("-") +
             "-" +
             Date.now()
               .toString()
@@ -448,11 +446,7 @@ function Inventory(props) {
                   </span>
                 ) : null}
                 {product.variants.length ? (
-                  <XTag
-                    forEntry="variants"
-                    entries={product.variants}
-                    action={deleteTag}
-                  />
+                  <XTag entries={product.variants} action={deleteTag} />
                 ) : null}
               </div>
               <div className="labeledInput">

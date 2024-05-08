@@ -102,7 +102,10 @@ function CartContent({
           </div>
         </div>
       ) : null}
-      <table className="defaultTable" style={{ overflow: "hidden" }}>
+      <table
+        className="defaultTable cart-content"
+        style={{ overflow: "hidden" }}
+      >
         <thead>
           <tr>
             <th>image</th>
@@ -118,7 +121,7 @@ function CartContent({
             cart.content.map((product, index) => {
               return (
                 <tr key={index}>
-                  <td data-label="image">
+                  <td>
                     <img
                       alt={product.designation}
                       src={
@@ -205,7 +208,7 @@ function CartContent({
               {cart.content.reduce((sum, product) => {
                 return sum + product.price * product.qty;
               }, 0) > shopInfo.freeShipping
-                ? "Livraison gratuite"
+                ? "✓ Livraison gratuite"
                 : "frais de livraison : " + shopInfo.shippingFee + "DT"}
             </th>
           </tr>
