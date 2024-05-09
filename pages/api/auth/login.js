@@ -41,7 +41,7 @@ handler.post(async (req, res) => {
             .status(401)
             .json({ message: "Vérifiez votre compte pour se connecter !" });
         }
-      } else {
+      } else if (user.role === "SUPER-ADMIN") {
         res.status(200).json({
           _id: user._id,
           role: user.role,
