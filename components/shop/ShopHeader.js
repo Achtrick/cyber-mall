@@ -5,7 +5,6 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import axios from "axios";
-import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
@@ -414,36 +413,18 @@ function ShopHeader({ shopInfo, ...props }) {
                 onError={(e) => {
                   e.target.src = "/images/image-placeholder.jpg";
                 }}
-                style={{
-                  objectFit: "contain",
-                  width: "150px",
-                  height: "80px",
-                }}
               />
             </Link>
           ) : (
             <Link href={`/${shopInfo.name}`}>
               <div className="row">
-                <Image
-                  alt="logo"
-                  src={"/images/default-store.png"}
-                  width={"60"}
-                  height={"60"}
-                  style={{
-                    objectFit: "contain",
-                    backgroundColor: "white",
-                    padding: "5px",
-                    borderRadius: "5px",
-                  }}
-                />
-                &nbsp;
-                <p
+                <h1
                   style={{
                     color: deduceColor(shopInfo.settings.headerColor),
                   }}
                 >
                   {shopInfo.name}
-                </p>
+                </h1>
               </div>
             </Link>
           )}
