@@ -10,4 +10,6 @@ Allow: /register
 Allow: /forgot-password
 Allow: /condition-of-use
 Allow: /privacy-policy
+Allow: /:shop
+Allow: /:shop/:product
 Sitemap: https://cyber-mall.tn/sitemap.xml
