@@ -21,6 +21,22 @@
 .logo {
   width: calc(100% / 3);
   @include flexContainer(center, center);
+  a {
+    width: 150px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  img {
+    object-fit: contain;
+    width: 100%;
+    height: 100%;
+  }
+  h1 {
+    margin: 0px;
+    text-transform: uppercase;
+  }
 }
 .menu {
   width: calc(100% / 3);

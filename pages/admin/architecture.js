@@ -1,6 +1,5 @@
-import { IconButton, Skeleton, Tooltip } from "@mui/material";
+import { CircularProgress, IconButton, Skeleton, Tooltip } from "@mui/material";
 import axios from "axios";
-import Image from "next/image";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import React, { useEffect, useState } from "react";
@@ -47,6 +46,8 @@ function Architecture(props) {
   const [loading, setLoading] = useState(true);
   const [loadingSlider, setLoadingSlider] = useState(true);
   const [loadingGallery, setLoadingGallery] = useState(true);
+  const [compressingLogo, setCompressingLogo] = useState(false);
+  const [uploadingLogo, setUploadingLogo] = useState(false);
   const [shopInfo, setShopInfo] = useState({});
   const [sliderInfo, setSliderInfo] = useState([]);
   const [slide, setSlide] = useState({ image: "", link: "", category: "" });
@@ -223,7 +224,7 @@ function Architecture(props) {
   };
 
   const updateLogo = async () => {
-    setLoading(true);
+    setUploadingLogo(true);
     const formData = new FormData();
     formData.append("images", compressedLogo);
     try {
@@ -243,11 +244,11 @@ function Architecture(props) {
       });
       setCompressedLogo(null);
       enqueueSnackbar(result.data.message, { variant: "success" });
-      setLoading(false);
+      setUploadingLogo(false);
     } catch (error) {
       checkExpirity(error, dispatch);
       enqueueSnackbar(getError(error), { variant: "error" });
-      setLoading(false);
+      setUploadingLogo(false);
     }
   };
 
@@ -769,26 +770,32 @@ function Architecture(props) {
             <div className={styles.container}>
               <h1>Logo</h1>
               <div className="row" style={{ justifyContent: "flex-start" }}>
-                {logo ? (
-                  <Image
-                    alt="logo"
-                    src={logo}
-                    onError={(e) => {
-                      setLogo("/images/default-store.png");
-                    }}
-                    width={"150"}
-                    height={"80"}
-                    style={{ objectFit: "contain" }}
-                  />
-                ) : (
-                  <Image
-                    alt="logo"
-                    src={"/images/default-store.png"}
-                    width={"100"}
-                    height={"100"}
-                    style={{ objectFit: "contain" }}
-                  />
-                )}
+                <>
+                  {!compressingLogo ? (
+                    <>
+                      {logo ? (
+                        <img
+                          alt="logo"
+                          src={logo}
+                          onError={(e) => {
+                            setLogo("/images/default-store.png");
+                          }}
+                          width={"150"}
+                          height={"80"}
+                          style={{ objectFit: "contain" }}
+                        />
+                      ) : (
+                        <h1>{shopInfo.name}</h1>
+                      )}
+                    </>
+                  ) : (
+                    <Skeleton
+                      variant="circular"
+                      width={"80px"}
+                      height={"80px"}
+                    />
+                  )}
+                </>
                 <input
                   id="logo"
                   hidden
@@ -796,6 +803,7 @@ function Architecture(props) {
                   accept="image/*"
                   name="logo"
                   onChange={async (e) => {
+                    setCompressingLogo(true);
                     const base64 = await getThumbnail(e.target.files[0]);
                     const compressed = await compressImage(
                       e.target.files[0],
@@ -804,41 +812,54 @@ function Architecture(props) {
                     );
                     setLogo(base64);
                     setCompressedLogo(compressed);
+                    setCompressingLogo(false);
                   }}
                 />
                 &nbsp;&nbsp;
                 <Tooltip title="Modifier logo">
-                  <IconButton color="info">
-                    <label
-                      style={{
-                        cursor: "pointer",
-                        width: "25px",
-                        height: "25px",
-                      }}
-                      htmlFor="logo"
-                    >
-                      <SettingsIcon />
-                    </label>
-                  </IconButton>
+                  {compressingLogo ? (
+                    <IconButton>
+                      <CircularProgress size={21} />
+                    </IconButton>
+                  ) : (
+                    <IconButton color="info">
+                      <label
+                        style={{
+                          cursor: "pointer",
+                          width: "25px",
+                          height: "25px",
+                        }}
+                        htmlFor="logo"
+                      >
+                        <SettingsIcon />
+                      </label>
+                    </IconButton>
+                  )}
                 </Tooltip>{" "}
                 |{" "}
                 <Tooltip title="Enregistrer">
                   {" "}
-                  <IconButton
-                    disabled={!compressedLogo}
-                    color="info"
-                    onClick={updateLogo}
-                  >
-                    <label
-                      style={{
-                        cursor: "pointer",
-                        width: "25px",
-                        height: "25px",
-                      }}
+                  {uploadingLogo ? (
+                    <IconButton>
+                      <CircularProgress size={21} />
+                    </IconButton>
+                  ) : (
+                    <IconButton
+                      disabled={!compressedLogo}
+                      color="info"
+                      onClick={updateLogo}
                     >
-                      <CheckCircleIcon />
-                    </label>
-                  </IconButton>
+                      <label
+                        style={{
+                          cursor: "pointer",
+                          width: "25px",
+                          height: "25px",
+                        }}
+                      >
+                        <CheckCircleIcon />
+                      </label>
+                    </IconButton>
+                  )}
                 </Tooltip>{" "}
               </div>
               <br />

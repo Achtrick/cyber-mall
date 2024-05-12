@@ -81,7 +81,7 @@ function AdminLayout(props) {
           height={"60"}
           style={{ objectFit: "contain" }}
         />
-        <IconButton />
+        <p></p>
       </section>
       <Drawer open={drawerOpen} anchor={"left"} onClose={toggleDrawer}>
         <section className={styles.sidebar}>
