@@ -2,7 +2,6 @@ import SearchIcon from "@mui/icons-material/Search";
 import { Skeleton } from "@mui/material";
 import axios from "axios";
 import moment from "moment";
-import Image from "next/image";
 import { useSnackbar } from "notistack";
 import React, { useEffect, useState } from "react";
 import DisconnectedGuard from "../../components/guards/disconnectedGuard";
@@ -132,7 +131,7 @@ export default function Shops(props) {
                       >
                         <h1>{shop.name}</h1>
                         {shop.logo ? (
-                          <Image
+                          <img
                             alt="logo"
                             src={shop.logo}
                             onError={() => {
@@ -143,7 +142,7 @@ export default function Shops(props) {
                             style={{ objectFit: "contain" }}
                           />
                         ) : (
-                          <Image
+                          <img
                             alt="logo"
                             src={"/images/default-store.png"}
                             width={"50"}

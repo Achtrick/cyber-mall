@@ -7,7 +7,6 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import moment from "moment";
-import Image from "next/image";
 import { useSnackbar } from "notistack";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -292,7 +291,7 @@ function Account(props) {
                 >
                   <h1>{userInfo.shop.name}</h1>
                   {userInfo?.shop.logo ? (
-                    <Image
+                    <img
                       alt="logo"
                       src={userInfo?.shop.logo}
                       onError={(e) => {
@@ -303,7 +302,7 @@ function Account(props) {
                       style={{ objectFit: "contain" }}
                     />
                   ) : (
-                    <Image
+                    <img
                       alt="logo"
                       src={"/images/default-store.png"}
                       width={"60"}

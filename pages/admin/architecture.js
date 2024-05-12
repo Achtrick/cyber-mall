@@ -1,6 +1,5 @@
 import { CircularProgress, IconButton, Skeleton, Tooltip } from "@mui/material";
 import axios from "axios";
-import Image from "next/image";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import React, { useEffect, useState } from "react";
@@ -775,7 +774,7 @@ function Architecture(props) {
                   {!compressingLogo ? (
                     <>
                       {logo ? (
-                        <Image
+                        <img
                           alt="logo"
                           src={logo}
                           onError={(e) => {
