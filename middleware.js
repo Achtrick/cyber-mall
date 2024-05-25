@@ -10,22 +10,10 @@ export function middleware(request) {
   if (hostname === "ashref-mtir.dev" || hostname === "www.ashref-mtir.dev") {
     basePath = "/demo";
   }
-  //
 
   // URL REWRITE SECTION
   if (basePath && !pathname.startsWith(basePath)) {
-    const newurl = new URL(
-      `${
-        !(
-          pathname.startsWith("/_next/static") ||
-          pathname.startsWith("/api") ||
-          pathname.startsWith("/images")
-        )
-          ? basePath
-          : ""
-      }${pathname}`,
-      request.url
-    );
+    const newurl = new URL(`${basePath}${pathname}`, request.url);
     return NextResponse.rewrite(newurl);
   }
 
@@ -33,5 +21,5 @@ export function middleware(request) {
 }
 
 export const config = {
-  matcher: "/:path*",
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico|images).*)"],
 };
