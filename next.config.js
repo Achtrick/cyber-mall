@@ -6,9 +6,6 @@ const nextConfig = {
   sassOptions: {
     includePaths: [path.join(__dirname, "styles")],
   },
-  experimental: {
-    middleware: true,
-  },
 };
 
 module.exports = nextConfig;
