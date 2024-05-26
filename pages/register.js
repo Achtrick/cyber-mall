@@ -206,7 +206,7 @@ function Register(props) {
                 >
                   <input value={conditions} required type="checkbox" />
                   <label onClick={toggleConditions}>
-                    Condition d'utilisation.
+                    Condition d&apos;utilisation.
                   </label>
                 </div>
                 <br />
