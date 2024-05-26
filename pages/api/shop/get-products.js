@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import nc from "next-connect";
 import Product from "../../../models/product.model";
+import Shop from "../../../models/shop.model";
 import connectDB from "../../../utils/connectDB";
 
 const handler = nc();
@@ -28,13 +29,19 @@ handler.post(async (req, res) => {
 
   try {
     await connectDB();
+    const shop = await Shop.findById(mongoose.Types.ObjectId(shopId));
     const products = await Product.find(query, { images: { $slice: 1 } })
       .sort(sortOrder)
-      .limit(12)
-      .skip((page - 1) * 12);
+      .limit(shop.pack.type === "FREE" ? 10 : 12)
+      .skip(shop.pack.type === "FREE" ? 0 : (page - 1) * 12);
     const totalProducts = await Product.countDocuments(query);
     const count = Math.ceil(totalProducts / 12);
-    res.status(200).json({ products: products, count: count });
+    res
+      .status(200)
+      .json({
+        products: products,
+        count: shop.pack.type === "FREE" ? 1 : count,
+      });
   } catch (err) {
     res.status(400).json(err);
   }

@@ -1,3 +1,4 @@
+import { Language } from "@mui/icons-material";
 import { Badge, Button, Drawer, IconButton } from "@mui/material";
 import axios from "axios";
 import Head from "next/head";
@@ -94,7 +95,7 @@ function AdminLayout(props) {
           height={"60"}
           style={{ objectFit: "contain" }}
         />
-        <p></p>
+        <IconButton style={{ width: "35px" }} disabled={true}></IconButton>
       </section>
       <Drawer open={drawerOpen} anchor={"left"} onClose={toggleDrawer}>
         <section className={styles.sidebar}>
@@ -134,6 +135,12 @@ function AdminLayout(props) {
             <div className={`${styles.link} + hoverable`}>
               <SettingsIcon color="shop6" />
               <p>configurer ma shop</p>
+            </div>
+          </Link>
+          <Link onClick={toggleDrawer} href="/admin/domain-name">
+            <div className={`${styles.link} + hoverable`}>
+              <Language color="shop7" />
+              <p>Nom de domaine</p>
             </div>
           </Link>
           <Link

@@ -1,7 +1,7 @@
 import nc from "next-connect";
+import auth from "../../../middlewares/super-admin-auth";
 import Shop from "../../../models/shop.model";
 import connectDB from "../../../utils/connectDB";
-import auth from "../../../middlewares/super-admin-auth";
 
 const handler = nc();
 
@@ -18,7 +18,7 @@ handler.post(auth, async (req, res) => {
   try {
     await connectDB();
     const shops = await Shop.find(query)
-      .sort({ createdAt: -1 })
+      .sort({ "pack.expiresIn": 1 })
       .limit(20)
       .skip((page - 1) * 20);
     const totalShops = await Shop.countDocuments(query);

@@ -6,6 +6,7 @@ const shopSchema = new Schema(
     banned: { type: Boolean, default: false },
     name: { type: String, unique: true },
     logo: { type: String, default: "" },
+    domainName: { type: String, default: "" },
     pack: {
       type: Object,
     },

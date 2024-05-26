@@ -4,9 +4,11 @@ import axios from "axios";
 import moment from "moment";
 import { useSnackbar } from "notistack";
 import React, { useEffect, useState } from "react";
+import { ModalSizes } from "../../components/admin/ModalSettings";
 import DisconnectedGuard from "../../components/guards/disconnectedGuard";
 import SuperAdminLayout from "../../components/super-admin/SuperAdminLayout";
 import XButton from "../../components/ui-components/XButton";
+import XModal from "../../components/ui-components/XModal";
 import XPagination from "../../components/ui-components/XPagination";
 import styles from "../../styles/SuperAdmin.module.scss";
 import { getError } from "../../utils/shared/getError";
@@ -19,7 +21,9 @@ export default function Shops(props) {
   const [page, setPage] = useState(0);
   const [count, setCount] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [shopId, setShopId] = useState(null);
+  const [domainName, setDomainName] = useState("");
   const [shops, setShops] = useState([]);
 
   useEffect(() => {
@@ -84,8 +88,51 @@ export default function Shops(props) {
     }
   };
 
+  const updateDomainName = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const { data } = await axios.post("/api/super-admin/update-domain-name", {
+        shopId: shopId,
+        domainName: domainName,
+      });
+      setLoading(false);
+      cancelAction();
+      enqueueSnackbar(data.message, { variant: "info" });
+    } catch (error) {
+      enqueueSnackbar(getError(error), { variant: "error" });
+      setLoading(false);
+    }
+  };
+
+  const cancelAction = () => {
+    setDomainName("");
+    setShopId(null);
+  };
+
   return (
     <DisconnectedGuard>
+      <XModal
+        loading={loading}
+        open={!!shopId}
+        onClose={cancelAction}
+        formId={"domain_name_form"}
+        cancelAction={cancelAction}
+        size={ModalSizes.SMALL}
+        title="Modifier le nom de domaine"
+      >
+        <form id="domain_name_form" onSubmit={updateDomainName}>
+          <div className="labeledInput">
+            <label>Nouveau Nom de domaine</label>
+            <input
+              type="text"
+              className="defaultInput"
+              required
+              onChange={(e) => setDomainName(e.target.value)}
+            />
+          </div>
+        </form>
+      </XModal>
       <SuperAdminLayout>
         <section>
           <div className={styles.searchField}>
@@ -180,6 +227,16 @@ export default function Shops(props) {
                               action={() => downgradeShop(shop._id)}
                             ></XButton>
                           )}
+                        {shop.pack.type !== "FREE" && (
+                          <>
+                            &nbsp;
+                            <XButton
+                              color="orange"
+                              text="change domain name"
+                              action={() => setShopId(shop._id)}
+                            ></XButton>
+                          </>
+                        )}
                         &nbsp;
                         <XButton
                           color={shop.banned ? "#37a237" : "#c52222"}
