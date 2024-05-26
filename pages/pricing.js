@@ -48,6 +48,7 @@ function Pricing(props) {
                 <li>images par produit : 1</li>
                 <li>diapositives d&apos;accueil : 3</li>
                 <li>Génération de facture : restreinte</li>
+                <li>Nom de domaine de votre choix : restreinte</li>
               </ul>
               <hr />
               <p>Gratuit</p>
@@ -86,6 +87,7 @@ function Pricing(props) {
                 <li>images par produit : 6</li>
                 <li>diapositives d&apos;accueil : illimitées</li>
                 <li>génération de facture : autorisée</li>
+                <li>Nom de domaine de votre choix : autorisée</li>
               </ul>
               <hr />
               <p>30 DT / Mois</p>

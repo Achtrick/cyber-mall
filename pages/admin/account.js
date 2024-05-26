@@ -235,13 +235,12 @@ function Account(props) {
             <br />
             {offer && (
               <span>
-                <p>
+                <p style={{ color: "blue" }}>
                   Mettre à niveau votre forfait, Envoyer {offer.price}
                   &nbsp;DT à:
                 </p>
-                <ul>
+                <ul style={{ color: "blue" }}>
                   <li>RIB: 17503000000268993518</li>
-                  <li>E-DINAR: 4742000268993511</li>
                 </ul>
               </span>
             )}
@@ -251,26 +250,12 @@ function Account(props) {
             </p>
             <hr />
             <ul style={{ listStyle: "none", marginLeft: "-20px" }}>
-              <li>
-                <CheckCircleIcon color="primary" fontSize="12px" /> catégories:
-                illimité
-              </li>
-              <li>
-                <CheckCircleIcon color="primary" fontSize="12px" /> produits:
-                illimité
-              </li>
-              <li>
-                <CheckCircleIcon color="primary" fontSize="12px" /> images par
-                produit: jusqu&apos;à 6
-              </li>
-              <li>
-                <CheckCircleIcon color="primary" fontSize="12px" /> diapositives
-                de la page d&apos;accueil: illimité
-              </li>
-              <li>
-                <CheckCircleIcon color="primary" fontSize="12px" /> génération
-                des factures: permise
-              </li>
+              <li>- catégories: illimité ✓</li>
+              <li>- produits: illimité ✓</li>
+              <li>- images par produit: jusqu&apos;à 6 ✓</li>
+              <li>- diapositives de la page d&apos;accueil: illimité ✓</li>
+              <li>- génération des factures: permise ✓</li>
+              <li>- nom de domaine de votre choix: permise ✓</li>
             </ul>
           </section>
         </XModal>
@@ -331,6 +316,10 @@ function Account(props) {
                   {pack.type === "FREE" ? <CloseIcon /> : <Check />}
                   &nbsp;diapositives illimité
                 </p>
+                <p>
+                  {pack.type === "FREE" ? <CloseIcon /> : <Check />}
+                  &nbsp;nom de domaine de votre choix
+                </p>
                 <hr />
                 <h5>Pack: {pack.type}</h5>
                 {pack.type !== "FREE" && (
@@ -345,20 +334,17 @@ function Account(props) {
                 )}
                 {upgradeDemand ? (
                   <span>
-                    <h4>
-                      Mettre à niveau votre forfait, Envoyer{" "}
+                    <h4 style={{ color: "blue" }}>
+                      Mettre à niveau votre forfait, Transférez{" "}
                       {
                         offers.find((o) => o.period === upgradeDemand.period)
                           .price
                       }
                       &nbsp;DT à:
                     </h4>
-                    <ul>
+                    <ul style={{ color: "blue" }}>
                       <li>
                         <h4>RIB: 17503000000268993518</h4>
-                      </li>
-                      <li>
-                        <h4>E-DINAR: 4742000268993511</h4>
                       </li>
                     </ul>
                   </span>

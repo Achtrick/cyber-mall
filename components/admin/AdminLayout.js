@@ -1,8 +1,9 @@
-import { Button, Drawer, IconButton } from "@mui/material";
+import { Badge, Button, Drawer, IconButton } from "@mui/material";
+import axios from "axios";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import InstallPWA from "../../components/installPwa";
 import styles from "../../styles/admin/AdminLayout.module.scss";
@@ -21,10 +22,22 @@ import {
 
 function AdminLayout(props) {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [ordersCount, setOrdersCount] = useState(0);
 
   const { userInfo } = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    userInfo && getOrdersCount();
+  }, []);
+
+  const getOrdersCount = async () => {
+    const { data } = await axios.post("/api/admin/orders/count", {
+      shop: userInfo.shop._id,
+    });
+    setOrdersCount(data);
+  };
 
   const toggleDrawer = () => {
     setDrawerOpen(!drawerOpen);
@@ -105,7 +118,9 @@ function AdminLayout(props) {
           </Link>
           <Link onClick={toggleDrawer} href="/admin/orders">
             <div className={`${styles.link} + hoverable`}>
-              <LocalShippingIcon color="shop4" />
+              <Badge badgeContent={ordersCount} color="secondary">
+                <LocalShippingIcon color="shop4" />
+              </Badge>
               <p>commandes</p>
             </div>
           </Link>

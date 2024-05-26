@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { domains } from "./utils/config/domains";
 
 export function middleware(request) {
   const { pathname } = request.nextUrl;
@@ -7,9 +8,11 @@ export function middleware(request) {
   let basePath = "";
 
   // DOMAIN NAMES SECTION
-  if (hostname === "ashref-mtir.dev" || hostname === "www.ashref-mtir.dev") {
-    basePath = "/demo";
-  }
+  domains.forEach((domain) => {
+    if (hostname === domain.name || hostname === `www.${domain.name}`) {
+      basePath = `/${domain}`;
+    }
+  });
 
   // URL REWRITE SECTION
   if (basePath && !pathname.startsWith(basePath)) {
