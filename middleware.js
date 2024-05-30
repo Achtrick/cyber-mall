@@ -10,7 +10,7 @@ export function middleware(request) {
   // DOMAIN NAMES SECTION
   domains.forEach((domain) => {
     if (hostname === domain.name || hostname === `www.${domain.name}`) {
-      basePath = `/${domain}`;
+      basePath = `/${domain.shop}`;
     }
   });
 
