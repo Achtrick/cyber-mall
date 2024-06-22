@@ -147,7 +147,12 @@ function ShopHeader({ shopInfo, ...props }) {
     query = { ...query, category: categoryName };
 
     if (pathname.includes("products")) {
-      return { pathname: pathname, query: query };
+      return {
+        pathname: shopInfo.domainName.length
+          ? pathname.split(shopInfo.name)[1]
+          : pathname,
+        query: query,
+      };
     } else {
       return shopInfo.domainName.length
         ? `/products?category=${categoryName}`
@@ -422,7 +427,7 @@ function ShopHeader({ shopInfo, ...props }) {
         </div>
         <div className={styles.logo}>
           {shopInfo.logo ? (
-            <Link href={`/${shopInfo.name}`}>
+            <Link href={`/${shopInfo.domainName.length ? "" : shopInfo.name}`}>
               <img
                 alt={shopInfo.name}
                 src={`/api/images/${shopInfo.logo.split("/").pop()}`}
@@ -432,7 +437,7 @@ function ShopHeader({ shopInfo, ...props }) {
               />
             </Link>
           ) : (
-            <Link href={`/${shopInfo.name}`}>
+            <Link href={`/${shopInfo.domainName.length ? "" : shopInfo.name}`}>
               <div className="row">
                 <h1
                   style={{

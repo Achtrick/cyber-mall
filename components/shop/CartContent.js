@@ -229,7 +229,9 @@ function CartContent({
             text={"Finir Vos Achats"}
             action={() => {
               dispatch({ type: "TOGGLE_CART_PREVIEW" });
-              router.push(`/${shopInfo.name}/cart`);
+              router.push(
+                shopInfo.domainName.length ? `/cart` : `/${shopInfo.name}/cart`
+              );
             }}
           />
         ) : null}
