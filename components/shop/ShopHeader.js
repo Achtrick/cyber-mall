@@ -146,18 +146,16 @@ function ShopHeader({ shopInfo, ...props }) {
 
     query = { ...query, category: categoryName };
 
-    if (pathname.includes("products")) {
-      return {
-        pathname: shopInfo.domainName.length
-          ? pathname.split(shopInfo.name)[1]
-          : pathname,
-        query: query,
-      };
-    } else {
-      return shopInfo.domainName.length
-        ? `/products?category=${categoryName}`
-        : `/${shopInfo.name}/products?category=${categoryName}`;
-    }
+    // if (pathname.includes("products")) {
+    //   return {
+    //     pathname: "/products",
+    //     query: query,
+    //   };
+    // } else {
+    return shopInfo.domainName.length
+      ? `/products?category=${categoryName}`
+      : `/${shopInfo.name}/products?category=${categoryName}`;
+    // }
   };
 
   const restSearch = async () => {

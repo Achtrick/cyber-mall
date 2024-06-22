@@ -123,7 +123,10 @@ function Products({ shop }) {
     const pathname = router.pathname;
     let query = router.query;
     query = { ...query, [filterOption]: filterValue };
-    router.push({ pathname: pathname, query: query });
+    router.push({
+      pathname: shopInfo.domainName.length ? "/products" : pathname,
+      query: query,
+    });
   };
 
   const addTocart = (shop, product) => {
