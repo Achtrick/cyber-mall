@@ -27,7 +27,7 @@ function Products({ shop }) {
   const router = useRouter();
   const { category, searchTerm, sort } = router.query;
 
-  const sortOptions = [{ name: "ascending" }, { name: "descending" }];
+  const sortOptions = [{ name: "Ascendant" }, { name: "Descendant" }];
 
   const dispatch = useDispatch();
 
