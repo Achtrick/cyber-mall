@@ -27,7 +27,10 @@ function Products({ shop }) {
   const router = useRouter();
   const { category, searchTerm, sort } = router.query;
 
-  const sortOptions = [{ name: "Ascendant" }, { name: "Descendant" }];
+  const sortOptions = [
+    { name: "Ascendant", value: "ascending" },
+    { name: "Descendant", value: "descending" },
+  ];
 
   const dispatch = useDispatch();
 
@@ -280,9 +283,9 @@ function Products({ shop }) {
                       options={sortOptions}
                       value={sort}
                       optionDisplayExpr="name"
-                      optionValueExpr="name"
+                      optionValueExpr="value"
                       onChange={(e, val) => {
-                        filter("sort", val?.name || "");
+                        filter("sort", val?.value || "");
                       }}
                     />
                   </>

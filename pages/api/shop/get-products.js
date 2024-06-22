@@ -36,13 +36,12 @@ handler.post(async (req, res) => {
       .skip(shop.pack.type === "FREE" ? 0 : (page - 1) * 12);
     const totalProducts = await Product.countDocuments(query);
     const count = Math.ceil(totalProducts / 12);
-    res
-      .status(200)
-      .json({
-        products: products,
-        count: shop.pack.type === "FREE" ? 1 : count,
-      });
+    res.status(200).json({
+      products: products,
+      count: shop.pack.type === "FREE" ? 1 : count,
+    });
   } catch (err) {
+    console.log(err);
     res.status(400).json(err);
   }
 });
