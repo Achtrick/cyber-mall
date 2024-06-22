@@ -56,7 +56,10 @@ function DomainName(props) {
         >
           <form id="domain_name_form" onSubmit={updateDomainName}>
             <div className="labeledInput">
-              <label>Nouveau Nom de domaine</label>
+              <label>
+                Nouveau Nom de domaine sans http:// et sans www (exemple:
+                domain.com)
+              </label>
               <input
                 type="text"
                 className="defaultInput"
@@ -82,7 +85,7 @@ function DomainName(props) {
                     <td>{domainName.length ? domainName : "example.com"}</td>
                     <td>0</td>
                     <td>A</td>
-                    <td>196.203.89.103</td>
+                    <td>194.164.51.41</td>
                   </tr>
                 </tbody>
               </table>

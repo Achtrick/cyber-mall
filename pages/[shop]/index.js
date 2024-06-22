@@ -175,7 +175,7 @@ function Shop({ shop }) {
                           },
                         ]
                   }
-                  shopName={shop}
+                  shopInfo={shopInfo}
                 />
               )}
             </div>
@@ -203,7 +203,7 @@ function Shop({ shop }) {
                       : categories
                   }
                   architecture={architecture}
-                  shopName={shop}
+                  shopInfo={shopInfo}
                 />
               ) : (
                 <XGridSkeleton title={"Découvrir Nos Catégories"} />
@@ -225,10 +225,7 @@ function Shop({ shop }) {
                 }}
               >
                 <XHr color={shopInfo.settings.secondaryColor} width="150px" />
-                <XGallery
-                  shopName={shopInfo.name}
-                  content={galleryInfo.content}
-                />
+                <XGallery shopInfo={shopInfo} content={galleryInfo.content} />
               </div>
             )}
 

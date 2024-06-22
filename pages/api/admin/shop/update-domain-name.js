@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import nc from "next-connect";
 import auth from "../../../../middlewares/admin-auth";
+import DomainDemand from "../../../../models/domainDemand.model";
 import Shop from "../../../../models/shop.model";
 import User from "../../../../models/user.model";
 import connectDB from "../../../../utils/connectDB";
@@ -17,7 +18,21 @@ handler.post(auth, async (req, res) => {
     const user = await User.findOne({
       shop: mongoose.Types.ObjectId(shopId),
     });
-    await shop.save();
+    const demand = await DomainDemand.findOne({
+      shop: mongoose.Types.ObjectId(shopId),
+    });
+    if (demand) {
+      await DomainDemand.findOneAndRemove({
+        shop: mongoose.Types.ObjectId(shopId),
+      });
+    }
+    await DomainDemand.create({
+      userName: user.firstName + user.lastName,
+      phone: user.phone,
+      email: user.email,
+      domainName: domainName,
+      shop: mongoose.Types.ObjectId(shopId),
+    });
     await new Promise((resolve, reject) => {
       // send mail
       transporter.sendMail(

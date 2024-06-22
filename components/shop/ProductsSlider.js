@@ -90,7 +90,11 @@ function ProductsSlider({
               >
                 <Link
                   href={
-                    activateControls ? `/${shopInfo.name}/${product.slug}` : ""
+                    activateControls
+                      ? shopInfo.domainName.length
+                        ? `/${product.slug}`
+                        : `/${shopInfo.name}/${product.slug}`
+                      : ""
                   }
                 >
                   <img

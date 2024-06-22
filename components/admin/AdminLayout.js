@@ -147,7 +147,11 @@ function AdminLayout(props) {
             rel="noreferrer"
             target="_blank"
             onClick={toggleDrawer}
-            href={`/${userInfo?.shop?.name}`}
+            href={
+              userInfo?.shop.domainName.length
+                ? `https://${userInfo?.shop?.domainName}`
+                : `/${userInfo?.shop?.name}`
+            }
           >
             <div className={`${styles.link} + hoverable`}>
               <TravelExploreIcon />

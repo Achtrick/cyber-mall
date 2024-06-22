@@ -170,7 +170,11 @@ function Products({ shop }) {
       router.push({ pathname: pathname, query: query });
     } else {
       router.push(
-        `/${shopInfo.name}/products?searchTerm=${searchTerm ? searchTerm : ""}`
+        shopInfo.domainName.length
+          ? `/products?searchTerm=${searchTerm ? searchTerm : ""}`
+          : `/${shopInfo.name}/products?searchTerm=${
+              searchTerm ? searchTerm : ""
+            }`
       );
     }
   };
@@ -309,7 +313,13 @@ function Products({ shop }) {
                         style={{ alignItems: "flex-start" }}
                         key={product._id}
                       >
-                        <Link href={`/${shopInfo.name}/${product.slug}`}>
+                        <Link
+                          href={
+                            shopInfo.domainName.length
+                              ? `/${product.slug}`
+                              : `/${shopInfo.name}/${product.slug}`
+                          }
+                        >
                           <img
                             alt={product.designation}
                             src={

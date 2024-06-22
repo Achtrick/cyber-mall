@@ -129,7 +129,11 @@ function ShopHeader({ shopInfo, ...props }) {
       router.push({ pathname: pathname, query: query });
     } else {
       router.push(
-        `/${shopInfo.name}/products?searchTerm=${searchTerm ? searchTerm : ""}`
+        shopInfo.domainName.length
+          ? `/products?searchTerm=${searchTerm ? searchTerm : ""}`
+          : `/${shopInfo.name}/products?searchTerm=${
+              searchTerm ? searchTerm : ""
+            }`
       );
     }
 
@@ -145,7 +149,9 @@ function ShopHeader({ shopInfo, ...props }) {
     if (pathname.includes("products")) {
       return { pathname: pathname, query: query };
     } else {
-      return `/${shopInfo.name}/products?category=${categoryName}`;
+      return shopInfo.domainName.length
+        ? `/products?category=${categoryName}`
+        : `/${shopInfo.name}/products?category=${categoryName}`;
     }
   };
 
@@ -213,7 +219,10 @@ function ShopHeader({ shopInfo, ...props }) {
       <Drawer open={drawerOpen} anchor={"left"} onClose={toggleDrawer}>
         <section className={styles.drawer}>
           <div className={styles.container}>
-            <Link href={`/${shopInfo.name}`} onClick={toggleDrawer}>
+            <Link
+              href={shopInfo.domainName.length ? "/" : `/${shopInfo.name}`}
+              onClick={toggleDrawer}
+            >
               <div
                 className={styles.link}
                 onMouseOver={(e) => {
@@ -236,7 +245,14 @@ function ShopHeader({ shopInfo, ...props }) {
                 Accueil
               </div>
             </Link>
-            <Link href={`/${shopInfo.name}/products`} onClick={toggleDrawer}>
+            <Link
+              href={
+                shopInfo.domainName.length
+                  ? "/products"
+                  : `/${shopInfo.name}/products`
+              }
+              onClick={toggleDrawer}
+            >
               <div
                 className={styles.link}
                 onMouseOver={(e) => {

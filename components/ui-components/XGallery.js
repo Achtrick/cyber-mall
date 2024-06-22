@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import React from "react";
 import styles from "../../styles/components/XGallery.module.scss";
 
-function XGallery({ shopName, content, props }) {
+function XGallery({ shopInfo, content, props }) {
   const router = useRouter();
   const isMobile = useMediaQuery("(max-width:800px)");
   return (
@@ -16,7 +16,9 @@ function XGallery({ shopName, content, props }) {
             content[0]?.link.length
               ? content[0]?.link
               : content[0]?.category.length
-              ? `/${shopName}/products?category=${content[0]?.category}`
+              ? shopInfo.domainName.length
+                ? `/products?category=${content[0]?.category}`
+                : `/${shopInfo.name}/products?category=${content[0]?.category}`
               : router.asPath
           }
           rel={content[0]?.link.length ? "noreferrer" : null}
@@ -45,7 +47,9 @@ function XGallery({ shopName, content, props }) {
             content[1]?.link.length
               ? content[1]?.link
               : content[1]?.category.length
-              ? `/${shopName}/products?category=${content[1]?.category}`
+              ? shopInfo.domainName.length
+                ? `/products?category=${content[1]?.category}`
+                : `/${shopInfo.name}/products?category=${content[1]?.category}`
               : router.asPath
           }
           rel={content[1]?.link.length ? "noreferrer" : null}
@@ -76,7 +80,9 @@ function XGallery({ shopName, content, props }) {
             content[2]?.link.length
               ? content[2]?.link
               : content[2]?.category.length
-              ? `/${shopName}/products?category=${content[2]?.category}`
+              ? shopInfo.domainName.length
+                ? `/products?category=${content[2]?.category}`
+                : `/${shopInfo.name}/products?category=${content[2]?.category}`
               : router.asPath
           }
           rel={content[2]?.link.length ? "noreferrer" : null}
@@ -105,7 +111,9 @@ function XGallery({ shopName, content, props }) {
             content[3]?.link.length
               ? content[3]?.link
               : content[3]?.category.length
-              ? `/${shopName}/products?category=${content[3]?.category}`
+              ? shopInfo.domainName.length
+                ? `/products?category=${content[3]?.category}`
+                : `/${shopInfo.name}/products?category=${content[3]?.category}`
               : router.asPath
           }
           rel={content[3]?.link.length ? "noreferrer" : null}

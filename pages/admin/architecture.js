@@ -996,7 +996,7 @@ function Architecture(props) {
                   activateControls={false}
                   categories={categories}
                   architecture={architecture}
-                  shopName={shopInfo.name}
+                  shopInfo={shopInfo}
                 />
               ) : (
                 <XGridSkeleton title={"Découvrir Nos Catégories"} />

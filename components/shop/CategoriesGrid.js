@@ -9,7 +9,7 @@ function CategoriesGrid({
   activateControls = true,
   categories,
   architecture,
-  shopName,
+  shopInfo,
 }) {
   const isMobile = useMediaQuery("(max-width:800px)");
   return (
@@ -40,7 +40,9 @@ function CategoriesGrid({
                   <Link
                     href={
                       activateControls
-                        ? `/${shopName}/products?category=${category.name}`
+                        ? shopInfo.domainName.length
+                          ? `products?category=${category.name}`
+                          : `/${shopInfo.name}/products?category=${category.name}`
                         : ""
                     }
                   >
