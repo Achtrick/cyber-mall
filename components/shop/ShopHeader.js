@@ -48,7 +48,7 @@ function ShopHeader({ shopInfo, ...props }) {
   useEffect(() => {
     if (router.isReady) setSearchTerm(router.query.searchTerm);
     !categories.length && getCategories(shopInfo._id);
-  }, [router]);
+  }, [router, router.query]);
 
   useEffect(() => {
     if (shop) {
@@ -125,17 +125,17 @@ function ShopHeader({ shopInfo, ...props }) {
     let query = router.query;
 
     query = { ...query, searchTerm: searchTerm };
-    if (pathname.includes("products")) {
-      router.push({ pathname: pathname, query: query });
-    } else {
-      router.push(
-        shopInfo.domainName.length
-          ? `/products?searchTerm=${searchTerm ? searchTerm : ""}`
-          : `/${shopInfo.name}/products?searchTerm=${
-              searchTerm ? searchTerm : ""
-            }`
-      );
-    }
+    // if (pathname.includes("products")) {
+    //   router.push({ pathname: pathname, query: query });
+    // } else {
+    router.push(
+      shopInfo.domainName.length
+        ? `/products?searchTerm=${searchTerm ? searchTerm : ""}`
+        : `/${shopInfo.name}/products?searchTerm=${
+            searchTerm ? searchTerm : ""
+          }`
+    );
+    // }
 
     setSearchOpen(false);
   };
