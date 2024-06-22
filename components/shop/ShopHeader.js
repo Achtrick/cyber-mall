@@ -121,13 +121,10 @@ function ShopHeader({ shopInfo, ...props }) {
   };
 
   const navigateToSeacrh = (searchTerm) => {
-    const pathname = router.pathname;
     let query = router.query;
 
     query = { ...query, searchTerm: searchTerm };
-    // if (pathname.includes("products")) {
-    //   router.push({ pathname: pathname, query: query });
-    // } else {
+
     router.push(
       shopInfo.domainName.length
         ? `/products?searchTerm=${searchTerm ? searchTerm : ""}`
@@ -135,7 +132,6 @@ function ShopHeader({ shopInfo, ...props }) {
             searchTerm ? searchTerm : ""
           }`
     );
-    // }
 
     setSearchOpen(false);
   };
@@ -146,16 +142,9 @@ function ShopHeader({ shopInfo, ...props }) {
 
     query = { ...query, category: categoryName };
 
-    // if (pathname.includes("products")) {
-    //   return {
-    //     pathname: "/products",
-    //     query: query,
-    //   };
-    // } else {
     return shopInfo.domainName.length
       ? `/products?category=${categoryName}`
       : `/${shopInfo.name}/products?category=${categoryName}`;
-    // }
   };
 
   const restSearch = async () => {

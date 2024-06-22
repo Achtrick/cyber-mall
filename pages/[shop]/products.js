@@ -63,7 +63,7 @@ function Products({ shop }) {
 
   useEffect(() => {
     if (router.isReady && shopInfo && !loadingCategories) getProducts();
-  }, [router, page, shopInfo, categories]);
+  }, [router, router.query, page, shopInfo, categories]);
 
   const getShopInfo = async () => {
     try {
@@ -165,21 +165,17 @@ function Products({ shop }) {
   };
 
   const resetSearch = (searchTerm) => {
-    const pathname = router.pathname;
     let query = router.query;
 
     query = { ...query, searchTerm: searchTerm };
-    if (pathname.includes("products")) {
-      router.push({ pathname: pathname, query: query });
-    } else {
-      router.push(
-        shopInfo.domainName.length
-          ? `/products?searchTerm=${searchTerm ? searchTerm : ""}`
-          : `/${shopInfo.name}/products?searchTerm=${
-              searchTerm ? searchTerm : ""
-            }`
-      );
-    }
+
+    router.push(
+      shopInfo.domainName.length
+        ? `/products?searchTerm=${searchTerm ? searchTerm : ""}`
+        : `/${shopInfo.name}/products?searchTerm=${
+            searchTerm ? searchTerm : ""
+          }`
+    );
   };
 
   const tagStyle = {
