@@ -47,7 +47,7 @@ function CategoriesGrid({ disabled, categories, architecture, shopInfo }) {
                         alt={index}
                         src={`/api/images/${category.icon
                           .split("/")
-                          .pop()}?width=200&height=200`}
+                          .pop()}?width=400&height=400`}
                         onError={(e) => {
                           e.target.src = "/images/category.svg";
                         }}

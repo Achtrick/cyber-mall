@@ -131,7 +131,7 @@ function Product({ shop, slug }) {
             product?.image &&
             `/api/images/${product?.image
               .split("/")
-              .pop()}?width=200&height=200`
+              .pop()}?width=300&height=300`
           }
           tags={[product?.designation, product?.category.name]}
           shopInfo={shopInfo}

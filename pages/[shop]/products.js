@@ -325,7 +325,7 @@ function Products({ shop }) {
                               product.images[0]
                                 ? `/api/images/${product.images[0]
                                     .split("/")
-                                    .pop()}?width=200&height=200`
+                                    .pop()}?width=400&height=400`
                                 : "/images/image-placeholder.jpg"
                             }
                             onError={(e) => {

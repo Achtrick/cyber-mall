@@ -128,7 +128,7 @@ function CartContent({
                         product.images[0]
                           ? `/api/images/${product.images[0]
                               .split("/")
-                              .pop()}?width=50&height=50`
+                              .pop()}?width=150&height=150`
                           : "/images/image-placeholder.jpg"
                       }
                       onError={(e) => {
