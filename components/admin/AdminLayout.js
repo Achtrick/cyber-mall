@@ -148,7 +148,7 @@ function AdminLayout(props) {
             target="_blank"
             onClick={toggleDrawer}
             href={
-              userInfo?.shop.domainName.length
+              userInfo?.shop?.domainName.length
                 ? `https://${userInfo?.shop?.domainName}`
                 : `/${userInfo?.shop?.name}`
             }

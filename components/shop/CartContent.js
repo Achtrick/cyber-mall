@@ -230,7 +230,7 @@ function CartContent({
             action={() => {
               dispatch({ type: "TOGGLE_CART_PREVIEW" });
               router.push(
-                shopInfo.domainName.length ? `/cart` : `/${shopInfo.name}/cart`
+                shopInfo.domainName?.length ? `/cart` : `/${shopInfo.name}/cart`
               );
             }}
           />

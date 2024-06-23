@@ -112,8 +112,8 @@ function DomainName(props) {
           ) : (
             <section align="center">
               <p style={{ textTransform: "unset", fontWeight: "500" }}>
-                {userInfo?.shop.domainName.length
-                  ? "Nom de domaine: " + userInfo?.shop.domainName
+                {userInfo?.shop?.domainName.length
+                  ? "Nom de domaine: " + userInfo?.shop?.domainName
                   : "Votre shop est maitenant accessible sous le lien : https://cyber-mall.tn/" +
                     userInfo?.shop.name}
               </p>

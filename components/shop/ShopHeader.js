@@ -126,7 +126,7 @@ function ShopHeader({ shopInfo, ...props }) {
     query = { ...query, searchTerm: searchTerm };
 
     router.push(
-      shopInfo.domainName.length
+      shopInfo?.domainName.length
         ? `/products?searchTerm=${searchTerm ? searchTerm : ""}`
         : `/${shopInfo.name}/products?searchTerm=${
             searchTerm ? searchTerm : ""
@@ -142,7 +142,7 @@ function ShopHeader({ shopInfo, ...props }) {
 
     query = { ...query, category: categoryName };
 
-    return shopInfo.domainName.length
+    return shopInfo?.domainName.length
       ? `/products?category=${categoryName}`
       : `/${shopInfo.name}/products?category=${categoryName}`;
   };
@@ -212,7 +212,7 @@ function ShopHeader({ shopInfo, ...props }) {
         <section className={styles.drawer}>
           <div className={styles.container}>
             <Link
-              href={shopInfo.domainName.length ? "/" : `/${shopInfo.name}`}
+              href={shopInfo?.domainName.length ? "/" : `/${shopInfo.name}`}
               onClick={toggleDrawer}
             >
               <div
@@ -239,7 +239,7 @@ function ShopHeader({ shopInfo, ...props }) {
             </Link>
             <Link
               href={
-                shopInfo.domainName.length
+                shopInfo?.domainName.length
                   ? "/products"
                   : `/${shopInfo.name}/products`
               }
@@ -414,7 +414,7 @@ function ShopHeader({ shopInfo, ...props }) {
         </div>
         <div className={styles.logo}>
           {shopInfo.logo ? (
-            <Link href={`/${shopInfo.domainName.length ? "" : shopInfo.name}`}>
+            <Link href={`/${shopInfo?.domainName.length ? "" : shopInfo.name}`}>
               <img
                 alt={shopInfo.name}
                 src={`/api/images/${shopInfo.logo.split("/").pop()}`}
@@ -424,7 +424,7 @@ function ShopHeader({ shopInfo, ...props }) {
               />
             </Link>
           ) : (
-            <Link href={`/${shopInfo.domainName.length ? "" : shopInfo.name}`}>
+            <Link href={`/${shopInfo?.domainName.length ? "" : shopInfo.name}`}>
               <div className="row">
                 <h1
                   style={{

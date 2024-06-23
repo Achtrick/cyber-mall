@@ -124,7 +124,7 @@ function Products({ shop }) {
     let query = router.query;
     query = { ...query, [filterOption]: filterValue };
     router.push({
-      pathname: shopInfo.domainName.length ? "/products" : pathname,
+      pathname: shopInfo?.domainName.length ? "/products" : pathname,
       query: query,
     });
   };
@@ -170,7 +170,7 @@ function Products({ shop }) {
     query = { ...query, searchTerm: searchTerm };
 
     router.push(
-      shopInfo.domainName.length
+      shopInfo?.domainName.length
         ? `/products?searchTerm=${searchTerm ? searchTerm : ""}`
         : `/${shopInfo.name}/products?searchTerm=${
             searchTerm ? searchTerm : ""
@@ -314,7 +314,7 @@ function Products({ shop }) {
                       >
                         <Link
                           href={
-                            shopInfo.domainName.length
+                            shopInfo?.domainName.length
                               ? `/${product.slug}`
                               : `/${shopInfo.name}/${product.slug}`
                           }
