@@ -8,6 +8,7 @@ import AdminLayout from "../../components/admin/AdminLayout";
 import { ModalSizes } from "../../components/admin/ModalSettings";
 import DisconnectedGuard from "../../components/guards/disconnectedGuard";
 import CategoriesGrid from "../../components/shop/CategoriesGrid";
+import HomeSlider from "../../components/shop/HomeSlider";
 import ProductsSlider from "../../components/shop/ProductsSlider";
 import XGallery from "../../components/ui-components/XGallery";
 import XModal from "../../components/ui-components/XModal";
@@ -954,7 +955,7 @@ function Architecture(props) {
                   <br />
                   <br />
                   <p>Aperçu</p>
-                  {/* <HomeSlider
+                  <HomeSlider
                     disabled={true}
                     slides={
                       sliderInfo.length
@@ -967,7 +968,7 @@ function Architecture(props) {
                           ]
                     }
                     shopInfo={shopInfo}
-                  /> */}
+                  />
                 </>
               )}
               <br />
