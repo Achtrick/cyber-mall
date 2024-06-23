@@ -140,9 +140,9 @@ function Categories() {
           setImages("");
           break;
         case AdminActions.DELETE:
-          result = await axios.delete(
-            `/api/admin/categories/delete/${category._id}`
-          );
+          result = await axios.post(`/api/admin/categories/delete`, {
+            categoryId: category._id,
+          });
           setImages("");
           break;
         default:

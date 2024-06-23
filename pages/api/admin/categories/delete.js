@@ -1,20 +1,20 @@
 import mongoose from "mongoose";
 import nc from "next-connect";
-import auth from "../../../../../middlewares/admin-auth";
-import Product from "../../../../../models/product.model";
-import ProductCategory from "../../../../../models/productCategory.model";
-import connectDB from "../../../../../utils/connectDB";
-import { removeFile } from "../../../../../utils/shared/removeFile";
-import { deleteProduct } from "../../products/delete/[_id]";
+import auth from "../../../../middlewares/admin-auth";
+import Product from "../../../../models/product.model";
+import ProductCategory from "../../../../models/productCategory.model";
+import connectDB from "../../../../utils/connectDB";
+import { removeFile } from "../../../../utils/shared/removeFile";
+import { deleteProduct } from "../products/delete";
 
 const handler = nc();
 
-handler.delete(auth, async (req, res) => {
+handler.post(auth, async (req, res) => {
   await connectDB();
 
   try {
-    const { _id } = req.query;
-    await deleteCategory(_id);
+    const { categoryId } = req.query;
+    await deleteCategory(categoryId);
 
     res
       .status(200)
@@ -24,8 +24,8 @@ handler.delete(auth, async (req, res) => {
   }
 });
 
-export const deleteCategory = async (_id) => {
-  const category = await ProductCategory.findById(_id);
+export const deleteCategory = async (categoryId) => {
+  const category = await ProductCategory.findById(categoryId);
   if (!category) {
     return res.status(404).json({ message: "Catégorie introuvable" });
   }
@@ -37,7 +37,7 @@ export const deleteCategory = async (_id) => {
   for (const product of products) {
     await deleteProduct(product._id);
   }
-  await ProductCategory.findByIdAndDelete(_id);
+  await ProductCategory.findByIdAndDelete(categoryId);
 };
 
 export default handler;

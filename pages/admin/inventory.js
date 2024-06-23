@@ -244,9 +244,9 @@ function Inventory(props) {
           setImages([]);
           break;
         case AdminActions.DELETE:
-          result = await axios.delete(
-            `/api/admin/products/delete/${product._id}`
-          );
+          result = await axios.post(`/api/admin/products/delete`, {
+            productId: product._id,
+          });
           setImages([]);
           break;
         default:

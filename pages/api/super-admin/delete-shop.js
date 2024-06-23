@@ -9,7 +9,7 @@ import UpgradeDemand from "../../../models/upgradeDemand.model";
 import User from "../../../models/user.model";
 import connectDB from "../../../utils/connectDB";
 import { removeFile } from "../../../utils/shared/removeFile";
-import { deleteCategory } from "../admin/categories/delete/[_id]";
+import { deleteCategory } from "../admin/categories/delete";
 
 const handler = nc();
 
