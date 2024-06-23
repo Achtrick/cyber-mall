@@ -42,32 +42,20 @@ const InstallPWA = ({ top }) => {
   }
   return (
     <button
-      style={
-        isMobile
-          ? {
-              position: "fixed",
-              bottom: "10px",
-              right: "10px",
-              zIndex: "1300",
-              height: "30px",
-              width: "calc(100% - 20px)",
-            }
-          : {
-              position: "fixed",
-              bottom: "10px",
-              right: "10px",
-              zIndex: "1300",
-              height: "30px",
-              width: "300px",
-            }
-      }
+      style={{
+        position: "fixed",
+        bottom: "10px",
+        right: "10px",
+        zIndex: "1300",
+        height: "30px",
+        width: "30px",
+      }}
       className="downloadBtn"
       id="setup_button"
       aria-label="Installer l'application"
       title="Installer l'application"
       onClick={onClick}
     >
-      Téléchargez notre application&nbsp;
       <Download />
     </button>
   );

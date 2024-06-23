@@ -3,7 +3,7 @@ import React from "react";
 import { SwiperSlide } from "swiper/react";
 import XSwiper from "../ui-components/XSwiper";
 
-function HomeSlider({ slides, shopInfo, ...props }) {
+function HomeSlider({ slides, disabled, shopInfo, ...props }) {
   const isMobile = useMediaQuery("(max-width:800px)");
 
   return (
@@ -18,7 +18,10 @@ function HomeSlider({ slides, shopInfo, ...props }) {
         >
           {slides.map((slide, index) => {
             return (
-              <SwiperSlide key={index}>
+              <SwiperSlide
+                key={index}
+                style={disabled && { pointerEvents: "none" }}
+              >
                 {slide.link && slide.link !== "" ? (
                   <a href={slide.link} rel="noreferrer" target="_blank">
                     <img

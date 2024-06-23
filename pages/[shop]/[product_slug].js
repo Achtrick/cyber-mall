@@ -288,7 +288,6 @@ function Product({ shop, slug }) {
               <ProductsSlider
                 shopInfo={shopInfo}
                 products={similars}
-                activateControls={true}
                 title={"Découvrir des produits similaires !"}
                 buttonAction={addTocart}
               />

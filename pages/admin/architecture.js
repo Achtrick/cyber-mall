@@ -838,27 +838,28 @@ function Architecture(props) {
                 </Tooltip>{" "}
                 |{" "}
                 <Tooltip title="Enregistrer">
-                  {" "}
                   {uploadingLogo ? (
                     <IconButton>
                       <CircularProgress size={21} />
                     </IconButton>
                   ) : (
-                    <IconButton
-                      disabled={!compressedLogo}
-                      color="info"
-                      onClick={updateLogo}
-                    >
-                      <label
-                        style={{
-                          cursor: "pointer",
-                          width: "25px",
-                          height: "25px",
-                        }}
+                    <span>
+                      <IconButton
+                        disabled={!compressedLogo}
+                        color="info"
+                        onClick={updateLogo}
                       >
-                        <CheckCircleIcon />
-                      </label>
-                    </IconButton>
+                        <label
+                          style={{
+                            cursor: "pointer",
+                            width: "25px",
+                            height: "25px",
+                          }}
+                        >
+                          <CheckCircleIcon />
+                        </label>
+                      </IconButton>
+                    </span>
                   )}
                 </Tooltip>{" "}
               </div>
@@ -955,6 +956,7 @@ function Architecture(props) {
                   <br />
                   <p>Aperçu</p>
                   <HomeSlider
+                    disabled={true}
                     slides={
                       sliderInfo.length
                         ? sliderInfo
@@ -965,7 +967,7 @@ function Architecture(props) {
                             },
                           ]
                     }
-                    shopName={shopInfo.name}
+                    shopInfo={shopInfo}
                   />
                 </>
               )}
@@ -993,7 +995,7 @@ function Architecture(props) {
               </p>
               {categories.length ? (
                 <CategoriesGrid
-                  activateControls={false}
+                  disabled={true}
                   categories={categories}
                   architecture={architecture}
                   shopInfo={shopInfo}
@@ -1025,7 +1027,7 @@ function Architecture(props) {
               </p>
               {discounts.length ? (
                 <ProductsSlider
-                  activateControls={false}
+                  disabled={true}
                   products={discounts}
                   shopInfo={shopInfo}
                   title={"Obtenez plus pour moins cher !"}
@@ -1140,7 +1142,8 @@ function Architecture(props) {
                   <br />
                   <p>Aperçu</p>
                   <XGallery
-                    shopName={shopInfo.name}
+                    disabled={true}
+                    shopInfo={shopInfo}
                     content={galleryInfo.content}
                   />
                 </>

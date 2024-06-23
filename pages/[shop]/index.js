@@ -247,7 +247,6 @@ function Shop({ shop }) {
                 <ProductsSlider
                   shopInfo={shopInfo}
                   products={discounts}
-                  activateControls={true}
                   title={"Obtenez plus pour moins cher !"}
                   buttonAction={addTocart}
                 />

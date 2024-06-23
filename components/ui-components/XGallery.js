@@ -4,11 +4,14 @@ import { useRouter } from "next/router";
 import React from "react";
 import styles from "../../styles/components/XGallery.module.scss";
 
-function XGallery({ shopInfo, content, props }) {
+function XGallery({ shopInfo, content, disabled, props }) {
   const router = useRouter();
   const isMobile = useMediaQuery("(max-width:800px)");
   return (
-    <section className={styles.container}>
+    <section
+      className={styles.container}
+      style={disabled && { pointerEvents: "none" }}
+    >
       <div className={styles.col}>
         <Link
           className={styles.square}

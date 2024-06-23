@@ -10,13 +10,7 @@ import {
 import XButton from "../ui-components/XButton";
 import XSwiper from "../ui-components/XSwiper";
 
-function ProductsSlider({
-  activateControls = true,
-  products,
-  shopInfo,
-  title,
-  buttonAction,
-}) {
+function ProductsSlider({ disabled, products, shopInfo, title, buttonAction }) {
   const [selectedVariant, setSelectedVariant] = useState(null);
   const [selectedProduct, setSelectedProduct] = useState(null);
 
@@ -83,18 +77,19 @@ function ProductsSlider({
       >
         {products.map((product, index) => {
           return (
-            <SwiperSlide key={index}>
+            <SwiperSlide
+              key={index}
+              style={disabled && { pointerEvents: "none" }}
+            >
               <div
                 className={styles.product}
                 style={{ alignItems: "flex-start" }}
               >
                 <Link
                   href={
-                    activateControls
-                      ? shopInfo.domainName.length
-                        ? `/${product.slug}`
-                        : `/${shopInfo.name}/${product.slug}`
-                      : ""
+                    shopInfo.domainName.length
+                      ? `/${product.slug}`
+                      : `/${shopInfo.name}/${product.slug}`
                   }
                 >
                   <img

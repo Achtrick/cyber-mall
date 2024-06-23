@@ -5,12 +5,7 @@ import { SwiperSlide } from "swiper/react";
 import styles from "../../styles/shop/CategoriesGrid.module.scss";
 import XSwiper from "../ui-components/XSwiper";
 
-function CategoriesGrid({
-  activateControls = true,
-  categories,
-  architecture,
-  shopInfo,
-}) {
+function CategoriesGrid({ disabled, categories, architecture, shopInfo }) {
   const isMobile = useMediaQuery("(max-width:800px)");
   return (
     <section className={styles.container}>
@@ -36,14 +31,15 @@ function CategoriesGrid({
             )
             .map((category, index) => {
               return (
-                <SwiperSlide key={index}>
+                <SwiperSlide
+                  key={index}
+                  style={disabled && { pointerEvents: "none" }}
+                >
                   <Link
                     href={
-                      activateControls
-                        ? shopInfo.domainName.length
-                          ? `products?category=${category.name}`
-                          : `/${shopInfo.name}/products?category=${category.name}`
-                        : ""
+                      shopInfo.domainName.length
+                        ? `products?category=${category.name}`
+                        : `/${shopInfo.name}/products?category=${category.name}`
                     }
                   >
                     <div className={styles.category}>
