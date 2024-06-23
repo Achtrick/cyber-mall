@@ -13,7 +13,7 @@ handler.post(auth, async (req, res) => {
   await connectDB();
 
   try {
-    const { categoryId } = req.query;
+    const { categoryId } = req.body;
     await deleteCategory(categoryId);
 
     res
