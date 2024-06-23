@@ -122,29 +122,26 @@ function ShopHeader({ shopInfo, ...props }) {
 
   const navigateToSeacrh = (searchTerm) => {
     let query = router.query;
+    let pathname = shopInfo?.domainName.length
+      ? `/products`
+      : `/${shopInfo.name}/products`;
 
     query = { ...query, searchTerm: searchTerm };
-
-    router.push(
-      shopInfo?.domainName.length
-        ? `/products?searchTerm=${searchTerm ? searchTerm : ""}`
-        : `/${shopInfo.name}/products?searchTerm=${
-            searchTerm ? searchTerm : ""
-          }`
-    );
+    router.push({ pathname, query });
 
     setSearchOpen(false);
   };
 
   const getCategoryPath = (categoryName) => {
-    const pathname = router.pathname;
     let query = router.query;
+
+    const pathname = shopInfo?.domainName.length
+      ? `/products`
+      : `/${shopInfo.name}/products`;
 
     query = { ...query, category: categoryName };
 
-    return shopInfo?.domainName.length
-      ? `/products?category=${categoryName}`
-      : `/${shopInfo.name}/products?category=${categoryName}`;
+    return { pathname, query };
   };
 
   const restSearch = async () => {

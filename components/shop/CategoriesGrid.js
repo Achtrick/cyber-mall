@@ -38,7 +38,7 @@ function CategoriesGrid({ disabled, categories, architecture, shopInfo }) {
                   <Link
                     href={
                       shopInfo?.domainName.length
-                        ? `products?category=${category.name}`
+                        ? `/products?category=${category.name}`
                         : `/${shopInfo.name}/products?category=${category.name}`
                     }
                   >
