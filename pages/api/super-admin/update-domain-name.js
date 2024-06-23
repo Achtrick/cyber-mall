@@ -1,10 +1,38 @@
+import fs from "fs";
 import mongoose from "mongoose";
 import nc from "next-connect";
+import path from "path";
 import auth from "../../../middlewares/super-admin-auth";
 import Shop from "../../../models/shop.model";
 import User from "../../../models/user.model";
 import connectDB from "../../../utils/connectDB";
 import { mailcss, transporter } from "../../../utils/shared/mailer";
+import { updateManifestJsonFile } from "../admin/shop/update-logo";
+
+const updateDomainsJsonFile = (shopName, domainName) => {
+  const domainsFilePath = path.join(
+    process.cwd(),
+    "public/domainNames/domainNames.json"
+  );
+
+  const domainsFileContent = JSON.parse(
+    fs.readFileSync(domainsFilePath, "utf8")
+  );
+  const foundOneAndEdited = domainsFileContent.map((_) => {
+    if (_.shop === shopName) {
+      _.domain = domainName;
+      return true;
+    }
+  });
+  if (!foundOneAndEdited) {
+    domainsFileContent.push({ shop: shopName, domain: domainName });
+  }
+
+  fs.writeFileSync(
+    domainsFilePath,
+    JSON.stringify(domainsFileContent, null, 2)
+  );
+};
 
 const handler = nc();
 
@@ -18,6 +46,13 @@ handler.post(auth, async (req, res) => {
       shop: mongoose.Types.ObjectId(shopId),
     });
     shop.domainName = domainName;
+    updateDomainsJsonFile(shop.name, domainName);
+    updateManifestJsonFile(
+      shop.name,
+      domainName,
+      `/api/images/fill/${shop.logo.split("/").pop()}`,
+      shop.settings.primaryColor
+    );
     await shop.save();
     await new Promise((resolve, reject) => {
       // send mail
@@ -64,6 +99,7 @@ handler.post(auth, async (req, res) => {
       message: "Nom de domaine modifié.",
     });
   } catch (err) {
+    console.log(err);
     res.status(400).json(err);
   }
 });

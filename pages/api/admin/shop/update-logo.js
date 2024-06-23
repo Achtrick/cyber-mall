@@ -6,7 +6,12 @@ import Shop from "../../../../models/shop.model";
 import connectDB from "../../../../utils/connectDB";
 import { removeFile } from "../../../../utils/shared/removeFile";
 
-const createManifest = (shopName, logo, themeColor) => {
+export const updateManifestJsonFile = (
+  shopName,
+  domainName,
+  logo,
+  themeColor
+) => {
   const shopNameCap = shopName.charAt(0).toUpperCase() + shopName.slice(1);
 
   const manifestData = {
@@ -29,7 +34,7 @@ const createManifest = (shopName, logo, themeColor) => {
         sizes: "512x512",
       },
     ],
-    start_url: `/${shopName}`,
+    start_url: domainName.length ? "/" : `/${shopName}`,
     theme_color: themeColor,
     background_color: "#808080",
     display: "standalone",
@@ -61,8 +66,9 @@ handler.post(auth, async (req, res) => {
 
     await shop.save();
 
-    createManifest(
+    updateManifestJsonFile(
       shop.name,
+      shop.domainName,
       `/api/images/fill/${shop.logo.split("/").pop()}`,
       shop.settings.primaryColor
     );

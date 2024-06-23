@@ -1,16 +1,23 @@
 import { NextResponse } from "next/server";
-import { domains } from "./utils/config/domains";
 
-export function middleware(request) {
+export async function middleware(request) {
   const { pathname } = request.nextUrl;
   const hostname = request.headers.get("host");
 
   let basePath = "";
 
+  // READ DOMAIN NAME FILE
+  const domainsApi = await fetch(
+    process.env.NODE_ENV === "production"
+      ? "https://cyber-mall.tn/api/domains"
+      : "http://localhost:3000/api/domains"
+  );
+  const domains = await domainsApi.json();
+
   // DOMAIN NAMES SECTION
-  domains.forEach((domain) => {
-    if (hostname === domain.name || hostname === `www.${domain.name}`) {
-      basePath = `/${domain.shop}`;
+  domains.forEach((_) => {
+    if (hostname === _.domain || hostname === `www.${_.domain}`) {
+      basePath = `/${_.shop}`;
     }
   });
 
