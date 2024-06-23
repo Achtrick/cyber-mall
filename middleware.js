@@ -4,15 +4,13 @@ export async function middleware(request) {
   const { pathname } = request.nextUrl;
   const hostname = request.headers.get("host");
 
+  const url = new URL(request.url);
+  const domainsJsonUrl = `${url.origin}/domainNames/domainNames.json`;
+
   let basePath = "";
 
   // READ DOMAIN NAME FILE
-  const domainsApi = await fetch(
-    process.env.NODE_ENV === "production"
-      ? "https://cyber-mall.tn/api/domains"
-      : "http://localhost:3000/api/domains"
-  );
-  const domains = await domainsApi.json();
+  const domains = await (await fetch(domainsJsonUrl)).json();
 
   // DOMAIN NAMES SECTION
   domains.forEach((_) => {

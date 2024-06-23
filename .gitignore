@@ -39,4 +39,4 @@ certificates
 
 /public/manifests
 /public/uploads
-# /public/domainNames
+/public/domainNames
