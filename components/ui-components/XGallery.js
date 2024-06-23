@@ -19,7 +19,7 @@ function XGallery({ shopInfo, content, disabled, props }) {
             content[0]?.link.length
               ? content[0]?.link
               : content[0]?.category.length
-              ? shopInfo.domainName.length
+              ? shopInfo?.domainName.length
                 ? `/products?category=${content[0]?.category}`
                 : `/${shopInfo.name}/products?category=${content[0]?.category}`
               : router.asPath
@@ -50,7 +50,7 @@ function XGallery({ shopInfo, content, disabled, props }) {
             content[1]?.link.length
               ? content[1]?.link
               : content[1]?.category.length
-              ? shopInfo.domainName.length
+              ? shopInfo?.domainName.length
                 ? `/products?category=${content[1]?.category}`
                 : `/${shopInfo.name}/products?category=${content[1]?.category}`
               : router.asPath
@@ -83,7 +83,7 @@ function XGallery({ shopInfo, content, disabled, props }) {
             content[2]?.link.length
               ? content[2]?.link
               : content[2]?.category.length
-              ? shopInfo.domainName.length
+              ? shopInfo?.domainName.length
                 ? `/products?category=${content[2]?.category}`
                 : `/${shopInfo.name}/products?category=${content[2]?.category}`
               : router.asPath
@@ -114,7 +114,7 @@ function XGallery({ shopInfo, content, disabled, props }) {
             content[3]?.link.length
               ? content[3]?.link
               : content[3]?.category.length
-              ? shopInfo.domainName.length
+              ? shopInfo?.domainName.length
                 ? `/products?category=${content[3]?.category}`
                 : `/${shopInfo.name}/products?category=${content[3]?.category}`
               : router.asPath

@@ -87,7 +87,7 @@ function ProductsSlider({ disabled, products, shopInfo, title, buttonAction }) {
               >
                 <Link
                   href={
-                    shopInfo.domainName.length
+                    shopInfo?.domainName.length
                       ? `/${product.slug}`
                       : `/${shopInfo.name}/${product.slug}`
                   }

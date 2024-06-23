@@ -43,7 +43,7 @@ function HomeSlider({ slides, disabled, shopInfo, ...props }) {
                 ) : slide.category && slide.category !== "" ? (
                   <Link
                     href={
-                      shopInfo.domainName.length
+                      shopInfo?.domainName.length
                         ? `/products?category=${slide.category}`
                         : `/${shopInfo.name}/products?category=${slide.category}`
                     }
