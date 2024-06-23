@@ -50,7 +50,7 @@ function AdminLayout(props) {
 
   return (
     <>
-      <InstallPWA top="15px" color={"#ec008c"} />
+      <InstallPWA color={"#ec008c"} />
       <Head>
         <title>Cyber-Mall</title>
         <meta name="description" content="Cyber-Mall Dashboard"></meta>

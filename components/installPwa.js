@@ -1,11 +1,9 @@
 import { Download } from "@mui/icons-material";
-import { useMediaQuery } from "@mui/material";
 import { useEffect, useState } from "react";
 
-const InstallPWA = ({ top }) => {
+const InstallPWA = () => {
   const [supportsPWA, setSupportsPWA] = useState(false);
   const [promptInstall, setPromptInstall] = useState(null);
-  const isMobile = useMediaQuery("(max-width:800px)");
 
   function isCookiePresent(cookieName) {
     const cookies = document.cookie.split(";");
