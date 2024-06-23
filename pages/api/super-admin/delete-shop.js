@@ -1,4 +1,3 @@
-import axios from "axios";
 import mongoose from "mongoose";
 import nc from "next-connect";
 import auth from "../../../middlewares/super-admin-auth";
@@ -10,11 +9,11 @@ import UpgradeDemand from "../../../models/upgradeDemand.model";
 import User from "../../../models/user.model";
 import connectDB from "../../../utils/connectDB";
 import { removeFile } from "../../../utils/shared/removeFile";
+import { deleteCategory } from "../admin/categories/delete/[_id]";
 
 const handler = nc();
 
 handler.post(auth, async (req, res) => {
-  axios.defaults.headers.common["Authorization"] = req.headers.authorization;
   const { shopId } = req.body;
   try {
     await connectDB();
@@ -42,9 +41,7 @@ handler.post(auth, async (req, res) => {
     });
 
     for (const category of categories) {
-      await axios.delete(
-        `${req.headers.origin}/api/admin/categories/delete/${category._id}`
-      );
+      await deleteCategory(category._id);
     }
 
     res.status(200).json({
