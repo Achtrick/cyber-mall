@@ -414,7 +414,7 @@ function Account(props) {
                     onChange={onChange}
                   />
                   <input
-                    type="phone"
+                    type="number"
                     className={
                       editAccount ? "defaultInput" : "transparentInput"
                     }

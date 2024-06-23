@@ -24,6 +24,7 @@ export default function Shops(props) {
   const [loading, setLoading] = useState(false);
   const [shopId, setShopId] = useState(null);
   const [domainName, setDomainName] = useState("");
+  const [action, setAction] = useState("");
   const [shops, setShops] = useState([]);
 
   useEffect(() => {
@@ -105,8 +106,26 @@ export default function Shops(props) {
     }
   };
 
+  const deleteShop = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const { data } = await axios.post("/api/super-admin/delete-shop", {
+        shopId: shopId,
+      });
+      setShops(shops.filter((s) => s._id !== shopId));
+      setLoading(false);
+      cancelAction();
+      enqueueSnackbar(data.message, { variant: "info" });
+    } catch (error) {
+      enqueueSnackbar(getError(error), { variant: "error" });
+      setLoading(false);
+    }
+  };
+
   const cancelAction = () => {
     setDomainName("");
+    setAction("");
     setShopId(null);
   };
 
@@ -114,24 +133,39 @@ export default function Shops(props) {
     <DisconnectedGuard>
       <XModal
         loading={loading}
-        open={!!shopId}
+        open={action.length}
         onClose={cancelAction}
-        formId={"domain_name_form"}
+        formId={action === "DOMAIN" ? "domain_name_form" : null}
         cancelAction={cancelAction}
+        confirmAction={action === "DELETE" ? deleteShop : null}
         size={ModalSizes.SMALL}
-        title="Modifier le nom de domaine"
+        title={
+          action === "DOMAIN"
+            ? "Modifier le nom de domaine"
+            : action === "DELETE"
+            ? `Supprimer le shop: ${
+                shops.find((_) => _._id === shopId).name
+              } ?!`
+            : null
+        }
       >
-        <form id="domain_name_form" onSubmit={updateDomainName}>
-          <div className="labeledInput">
-            <label>Nouveau Nom de domaine</label>
-            <input
-              type="text"
-              className="defaultInput"
-              required
-              onChange={(e) => setDomainName(e.target.value)}
-            />
-          </div>
-        </form>
+        <>
+          {action === "DOMAIN" ? (
+            <form id="domain_name_form" onSubmit={updateDomainName}>
+              <div className="labeledInput">
+                <label>Nouveau Nom de domaine (sans www)</label>
+                <input
+                  type="text"
+                  className="defaultInput"
+                  required
+                  onChange={(e) => setDomainName(e.target.value)}
+                />
+              </div>
+            </form>
+          ) : action === "DELETE" ? (
+            <></>
+          ) : null}
+        </>
       </XModal>
       <SuperAdminLayout>
         <section>
@@ -208,7 +242,10 @@ export default function Shops(props) {
                         >
                           {shop.banned ? "Banned" : "Active"}
                         </span>
-                      </p>
+                      </p>{" "}
+                      {shop.domainName.length ? (
+                        <p>Domain name: {shop.domainName}</p>
+                      ) : null}
                       <p>Pack: {shop.pack.type}</p>
                       {shop.pack.type !== "FREE" && (
                         <p>
@@ -231,17 +268,29 @@ export default function Shops(props) {
                           <>
                             &nbsp;
                             <XButton
-                              color="orange"
-                              text="change domain name"
-                              action={() => setShopId(shop._id)}
+                              color="turquoise"
+                              text="domain name"
+                              action={() => {
+                                setShopId(shop._id);
+                                setAction("DOMAIN");
+                              }}
                             ></XButton>
                           </>
                         )}
                         &nbsp;
                         <XButton
-                          color={shop.banned ? "#37a237" : "#c52222"}
+                          color={shop.banned ? "violet" : "orange"}
                           text={shop.banned ? "activate" : "bann"}
                           action={() => toggleBann(shop._id)}
+                        ></XButton>
+                        &nbsp;
+                        <XButton
+                          color="red"
+                          text="delete"
+                          action={() => {
+                            setShopId(shop._id);
+                            setAction("DELETE");
+                          }}
                         ></XButton>
                       </div>
                     </div>

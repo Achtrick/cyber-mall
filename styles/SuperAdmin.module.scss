@@ -25,7 +25,7 @@
   .arena {
     height: calc(100vh - 260px);
     overflow-y: auto;
-    padding: 20px;
+    padding: 0px 10px;
     @include flexLayout(center, flex-start, column);
   }
   .shopCard {
@@ -33,19 +33,20 @@
     border: 1px solid #ccc;
     border-radius: 4px;
     padding: 10px;
-    margin: 20px 0px;
+    margin: 5px 0px;
     color: #080b14;
     position: relative;
     h1 {
-      font-size: 20px;
+      font-size: 15px;
       text-transform: uppercase;
       margin: 5px 0px;
     }
     h4 {
+      font-size: 12px;
       text-transform: uppercase;
     }
     p {
-      font-size: 15px;
+      font-size: 12px;
       font-weight: 500;
       text-transform: capitalize;
       margin: 5px 0px;
@@ -66,10 +67,10 @@
       border-radius: 4px;
     }
     .controls {
-      position: absolute;
-      right: 10px;
-      bottom: 10px;
       @include flexLayout(flex-end, flex-end);
+      button {
+        margin: 0px;
+      }
     }
   }
   .silver {

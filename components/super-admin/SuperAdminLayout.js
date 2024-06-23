@@ -1,5 +1,6 @@
 import { Logout } from "@mui/icons-material";
-import AddCardIcon from "@mui/icons-material/AddCard";
+import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
+import LanguageIcon from "@mui/icons-material/Language";
 import StoreIcon from "@mui/icons-material/Store";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -15,30 +16,44 @@ function SuperAdminLayout(props) {
     <>
       <div className={styles.content}>{props.children}</div>
       <div className={styles.navbar}>
-        <div
+        <Link
           className={
             router.pathname === "/super-admin/shops"
               ? `${styles.navItem} + ${styles.activeNavItem}`
               : styles.navItem
           }
+          href="/super-admin/shops"
         >
-          <Link href="/super-admin/shops">
-            <StoreIcon />
-          </Link>
-        </div>
-        <div
+          <StoreIcon />
+        </Link>
+
+        <Link
           className={
-            router.pathname === "/super-admin/demands"
+            router.pathname === "/super-admin/premium-demands"
               ? `${styles.navItem} + ${styles.activeNavItem}`
               : styles.navItem
           }
+          href="/super-admin/premium-demands"
         >
-          <Link href="/super-admin/demands">
-            <AddCardIcon />
-          </Link>
-        </div>
-        <div className={styles.navItem}>
-          <Logout onClick={() => dispatch({ type: "USER_LOGOUT" })} />
+          <AddShoppingCartIcon />
+        </Link>
+
+        <Link
+          className={
+            router.pathname === "/super-admin/domain-demands"
+              ? `${styles.navItem} + ${styles.activeNavItem}`
+              : styles.navItem
+          }
+          href="/super-admin/domain-demands"
+        >
+          <LanguageIcon />
+        </Link>
+
+        <div
+          onClick={() => dispatch({ type: "USER_LOGOUT" })}
+          className={styles.navItem}
+        >
+          <Logout />
         </div>
       </div>
     </>

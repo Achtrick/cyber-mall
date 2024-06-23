@@ -7,6 +7,7 @@ const shopSchema = new Schema(
     name: { type: String, unique: true },
     logo: { type: String, default: "" },
     domainName: { type: String, default: "" },
+    activityDomain: String,
     pack: {
       type: Object,
     },

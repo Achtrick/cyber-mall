@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import nc from "next-connect";
 import path from "path";
 import auth from "../../../middlewares/super-admin-auth";
+import DomainDemand from "../../../models/domainDemand.model";
 import Shop from "../../../models/shop.model";
 import User from "../../../models/user.model";
 import connectDB from "../../../utils/connectDB";
@@ -54,6 +55,9 @@ handler.post(auth, async (req, res) => {
       shop.settings.primaryColor
     );
     await shop.save();
+    await DomainDemand.findOneAndRemove({
+      shop: mongoose.Types.ObjectId(shopId),
+    });
     await new Promise((resolve, reject) => {
       // send mail
       transporter.sendMail(

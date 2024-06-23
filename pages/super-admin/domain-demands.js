@@ -15,13 +15,6 @@ import { getError } from "../../utils/shared/getError";
 export default function Demands(props) {
   let executeSearchTimeout;
 
-  const offers = [
-    { period: "1 Mois", price: 30 },
-    { period: "3 Mois", price: 85 },
-    { period: "6 Mois", price: 160 },
-    { period: "12 Mois", price: 300 },
-  ];
-
   const { enqueueSnackbar } = useSnackbar();
 
   const [page, setPage] = useState(0);
@@ -38,7 +31,7 @@ export default function Demands(props) {
   const getDemands = async () => {
     setLoading(true);
     try {
-      const { data } = await axios.post("/api/super-admin/get-demands", {
+      const { data } = await axios.post("/api/super-admin/get-domain-demands", {
         page: page + 1,
         searchTerm: searchTerm,
       });
@@ -62,13 +55,12 @@ export default function Demands(props) {
     }, 600);
   };
 
-  const upgradeShop = async (shopId, demandId, period) => {
+  const upgradeShop = async (shopId, demandId, domainName) => {
     setLoadingUpgrade(demandId);
     try {
-      const { data } = await axios.put("/api/super-admin/upgrade-shop", {
+      const { data } = await axios.post("/api/super-admin/update-domain-name", {
         shopId: shopId,
-        demandId: demandId,
-        period: period,
+        domainName: domainName,
       });
       setDemands([...demands.filter((d) => d._id !== demandId)]);
       enqueueSnackbar(data.message, { variant: "info" });
@@ -152,11 +144,7 @@ export default function Demands(props) {
                           />
                         )}
                       </div>
-                      <h4>
-                        Requested Pack: {demand.period} for{" "}
-                        {offers.find((o) => o.period === demand.period).price}{" "}
-                        DT
-                      </h4>
+                      <h4>Requested Domain Name: {demand.domainName}</h4>
                       <LinearProgress />
                       <br />
                       <p>
@@ -181,12 +169,12 @@ export default function Demands(props) {
                       <div className={styles.controls}>
                         <XButton
                           color="#37a237"
-                          text="upgrade"
+                          text="confirm new domain"
                           action={() =>
                             upgradeShop(
                               demand.shop._id,
                               demand._id,
-                              demand.period
+                              demand.domainName
                             )
                           }
                           loading={loadingUpgrade === demand._id}

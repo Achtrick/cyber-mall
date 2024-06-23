@@ -34,6 +34,8 @@ handler.post(async (req, res) => {
 
     const shop = await Shop.create({
       name: data.shopName.toLowerCase(),
+      domainName: "",
+      activityDomain: data.activityDomain,
       pack: { type: "FREE", expiresIn: "" },
       settings: {
         headerColor: "#ffffff",

@@ -6,9 +6,11 @@ import { useSnackbar } from "notistack";
 import React, { useState } from "react";
 import { ModalSizes } from "../components/admin/ModalSettings";
 import ConnectedGuard from "../components/guards/connectedGuard";
+import XAutoComplete from "../components/ui-components/XAutoComplete";
 import XModal from "../components/ui-components/XModal";
 import Layout from "../components/vitrine/Layout";
 import styles from "../styles/vitrine/RegisterShop.module.scss";
+import { ActivityDomains } from "../utils/shared/activityDomains";
 import { getError } from "../utils/shared/getError";
 import { VisibilityIcon, VisibilityOffIcon } from "../utils/theme/icons";
 import { conditionOfUse } from "./condition-of-use";
@@ -23,6 +25,7 @@ function Register(props) {
     password: "",
     confirmPassword: "",
     shopName: "",
+    activityDomain: "",
   });
 
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -182,6 +185,23 @@ function Register(props) {
                   data-aos="fade-up"
                   data-aos-offset="100"
                   data-aos-delay="700"
+                >
+                  <XAutoComplete
+                    options={ActivityDomains}
+                    value={formData.activityDomain}
+                    optionDisplayExpr="name"
+                    optionValueExpr="name"
+                    formData={formData}
+                    setFormData={setFormData}
+                    required={true}
+                    placeholder="domaine d'activité"
+                    attributeKey="activityDomain"
+                  />
+                </div>
+                <div
+                  data-aos="fade-up"
+                  data-aos-offset="100"
+                  data-aos-delay="800"
                   className="labeledInput"
                 >
                   <label style={{ color: labelColor }}>
@@ -201,7 +221,7 @@ function Register(props) {
                 <div
                   data-aos="fade-up"
                   data-aos-offset="100"
-                  data-aos-delay="800"
+                  data-aos-delay="900"
                   className={styles.conditions}
                 >
                   <input value={conditions} required type="checkbox" />
@@ -213,7 +233,7 @@ function Register(props) {
                 <div
                   data-aos="fade-up"
                   data-aos-offset="100"
-                  data-aos-delay="900"
+                  data-aos-delay="1000"
                 >
                   <Button
                     disabled={loading}
@@ -239,7 +259,7 @@ function Register(props) {
                 <p
                   data-aos="fade-up"
                   data-aos-offset="100"
-                  data-aos-delay="1000"
+                  data-aos-delay="1100"
                 >
                   Vous avez déjà un compte ?{" "}
                   <Link href={"/login"}>Se connecter !</Link>
