@@ -31,19 +31,52 @@ function Navbar() {
         }}
       >
         <div className={styles.drawer}>
-          <Link href={"/"}>
+          <Link
+            onClick={() => {
+              toggleMenu();
+            }}
+            href={"/"}
+          >
             <p>Accueil</p>
           </Link>
-          <Link href={"/pricing"}>
+          <Link
+            onClick={() => {
+              toggleMenu();
+            }}
+            href={"/#how-to"}
+          >
+            <p>Comment ça marche</p>
+          </Link>
+          <Link
+            onClick={() => {
+              toggleMenu();
+            }}
+            href={"/pricing"}
+          >
             <p>Tarifs</p>
           </Link>
-          <Link href={"/contact"}>
+          <Link
+            onClick={() => {
+              toggleMenu();
+            }}
+            href={"/contact"}
+          >
             <p>Contact</p>
           </Link>
-          <Link href={"/login"}>
+          <Link
+            onClick={() => {
+              toggleMenu();
+            }}
+            href={"/login"}
+          >
             <p>se connecter</p>
           </Link>
-          <Link href={"/register"}>
+          <Link
+            onClick={() => {
+              toggleMenu();
+            }}
+            href={"/register"}
+          >
             <p>s&apos;inscrire</p>
           </Link>
           <IconButton
@@ -85,6 +118,7 @@ function Navbar() {
           <li>
             <Link href="/pricing">Tarifs</Link>
           </li>
+          <Link href={"/#how-to"}>Comment ça marche</Link>
           <li>
             <Link href="/contact">Contact</Link>
           </li>

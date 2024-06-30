@@ -4,6 +4,7 @@ Allow: /#customize
 Allow: /#dashboard
 Allow: /#receipts
 Allow: /#domain
+Allow: /#how-to
 Allow: /pricing
 Allow: /contact
 Allow: /login
