@@ -7,13 +7,14 @@ import styles from "../../styles/components/XGallery.module.scss";
 function XGallery({ shopInfo, content, disabled, props }) {
   const router = useRouter();
   const isMobile = useMediaQuery("(max-width:800px)");
+  const handleClick = (event) => {
+    disabled && event.preventDefault();
+  };
   return (
-    <section
-      className={styles.container}
-      style={disabled && { pointerEvents: "none" }}
-    >
+    <section className={styles.container}>
       <div className={styles.col}>
         <Link
+          onClick={handleClick}
           className={styles.square}
           href={
             content[0]?.link.length
@@ -45,6 +46,7 @@ function XGallery({ shopInfo, content, disabled, props }) {
           </div>
         </Link>
         <Link
+          onClick={handleClick}
           className={styles.rectangle}
           href={
             content[1]?.link.length
@@ -78,6 +80,7 @@ function XGallery({ shopInfo, content, disabled, props }) {
       </div>
       <div className={styles.col}>
         <Link
+          onClick={handleClick}
           className={styles.rectangle}
           href={
             content[2]?.link.length
@@ -109,6 +112,7 @@ function XGallery({ shopInfo, content, disabled, props }) {
           </div>
         </Link>
         <Link
+          onClick={handleClick}
           className={styles.square}
           href={
             content[3]?.link.length

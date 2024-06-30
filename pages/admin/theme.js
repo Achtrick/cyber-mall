@@ -1,3 +1,5 @@
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import ContentPasteIcon from "@mui/icons-material/ContentPaste";
 import { CircularProgress, IconButton, Skeleton, Tooltip } from "@mui/material";
 import axios from "axios";
 import { useRouter } from "next/router";
@@ -17,7 +19,6 @@ import { deduceColor } from "../../utils/config/convertHelper";
 import { checkExpirity } from "../../utils/shared/checkExpirity";
 import { getError } from "../../utils/shared/getError";
 import { PaletteIcon, ShoppingCartIcon } from "../../utils/theme/icons";
-
 function Theme(props) {
   const { userInfo } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
@@ -29,6 +30,7 @@ function Theme(props) {
 
   const [action, setAction] = useState("");
   const [title, setTitle] = useState("");
+  const [copiedColor, setCopiedColor] = useState(null);
 
   const [colors, setColors] = useState({
     headerColor: "",
@@ -42,8 +44,8 @@ function Theme(props) {
     getShopInfo();
   }, []);
 
-  const getShopInfo = async () => {
-    setLoading(true);
+  const getShopInfo = async (load = true) => {
+    load && setLoading(true);
     try {
       const { data } = await axios.post("/api/shop/getInfo", {
         shopName: userInfo.shop.name,
@@ -69,7 +71,6 @@ function Theme(props) {
   };
 
   const saveSettings = async () => {
-    setLoading(true);
     try {
       const { data } = await axios.post("/api/admin/shop/update-theme", {
         shopId: shopInfo._id,
@@ -77,11 +78,30 @@ function Theme(props) {
       });
 
       enqueueSnackbar(data.message, { variant: "success" });
-      getShopInfo();
+      getShopInfo(false);
       setAction("");
     } catch (error) {
       checkExpirity(error, dispatch);
       enqueueSnackbar(getError(error), { variant: "error" });
+    }
+  };
+
+  const handleColorCopyPaste = async (color) => {
+    if (copiedColor) {
+      setColors({ ...colors, [color]: copiedColor });
+      await axios.post("/api/admin/shop/update-theme", {
+        shopId: shopInfo._id,
+        settings: { ...colors, [color]: copiedColor },
+      });
+      setCopiedColor(null);
+      enqueueSnackbar("Couleur appliquée", {
+        variant: "info",
+      });
+    } else {
+      setCopiedColor(colors[color]);
+      enqueueSnackbar("Couleur copiée", {
+        variant: "info",
+      });
     }
   };
 
@@ -121,7 +141,7 @@ function Theme(props) {
             <IconButton disabled>
               <PaletteIcon color="warning" />
             </IconButton>{" "}
-            pour changer d&apos;apparence
+            pour changer le couleur
           </p>
 
           {loading ? (
@@ -152,6 +172,26 @@ function Theme(props) {
                     >
                       <PaletteIcon color="warning" />
                     </IconButton>
+                  </Tooltip>{" "}
+                  |{" "}
+                  <Tooltip
+                    title={
+                      copiedColor
+                        ? "Appliquer le couleur copiée"
+                        : "Copier le couleur"
+                    }
+                  >
+                    <IconButton
+                      onClick={() => {
+                        handleColorCopyPaste("headerColor");
+                      }}
+                    >
+                      {copiedColor ? (
+                        <ContentPasteIcon color="info" />
+                      ) : (
+                        <ContentCopyIcon color="info" />
+                      )}
+                    </IconButton>
                   </Tooltip>
                 </div>
                 <br />
@@ -174,6 +214,26 @@ function Theme(props) {
                         }}
                       >
                         <PaletteIcon color="warning" />
+                      </IconButton>
+                    </Tooltip>
+                    |{" "}
+                    <Tooltip
+                      title={
+                        copiedColor
+                          ? "Appliquer le couleur copiée"
+                          : "Copier le couleur"
+                      }
+                    >
+                      <IconButton
+                        onClick={() => {
+                          handleColorCopyPaste("primaryColor");
+                        }}
+                      >
+                        {copiedColor ? (
+                          <ContentPasteIcon color="info" />
+                        ) : (
+                          <ContentCopyIcon color="info" />
+                        )}
                       </IconButton>
                     </Tooltip>
                   </div>
@@ -217,6 +277,26 @@ function Theme(props) {
                         <PaletteIcon color="warning" />
                       </IconButton>
                     </Tooltip>
+                    |{" "}
+                    <Tooltip
+                      title={
+                        copiedColor
+                          ? "Appliquer le couleur copiée"
+                          : "Copier le couleur"
+                      }
+                    >
+                      <IconButton
+                        onClick={() => {
+                          handleColorCopyPaste("secondaryColor");
+                        }}
+                      >
+                        {copiedColor ? (
+                          <ContentPasteIcon color="info" />
+                        ) : (
+                          <ContentCopyIcon color="info" />
+                        )}
+                      </IconButton>
+                    </Tooltip>
                   </div>
                   <br />
                   <p>les accents ressembleront à ceci</p>
@@ -245,6 +325,26 @@ function Theme(props) {
                       }}
                     >
                       <PaletteIcon color="warning" />
+                    </IconButton>
+                  </Tooltip>
+                  |{" "}
+                  <Tooltip
+                    title={
+                      copiedColor
+                        ? "Appliquer le couleur copiée"
+                        : "Copier le couleur"
+                    }
+                  >
+                    <IconButton
+                      onClick={() => {
+                        handleColorCopyPaste("footerColor");
+                      }}
+                    >
+                      {copiedColor ? (
+                        <ContentPasteIcon color="info" />
+                      ) : (
+                        <ContentCopyIcon color="info" />
+                      )}
                     </IconButton>
                   </Tooltip>
                 </div>

@@ -19,10 +19,11 @@ const updateDomainsJsonFile = (shopName, domainName) => {
   const domainsFileContent = JSON.parse(
     fs.readFileSync(domainsFilePath, "utf8")
   );
-  const foundOneAndEdited = domainsFileContent.map((_) => {
+  let foundOneAndEdited = false;
+  domainsFileContent.map((_) => {
     if (_.shop === shopName) {
       _.domain = domainName;
-      return true;
+      foundOneAndEdited = true;
     }
   });
   if (!foundOneAndEdited) {

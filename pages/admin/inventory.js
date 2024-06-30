@@ -488,7 +488,7 @@ function Inventory(props) {
         </XModal>
         <section className={styles.container}>
           <div className={styles.controls}>
-            <h1>Inventaire</h1>
+            <h1>Produits</h1>
             <div className="row">
               <SearchIcon color="secondary" style={{ marginRight: "-30px" }} />
               <input

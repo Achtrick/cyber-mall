@@ -7,11 +7,10 @@ function Control(props) {
         <div className="col">
           <p data-aos="fade-up">solution tout en un</p>
           <p data-aos="fade-up">
-            prenez le contrôle de votre inventaire, de vos commandes et de vos
-            clients
+            prenez le contrôle de votre inventaire, de vos commandes
           </p>
           <p data-aos="fade-up">
-            avec un tableau de bord clair, mobile et d&apos;accès rapide !
+            avec un tableau de bord clair, mobile et rapide !
           </p>
         </div>
         <div className="col">

@@ -4,6 +4,7 @@ import XHr from "../components/ui-components/XHr";
 import BecomeMember from "../components/vitrine/BecomeMember";
 import Control from "../components/vitrine/Control";
 import Customize from "../components/vitrine/Customize";
+import Domain from "../components/vitrine/Domain";
 import HomeHedaer from "../components/vitrine/HomeHedaer";
 import Layout from "../components/vitrine/Layout";
 import Receipts from "../components/vitrine/Receipts";
@@ -17,20 +18,25 @@ export default function Home() {
       >
         <HomeHedaer />
         <br />
-        <XHr width="20%" marginLeft="40%" color={"var(--second-color)"} />
+        <XHr width="15%" marginLeft="40%" color={"var(--second-color)"} />
         <span id="customize" />
         <br />
         <Customize />
         <br />
-        <XHr width="20%" marginLeft="40%" color={"var(--second-color)"} />
+        <XHr width="15%" marginLeft="40%" color={"var(--second-color)"} />
         <span id="dashboard" />
         <br />
         <Control />
         <br />
-        <XHr width="20%" marginLeft="40%" color={"var(--second-color)"} />
+        <XHr width="15%" marginLeft="40%" color={"var(--second-color)"} />
         <span id="receipts" />
         <br />
         <Receipts />
+        <br />
+        <XHr width="15%" marginLeft="40%" color={"var(--second-color)"} />
+        <span id="domain" />
+        <br />
+        <Domain />
         <br />
         <BecomeMember />
       </Layout>

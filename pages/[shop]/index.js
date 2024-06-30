@@ -181,34 +181,36 @@ function Shop({ shop }) {
             </div>
           </section>
           <section className={styles.container}>
-            <div
-              className={styles.orderedComponent}
-              style={{
-                order: architecture.home.categoriesComponent.visibleIndex,
-              }}
-            >
-              <XHr color={shopInfo.settings.secondaryColor} width="150px" />
-              {loadingCategories ? (
-                <Skeleton
-                  variant="rectangular"
-                  width={"100%"}
-                  height={"150px"}
-                  style={{ margin: "20px 0px" }}
-                />
-              ) : categories.length ? (
-                <CategoriesGrid
-                  categories={
-                    shopInfo.pack.type !== "PREMIUM"
-                      ? categories.slice(0, 5)
-                      : categories
-                  }
-                  architecture={architecture}
-                  shopInfo={shopInfo}
-                />
-              ) : (
-                <XGridSkeleton title={"Découvrir Nos Catégories"} />
-              )}
-            </div>
+            {shopInfo.architecture.home.categoriesComponent.visible ? (
+              <div
+                className={styles.orderedComponent}
+                style={{
+                  order: architecture.home.categoriesComponent.visibleIndex,
+                }}
+              >
+                <XHr color={shopInfo.settings.secondaryColor} width="150px" />
+                {loadingCategories ? (
+                  <Skeleton
+                    variant="rectangular"
+                    width={"100%"}
+                    height={"150px"}
+                    style={{ margin: "20px 0px" }}
+                  />
+                ) : categories.length ? (
+                  <CategoriesGrid
+                    categories={
+                      shopInfo.pack.type !== "PREMIUM"
+                        ? categories.slice(0, 5)
+                        : categories
+                    }
+                    architecture={architecture}
+                    shopInfo={shopInfo}
+                  />
+                ) : (
+                  <XGridSkeleton title={"Découvrir Nos Catégories"} />
+                )}
+              </div>
+            ) : null}
 
             {loadingGallery ? (
               <Skeleton
@@ -217,7 +219,7 @@ function Shop({ shop }) {
                 height={"60vh"}
                 style={{ margin: "20px 0px" }}
               />
-            ) : (
+            ) : galleryInfo.visible ? (
               <div
                 className={styles.orderedComponent}
                 style={{
@@ -227,33 +229,34 @@ function Shop({ shop }) {
                 <XHr color={shopInfo.settings.secondaryColor} width="150px" />
                 <XGallery shopInfo={shopInfo} content={galleryInfo.content} />
               </div>
-            )}
-
-            <div
-              className={styles.orderedComponent}
-              style={{
-                order: architecture.home.discountComponent.visibleIndex,
-              }}
-            >
-              <XHr color={shopInfo.settings.secondaryColor} width="150px" />
-              {loadingDiscounts ? (
-                <Skeleton
-                  variant="rectangular"
-                  width={"100%"}
-                  height={"150px"}
-                  style={{ margin: "20px 0px" }}
-                />
-              ) : discounts.length ? (
-                <ProductsSlider
-                  shopInfo={shopInfo}
-                  products={discounts}
-                  title={"Obtenez plus pour moins cher !"}
-                  buttonAction={addTocart}
-                />
-              ) : (
-                <XGridSkeleton title={"Obtenez plus pour moins cher !"} />
-              )}
-            </div>
+            ) : null}
+            {shopInfo.architecture.home.discountComponent.visible ? (
+              <div
+                className={styles.orderedComponent}
+                style={{
+                  order: architecture.home.discountComponent.visibleIndex,
+                }}
+              >
+                <XHr color={shopInfo.settings.secondaryColor} width="150px" />
+                {loadingDiscounts ? (
+                  <Skeleton
+                    variant="rectangular"
+                    width={"100%"}
+                    height={"150px"}
+                    style={{ margin: "20px 0px" }}
+                  />
+                ) : discounts.length ? (
+                  <ProductsSlider
+                    shopInfo={shopInfo}
+                    products={discounts}
+                    title={"Obtenez plus pour moins cher !"}
+                    buttonAction={addTocart}
+                  />
+                ) : (
+                  <XGridSkeleton title={"Obtenez plus pour moins cher !"} />
+                )}
+              </div>
+            ) : null}
           </section>
         </ShopLayout>
       )}

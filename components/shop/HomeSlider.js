@@ -5,7 +5,9 @@ import XSwiper from "../ui-components/XSwiper";
 
 function HomeSlider({ slides, disabled, shopInfo, ...props }) {
   const isMobile = useMediaQuery("(max-width:800px)");
-
+  const handleClick = (event) => {
+    disabled && event.preventDefault();
+  };
   return (
     <>
       {slides.length ? (
@@ -18,12 +20,14 @@ function HomeSlider({ slides, disabled, shopInfo, ...props }) {
         >
           {slides.map((slide, index) => {
             return (
-              <SwiperSlide
-                key={index}
-                style={disabled && { pointerEvents: "none" }}
-              >
+              <SwiperSlide key={index}>
                 {slide.link && slide.link !== "" ? (
-                  <a href={slide.link} rel="noreferrer" target="_blank">
+                  <a
+                    onClick={handleClick}
+                    href={slide.link}
+                    rel="noreferrer"
+                    target="_blank"
+                  >
                     <img
                       src={
                         slide.image !== "slider-placeholder.jpg"
@@ -42,6 +46,7 @@ function HomeSlider({ slides, disabled, shopInfo, ...props }) {
                   </a>
                 ) : slide.category && slide.category !== "" ? (
                   <Link
+                    onClick={handleClick}
                     href={
                       shopInfo?.domainName.length
                         ? `/products?category=${slide.category}`

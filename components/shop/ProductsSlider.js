@@ -16,6 +16,10 @@ function ProductsSlider({ disabled, products, shopInfo, title, buttonAction }) {
 
   const isMobile = useMediaQuery("(max-width:800px)");
 
+  const handleClick = (event) => {
+    disabled && event.preventDefault();
+  };
+
   const checkVariants = (product) => {
     if (!product.variants?.length) {
       setSelectedVariant(null);
@@ -77,15 +81,13 @@ function ProductsSlider({ disabled, products, shopInfo, title, buttonAction }) {
       >
         {products.map((product, index) => {
           return (
-            <SwiperSlide
-              key={index}
-              style={disabled && { pointerEvents: "none" }}
-            >
+            <SwiperSlide key={index}>
               <div
                 className={styles.product}
                 style={{ alignItems: "flex-start" }}
               >
                 <Link
+                  onClick={handleClick}
                   href={
                     shopInfo?.domainName.length
                       ? `/${product.slug}`

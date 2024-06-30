@@ -51,20 +51,20 @@ function XModal({
                       color="black"
                       style={{ color: "white" }}
                       variant="contained"
-                      type={confirmAction ? "" : "submit"}
-                      onClick={confirmAction ? confirmAction : null}
-                      form={formId ? formId : null}
+                      onClick={cancelAction}
                     >
-                      confirmer
+                      annuler
                     </Button>
                     &nbsp;
                     <Button
                       color="black"
                       style={{ color: "white" }}
                       variant="contained"
-                      onClick={cancelAction}
+                      type={confirmAction ? "" : "submit"}
+                      onClick={confirmAction ? confirmAction : null}
+                      form={formId ? formId : null}
                     >
-                      annuler
+                      confirmer
                     </Button>
                   </>
                 )}

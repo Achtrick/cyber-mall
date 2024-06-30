@@ -3,6 +3,7 @@ import nc from "next-connect";
 import auth from "../../../../middlewares/admin-auth";
 import Product from "../../../../models/product.model";
 import ProductCategory from "../../../../models/productCategory.model";
+import Shop from "../../../../models/shop.model";
 import connectDB from "../../../../utils/connectDB";
 import { removeFile } from "../../../../utils/shared/removeFile";
 import { deleteProduct } from "../products/delete";
@@ -26,6 +27,7 @@ handler.post(auth, async (req, res) => {
 
 export const deleteCategory = async (categoryId) => {
   const category = await ProductCategory.findById(categoryId);
+  const shop = await Shop.findById(mongoose.Types.ObjectId(category.shop));
   if (!category) {
     return res.status(404).json({ message: "Catégorie introuvable" });
   }
@@ -38,6 +40,21 @@ export const deleteCategory = async (categoryId) => {
     await deleteProduct(product._id);
   }
   await ProductCategory.findByIdAndDelete(categoryId);
+  shop.architecture = {
+    ...shop.architecture,
+    home: {
+      ...shop.architecture.home,
+      categoriesComponent: {
+        ...shop.architecture.home.categoriesComponent,
+        selectedCategoriesIds:
+          shop.architecture.home.categoriesComponent.selectedCategoriesIds.filter(
+            (id) => id !== categoryId
+          ),
+      },
+    },
+  };
+
+  await shop.save();
 };
 
 export default handler;

@@ -39,10 +39,10 @@ function Account(props) {
   const pack = userInfo?.shop.pack;
 
   const offers = [
-    { period: "1 Mois", price: 30 },
-    { period: "3 Mois", price: 85 },
-    { period: "6 Mois", price: 160 },
-    { period: "12 Mois", price: 300 },
+    { period: "1 Mois", price: 49 },
+    { period: "3 Mois", price: 139 },
+    { period: "6 Mois", price: 259 },
+    { period: "12 Mois", price: 499 },
   ];
 
   const [upgradeDemand, setUpgradeDemand] = useState(null);
@@ -153,6 +153,9 @@ function Account(props) {
           const { data } = await axios.post(
             "/api/admin/shop/update-subscription",
             {
+              orderNumber:
+                userInfo.shop.name +
+                Math.floor(100000 + Math.random() * 900000),
               userName: userInfo.firstName + " " + userInfo.lastName,
               email: userInfo.email,
               phone: userInfo.phone,
@@ -229,19 +232,24 @@ function Account(props) {
               })}
             </div>
             <p>
-              après confirmation, procéder à l&apos;exécution de la transaction
-              :
+              sélectionner une offre et procéder à l&apos;exécution de la
+              transaction :
             </p>
             <br />
             {offer && (
               <span>
                 <p style={{ color: "blue" }}>
-                  Mettre à niveau votre forfait, Envoyer {offer.price}
+                  Après confirmation, Envoyer {offer.price}
                   &nbsp;DT à:
                 </p>
                 <ul style={{ color: "blue" }}>
-                  <li>RIB: 17503000000268993518</li>
-                </ul>
+                  <li>RIB: 17503000000268993518</li>{" "}
+                  <li>
+                    Après contactez nous sur whatsapp{" "}
+                    <a style={{ textDecoration: "underline" }}>47 010 114</a>{" "}
+                    avec une preuve de paiement.
+                  </li>
+                </ul>{" "}
               </span>
             )}
             <p>
@@ -297,28 +305,44 @@ function Account(props) {
                   )}
                 </div>
                 <p>
-                  {pack.type === "FREE" ? <CloseIcon /> : <Check />}
-                  &nbsp;impression de factures
+                  {pack.type !== "FREE" ? (
+                    <>
+                      <Check />
+                      &nbsp;impression de factures
+                    </>
+                  ) : null}
                 </p>
                 <p>
-                  {pack.type === "FREE" ? <CloseIcon /> : <Check />}
-                  &nbsp;catégories illimité
+                  <Check />
+                  &nbsp;catégories{" "}
+                  {pack.type === "FREE" ? "limité à 5" : "illimitées"}
                 </p>
                 <p>
-                  {pack.type === "FREE" ? <CloseIcon /> : <Check />}
-                  &nbsp;produits illimité
+                  <Check />
+                  &nbsp;produits{" "}
+                  {pack.type === "FREE" ? "limité à 10" : "illimités"}
                 </p>
                 <p>
-                  {pack.type === "FREE" ? <CloseIcon /> : <Check />}
-                  &nbsp;jusqu&apos;à 6 images par produit
+                  <Check />
+                  &nbsp;
+                  {pack.type === "FREE"
+                    ? "1 seule image par produit"
+                    : "jusqu'à 6 images par produit"}
                 </p>
                 <p>
-                  {pack.type === "FREE" ? <CloseIcon /> : <Check />}
-                  &nbsp;diapositives illimité
+                  <Check />
+                  &nbsp;
+                  {pack.type === "FREE"
+                    ? "diapositives limitées à 3"
+                    : "diapositives illimitées"}
                 </p>
                 <p>
-                  {pack.type === "FREE" ? <CloseIcon /> : <Check />}
-                  &nbsp;nom de domaine de votre choix
+                  {pack.type !== "FREE" ? (
+                    <>
+                      <Check />
+                      &nbsp;nom de domaine de votre choix
+                    </>
+                  ) : null}
                 </p>
                 <hr />
                 <h5>Pack: {pack.type}</h5>
@@ -330,12 +354,21 @@ function Account(props) {
                 {pack.type === "FREE" && !upgradeDemand && (
                   <>
                     <p>passez à premium et bénéficiez de nos services !</p>
+                    <ul>
+                      <li>Impression de facture</li>
+                      <li>Intégration de Nom de domaine de votre choix</li>
+                      <li>Catégories illimitées</li>
+                      <li>Produits illimités</li>
+                      <li>Jusqu&apos;à 6 images par produits</li>
+                      <li>Diapositifs illimitées</li>
+                      <li>Intégration de Nom de domaine de votre choix</li>
+                    </ul>
                   </>
                 )}
                 {upgradeDemand ? (
                   <span>
                     <h4 style={{ color: "blue" }}>
-                      Mettre à niveau votre forfait, Transférez{" "}
+                      Transférez{" "}
                       {
                         offers.find((o) => o.period === upgradeDemand.period)
                           .price
@@ -345,6 +378,19 @@ function Account(props) {
                     <ul style={{ color: "blue" }}>
                       <li>
                         <h4>RIB: 17503000000268993518</h4>
+                      </li>
+                      <li>
+                        <h4>
+                          après contactez nous sur whatsapp{" "}
+                          <a style={{ textDecoration: "underline" }}>
+                            47 010 114
+                          </a>{" "}
+                          avec le numéro de demande{" "}
+                          <a style={{ textDecoration: "underline" }}>
+                            {upgradeDemand.orderNumber}
+                          </a>{" "}
+                          et une preuve de paiement.
+                        </h4>
                       </li>
                     </ul>
                   </span>

@@ -1,11 +1,24 @@
 .container {
-  width: 100%;
+  border-top: 1px solid #ccc;
+  background-color: whitesmoke;
+}
+.row {
   padding: 50px;
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
-  border-top: 1px solid #ccc;
-  background-color: whitesmoke;
+  width: 100%;
+}
+.shoutout {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+  padding: 10px;
+  font-size: 12px;
+  a {
+    text-decoration: underline;
+  }
 }
 .col {
   width: calc(100% / 3);

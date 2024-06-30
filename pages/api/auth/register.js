@@ -48,13 +48,16 @@ handler.post(async (req, res) => {
           sliderComponent: [],
           categoriesComponent: {
             visibleIndex: 0,
+            visible: true,
             selectedCategoriesIds: [],
           },
           discountComponent: {
             visibleIndex: 0,
+            visible: true,
           },
           galleryComponent: {
             visibleIndex: 0,
+            visible: true,
             content: [],
           },
         },

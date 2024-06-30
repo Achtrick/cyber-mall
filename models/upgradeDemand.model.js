@@ -2,6 +2,7 @@ import { Schema, model, models } from "mongoose";
 
 const UpgradeDemandSchema = new Schema(
   {
+    orderNumber: String,
     userName: String,
     phone: String,
     email: String,

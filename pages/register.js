@@ -21,6 +21,7 @@ function Register(props) {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
+    phone: null,
     email: "",
     password: "",
     confirmPassword: "",
@@ -132,17 +133,28 @@ function Register(props) {
                   className="defaultInput"
                   required
                   onChange={onChange}
+                  type="number"
+                  name="phone"
+                  placeholder="téléphone"
+                  data-aos="fade-up"
+                  data-aos-offset="100"
+                  data-aos-delay="400"
+                />
+                <input
+                  className="defaultInput"
+                  required
+                  onChange={onChange}
                   type="email"
                   name="email"
                   placeholder="email"
                   data-aos="fade-up"
                   data-aos-offset="100"
-                  data-aos-delay="400"
+                  data-aos-delay="500"
                 />
                 <div
                   data-aos="fade-up"
                   data-aos-offset="100"
-                  data-aos-delay="500"
+                  data-aos-delay="600"
                   className={styles.passwordContainer}
                 >
                   <input
@@ -179,12 +191,12 @@ function Register(props) {
                   placeholder="confirmer mot de passe"
                   data-aos="fade-up"
                   data-aos-offset="100"
-                  data-aos-delay="600"
+                  data-aos-delay="700"
                 />
                 <div
                   data-aos="fade-up"
                   data-aos-offset="100"
-                  data-aos-delay="700"
+                  data-aos-delay="800"
                 >
                   <XAutoComplete
                     options={ActivityDomains}
@@ -201,7 +213,7 @@ function Register(props) {
                 <div
                   data-aos="fade-up"
                   data-aos-offset="100"
-                  data-aos-delay="800"
+                  data-aos-delay="900"
                   className="labeledInput"
                 >
                   <label style={{ color: labelColor }}>
@@ -221,7 +233,7 @@ function Register(props) {
                 <div
                   data-aos="fade-up"
                   data-aos-offset="100"
-                  data-aos-delay="900"
+                  data-aos-delay="1000"
                   className={styles.conditions}
                 >
                   <input value={conditions} required type="checkbox" />
@@ -233,7 +245,7 @@ function Register(props) {
                 <div
                   data-aos="fade-up"
                   data-aos-offset="100"
-                  data-aos-delay="1000"
+                  data-aos-delay="1100"
                 >
                   <Button
                     disabled={loading}
@@ -259,7 +271,7 @@ function Register(props) {
                 <p
                   data-aos="fade-up"
                   data-aos-offset="100"
-                  data-aos-delay="1100"
+                  data-aos-delay="1200"
                 >
                   Vous avez déjà un compte ?{" "}
                   <Link href={"/login"}>Se connecter !</Link>

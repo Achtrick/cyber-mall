@@ -114,7 +114,7 @@ function AdminLayout(props) {
           <Link onClick={toggleDrawer} href="/admin/inventory">
             <div className={`${styles.link} + hoverable`}>
               <InventoryIcon color="shop3" />
-              <p>inventaire</p>
+              <p>Produits</p>
             </div>
           </Link>
           <Link onClick={toggleDrawer} href="/admin/orders">

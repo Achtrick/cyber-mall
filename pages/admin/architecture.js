@@ -33,6 +33,8 @@ import {
   PhoneEnabledIcon,
   SettingsIcon,
   TiktokIcon,
+  VisibilityIcon,
+  VisibilityOffIcon,
   YouTubeIcon,
 } from "../../utils/theme/icons";
 import XGridSkeleton from "./../../components/ui-components/XGridSkeleton";
@@ -77,8 +79,8 @@ function Architecture(props) {
     getDiscounts();
   }, []);
 
-  const getShopInfo = async () => {
-    setLoading(true);
+  const getShopInfo = async (load = true) => {
+    load && setLoading(true);
     try {
       const { data } = await axios.post("/api/shop/getInfo", {
         shopName: userInfo.shop.name,
@@ -220,6 +222,33 @@ function Architecture(props) {
       checkExpirity(error, dispatch);
       enqueueSnackbar(getError(error), { variant: "error" });
       setLoading(false);
+    }
+  };
+
+  const toggleComponentVisibility = async (componentName) => {
+    try {
+      const { data } = await axios.post(
+        "/api/admin/shop/toggle-component-visibility",
+        {
+          shopId: userInfo.shop._id,
+          componentName: componentName,
+        }
+      );
+
+      dispatch({
+        type: "USER_LOGIN",
+        payload: {
+          ...userInfo,
+          shop: data.shopInfo,
+        },
+      });
+      await getShopInfo(false);
+
+      enqueueSnackbar(data.message, { variant: "success" });
+      setLoading(false);
+    } catch (error) {
+      checkExpirity(error, dispatch);
+      enqueueSnackbar(getError(error), { variant: "error" });
     }
   };
 
@@ -992,6 +1021,27 @@ function Architecture(props) {
                     <SettingsIcon />
                   </IconButton>
                 </Tooltip>{" "}
+                |{" "}
+                <Tooltip
+                  title={
+                    architecture.home.categoriesComponent.visible
+                      ? "Masquer de la page d'accueil"
+                      : "Afficher sur la page d'accueil"
+                  }
+                >
+                  <IconButton
+                    color="info"
+                    onClick={async () => {
+                      await toggleComponentVisibility("categoriesComponent");
+                    }}
+                  >
+                    {architecture.home.categoriesComponent.visible ? (
+                      <VisibilityOffIcon />
+                    ) : (
+                      <VisibilityIcon />
+                    )}
+                  </IconButton>
+                </Tooltip>{" "}
               </p>
               {categories.length ? (
                 <CategoriesGrid
@@ -1022,6 +1072,27 @@ function Architecture(props) {
                     }}
                   >
                     <SettingsIcon />
+                  </IconButton>
+                </Tooltip>{" "}
+                |{" "}
+                <Tooltip
+                  title={
+                    architecture.home.discountComponent.visible
+                      ? "Masquer de la page d'accueil"
+                      : "Afficher sur la page d'accueil"
+                  }
+                >
+                  <IconButton
+                    color="info"
+                    onClick={async () => {
+                      await toggleComponentVisibility("discountComponent");
+                    }}
+                  >
+                    {architecture.home.discountComponent.visible ? (
+                      <VisibilityOffIcon />
+                    ) : (
+                      <VisibilityIcon />
+                    )}
                   </IconButton>
                 </Tooltip>{" "}
               </p>
@@ -1057,6 +1128,27 @@ function Architecture(props) {
                     <SettingsIcon />
                   </IconButton>
                 </Tooltip>
+                |{" "}
+                <Tooltip
+                  title={
+                    galleryInfo.visible
+                      ? "Masquer de la page d'accueil"
+                      : "Afficher sur la page d'accueil"
+                  }
+                >
+                  <IconButton
+                    color="info"
+                    onClick={async () => {
+                      await toggleComponentVisibility("galleryComponent");
+                    }}
+                  >
+                    {galleryInfo.visible ? (
+                      <VisibilityOffIcon />
+                    ) : (
+                      <VisibilityIcon />
+                    )}
+                  </IconButton>
+                </Tooltip>{" "}
               </p>
               {loadingGallery ? (
                 <Skeleton

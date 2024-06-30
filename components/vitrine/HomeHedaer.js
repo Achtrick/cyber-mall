@@ -1,3 +1,5 @@
+import { Button } from "@mui/material";
+import Link from "next/link";
 import React from "react";
 import styles from "../../styles/vitrine/HomeHedaer.module.scss";
 
@@ -5,11 +7,18 @@ function HomeHedaer(props) {
   return (
     <section className={styles.container}>
       <div className={styles.overlay}>
-        <h1>Rendre le commerce meilleur pour tous</h1>
-        <p>
-          Cyber-Mall accompagne la prochaine génération d&apos;entrepreneurs,
-          les plus grandes marques du monde, et tout entre les deux.
-        </p>
+        <div className={styles.text}>
+          <h1>Rendre le commerce meilleur pour tous</h1>
+          <p>
+            Cyber-Mall accompagne la prochaine génération d&apos;entrepreneurs,
+            les plus grandes marques du monde, et tout entre les deux.
+          </p>
+        </div>
+        <Link href={"/register"}>
+          <Button style={{ backgroundColor: "white", color: "black" }}>
+            s&apos;inscrire
+          </Button>
+        </Link>
       </div>
       <video
         className={styles.video}

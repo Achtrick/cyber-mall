@@ -7,6 +7,9 @@ import XSwiper from "../ui-components/XSwiper";
 
 function CategoriesGrid({ disabled, categories, architecture, shopInfo }) {
   const isMobile = useMediaQuery("(max-width:800px)");
+  const handleClick = (event) => {
+    disabled && event.preventDefault();
+  };
   return (
     <section className={styles.container}>
       <h2>découvrir nos catégories</h2>
@@ -31,11 +34,9 @@ function CategoriesGrid({ disabled, categories, architecture, shopInfo }) {
             )
             .map((category, index) => {
               return (
-                <SwiperSlide
-                  key={index}
-                  style={disabled && { pointerEvents: "none" }}
-                >
+                <SwiperSlide key={index}>
                   <Link
+                    onClick={handleClick}
                     href={
                       shopInfo?.domainName.length
                         ? `/products?category=${category.name}`

@@ -35,12 +35,11 @@ export const conditionOfUse = (
     </p>
     <h2>Pannes</h2>
     <p>
-      nous hébergeons nos propres serveurs en tunisie, exactement à sousse sur
-      la connexion internet tunisia telecom, donc toute connexion internet lente
-      qui affecte votre site web n&apos;est pas notre responsabilité, mais nous
-      rembourserons la période d&apos;indisponibilité pour toutes les boutiques
-      concernées, si votre site web est confronté à un acompte de 24h vous serez
-      remboursé avec 24h de prime...
+      toute connexion internet lente qui affecte votre site web n&apos;est pas
+      notre responsabilité, mais nous rembourserons la période
+      d&apos;indisponibilité pour toutes les boutiques concernées, si votre site
+      web est confronté à un problème et vous avez un pack Premium, vous serez
+      remboursé sur cette période avec premium.
     </p>
     <h1>Contactez-nous</h1>
     <p>
