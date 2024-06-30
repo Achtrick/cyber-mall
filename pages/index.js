@@ -8,7 +8,7 @@ import Domain from "../components/vitrine/Domain";
 import HomeHedaer from "../components/vitrine/HomeHedaer";
 import Layout from "../components/vitrine/Layout";
 import Receipts from "../components/vitrine/Receipts";
-import Steps from "../components/vitrine/Steps";
+import ShopSteps from "../components/vitrine/Steps";
 
 export default function Home() {
   return (
@@ -42,7 +42,7 @@ export default function Home() {
         <XHr width="15%" marginLeft="40%" color={"var(--second-color)"} />
         <span id="domain" />
         <br />
-        <Steps />
+        <ShopSteps />
         <br />
         <BecomeMember />
       </Layout>

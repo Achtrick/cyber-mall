@@ -1,7 +1,7 @@
 import React from "react";
 
-function Steps(props) {
+function ShopSteps(props) {
   return <section className="vitrine-block">Steps here</section>;
 }
 
-export default Steps;
+export default ShopSteps;
