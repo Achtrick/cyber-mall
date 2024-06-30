@@ -8,7 +8,6 @@ import Domain from "../components/vitrine/Domain";
 import HomeHedaer from "../components/vitrine/HomeHedaer";
 import Layout from "../components/vitrine/Layout";
 import Receipts from "../components/vitrine/Receipts";
-import ShopSteps from "../components/vitrine/ShopSteps";
 
 export default function Home() {
   return (
@@ -19,30 +18,30 @@ export default function Home() {
       >
         <HomeHedaer />
         <br />
-        <XHr width="15%" marginLeft="40%" color={"var(--second-color)"} />
+        <XHr width="10%" marginLeft="50%" color={"var(--second-color)"} />
         <span id="customize" />
         <br />
         <Customize />
         <br />
-        <XHr width="15%" marginLeft="40%" color={"var(--second-color)"} />
+        <XHr width="10%" marginLeft="50%" color={"var(--second-color)"} />
         <span id="dashboard" />
         <br />
         <Control />
         <br />
-        <XHr width="15%" marginLeft="40%" color={"var(--second-color)"} />
+        <XHr width="10%" marginLeft="50%" color={"var(--second-color)"} />
         <span id="receipts" />
         <br />
         <Receipts />
         <br />
-        <XHr width="15%" marginLeft="40%" color={"var(--second-color)"} />
+        <XHr width="10%" marginLeft="50%" color={"var(--second-color)"} />
         <span id="domain" />
         <br />
         <Domain />
         <br />
-        <XHr width="15%" marginLeft="40%" color={"var(--second-color)"} />
+        <XHr width="10%" marginLeft="50%" color={"var(--second-color)"} />
         <span id="domain" />
         <br />
-        <ShopSteps />
+        {/* <ShopSteps /> */}
         <br />
         <BecomeMember />
       </Layout>
