@@ -8,7 +8,7 @@ import Domain from "../components/vitrine/Domain";
 import HomeHedaer from "../components/vitrine/HomeHedaer";
 import Layout from "../components/vitrine/Layout";
 import Receipts from "../components/vitrine/Receipts";
-import ShopSteps from "../components/vitrine/Steps";
+import ShopSteps from "../components/vitrine/ShopSteps";
 
 export default function Home() {
   return (
