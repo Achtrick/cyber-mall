@@ -10,7 +10,7 @@ function Domain(props) {
             Intégrez facilement votre nom de domaine en un seul clic.
           </p>
           <p data-aos="fade-up">
-            même si vous n&pos;en avez pas, nous serons là pour vous aider à en
+            même si vous n&apos;en avez pas, nous serons là pour vous aider à en
             obtenir un!
           </p>
         </div>
