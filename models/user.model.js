@@ -10,7 +10,7 @@ const userSchema = new Schema(
     password: String,
     role: String, // SUPER-ADMIN / ADMIN
     token: String,
-    shop: { type: Schema.Types.ObjectId, ref: "Shop" }, // REFERENCE FOR THE ADMIN SHOP
+    shop: { type: Schema.Types.Mixed }, // REFERENCE FOR THE ADMIN SHOP
   },
   { timestamps: true }
 );
