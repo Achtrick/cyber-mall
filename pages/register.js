@@ -160,9 +160,9 @@ function Register(props) {
                   <input
                     className="defaultInput"
                     minLength="8"
-                    maxLength="16"
-                    pattern="^[a-zA-Z0-9]{8,16}$"
-                    title="Le mot de passe doit comporter entre 8 et 16 caractères et contenir uniquement des lettres et des chiffres."
+                    maxLength="20"
+                    pattern="^[a-zA-Z0-9]{8,20}$"
+                    title="Le mot de passe doit comporter entre 8 et 20 caractères et contenir uniquement des lettres et des chiffres."
                     required
                     onChange={onChange}
                     type={passwordVisible ? "text" : "password"}
