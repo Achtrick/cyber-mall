@@ -2,6 +2,7 @@ import React from "react";
 import ConnectedGuard from "../components/guards/connectedGuard";
 import XHr from "../components/ui-components/XHr";
 import BecomeMember from "../components/vitrine/BecomeMember";
+import BrowseShops from "../components/vitrine/BrowseShops";
 import Control from "../components/vitrine/Control";
 import Customize from "../components/vitrine/Customize";
 import Domain from "../components/vitrine/Domain";
@@ -42,9 +43,12 @@ export default function Home() {
         <XHr width="10%" marginLeft="45%" color={"var(--second-color)"} />
         <span id="how-to" />
         <br />
+        <br />
         <Steps />
         <br />
         <BecomeMember />
+        <br />
+        <BrowseShops />
       </Layout>
     </ConnectedGuard>
   );

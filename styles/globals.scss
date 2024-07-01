@@ -238,16 +238,18 @@ th {
 .grid-5 {
   padding: 10px 0px;
   row-gap: 10px;
+  column-gap: 10px;
   display: grid;
-  grid-template-columns: auto auto auto auto auto;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
   p {
     margin: 2px 0px;
   }
 }
 .grid-4 {
   padding: 20px 0px;
+  gap: 20px;
   display: grid;
-  grid-template-columns: auto auto auto auto;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
 }
 .card {
   width: 100%;
@@ -401,6 +403,35 @@ th {
       @include flexLayout(center, center, column);
     }
   }
+  .vitine-card {
+    img {
+      width: 100px;
+      height: 100px;
+      object-fit: contain;
+    }
+    border-radius: 15px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background-position: top;
+    background-size: cover;
+    background-repeat: no-repeat;
+    min-height: 200px;
+
+    p {
+      font-size: 15px !important;
+      text-transform: uppercase;
+    }
+
+    transition: all 0.3s;
+  }
+  .vitine-card:hover {
+    cursor: pointer;
+    scale: 1.01;
+  }
 }
 .downloadBtn {
   color: white;
@@ -472,10 +503,10 @@ th {
   .grid-5 {
     padding: 10px 0px;
     display: grid;
-    grid-template-columns: auto auto auto;
+    grid-template-columns: 1fr 1fr 1fr;
   }
   .grid-4 {
-    grid-template-columns: auto auto;
+    grid-template-columns: 1fr 1fr;
     row-gap: 20px;
   }
   .defaultTable {

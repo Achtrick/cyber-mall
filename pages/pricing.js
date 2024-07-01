@@ -23,9 +23,11 @@ function Pricing(props) {
               data-aos-offset="100"
               className={styles.pack}
             >
-              <p>basique</p>
-              <p>Gratuit</p>
-              <hr />
+              <div style={{ width: "100%" }}>
+                <p>basique</p>
+                <p>Gratuit</p>
+                <XHr color={"#f2f2f2"} />
+              </div>
               <ul>
                 <li>création de shop</li>
                 <li>ajouter un logo</li>
@@ -35,11 +37,7 @@ function Pricing(props) {
                 <li>produits : 10</li>
                 <li>images par produit : 1</li>
                 <li>diapositives d&apos;accueil : 3</li>
-                <li>Génération de facture : restreinte</li>
-                <li>Nom de domaine de votre choix : restreinte</li>
               </ul>
-              <hr />
-
               <Link href={"/register"}>
                 <Button
                   style={{
@@ -58,9 +56,11 @@ function Pricing(props) {
               data-aos-offset="100"
               className={styles.pack}
             >
-              <p>premium mensuelle</p>
-              <p>49 DT</p>
-              <hr />
+              <div style={{ width: "100%" }}>
+                <p>premium mensuelle</p>
+                <p>49 DT</p>
+                <XHr color={"#f2f2f2"} />
+              </div>
               <ul>
                 <li>création de shop</li>
                 <li>ajouter un logo</li>
@@ -70,11 +70,9 @@ function Pricing(props) {
                 <li>produits : illimité</li>
                 <li>images par produit : 6</li>
                 <li>diapositives d&apos;accueil : illimitées</li>
-                <li>génération de facture : autorisée</li>
-                <li>Nom de domaine de votre choix : autorisée</li>
+                <li>génération de facture</li>
+                <li>Nom de domaine de votre choix</li>
               </ul>
-              <hr />
-
               <Link href={"/register"}>
                 <Button
                   style={{
@@ -93,12 +91,14 @@ function Pricing(props) {
               data-aos-offset="100"
               className={styles.pack}
             >
-              <p>premium annuelle</p>
-              <div className="row">
-                <p style={{ textDecoration: "line-through" }}>588 DT</p>&nbsp;
-                <p>499 DT</p>
+              <div style={{ width: "100%" }}>
+                <p>premium annuelle</p>
+                <div className="row">
+                  <p style={{ textDecoration: "line-through" }}>588 DT</p>&nbsp;
+                  <p>499 DT</p>
+                </div>
+                <XHr color={"#f2f2f2"} />
               </div>
-              <hr />
               <ul>
                 <li>création de shop</li>
                 <li>ajouter un logo</li>
@@ -108,11 +108,9 @@ function Pricing(props) {
                 <li>produits : illimité</li>
                 <li>images par produit : 6</li>
                 <li>diapositives d&apos;accueil : illimitées</li>
-                <li>génération de facture : autorisée</li>
-                <li>Nom de domaine de votre choix : autorisée</li>
+                <li>génération de facture</li>
+                <li>Nom de domaine de votre choix</li>
               </ul>
-              <hr />
-
               <Link href={"/register"}>
                 <Button
                   style={{

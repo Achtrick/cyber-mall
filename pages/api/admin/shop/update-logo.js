@@ -36,7 +36,7 @@ export const updateManifestJsonFile = (
     ],
     start_url: domainName.length ? "/" : `/${shopName}`,
     theme_color: themeColor,
-    background_color: "#808080",
+    background_color: "#ffffff",
     display: "standalone",
     scope: "/",
   };
