@@ -84,6 +84,10 @@ function ResetPassword(props) {
                   <label>mot de passe</label>
                   <input
                     required
+                    minLength="8"
+                    maxLength="20"
+                    pattern="^[a-zA-Z0-9]{8,20}$"
+                    title="Le mot de passe doit comporter entre 8 et 20 caractères et contenir uniquement des lettres et des chiffres."
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     className="defaultInput"
