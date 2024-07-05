@@ -211,6 +211,7 @@ export default function Shops(props) {
                         style={{ justifyContent: "space-between" }}
                       >
                         <h1>{shop.name}</h1>
+
                         {shop.logo ? (
                           <img
                             alt="logo"
@@ -232,6 +233,9 @@ export default function Shops(props) {
                           />
                         )}
                       </div>
+                      <h1>{shop.user.firstName + " " + shop.user.lastName}</h1>
+                      <h1>{shop.user.email}</h1>
+                      <h1>{shop.user.phone}</h1>
                       <hr />
                       <p>
                         Status:{" "}
