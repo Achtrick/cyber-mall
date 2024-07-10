@@ -2,6 +2,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import { Skeleton } from "@mui/material";
 import axios from "axios";
 import moment from "moment";
+import Link from "next/link";
 import { useSnackbar } from "notistack";
 import React, { useEffect, useState } from "react";
 import { ModalSizes } from "../../components/admin/ModalSettings";
@@ -213,24 +214,44 @@ export default function Shops(props) {
                         <h1>{shop.name}</h1>
 
                         {shop.logo ? (
-                          <img
-                            alt="logo"
-                            src={`/api/images/${shop.logo.split("/").pop()}`}
-                            onError={(e) => {
-                              e.target.src = "/cyber-mall.png";
-                            }}
-                            width={"50"}
-                            height={"50"}
-                            style={{ objectFit: "contain" }}
-                          />
+                          <Link
+                            target="_blank"
+                            rel="noreferrer"
+                            href={
+                              shop.domainName.length
+                                ? shop.domainName
+                                : `/${shop.name}`
+                            }
+                          >
+                            <img
+                              alt="logo"
+                              src={`/api/images/${shop.logo.split("/").pop()}`}
+                              onError={(e) => {
+                                e.target.src = "/cyber-mall.png";
+                              }}
+                              width={"50"}
+                              height={"50"}
+                              style={{ objectFit: "contain" }}
+                            />
+                          </Link>
                         ) : (
-                          <img
-                            alt="logo"
-                            src={"/cyber-mall.png"}
-                            width={"50"}
-                            height={"50"}
-                            style={{ objectFit: "contain" }}
-                          />
+                          <Link
+                            target="_blank"
+                            rel="noreferrer"
+                            href={
+                              shop.domainName.length
+                                ? shop.domainName
+                                : `/${shop.name}`
+                            }
+                          >
+                            <img
+                              alt="logo"
+                              src={"/cyber-mall.png"}
+                              width={"50"}
+                              height={"50"}
+                              style={{ objectFit: "contain" }}
+                            />
+                          </Link>
                         )}
                       </div>
                       <h1>{shop.user.firstName + " " + shop.user.lastName}</h1>
