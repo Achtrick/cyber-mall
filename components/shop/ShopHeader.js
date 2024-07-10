@@ -422,15 +422,7 @@ function ShopHeader({ shopInfo, ...props }) {
             </Link>
           ) : (
             <Link href={`/${shopInfo?.domainName.length ? "" : shopInfo.name}`}>
-              <div className="row">
-                <h1
-                  style={{
-                    color: deduceColor(shopInfo.settings.headerColor),
-                  }}
-                >
-                  {shopInfo.name}
-                </h1>
-              </div>
+              <img alt={shopInfo.name} src={`/cyber-mall.png`} />
             </Link>
           )}
         </div>

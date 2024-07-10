@@ -215,9 +215,9 @@ export default function Shops(props) {
                         {shop.logo ? (
                           <img
                             alt="logo"
-                            src={shop.logo}
-                            onError={() => {
-                              setLogo("/images/default-store.png");
+                            src={`/api/images/${shop.logo.split("/").pop()}`}
+                            onError={(e) => {
+                              e.target.src = "/cyber-mall.png";
                             }}
                             width={"50"}
                             height={"50"}
@@ -226,7 +226,7 @@ export default function Shops(props) {
                         ) : (
                           <img
                             alt="logo"
-                            src={"/images/default-store.png"}
+                            src={"/cyber-mall.png"}
                             width={"50"}
                             height={"50"}
                             style={{ objectFit: "contain" }}

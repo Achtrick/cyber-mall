@@ -807,14 +807,20 @@ function Architecture(props) {
                           alt="logo"
                           src={logo}
                           onError={(e) => {
-                            setLogo("/images/default-store.png");
+                            setLogo("/cyber-mall.png");
                           }}
                           width={"150"}
                           height={"80"}
                           style={{ objectFit: "contain" }}
                         />
                       ) : (
-                        <h1>{shopInfo.name}</h1>
+                        <img
+                          alt="logo"
+                          src={"/cyber-mall.png"}
+                          width={"150"}
+                          height={"80"}
+                          style={{ objectFit: "contain" }}
+                        />
                       )}
                     </>
                   ) : (

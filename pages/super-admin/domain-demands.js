@@ -126,9 +126,11 @@ export default function Demands(props) {
                         {demand.shop.logo ? (
                           <img
                             alt="logo"
-                            src={demand.shop.logo}
-                            onError={() => {
-                              setLogo("/images/default-store.png");
+                            src={`/api/images/${demand.shop.logo
+                              .split("/")
+                              .pop()}`}
+                            onError={(e) => {
+                              e.target.src = "/cyber-mall.png";
                             }}
                             width={"50"}
                             height={"50"}
@@ -137,7 +139,7 @@ export default function Demands(props) {
                         ) : (
                           <img
                             alt="logo"
-                            src={"/images/default-store.png"}
+                            src={"/cyber-mall.png"}
                             width={"50"}
                             height={"50"}
                             style={{ objectFit: "contain" }}

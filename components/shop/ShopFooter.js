@@ -20,6 +20,10 @@ function ShopFooter({ shopInfo }) {
     shopInfo && setDeducedColor(deduceColor(shopInfo.settings.footerColor));
   }, [shopInfo]);
 
+  const transformLink = (link) => {
+    return link.includes("http") ? link : `${"https://" + link}`;
+  };
+
   return (
     <>
       <div
@@ -36,7 +40,9 @@ function ShopFooter({ shopInfo }) {
             <Link
               rel="noreferrer"
               target="_blank"
-              href={shopInfo.architecture.contact.socials.facebook}
+              href={transformLink(
+                shopInfo.architecture.contact.socials.facebook
+              )}
               className={styles.row}
             >
               <FacebookIcon />
@@ -48,7 +54,9 @@ function ShopFooter({ shopInfo }) {
             <Link
               rel="noreferrer"
               target="_blank"
-              href={shopInfo.architecture.contact.socials.instagram}
+              href={transformLink(
+                shopInfo.architecture.contact.socials.instagram
+              )}
               className={styles.row}
             >
               <InstagramIcon />
@@ -60,7 +68,7 @@ function ShopFooter({ shopInfo }) {
             <Link
               rel="noreferrer"
               target="_blank"
-              href={shopInfo.architecture.contact.socials.tiktok}
+              href={transformLink(shopInfo.architecture.contact.socials.tiktok)}
               className={styles.row}
             >
               <TiktokIcon />
@@ -72,7 +80,9 @@ function ShopFooter({ shopInfo }) {
             <Link
               rel="noreferrer"
               target="_blank"
-              href={shopInfo.architecture.contact.socials.youtube}
+              href={transformLink(
+                shopInfo.architecture.contact.socials.youtube
+              )}
               className={styles.row}
             >
               <YouTubeIcon />
@@ -84,7 +94,9 @@ function ShopFooter({ shopInfo }) {
             <Link
               rel="noreferrer"
               target="_blank"
-              href={shopInfo.architecture.contact.socials.linkedIn}
+              href={transformLink(
+                shopInfo.architecture.contact.socials.linkedIn
+              )}
               className={styles.row}
             >
               <LinkedInIcon />
@@ -119,12 +131,14 @@ function ShopFooter({ shopInfo }) {
             )}
           </div>
         </div>
-        <div className={styles.col}>
-          <h3>à propos</h3>
-          {shopInfo.architecture.about !== "" && (
-            <p>{shopInfo.architecture.about}</p>
-          )}
-        </div>
+        {shopInfo.architecture.about !== "" ? (
+          <div className={styles.col}>
+            <h3>à propos</h3>
+            {shopInfo.architecture.about !== "" && (
+              <p>{shopInfo.architecture.about}</p>
+            )}
+          </div>
+        ) : null}
       </div>
       <div
         style={{
