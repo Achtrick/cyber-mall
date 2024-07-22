@@ -32,7 +32,7 @@ handler.post(async (req, res) => {
             phone: user.phone,
             address: user.address,
             token: jwt.sign({ id: user._id }, process.env.JWT_ADMIN_SECRET, {
-              expiresIn: "1d",
+              expiresIn: "7d",
             }),
             shop: shop,
           });
@@ -50,7 +50,7 @@ handler.post(async (req, res) => {
             { id: user._id },
             process.env.JWT_SUPER_ADMIN_SECRET,
             {
-              expiresIn: "1d",
+              expiresIn: "365d",
             }
           ),
         });
