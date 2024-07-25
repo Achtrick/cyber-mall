@@ -19,6 +19,7 @@ handler.post(async (req, res) => {
           _id: 1,
           designation: 1,
           slug: 1,
+          qty: 1,
           price: 1,
           discount: 1,
           variants: 1,

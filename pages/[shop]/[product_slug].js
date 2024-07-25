@@ -6,6 +6,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { SwiperSlide } from "swiper/react";
 import LoadingScreen from "../../components/shop/LoadingScreen";
+import OutOfStock from "../../components/shop/OutOfStock";
 import ProductsSlider from "../../components/shop/ProductsSlider";
 import ShopLayout from "../../components/shop/ShopLayout";
 import XButton from "../../components/ui-components/XButton";
@@ -257,10 +258,12 @@ function Product({ shop, slug }) {
                       <AddIcon />
                     </Button>
                   </div>
+                  {product.qty < 1 ? <OutOfStock /> : null}
                   <XButton
                     color={shopInfo.settings.primaryColor}
                     width={"100px"}
                     text={"Acheter"}
+                    disabled={product.qty < 1}
                     action={() => {
                       addTocart(shop, {
                         ...product,

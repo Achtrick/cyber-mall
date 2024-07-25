@@ -11,6 +11,7 @@ import { useSnackbar } from "notistack";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import LoadingScreen from "../../components/shop/LoadingScreen";
+import OutOfStock from "../../components/shop/OutOfStock";
 import ShopLayout from "../../components/shop/ShopLayout";
 import XAutoComplete from "../../components/ui-components/XAutoComplete";
 import XButton from "../../components/ui-components/XButton";
@@ -400,7 +401,7 @@ function Products({ shop }) {
                               );
                             })}
                           </div>
-
+                          {product.qty < 1 ? <OutOfStock /> : null}
                           <XButton
                             color={shopInfo.settings.primaryColor}
                             text={"Acheter"}

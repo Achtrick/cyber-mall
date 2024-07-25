@@ -7,6 +7,7 @@ function XButton({
   color,
   width,
   inversed,
+  disabled = false,
   loading = false,
   action = () => {},
   props,
@@ -22,9 +23,12 @@ function XButton({
         <button
           onClick={action}
           className={styles.xbutton}
+          disabled={disabled}
           style={
             inversed
               ? {
+                  opacity: disabled ? "0.6" : "1",
+                  pointerEvents: disabled ? "none" : "all",
                   backgroundColor: deduceColor(color),
                   color: color,
                   width: width ?? "auto",
@@ -33,6 +37,8 @@ function XButton({
                   transition: "0.1s",
                 }
               : {
+                  opacity: disabled ? "0.6" : "1",
+                  pointerEvents: disabled ? "none" : "all",
                   backgroundColor: color,
                   color: deduceColor(color),
                   width: width ?? "auto",

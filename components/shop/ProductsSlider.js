@@ -9,11 +9,12 @@ import {
 } from "../../utils/config/convertHelper";
 import XButton from "../ui-components/XButton";
 import XSwiper from "../ui-components/XSwiper";
+import OutOfStock from "./OutOfStock";
 
 function ProductsSlider({ disabled, products, shopInfo, title, buttonAction }) {
   const [selectedVariant, setSelectedVariant] = useState(null);
   const [selectedProduct, setSelectedProduct] = useState(null);
-
+  console.log(products);
   const isMobile = useMediaQuery("(max-width:800px)");
 
   const handleClick = (event) => {
@@ -169,10 +170,11 @@ function ProductsSlider({ disabled, products, shopInfo, title, buttonAction }) {
                       );
                     })}
                   </div>
-
+                  {product.qty < 1 ? <OutOfStock /> : null}
                   <XButton
                     color={shopInfo.settings.primaryColor}
                     text={"Acheter"}
+                    disabled={product.qty < 1}
                     action={
                       buttonAction ? () => checkVariants(product) : () => {}
                     }

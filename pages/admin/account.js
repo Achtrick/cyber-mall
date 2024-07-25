@@ -245,6 +245,22 @@ function Account(props) {
                 <ul style={{ color: "blue" }}>
                   <li>RIB: 17503000000268993518</li>{" "}
                   <li>
+                    <a
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
+                      PAYPAL: ashref.mtir@gmail.com |{" "}
+                      <img
+                        alt="qrcode"
+                        width="100px"
+                        height="100px"
+                        src="/paypal.png"
+                      />
+                    </a>
+                  </li>{" "}
+                  <li>
                     Après contactez nous sur whatsapp{" "}
                     <a style={{ textDecoration: "underline" }}>47 010 114</a>{" "}
                     avec une preuve de paiement.
@@ -378,6 +394,17 @@ function Account(props) {
                     <ul style={{ color: "blue" }}>
                       <li>
                         <h4>RIB: 17503000000268993518</h4>
+                      </li>
+                      <li>
+                        <h4 style={{ display: "flex", alignItems: "center" }}>
+                          PAYPAL: ashref.mtir@gmail.com |{" "}
+                          <img
+                            width="100px"
+                            height="100px"
+                            alt="qrcode"
+                            src="/paypal.png"
+                          />
+                        </h4>{" "}
                       </li>
                       <li>
                         <h4>
