@@ -74,7 +74,10 @@ function CartContent({
                   cart.content.reduce((sum, product) => {
                     return sum + product.price * product.qty;
                   }, 0)
-                ).toLocaleString() + " DT reste pour la livraison gratuite"
+                ).toLocaleString() +
+                " " +
+                shopInfo.currency +
+                " reste pour la livraison gratuite"
               : "✓ Livraison gratuite"}
           </p>
           <br />
@@ -138,7 +141,7 @@ function CartContent({
                   </td>
                   <td data-label="désignation">{product.designation}</td>
                   <td data-label="prix">
-                    {product.price.toLocaleString() + " DT"}
+                    {product.price.toLocaleString() + " " + shopInfo.currency}
                   </td>
                   <td data-label="qté">
                     <div
@@ -179,7 +182,9 @@ function CartContent({
                     </div>
                   </td>
                   <td data-label="total">
-                    {(product.qty * product.price).toLocaleString() + " DT"}
+                    {(product.qty * product.price).toLocaleString() +
+                      " " +
+                      shopInfo.currency}
                   </td>
                   <td>
                     <IconButton
@@ -204,12 +209,15 @@ function CartContent({
                     return sum + product.price * product.qty;
                   }, 0)
                   .toLocaleString()}{" "}
-              DT +{" "}
+              {shopInfo.currency} +{" "}
               {cart.content.reduce((sum, product) => {
                 return sum + product.price * product.qty;
               }, 0) > shopInfo.freeShipping
                 ? "✓ Livraison gratuite"
-                : "frais de livraison : " + shopInfo.shippingFee + "DT"}
+                : "frais de livraison : " +
+                  shopInfo.shippingFee +
+                  " " +
+                  shopInfo.currency}
             </th>
           </tr>
         </tbody>

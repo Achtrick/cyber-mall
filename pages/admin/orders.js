@@ -208,12 +208,15 @@ function Orders() {
                         </td>
                         <td data-label="désignation">{product.designation}</td>
                         <td data-label="prix">
-                          {product.price.toLocaleString() + " DT"}
+                          {product.price.toLocaleString() +
+                            " " +
+                            userInfo.shop.currency}
                         </td>
                         <td data-label="qté">{product.qty}</td>
                         <td data-label="total">
                           {(product.qty * product.price).toLocaleString() +
-                            " DT"}
+                            " " +
+                            userInfo.shop.currency}
                         </td>
                       </tr>
                     );
@@ -226,14 +229,15 @@ function Orders() {
                           return sum + product.price * product.qty;
                         }, 0)
                         .toLocaleString()}{" "}
-                      DT{" "}
+                      {userInfo.shop.currency}{" "}
                       {order.products.reduce((sum, product) => {
                         return sum + product.price * product.qty;
                       }, 0) > userInfo.shop.freeShipping
                         ? ""
                         : "+ frais de livraison : " +
                           userInfo.shop.shippingFee +
-                          "DT"}
+                          +" " +
+                          userInfo.shop.currency}
                     </th>
                   </tr>
                 </tbody>
@@ -305,7 +309,9 @@ function Orders() {
                             .reduce((sum, product) => {
                               return sum + product.price * product.qty;
                             }, 0)
-                            .toLocaleString() + " DT"}
+                            .toLocaleString() +
+                            " " +
+                            userInfo.shop.currency}
                         </td>
                         <td data-label="Nbr Articles">
                           {order.products.reduce((count, product) => {
@@ -413,13 +419,20 @@ function Orders() {
         <section ref={receiptRef} className={styles.receipt}>
           {order && userInfo && (
             <>
-              <div className="row">
+              <div
+                className="row"
+                style={{ justifyContent: "flex-start", width: "100%" }}
+              >
                 <img
-                  src={`/api/images/${userInfo.shop.logo
-                    .split("/")
-                    .pop()}?width=200&height=200`}
+                  src={
+                    userInfo.shop.logo.length
+                      ? `/api/images/${userInfo.shop.logo
+                          .split("/")
+                          .pop()}?width=100&height=100`
+                      : "/cyber-mall.png"
+                  }
                   onError={(e) => {
-                    e.target.src = "/images/default-store.png";
+                    e.target.src = "/cyber-mall.png";
                   }}
                 />
               </div>
@@ -459,11 +472,16 @@ function Orders() {
                     return (
                       <tr key={key}>
                         <td>{product.designation}</td>
-                        <td>{product.price.toLocaleString() + " DT"}</td>
+                        <td>
+                          {product.price.toLocaleString() +
+                            " " +
+                            userInfo.shop.currency}
+                        </td>
                         <td>{product.qty}</td>
                         <td>
                           {(product.qty * product.price).toLocaleString() +
-                            " DT"}
+                            " " +
+                            userInfo.shop.currency}
                         </td>
                       </tr>
                     );
@@ -477,14 +495,15 @@ function Orders() {
                             return sum + product.price * product.qty;
                           }, 0)
                           .toLocaleString()}{" "}
-                      DT{" "}
+                      {userInfo.shop.currency}{" "}
                       {order.products.reduce((sum, product) => {
                         return sum + product.price * product.qty;
                       }, 0) > userInfo.shop.freeShipping
                         ? ""
                         : "+ frais de livraison : " +
                           userInfo.shop.shippingFee +
-                          "DT"}
+                          " " +
+                          userInfo.shop.currency}
                     </th>
                   </tr>
                 </tbody>

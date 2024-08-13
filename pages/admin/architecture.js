@@ -10,6 +10,7 @@ import DisconnectedGuard from "../../components/guards/disconnectedGuard";
 import CategoriesGrid from "../../components/shop/CategoriesGrid";
 import HomeSlider from "../../components/shop/HomeSlider";
 import ProductsSlider from "../../components/shop/ProductsSlider";
+import XAutoComplete from "../../components/ui-components/XAutoComplete";
 import XGallery from "../../components/ui-components/XGallery";
 import XModal from "../../components/ui-components/XModal";
 import styles from "../../styles/admin/Dashboard.module.scss";
@@ -45,6 +46,172 @@ function Architecture(props) {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
 
+  const currencies = [
+    { name: "AED" },
+    { name: "AFN" },
+    { name: "ALL" },
+    { name: "AMD" },
+    { name: "ANG" },
+    { name: "AOA" },
+    { name: "ARS" },
+    { name: "AUD" },
+    { name: "AWG" },
+    { name: "AZN" },
+    { name: "BAM" },
+    { name: "BBD" },
+    { name: "BDT" },
+    { name: "BGN" },
+    { name: "BHD" },
+    { name: "BIF" },
+    { name: "BMD" },
+    { name: "BND" },
+    { name: "BOB" },
+    { name: "BRL" },
+    { name: "BSD" },
+    { name: "BTN" },
+    { name: "BWP" },
+    { name: "BYN" },
+    { name: "BZD" },
+    { name: "CAD" },
+    { name: "CDF" },
+    { name: "CHF" },
+    { name: "CLP" },
+    { name: "CNY" },
+    { name: "COP" },
+    { name: "CRC" },
+    { name: "CUP" },
+    { name: "CVE" },
+    { name: "CZK" },
+    { name: "DJF" },
+    { name: "DKK" },
+    { name: "DOP" },
+    { name: "DZD" },
+    { name: "EGP" },
+    { name: "ERN" },
+    { name: "ETB" },
+    { name: "EUR" },
+    { name: "FJD" },
+    { name: "FKP" },
+    { name: "FOK" },
+    { name: "GBP" },
+    { name: "GEL" },
+    { name: "GGP" },
+    { name: "GHS" },
+    { name: "GIP" },
+    { name: "GMD" },
+    { name: "GNF" },
+    { name: "GTQ" },
+    { name: "GYD" },
+    { name: "HKD" },
+    { name: "HNL" },
+    { name: "HRK" },
+    { name: "HTG" },
+    { name: "HUF" },
+    { name: "IDR" },
+    { name: "ILS" },
+    { name: "IMP" },
+    { name: "INR" },
+    { name: "IQD" },
+    { name: "IRR" },
+    { name: "ISK" },
+    { name: "JEP" },
+    { name: "JMD" },
+    { name: "JOD" },
+    { name: "JPY" },
+    { name: "KES" },
+    { name: "KGS" },
+    { name: "KHR" },
+    { name: "KID" },
+    { name: "KMF" },
+    { name: "KRW" },
+    { name: "KWD" },
+    { name: "KYD" },
+    { name: "KZT" },
+    { name: "LAK" },
+    { name: "LBP" },
+    { name: "LKR" },
+    { name: "LRD" },
+    { name: "LSL" },
+    { name: "LYD" },
+    { name: "MAD" },
+    { name: "MDL" },
+    { name: "MGA" },
+    { name: "MKD" },
+    { name: "MMK" },
+    { name: "MNT" },
+    { name: "MOP" },
+    { name: "MRU" },
+    { name: "MUR" },
+    { name: "MVR" },
+    { name: "MWK" },
+    { name: "MXN" },
+    { name: "MYR" },
+    { name: "MZN" },
+    { name: "NAD" },
+    { name: "NGN" },
+    { name: "NIO" },
+    { name: "NOK" },
+    { name: "NPR" },
+    { name: "NZD" },
+    { name: "OMR" },
+    { name: "PAB" },
+    { name: "PEN" },
+    { name: "PGK" },
+    { name: "PHP" },
+    { name: "PKR" },
+    { name: "PLN" },
+    { name: "PYG" },
+    { name: "QAR" },
+    { name: "RON" },
+    { name: "RSD" },
+    { name: "RUB" },
+    { name: "RWF" },
+    { name: "SAR" },
+    { name: "SBD" },
+    { name: "SCR" },
+    { name: "SDG" },
+    { name: "SEK" },
+    { name: "SGD" },
+    { name: "SHP" },
+    { name: "SLE" },
+    { name: "SLL" },
+    { name: "SOS" },
+    { name: "SRD" },
+    { name: "SSP" },
+    { name: "STN" },
+    { name: "SYP" },
+    { name: "SZL" },
+    { name: "THB" },
+    { name: "TJS" },
+    { name: "TMT" },
+    { name: "TND" },
+    { name: "TOP" },
+    { name: "TRY" },
+    { name: "TTD" },
+    { name: "TVD" },
+    { name: "TWD" },
+    { name: "TZS" },
+    { name: "UAH" },
+    { name: "UGX" },
+    { name: "USD" },
+    { name: "UYU" },
+    { name: "UZS" },
+    { name: "VED" },
+    { name: "VES" },
+    { name: "VND" },
+    { name: "VUV" },
+    { name: "WST" },
+    { name: "XAF" },
+    { name: "XCD" },
+    { name: "XDR" },
+    { name: "XOF" },
+    { name: "XPF" },
+    { name: "YER" },
+    { name: "ZAR" },
+    { name: "ZMW" },
+    { name: "ZWL" },
+  ];
+
   const [loading, setLoading] = useState(true);
   const [loadingSlider, setLoadingSlider] = useState(true);
   const [loadingGallery, setLoadingGallery] = useState(true);
@@ -67,6 +234,7 @@ function Architecture(props) {
   const [categories, setCategories] = useState([]);
   const [discounts, setDiscounts] = useState([]);
   const [architecture, setArchitecture] = useState({});
+  const [currency, setCurrency] = useState("");
   const [logo, setLogo] = useState(null);
   const [compressedLogo, setCompressedLogo] = useState(null);
 
@@ -89,6 +257,7 @@ function Architecture(props) {
       setShopInfo(data);
       setLogo(data.logo);
       setArchitecture(data.architecture);
+      setCurrency(data.currency);
       getSliderInfo(data.name);
       getGalleryInfo(data.name);
       setLoading(false);
@@ -222,6 +391,29 @@ function Architecture(props) {
       checkExpirity(error, dispatch);
       enqueueSnackbar(getError(error), { variant: "error" });
       setLoading(false);
+    }
+  };
+
+  const updateCurrency = async (currency) => {
+    try {
+      const { data } = await axios.post("/api/admin/shop/update-currency", {
+        shopId: shopInfo._id,
+        currency: currency,
+      });
+      dispatch({
+        type: "USER_LOGIN",
+        payload: {
+          ...userInfo,
+          shop: {
+            ...shopInfo,
+            currency: currency,
+          },
+        },
+      });
+      enqueueSnackbar(data.message, { variant: "success" });
+    } catch (error) {
+      checkExpirity(error, dispatch);
+      enqueueSnackbar(getError(error), { variant: "error" });
     }
   };
 
@@ -903,6 +1095,25 @@ function Architecture(props) {
               <hr />
               <br />
               <br />
+              <h1>Devise de shop</h1>
+              <div className="row" style={{ width: "150px" }}>
+                <XAutoComplete
+                  options={currencies}
+                  value={currency}
+                  optionDisplayExpr="name"
+                  optionValueExpr="name"
+                  onChange={(e, value) => {
+                    setCurrency(value?.name ?? "");
+                    updateCurrency(value?.name ?? "");
+                  }}
+                  placeholder="devise"
+                />
+              </div>
+              <br />
+              <br />
+              <hr />
+              <br />
+              <br />
               <h1>Page D&apos;Accueil</h1>
               <p>
                 Glissière, il faut que les images soit la même résolution pour
@@ -1269,7 +1480,7 @@ function Architecture(props) {
               <input
                 type="number"
                 name="shippingFee"
-                placeholder="0,0 DT"
+                placeholder={`0,0 ${shopInfo.currency}`}
                 value={shopInfo.shippingFee}
                 onChange={(e) => {
                   setShopInfo({
@@ -1280,14 +1491,14 @@ function Architecture(props) {
                 className="defaultInput"
                 style={{ width: "50px" }}
               />{" "}
-              DT
+              {shopInfo.currency}
               <div className="labeledInput">
                 <label>Livraison gratuite à partir de :</label>
               </div>
               <input
                 type="number"
                 name="freeShipping"
-                placeholder="0,0 DT"
+                placeholder={`0,0 ${shopInfo.currency}`}
                 value={shopInfo.freeShipping}
                 onChange={(e) => {
                   setShopInfo({
@@ -1298,7 +1509,7 @@ function Architecture(props) {
                 className="defaultInput"
                 style={{ width: "50px" }}
               />{" "}
-              DT
+              {shopInfo.currency}
               <br />
               <br />
               <hr />

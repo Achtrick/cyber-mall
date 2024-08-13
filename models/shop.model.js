@@ -12,6 +12,7 @@ const shopSchema = new Schema(
       type: Object,
     },
     shippingFee: { type: Number, default: 7 },
+    currency: { type: String, default: "EUR" },
     freeShipping: Number,
     settings: {
       type: Object,

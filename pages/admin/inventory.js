@@ -588,7 +588,9 @@ function Inventory(props) {
                       >
                         <td data-label="Désignation">{product.designation}</td>
                         <td data-label="Prix">
-                          {product.price.toLocaleString() + " DT"}
+                          {product.price.toLocaleString() +
+                            " " +
+                            userInfo?.shop.currency}
                         </td>
                         <td data-label="Qté">{product.qty}</td>
                         <td data-label="Actions">

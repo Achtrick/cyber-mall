@@ -337,14 +337,18 @@ function Products({ shop }) {
                         <p>{product.designation}</p>
                         {product.discount && product.discount !== 0 ? (
                           <p className={styles.oldPrice}>
-                            {product.price.toLocaleString() + " DT"}
+                            {product.price.toLocaleString() +
+                              " " +
+                              shopInfo.currency}
                           </p>
                         ) : null}
                         <p className={styles.price}>
                           {calculateDiscount(
                             product.price,
                             product.discount
-                          ).toLocaleString() + " DT"}
+                          ).toLocaleString() +
+                            " " +
+                            shopInfo.currency}
                         </p>
                         <div
                           onMouseLeave={() => {

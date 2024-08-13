@@ -161,7 +161,7 @@ export default function Demands(props) {
                       <h4>
                         Requested Pack: {demand.period} for{" "}
                         {offers.find((o) => o.period === demand.period).price}{" "}
-                        DT
+                        {shopInfo.currency}
                       </h4>
                       <LinearProgress />
                       <br />
