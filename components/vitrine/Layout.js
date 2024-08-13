@@ -15,7 +15,7 @@ function Layout({ children, title, description, tags, image }) {
             name="keywords"
             content={
               tags.join(", ") +
-              "Tunisia, e-commerce, free e-commerce website, website creation, online store, business, shopify in tunisia, digital marketplace"
+              "Tunisia, e-commerce, free e-commerce website, website creation, shopify, online store, business, shopify in tunisia, digital marketplace"
             }
           />
         )}
