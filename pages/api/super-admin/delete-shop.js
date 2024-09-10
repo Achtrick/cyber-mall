@@ -34,7 +34,6 @@ handler.post(auth, async (req, res) => {
       shop: mongoose.Types.ObjectId(shopId),
     });
     await Order.deleteMany({ shop: mongoose.Types.ObjectId(shopId) });
-    await Shop.findByIdAndDelete(shopId);
 
     const categories = await ProductCategory.find({
       shop: mongoose.Types.ObjectId(shopId),
@@ -44,6 +43,7 @@ handler.post(auth, async (req, res) => {
       await deleteCategory(category._id);
     }
 
+    await Shop.findByIdAndDelete(shopId);
     res.status(200).json({
       message: `deleted shop: ${shop.name}`,
     });
