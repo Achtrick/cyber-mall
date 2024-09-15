@@ -2,16 +2,17 @@ import multer from "multer";
 import nc from "next-connect";
 import auth from "../../middlewares/admin-auth";
 
-const upload = multer({
-  storage: multer.diskStorage({
-    destination: "./public/uploads",
-    filename: (req, file, cb) => {
-      const uniqueFilename =
-        Date.now().toString() + "." + file.mimetype.split("/").pop();
-      cb(null, uniqueFilename);
-    },
-  }),
+const storage = multer.diskStorage({
+  destination: "./public/uploads",
+  filename: (req, file, cb) => {
+    const uniqueFilename =
+      Date.now().toString() + "." + file.mimetype.split("/").pop();
+    console.log(uniqueFilename);
+    cb(null, uniqueFilename);
+  },
 });
+
+const upload = multer({ storage });
 
 const handler = nc();
 
