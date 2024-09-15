@@ -33,8 +33,8 @@ function HomeSlider({ slides, disabled, shopInfo, ...props }) {
                         slide.image !== "slider-placeholder.jpg"
                           ? `/api/images/${slide.image.split("/").pop()}${
                               isMobile
-                                ? "?width=450&height=450"
-                                : "?width=900&height=900"
+                                ? "?width=950&height=540"
+                                : "?width=1920&height=1080"
                             }`
                           : "/images/slider-placeholder.jpg"
                       }
@@ -58,8 +58,8 @@ function HomeSlider({ slides, disabled, shopInfo, ...props }) {
                         slide.image !== "slider-placeholder.jpg"
                           ? `/api/images/${slide.image.split("/").pop()}${
                               isMobile
-                                ? "?width=450&height=450"
-                                : "?width=900&height=900"
+                                ? "?width=950&height=540"
+                                : "?width=1920&height=1080"
                             }`
                           : "/images/slider-placeholder.jpg"
                       }
@@ -75,8 +75,8 @@ function HomeSlider({ slides, disabled, shopInfo, ...props }) {
                       slide.image !== "slider-placeholder.jpg"
                         ? `/api/images/${slide.image.split("/").pop()}${
                             isMobile
-                              ? "?width=450&height=450"
-                              : "?width=900&height=900"
+                              ? "?width=950&height=540"
+                              : "?width=1920&height=1080"
                           }`
                         : "/images/slider-placeholder.jpg"
                     }

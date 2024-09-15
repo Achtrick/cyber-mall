@@ -160,7 +160,7 @@ function Product({ shop, slug }) {
                               <img
                                 src={`/api/images/${image
                                   .split("/")
-                                  .pop()}?width=500&height=500`}
+                                  .pop()}?width=1600&height=840`}
                                 onError={(e) => {
                                   e.target.src =
                                     "/images/image-placeholder.jpg";

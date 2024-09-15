@@ -32,7 +32,9 @@ function XGallery({ shopInfo, content, disabled, props }) {
             src={
               content[0]?.image.length
                 ? `/api/images/${content[0]?.image.split("/").pop()}${
-                    isMobile ? "?width=450&height=450" : "?width=900&height=900"
+                    isMobile
+                      ? "?width=950&height=540"
+                      : "?width=1920&height=1080"
                   }`
                 : "/images/image-placeholder.jpg"
             }
@@ -64,7 +66,9 @@ function XGallery({ shopInfo, content, disabled, props }) {
             src={
               content[1]?.image.length
                 ? `/api/images/${content[1]?.image.split("/").pop()}${
-                    isMobile ? "?width=450&height=450" : "?width=900&height=900"
+                    isMobile
+                      ? "?width=950&height=540"
+                      : "?width=1920&height=1080"
                   }`
                 : "/images/image-placeholder.jpg"
             }
@@ -98,7 +102,9 @@ function XGallery({ shopInfo, content, disabled, props }) {
             src={
               content[2]?.image.length
                 ? `/api/images/${content[2]?.image.split("/").pop()}${
-                    isMobile ? "?width=450&height=450" : "?width=900&height=900"
+                    isMobile
+                      ? "?width=950&height=540"
+                      : "?width=1920&height=1080"
                   }`
                 : "/images/image-placeholder.jpg"
             }
@@ -130,7 +136,9 @@ function XGallery({ shopInfo, content, disabled, props }) {
             src={
               content[3]?.image.length
                 ? `/api/images/${content[3]?.image.split("/").pop()}${
-                    isMobile ? "?width=450&height=450" : "?width=900&height=900"
+                    isMobile
+                      ? "?width=950&height=540"
+                      : "?width=1920&height=1080"
                   }`
                 : "/images/image-placeholder.jpg"
             }

@@ -94,7 +94,7 @@ function XMagnifier({ image, alt, ...props }) {
             </div>
           )}
           <img
-            src={`/api/images/${image.split("/").pop()}?width=1080&height=1080`}
+            src={`/api/images/${image.split("/").pop()}?width=1920&height=1080`}
             onLoad={() => {
               setLoading(false);
             }}
