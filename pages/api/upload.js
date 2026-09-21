@@ -42,11 +42,15 @@ const handler = nc({
   onError: (err, req, res) => {
     const known = err?.status === 400 || err?.name === "MulterError";
     if (!known) console.error(err);
+    // storage (Vercel Blob) errors are configuration problems and carry no secrets
+    const storage = err?.name === "BlobError" || err?.constructor?.name?.startsWith("Blob");
     res.status(known ? 400 : 500).json({
       message: known
         ? err.code === "LIMIT_FILE_SIZE"
           ? "Image is too large (4 MB max)"
           : err.message
+        : storage
+        ? `Storage error: ${String(err.message).slice(0, 200)}`
         : "Upload failed",
     });
   },

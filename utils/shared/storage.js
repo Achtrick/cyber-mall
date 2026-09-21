@@ -7,13 +7,32 @@ import path from "path";
 // "/api/images/<name>" in the UI), so nothing else needs to change.
 const PREFIX = "uploads/";
 
-export const saveFile = async (fileName, buffer, contentType) =>
-  put(PREFIX + fileName, buffer, {
-    access: "public",
-    contentType,
-    addRandomSuffix: false,
-    allowOverwrite: true,
-  });
+// A Blob store is either public or private and put() rejects the wrong access
+// mode ("Cannot use public access on a private store"). Try one, fall back to
+// the other and remember what worked so any store type works without config.
+let accessMode = null;
+const isAccessModeError = (e) => /access on an? (public|private) store/i.test(e?.message || "");
+
+export const saveFile = async (fileName, buffer, contentType) => {
+  const order = accessMode === "private" ? ["private", "public"] : ["public", "private"];
+  let lastError;
+  for (const access of order) {
+    try {
+      const blob = await put(PREFIX + fileName, buffer, {
+        access,
+        contentType,
+        addRandomSuffix: false,
+        allowOverwrite: true,
+      });
+      accessMode = access;
+      return blob;
+    } catch (e) {
+      lastError = e;
+      if (!isAccessModeError(e)) throw e;
+    }
+  }
+  throw lastError;
+};
 
 export const getFileUrl = async (fileName) => {
   const { blobs } = await list({ prefix: PREFIX + fileName, limit: 1 });
