@@ -53,7 +53,7 @@ function XModal({
                       variant="contained"
                       onClick={cancelAction}
                     >
-                      annuler
+                      cancel
                     </Button>
                     &nbsp;
                     <Button
@@ -64,7 +64,7 @@ function XModal({
                       onClick={confirmAction ? confirmAction : null}
                       form={formId ? formId : null}
                     >
-                      confirmer
+                      confirm
                     </Button>
                   </>
                 )}

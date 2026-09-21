@@ -1,51 +1,119 @@
+// Split auth card: form on one side, illustration panel on the other.
 .container {
   display: flex;
   justify-content: center;
-  margin: 20px 0px;
+  padding: 0 16px;
   h1 {
     text-transform: capitalize;
-    font-size: 2.2rem;
-    margin: 0px;
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0px 0px 22px;
+    color: var(--ink);
   }
   form {
-    max-width: 500px;
+    width: 100%;
+    max-width: 360px;
+    margin: 0 auto;
+    padding: 0;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+  }
+  a {
+    color: var(--second-color);
+    font-weight: 600;
+    transition: color 0.2s ease;
   }
   a:hover {
     text-decoration: underline;
   }
   .row {
-    width: 90%;
+    width: 100%;
+    max-width: 980px;
+    margin: 24px 0 60px;
     display: flex;
+    align-items: stretch;
+    gap: 0;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 28px;
+    box-shadow: 0 30px 70px -32px rgba(84, 41, 128, 0.35);
+    overflow: hidden;
   }
   p {
     font-size: 14px;
-    text-transform: capitalize;
+    color: var(--ink-soft);
     margin: 0px;
+    text-transform: capitalize;
   }
   .col {
-    width: 50%;
-    margin: 0px 0px;
-    padding: 0px 20px;
+    flex: 1 1 50%;
+    min-width: 0;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+  }
+  .col:first-child {
+    padding: 44px 40px;
+    text-align: center;
+    p {
+      margin-top: 6px;
+    }
+  }
+  .col:last-child {
+    position: relative;
+    padding: 36px;
+    background: radial-gradient(
+        circle at 20% 15%,
+        rgba(255, 255, 255, 0.7),
+        transparent 45%
+      ),
+      linear-gradient(155deg, #efe0ff 0%, #ffd9ec 100%);
+    overflow: hidden;
+    &::before,
+    &::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.45);
+      pointer-events: none;
+    }
+    &::before {
+      width: 220px;
+      height: 220px;
+      top: -70px;
+      right: -60px;
+    }
+    &::after {
+      width: 140px;
+      height: 140px;
+      bottom: -40px;
+      left: -30px;
+    }
     img {
-      width: 80%;
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 400px;
+      height: auto;
+      filter: drop-shadow(0 18px 24px rgba(84, 41, 128, 0.18));
     }
   }
   .conditions {
     display: flex;
     justify-content: flex-start;
     align-items: center;
+    margin: 6px 0px;
     input {
-      width: 15px;
-      height: 15px;
-      margin: 5px;
+      width: 16px;
+      height: 16px;
+      margin: 5px 8px 5px 5px;
+      accent-color: var(--second-color);
       cursor: pointer;
     }
     label {
-      color: blue;
+      color: var(--second-color);
       text-decoration: underline;
       font-size: 14px;
       cursor: pointer;
@@ -54,28 +122,36 @@
 }
 .passwordContainer {
   width: 100%;
+  max-width: var(--form-max);
+  position: relative;
   display: flex;
   align-items: center;
+  input {
+    padding-right: 48px;
+  }
 }
 .passwordVisibilityIcon {
-  margin-left: -45px;
+  position: absolute !important;
+  right: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-left: 0 !important;
 }
+
 @media (max-width: 800px) {
   .container {
     h1 {
-      font-size: 1.8rem;
-    }
-    .form {
-      width: 100%;
+      font-size: 1.7rem;
     }
     .row {
-      width: 100%;
       flex-direction: column;
+      margin: 12px 0 40px;
+      border-radius: 22px;
     }
-    .col {
-      width: 100%;
+    .col:first-child {
+      padding: 32px 20px;
     }
-    img {
+    .col:last-child {
       display: none;
     }
   }

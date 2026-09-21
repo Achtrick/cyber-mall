@@ -175,7 +175,7 @@ function ProductsSlider({ disabled, products, shopInfo, title, buttonAction }) {
                   {product.qty < 1 ? <OutOfStock /> : null}
                   <XButton
                     color={shopInfo.settings.primaryColor}
-                    text={"Acheter"}
+                    text={"Buy"}
                     disabled={product.qty < 1}
                     action={
                       buttonAction ? () => checkVariants(product) : () => {}

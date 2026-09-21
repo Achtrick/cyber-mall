@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import styles from "../../styles/vitrine/Navbar.module.scss";
+import useHideOnScroll from "../../utils/shared/useHideOnScroll";
 import { CloseIcon, MenuIcon } from "../../utils/theme/icons";
 
 function Navbar() {
@@ -11,12 +12,14 @@ function Navbar() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const router = useRouter();
 
+  const hidden = useHideOnScroll({ disabled: drawerOpen });
+
   useEffect(() => {
-    document.addEventListener("scroll", () => {
-      const scrollCheck = window.scrollY > 10;
-      setScrolled(scrollCheck);
-    });
-  });
+    const onScroll = () => setScrolled(window.scrollY > 10);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
   const toggleMenu = () => {
     setDrawerOpen(!drawerOpen);
   };
@@ -37,7 +40,7 @@ function Navbar() {
             }}
             href={"/"}
           >
-            <p>Accueil</p>
+            <p>Home</p>
           </Link>
           <Link
             onClick={() => {
@@ -45,7 +48,7 @@ function Navbar() {
             }}
             href={"/#how-to"}
           >
-            <p>Comment ça marche</p>
+            <p>How it works</p>
           </Link>
           <Link
             onClick={() => {
@@ -53,7 +56,7 @@ function Navbar() {
             }}
             href={"/pricing"}
           >
-            <p>Tarifs</p>
+            <p>Pricing</p>
           </Link>
           <Link
             onClick={() => {
@@ -69,7 +72,7 @@ function Navbar() {
             }}
             href={"/login"}
           >
-            <p>se connecter</p>
+            <p>log in</p>
           </Link>
           <Link
             onClick={() => {
@@ -77,7 +80,7 @@ function Navbar() {
             }}
             href={"/register"}
           >
-            <p>s&apos;inscrire</p>
+            <p>sign up</p>
           </Link>
           <IconButton
             sx={{ padding: "20px" }}
@@ -89,11 +92,13 @@ function Navbar() {
         </div>
       </Drawer>
       <section
-        className={
-          scrolled || router?.pathname !== "/"
-            ? `${styles.navbar} + ${styles.scrolled}`
-            : styles.navbar
-        }
+        className={[
+          styles.navbar,
+          scrolled || router?.pathname !== "/" ? styles.scrolled : "",
+          hidden ? styles.hidden : "",
+        ]
+          .filter(Boolean)
+          .join(" ")}
       >
         <IconButton onClick={toggleMenu} className={styles.drawerbtn}>
           <MenuIcon style={{ color: "white" }} />
@@ -113,23 +118,25 @@ function Navbar() {
         </Link>
         <ul>
           <li>
-            <Link href="/">Accueil</Link>
+            <Link href="/">Home</Link>
           </li>
           <li>
-            <Link href="/pricing">Tarifs</Link>
+            <Link href="/pricing">Pricing</Link>
           </li>
-          <Link href={"/#how-to"}>Comment ça marche</Link>
+          <li>
+            <Link href={"/#how-to"}>How it works</Link>
+          </li>
           <li>
             <Link href="/contact">Contact</Link>
           </li>
         </ul>
         <div className={styles.buttons}>
           <Link href={"/login"}>
-            <Button className={styles.login}>se&nbsp;connecter</Button>
+            <Button className={styles.login}>log&nbsp;in</Button>
           </Link>
           &nbsp;&nbsp;
           <Link href={"/register"}>
-            <Button className={styles.register}>s&apos;inscrire</Button>
+            <Button className={styles.register}>sign up</Button>
           </Link>
         </div>
       </section>

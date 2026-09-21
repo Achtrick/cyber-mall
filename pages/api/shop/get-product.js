@@ -1,27 +1,30 @@
-import mongoose from "mongoose";
 import nc from "next-connect";
 import Product from "../../../models/product.model";
 import connectDB from "../../../utils/connectDB";
+import { fail, isObjectId, str } from "../../../utils/shared/security";
 
 const handler = nc();
 
 handler.post(async (req, res) => {
-  const { shop, slug } = req.body;
-  const query = {
-    shop: mongoose.Types.ObjectId(shop),
-    slug: slug,
-  };
+  const { shop } = req.body || {};
+  const slug = str(req.body?.slug, 260);
+  // plain values only: objects like {"$ne": null} must never reach the query
+  if (!isObjectId(shop) || !slug) {
+    return res.status(400).json({ message: "Product link not found!" });
+  }
 
   try {
     await connectDB();
-    const product = await Product.findOne(query).populate({ path: "category" });
+    const product = await Product.findOne({ shop, slug }).populate({
+      path: "category",
+    });
     if (product) {
       res.status(200).json(product);
     } else {
-      res.status(400).json({ message: "Lien de produit introuvable !" });
+      res.status(400).json({ message: "Product link not found!" });
     }
   } catch (err) {
-    res.status(400).json(err);
+    fail(res, err);
   }
 });
 

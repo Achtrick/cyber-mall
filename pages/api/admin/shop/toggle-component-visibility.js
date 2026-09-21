@@ -1,16 +1,21 @@
-import mongoose from "mongoose";
 import nc from "next-connect";
 import auth from "../../../../middlewares/admin-auth";
 import Shop from "../../../../models/shop.model";
 import connectDB from "../../../../utils/connectDB";
+import { resolveShop } from "../../../../utils/shared/auth";
+import { fail, str } from "../../../../utils/shared/security";
 
 const handler = nc();
 
 handler.post(auth, async (req, res) => {
-  await connectDB();
-  const { shopId, componentName } = req.body;
-  const shop = await Shop.findById(mongoose.Types.ObjectId(shopId));
+  // always the caller's own shop; a foreign shop id in the body is rejected
+  const shopId = resolveShop(req, res, req.body?.shopId);
+  if (!shopId) return;
+  const componentName = str(req.body?.componentName, 40);
   try {
+    await connectDB();
+    const shop = await Shop.findById(shopId);
+    if (!shop) return res.status(404).json({ message: "Shop not found" });
     switch (componentName) {
       case "categoriesComponent":
         shop.architecture = {
@@ -53,9 +58,9 @@ handler.post(auth, async (req, res) => {
     }
     await shop.save();
 
-    res.status(200).json({ message: "Données enregistrer", shopInfo: shop });
+    res.status(200).json({ message: "Data saved", shopInfo: shop });
   } catch (err) {
-    res.status(400).json(err);
+    fail(res, err, 400, "Could not save the changes");
   }
 });
 

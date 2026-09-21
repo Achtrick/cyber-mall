@@ -1,18 +1,21 @@
-import fs from "fs";
 import nextConnect from "next-connect";
 import Vibrant from "node-vibrant";
 import path from "path";
 import sharp from "sharp";
+import { getFileBuffer } from "../../../../utils/shared/storage";
 import { deduceColor } from "../../../../utils/config/convertHelper";
 
 const handler = nextConnect();
 
 handler.get(async (req, res) => {
   try {
-    const { imgUrl } = req.query;
+    const imgUrl = path.basename(String(req.query.imgUrl ?? ""));
+    if (!/^[A-Za-z0-9][A-Za-z0-9._-]{0,150}$/.test(imgUrl)) {
+      return res.status(404).end();
+    }
 
-    const imagePath = path.join(process.cwd(), "public/uploads", imgUrl);
-    const imageBuffer = fs.readFileSync(imagePath);
+    const imageBuffer = await getFileBuffer(imgUrl);
+    if (!imageBuffer) return res.status(404).end();
 
     const resizedImageBuffer = await sharp(imageBuffer)
       .resize({
@@ -20,13 +23,17 @@ handler.get(async (req, res) => {
         height: parseInt(192),
         fit: sharp.fit.fill,
       })
+      .png() // node-vibrant (jimp) cannot decode WebP/AVIF, always hand it a PNG
       .toBuffer();
 
     const sharpImage = sharp(resizedImageBuffer);
-    const vibrant = await Vibrant.from(resizedImageBuffer).getPalette();
-    const mostProminentColor = vibrant.Vibrant
-      ? vibrant.Vibrant.getHex()
-      : "#ffffff";
+    let mostProminentColor = "#ffffff";
+    try {
+      const vibrant = await Vibrant.from(resizedImageBuffer).getPalette();
+      if (vibrant.Vibrant) mostProminentColor = vibrant.Vibrant.getHex();
+    } catch (e) {
+      // keep the default colour
+    }
 
     const outputImageBuffer = await sharpImage
       .extend({
@@ -50,10 +57,15 @@ handler.get(async (req, res) => {
       .toBuffer();
 
     res.setHeader("Content-Type", "image/png");
+    res.setHeader("X-Content-Type-Options", "nosniff");
+    res.setHeader(
+      "Cache-Control",
+      "public, max-age=86400, s-maxage=31536000, stale-while-revalidate=86400"
+    );
     res.status(200).send(outputImageBuffer);
   } catch (error) {
     console.error("Error processing image:", error);
-    res.status(500).json({ error: "Internal server error" });
+    res.status(500).json({ message: "Internal server error" });
   }
 });
 

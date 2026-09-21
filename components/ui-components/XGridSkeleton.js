@@ -25,16 +25,16 @@ function XGridSkeleton({ title }) {
             return (
               <SwiperSlide key={index}>
                 <div className={styles.category}>
-                  {title.includes("Catégories") ? (
+                  {title.includes("Categories") ? (
                     <>
                       <img src="/images/category.svg" alt={title} />
-                      <p>Catégorie</p>
+                      <p>Category</p>
                     </>
                   ) : (
                     <>
                       <img src="/images/image-placeholder.jpg" alt={title} />
                       <h4 style={{ margin: "5px 0px" }}>Designation</h4>
-                      <p>prix</p>
+                      <p>price</p>
                     </>
                   )}
                 </div>

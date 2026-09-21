@@ -1,6 +1,6 @@
-import { Check, Receipt } from "@mui/icons-material";
-import { IconButton, Skeleton, Tooltip } from "@mui/material";
+import { Skeleton } from "@mui/material";
 import axios from "axios";
+import EmptyState from "../../components/ui-components/EmptyState";
 import moment from "moment";
 import { useSnackbar } from "notistack";
 import { useEffect, useRef, useState } from "react";
@@ -15,11 +15,7 @@ import XPagination from "../../components/ui-components/XPagination";
 import styles from "../../styles/admin/Dashboard.module.scss";
 import { checkExpirity } from "../../utils/shared/checkExpirity";
 import { getError } from "../../utils/shared/getError";
-import {
-  DeleteIcon,
-  SearchIcon,
-  VisibilityIcon,
-} from "../../utils/theme/icons";
+import { SearchIcon } from "../../utils/theme/icons";
 
 function Orders() {
   let executeSearchTimeout;
@@ -145,7 +141,7 @@ function Orders() {
           {action === "CLOSE-ORDER" ? (
             <>
               <p>
-                êtes-vous sûr de clôturer la commande pour le client &apos;
+                are you sure you want to confirm the order for the customer &apos;
                 {order.user.firstName + " " + order.user.lastName}&apos; ?
               </p>
               <br />
@@ -153,7 +149,7 @@ function Orders() {
           ) : action === "DELETE-ORDER" ? (
             <>
               <p>
-                êtes-vous sûr de supprimer la commande pour le client &apos;
+                are you sure you want to delete the order for the customer &apos;
                 {order.user.firstName + " " + order.user.lastName}&apos; ?
               </p>
               <br />
@@ -176,10 +172,10 @@ function Orders() {
                 <thead>
                   <tr>
                     <th>image</th>
-                    <th>désignation</th>
-                    <th>prix</th>
-                    <th>qté</th>
-                    <th>total unitaire</th>
+                    <th>designation</th>
+                    <th>price</th>
+                    <th>qty</th>
+                    <th>unit total</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -206,13 +202,13 @@ function Orders() {
                             }}
                           />
                         </td>
-                        <td data-label="désignation">{product.designation}</td>
-                        <td data-label="prix">
+                        <td data-label="designation">{product.designation}</td>
+                        <td data-label="price">
                           {product.price.toLocaleString() +
                             " " +
                             userInfo.shop.currency}
                         </td>
-                        <td data-label="qté">{product.qty}</td>
+                        <td data-label="qty">{product.qty}</td>
                         <td data-label="total">
                           {(product.qty * product.price).toLocaleString() +
                             " " +
@@ -234,7 +230,7 @@ function Orders() {
                         return sum + product.price * product.qty;
                       }, 0) > userInfo.shop.freeShipping
                         ? ""
-                        : "+ frais de livraison : " +
+                        : "+ shipping fee : " +
                           userInfo.shop.shippingFee +
                           +" " +
                           userInfo.shop.currency}
@@ -242,11 +238,27 @@ function Orders() {
                   </tr>
                 </tbody>
               </table>
+              <div className="btn-group" style={{ justifyContent: "flex-end", marginTop: "16px" }}>
+                <button className="btn" onClick={cancelAction}>
+                  Close
+                </button>
+                {order.state === "WAITING" ? (
+                  <button
+                    className="btn btn-success"
+                    disabled={loadingCloseOrder}
+                    onClick={closeOrder}
+                  >
+                    {loadingCloseOrder ? "Confirming..." : "Confirm order"}
+                  </button>
+                ) : (
+                  <span className="pill">Order confirmed</span>
+                )}
+              </div>
             </>
           ) : null}
         </XModal>
         <section className={styles.container}>
-          <h1>Commandes</h1>
+          <h1>Orders</h1>
           <div className={styles.controls}>
             <XPagination
               color="secondary"
@@ -260,7 +272,7 @@ function Orders() {
               <input
                 style={{ paddingLeft: "30px" }}
                 className="defaultInput"
-                placeholder="Client"
+                placeholder="Customer"
                 onChange={onSearchTermChange}
               />
             </div>
@@ -276,13 +288,13 @@ function Orders() {
               <table className="defaultTable">
                 <thead>
                   <tr>
-                    <th>Client</th>
-                    <th>Téléphone</th>
-                    <th>Adresse</th>
+                    <th>Customer</th>
+                    <th>Phone</th>
+                    <th>Address</th>
                     <th>Date</th>
                     <th>Total</th>
-                    <th>Nbr Articles</th>
-                    <th>État</th>
+                    <th>Items</th>
+                    <th>Status</th>
                     <th>actions</th>
                   </tr>
                 </thead>
@@ -290,11 +302,11 @@ function Orders() {
                   {orders.map((order) => {
                     return (
                       <tr key={order._id}>
-                        <td data-label="Client">
+                        <td data-label="Customer">
                           {order.user.firstName + " " + order.user.lastName}
                         </td>
-                        <td data-label="Téléphone">{order.user.phone}</td>
-                        <td data-label="Adresse">
+                        <td data-label="Phone">{order.user.phone}</td>
+                        <td data-label="Address">
                           {order.user.address +
                             " " +
                             order.user.city +
@@ -313,7 +325,7 @@ function Orders() {
                             " " +
                             userInfo.shop.currency}
                         </td>
-                        <td data-label="Nbr Articles">
+                        <td data-label="Items">
                           {order.products.reduce((count, product) => {
                             return count + product.qty;
                           }, 0)}
@@ -327,37 +339,33 @@ function Orders() {
                             }
                           >
                             {order.state === "WAITING"
-                              ? "En Attente"
-                              : "Clôturée"}
+                              ? "Pending"
+                              : "Closed"}
                           </p>
                         </td>
                         <td>
-                          <div className="centered-row">
-                            <Tooltip title="Voir Commande">
-                              <IconButton
-                                color="info"
+                          <div className="btn-group">
+                            <button
+                              className="btn btn-sm"
+                              onClick={() => {
+                                setOrder(order);
+                                setAction("SHOW-ORDER");
+                                setTitle("Order preview");
+                              }}
+                            >
+                              View
+                            </button>
+                            {order.state === "WAITING" ? (
+                              <button
+                                className="btn btn-sm btn-success"
                                 onClick={() => {
                                   setOrder(order);
-                                  setAction("SHOW-ORDER");
-                                  setTitle("Aperçu de la commande");
+                                  setAction("CLOSE-ORDER");
+                                  setTitle("Confirm the order");
                                 }}
                               >
-                                <VisibilityIcon sx={{ width: "20px" }} />
-                              </IconButton>
-                            </Tooltip>
-                            {order.state === "WAITING" ? (
-                              <Tooltip title="Clôturer">
-                                <IconButton
-                                  color="info"
-                                  onClick={() => {
-                                    setOrder(order);
-                                    setAction("CLOSE-ORDER");
-                                    setTitle("Clôturer La Commande");
-                                  }}
-                                >
-                                  <Check sx={{ width: "20px" }} />
-                                </IconButton>
-                              </Tooltip>
+                                Confirm
+                              </button>
                             ) : null}
                             {order.state === "CLOSED" ? (
                               userInfo?.shop.pack.type === "PREMIUM" ? (
@@ -369,42 +377,34 @@ function Orders() {
                                     });
                                   }}
                                   trigger={() => (
-                                    <Tooltip title="Imprimer">
-                                      <IconButton color="info">
-                                        <Receipt sx={{ width: "20px" }} />
-                                      </IconButton>
-                                    </Tooltip>
+                                    <button className="btn btn-sm">Print</button>
                                   )}
                                   content={() => receiptRef.current}
                                 />
                               ) : (
-                                <Tooltip title="Imprimer">
-                                  <IconButton
-                                    onClick={() =>
-                                      enqueueSnackbar(
-                                        "Passez à PREMIUM pour bénéficier de cette fonctionnalité !",
-                                        { variant: "warning" }
-                                      )
-                                    }
-                                    color="info"
-                                  >
-                                    <Receipt sx={{ width: "20px" }} />
-                                  </IconButton>
-                                </Tooltip>
+                                <button
+                                  className="btn btn-sm"
+                                  onClick={() =>
+                                    enqueueSnackbar(
+                                      "Upgrade to PREMIUM to benefit from this feature!",
+                                      { variant: "warning" }
+                                    )
+                                  }
+                                >
+                                  Print
+                                </button>
                               )
                             ) : null}
-                            <Tooltip title="Supprimer">
-                              <IconButton
-                                color="error"
-                                onClick={() => {
-                                  setOrder(order);
-                                  setAction("DELETE-ORDER");
-                                  setTitle("Supprimer la commande");
-                                }}
-                              >
-                                <DeleteIcon sx={{ width: "20px" }} />
-                              </IconButton>
-                            </Tooltip>
+                            <button
+                              className="btn btn-sm btn-danger"
+                              onClick={() => {
+                                setOrder(order);
+                                setAction("DELETE-ORDER");
+                                setTitle("Delete the order");
+                              }}
+                            >
+                              Delete
+                            </button>
                           </div>
                         </td>
                       </tr>
@@ -412,6 +412,13 @@ function Orders() {
                   })}
                 </tbody>
               </table>
+              {!orders.length ? (
+                <EmptyState
+                  art="cart"
+                  title="No orders yet"
+                  text="New orders from your shop will appear here."
+                />
+              ) : null}
             </section>
           )}
         </section>
@@ -461,10 +468,10 @@ function Orders() {
               <table className="fixedTable">
                 <thead>
                   <tr>
-                    <th>désignation</th>
-                    <th>prix</th>
-                    <th>qté</th>
-                    <th>total unitaire</th>
+                    <th>designation</th>
+                    <th>price</th>
+                    <th>qty</th>
+                    <th>unit total</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -500,7 +507,7 @@ function Orders() {
                         return sum + product.price * product.qty;
                       }, 0) > userInfo.shop.freeShipping
                         ? ""
-                        : "+ frais de livraison : " +
+                        : "+ shipping fee : " +
                           userInfo.shop.shippingFee +
                           " " +
                           userInfo.shop.currency}
@@ -511,7 +518,7 @@ function Orders() {
               <br />
               <div className={styles.row}>
                 <p></p>
-                <p>créé à: {moment().format("DD-MM-YYYY")}</p>
+                <p>created at: {moment().format("DD-MM-YYYY")}</p>
               </div>
             </>
           )}

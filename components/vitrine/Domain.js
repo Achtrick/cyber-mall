@@ -5,13 +5,13 @@ function Domain(props) {
     <section className="vitrine-block">
       <div className="row">
         <div className="col">
-          <p data-aos="fade-up">Intégrer un nom de domaine</p>
+          <p data-aos="fade-up">Integrate a domain name</p>
           <p data-aos="fade-up">
-            Intégrez facilement votre nom de domaine en un seul clic.
+            Easily integrate your domain name in a single click.
           </p>
           <p data-aos="fade-up">
-            même si vous n&apos;en avez pas, nous serons là pour vous aider à en
-            obtenir un!
+            even if you don&apos;t have one, we will be there to help you get
+            one!
           </p>
         </div>
         <div className="col">

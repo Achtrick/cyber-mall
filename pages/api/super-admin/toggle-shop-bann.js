@@ -1,12 +1,14 @@
 import nc from "next-connect";
 import Shop from "../../../models/shop.model";
 import connectDB from "../../../utils/connectDB";
+import { fail, isObjectId } from "../../../utils/shared/security";
 import auth from "../../../middlewares/super-admin-auth";
 
 const handler = nc();
 
 handler.put(auth, async (req, res) => {
-  const { _id } = req.body;
+  const _id = req.body?._id;
+  if (!isObjectId(_id)) return res.status(400).json({ message: "Invalid shop" });
   try {
     await connectDB();
 
@@ -18,7 +20,7 @@ handler.put(auth, async (req, res) => {
       message: `shop: ${shop.name} is now ${shop.banned ? "banned" : "active"}`,
     });
   } catch (err) {
-    res.status(400).json(err);
+    return fail(res, err);
   }
 });
 

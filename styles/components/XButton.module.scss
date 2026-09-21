@@ -1,7 +1,19 @@
 .xbutton {
   border: none;
-  padding: 7px 10px;
-  border-radius: 4px;
+  padding: 9px 16px;
+  border-radius: 10px;
   text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.03em;
   cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.25s ease, filter 0.2s ease;
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+    filter: brightness(1.05);
+  }
+  &:active {
+    transform: translateY(0);
+    box-shadow: none;
+  }
 }

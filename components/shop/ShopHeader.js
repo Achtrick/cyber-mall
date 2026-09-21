@@ -12,8 +12,10 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import XBadge from "../../components/ui-components/XBadge";
 import XHr from "../../components/ui-components/XHr";
+import EmptyState from "../../components/ui-components/EmptyState";
 import styles from "../../styles/shop/ShopHeader.module.scss";
 import { deduceColor } from "../../utils/config/convertHelper";
+import useHideOnScroll from "../../utils/shared/useHideOnScroll";
 import {
   CloseIcon,
   FacebookIcon,
@@ -41,6 +43,9 @@ function ShopHeader({ shopInfo, ...props }) {
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [cart, setCart] = useState(null);
+  const headerHidden = useHideOnScroll({
+    disabled: drawerOpen || searchOpen || cartPreviewOpen,
+  });
 
   const [loadingCategories, setLoadingCategories] = useState(true);
   const [categories, setCategories] = useState([]);
@@ -54,7 +59,7 @@ function ShopHeader({ shopInfo, ...props }) {
     if (shop) {
       setCart(carts?.find((cart) => cart.shop === shop));
     } else {
-      enqueueSnackbar("Lien de shop invalide", { variant: "error" });
+      enqueueSnackbar("Invalid shop link", { variant: "error" });
       router.push("/");
     }
   }, [carts]);
@@ -158,7 +163,7 @@ function ShopHeader({ shopInfo, ...props }) {
       >
         <section className={styles.search}>
           <form
-            style={{ width: "90%" }}
+            style={{ flex: 1, minWidth: 0, margin: "0 0 0 24px" }}
             onSubmit={(e) => {
               e.preventDefault();
               navigateToSeacrh(searchTerm);
@@ -167,12 +172,13 @@ function ShopHeader({ shopInfo, ...props }) {
             <input
               id="searchInput"
               type="text"
-              placeholder="Qu'est-ce que vous cherchez ?"
+              placeholder="What are you looking for?"
               className="defaultInput"
               style={{
                 border: `1px solid ${shopInfo.settings.primaryColor}`,
-                fontSize: "12px",
-                fontStyle: "italic",
+                fontSize: "14px",
+                maxWidth: "none",
+                width: "100%",
               }}
               value={searchTerm}
               onChange={(e) => {
@@ -231,7 +237,7 @@ function ShopHeader({ shopInfo, ...props }) {
                 }}
                 aria-selected={!router.pathname.includes("products")}
               >
-                Accueil
+                Home
               </div>
             </Link>
             <Link
@@ -381,11 +387,10 @@ function ShopHeader({ shopInfo, ...props }) {
             />
           ) : (
             <>
-              <h2>Votre panier est vide !</h2>
-              <XHr
-                width="60px"
-                height="2px"
-                color={shopInfo.settings.secondaryColor}
+              <EmptyState
+                art="cart"
+                title="Your cart is empty"
+                text="Products you add will show up here."
               />
             </>
           )}
@@ -399,6 +404,8 @@ function ShopHeader({ shopInfo, ...props }) {
           boxShadow: `0px 0px 2px ${deduceColor(
             shopInfo.settings.headerColor
           )}`,
+          transform: headerHidden ? "translateY(-110%)" : "translateY(0)",
+          transition: "transform 0.35s ease",
         }}
       >
         <div className={styles.menu}>

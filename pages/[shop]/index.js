@@ -38,7 +38,7 @@ function Shop({ shop }) {
     if (shop) {
       getShopInfo();
     } else {
-      enqueueSnackbar("Lien de shop invalide", { variant: "error" });
+      enqueueSnackbar("Invalid shop link", { variant: "error" });
       router.push("/");
     }
   }, []);
@@ -140,7 +140,7 @@ function Shop({ shop }) {
       },
     });
     dispatch({ type: "TOGGLE_CART_PREVIEW" });
-    enqueueSnackbar(`${product.designation} Ajouté au panier`, {
+    enqueueSnackbar(`${product.designation} added to cart`, {
       variant: "info",
     });
   };
@@ -207,7 +207,7 @@ function Shop({ shop }) {
                     shopInfo={shopInfo}
                   />
                 ) : (
-                  <XGridSkeleton title={"Découvrir Nos Catégories"} />
+                  <XGridSkeleton title={"Discover Our Categories"} />
                 )}
               </div>
             ) : null}
@@ -249,11 +249,11 @@ function Shop({ shop }) {
                   <ProductsSlider
                     shopInfo={shopInfo}
                     products={discounts}
-                    title={"Obtenez plus pour moins cher !"}
+                    title={"Get more for less!"}
                     buttonAction={addTocart}
                   />
                 ) : (
-                  <XGridSkeleton title={"Obtenez plus pour moins cher !"} />
+                  <XGridSkeleton title={"Get more for less!"} />
                 )}
               </div>
             ) : null}

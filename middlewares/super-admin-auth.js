@@ -1,15 +1,20 @@
-import jwt from "jsonwebtoken";
-
-const secret = process.env.JWT_SUPER_ADMIN_SECRET;
+import { authenticate } from "../utils/shared/auth";
 
 const auth = async (req, res, next) => {
-  const token = req.headers.authorization;
+  let session = null;
   try {
-    jwt.verify(token, secret);
-    next();
+    session = await authenticate(req, { allowAdmin: false, allowSuperAdmin: true });
   } catch (error) {
-    res.status(401).json({ message: "Session expirée" });
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
   }
+  if (!session) {
+    return res
+      .status(401)
+      .json({ message: "Session expired", expired: true });
+  }
+  req.auth = session;
+  next();
 };
 
 export default auth;

@@ -2,11 +2,13 @@ import nc from "next-connect";
 import auth from "../../../middlewares/super-admin-auth";
 import Shop from "../../../models/shop.model";
 import connectDB from "../../../utils/connectDB";
+import { fail, isObjectId } from "../../../utils/shared/security";
 
 const handler = nc();
 
 handler.put(auth, async (req, res) => {
-  const { shopId } = req.body;
+  const shopId = req.body?.shopId;
+  if (!isObjectId(shopId)) return res.status(400).json({ message: "Invalid shop" });
   try {
     await connectDB();
 
@@ -20,8 +22,7 @@ handler.put(auth, async (req, res) => {
       message: `downgraded shop: ${shop.name} subscription`,
     });
   } catch (err) {
-    console.log(err);
-    res.status(400).json(err);
+    return fail(res, err);
   }
 });
 

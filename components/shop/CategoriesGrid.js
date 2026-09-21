@@ -12,7 +12,7 @@ function CategoriesGrid({ disabled, categories, architecture, shopInfo }) {
   };
   return (
     <section className={styles.container}>
-      <h2>découvrir nos catégories</h2>
+      <h2>discover our categories</h2>
       <br />
       {categories?.filter((category) =>
         architecture.home.categoriesComponent.selectedCategoriesIds.includes(

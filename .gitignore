@@ -37,6 +37,12 @@ next-env.d.ts
 
 certificates
 
-/public/manifests
 /public/uploads
-/public/domainNames
+
+# secrets / certificates (never commit)
+.env
+.env.production
+.env.development
+ssl/
+*.p7b
+*.ca-bundle

@@ -4,6 +4,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import { Outfit, Plus_Jakarta_Sans } from "next/font/google";
 import { useRouter } from "next/router";
 import { SnackbarProvider } from "notistack";
 import PropTypes from "prop-types";
@@ -14,6 +15,17 @@ import { store, wrapper } from "../redux/store";
 import "../styles/globals.scss";
 import createEmotionCache from "../utils/config/cahce";
 import lightTheme from "../utils/theme/theme";
+
+const fontBody = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  display: "swap",
+  weight: ["300", "400", "500", "600", "700", "800"],
+});
+const fontHeading = Outfit({
+  subsets: ["latin"],
+  display: "swap",
+  weight: ["400", "500", "600", "700", "800"],
+});
 
 const clientSideEmotionCache = createEmotionCache();
 
@@ -31,16 +43,22 @@ function MyApp(props) {
 
   return (
     <>
+      <style jsx global>{`
+        :root {
+          --font-body: ${fontBody.style.fontFamily};
+          --font-heading: ${fontHeading.style.fontFamily};
+        }
+      `}</style>
       <CookieConsent
         location="bottom"
-        buttonText="Je Comprend"
+        buttonText="I Understand"
         cookieName="cyber-mall-cookies-consent"
         style={{ background: "#000", borderTop: "1px solid #ccc" }}
         buttonStyle={{ backgroundColor: "#fff", fontSize: "15px" }}
         expires={150}
       >
-        Ce site utilise des cookies pour améliorer l&apos;expérience
-        utilisateur.
+        This site uses cookies to improve the user
+        experience.
       </CookieConsent>
       <Provider store={store}>
         <CacheProvider value={emotionCache}>

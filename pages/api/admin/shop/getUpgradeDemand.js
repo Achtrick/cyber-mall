@@ -2,18 +2,22 @@ import nc from "next-connect";
 import auth from "../../../../middlewares/admin-auth";
 import UpgradeDemand from "../../../../models/upgradeDemand.model";
 import connectDB from "../../../../utils/connectDB";
+import { resolveShop } from "../../../../utils/shared/auth";
+import { fail } from "../../../../utils/shared/security";
 
 const handler = nc();
 
 handler.post(auth, async (req, res) => {
-  await connectDB();
-  const { shop } = req.body;
+  // always the caller's own shop; a foreign shop id in the body is rejected
+  const shopId = resolveShop(req, res, req.body?.shop);
+  if (!shopId) return;
 
   try {
-    const demand = await UpgradeDemand.findOne({ shop: shop });
+    await connectDB();
+    const demand = await UpgradeDemand.findOne({ shop: shopId });
     res.status(200).json(demand);
   } catch (err) {
-    res.status(400).json(err);
+    fail(res, err);
   }
 });
 

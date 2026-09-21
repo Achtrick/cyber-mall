@@ -1,12 +1,10 @@
-import { Edit } from "@mui/icons-material";
 import {
   CircularProgress,
-  IconButton,
   Skeleton,
-  Tooltip,
   useMediaQuery,
 } from "@mui/material";
 import axios from "axios";
+import EmptyState from "../../components/ui-components/EmptyState";
 import { useSnackbar } from "notistack";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -23,7 +21,6 @@ import {
 import { checkExpirity } from "../../utils/shared/checkExpirity";
 import { checkPremium } from "../../utils/shared/checkPremium";
 import { getError } from "../../utils/shared/getError";
-import { AddIcon, DeleteIcon, ModeEditIcon } from "../../utils/theme/icons";
 
 function Categories() {
   const { userInfo } = useSelector((state) => state.auth);
@@ -106,7 +103,7 @@ function Categories() {
         case AdminActions.ADD:
           if (images === "") {
             setModalLoading(false);
-            return enqueueSnackbar("l'image de la catégorie est requise", {
+            return enqueueSnackbar("the category image is required", {
               variant: "error",
             });
           }
@@ -188,26 +185,26 @@ function Categories() {
           }
           title={
             action === AdminActions.ADD
-              ? "ajouter catégorie"
+              ? "add category"
               : action === AdminActions.UPDATE
-              ? "modifier catégorie"
+              ? "edit category"
               : action === AdminActions.DELETE
-              ? "supprimer catégorie"
+              ? "delete category"
               : null
           }
         >
           {action === AdminActions.DELETE ? (
             <>
               <p>
-                si vous supprimez la catégorie &quot;{category.name}&quot; ,
-                tous les les produits en dessous seront supprimés.
+                if you delete the category &quot;{category.name}&quot; ,
+                all the products under it will be deleted.
               </p>
-              <p>êtes-vous sûr ?</p>
+              <p>are you sure?</p>
             </>
           ) : (
             <form id="product_category_form" onSubmit={handleCategory}>
               <div className="labeledInput">
-                <label>nom</label>
+                <label>name</label>
                 <input
                   value={category.name}
                   className="defaultInput"
@@ -229,7 +226,7 @@ function Categories() {
                 />
               </div>
               <div className="labeledInput">
-                <label>icon (résolution recommandée (250px * 250px))</label>
+                <label>icon (recommended resolution (250px * 250px))</label>
                 <br />
                 {imagesLoading ? (
                   <CircularProgress color="black" size={30} />
@@ -256,38 +253,23 @@ function Categories() {
                   name="icon"
                   onChange={onChange}
                 />
-                <Tooltip
-                  title={
-                    category.icon.length ? "Modifier Image" : "Ajouter Image"
-                  }
+                <label
+                  className="btn btn-sm"
+                  style={{ marginTop: "8px" }}
+                  htmlFor="icon"
                 >
-                  <IconButton
-                    color={category.icon.length ? "warning" : "secondary"}
-                  >
-                    <label
-                      style={{
-                        cursor: "pointer",
-                        width: "25px",
-                        height: "25px",
-                      }}
-                      htmlFor="icon"
-                    >
-                      {!imagesLoading ? (
-                        category.icon.length ? (
-                          <Edit />
-                        ) : (
-                          <AddIcon />
-                        )
-                      ) : null}
-                    </label>
-                  </IconButton>
-                </Tooltip>
+                  {imagesLoading
+                    ? "Uploading..."
+                    : category.icon.length
+                    ? "Change image"
+                    : "Add image"}
+                </label>
               </div>
             </form>
           )}
         </XModal>
         <section className={styles.container}>
-          <h1>Catégories</h1>
+          <h1>Categories</h1>
           {loading ? (
             <Skeleton
               variant="rectangular"
@@ -311,37 +293,32 @@ function Categories() {
                     />
 
                     <p>{category.name}</p>
-                    <div className="centered-row">
-                      <Tooltip title="Modifier">
-                        <IconButton
-                          color="warning"
-                          onClick={() => {
-                            setAction(AdminActions.UPDATE);
-                            setCategory(category);
-                          }}
-                        >
-                          <ModeEditIcon sx={{ width: "20px" }} />
-                        </IconButton>
-                      </Tooltip>
-                      <Tooltip title="Supprimer">
-                        <IconButton
-                          color="error"
-                          onClick={() => {
-                            setAction(AdminActions.DELETE);
-                            setCategory(category);
-                          }}
-                        >
-                          <DeleteIcon sx={{ width: "20px" }} />
-                        </IconButton>
-                      </Tooltip>
+                    <div className="btn-group">
+                      <button
+                        className="btn btn-sm"
+                        onClick={() => {
+                          setAction(AdminActions.UPDATE);
+                          setCategory(category);
+                        }}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        className="btn btn-sm btn-danger"
+                        onClick={() => {
+                          setAction(AdminActions.DELETE);
+                          setCategory(category);
+                        }}
+                      >
+                        Delete
+                      </button>
                     </div>
                   </div>
                 );
               })}
               <div className="card" key={category._id}>
-                <IconButton
-                  color="secondary"
-                  sx={{ width: "40px", height: "40px" }}
+                <button
+                  className="btn btn-primary"
                   onClick={() => {
                     if (userInfo) {
                       checkPremium(
@@ -354,13 +331,19 @@ function Categories() {
                       )();
                     }
                   }}
-                  icon="add"
                 >
-                  <AddIcon />
-                </IconButton>
+                  + Add category
+                </button>
               </div>
             </div>
           )}
+          {!loading && !categories.length ? (
+            <EmptyState
+              art="box"
+              title="No categories yet"
+              text="Use the + button to create your first category."
+            />
+          ) : null}
         </section>
       </DisconnectedGuard>
     </AdminLayout>

@@ -29,7 +29,7 @@ function CartContent({
       <XModal
         size={ModalSizes.SMALL}
         open={product !== null}
-        title={"Retirer De panier"}
+        title={"Remove From Cart"}
         onClose={() => setProduct(null)}
         cancelAction={() => setProduct(null)}
         confirmAction={() => {
@@ -37,11 +37,11 @@ function CartContent({
           setProduct(null);
         }}
       >
-        <p>{` Voulez vous retirez "${product?.designation}" de votre panier ?`}</p>
+        <p>{`Do you want to remove "${product?.designation}" from your cart?`}</p>
       </XModal>
       <XModal
         size={ModalSizes.SMALL}
-        title={` Voulez vous vider votre panier ?`}
+        title={`Do you want to empty your cart?`}
         open={emptyCartAction}
         onClose={() => setEmptyCartAction(false)}
         cancelAction={() => setEmptyCartAction(false)}
@@ -77,8 +77,8 @@ function CartContent({
                 ).toLocaleString() +
                 " " +
                 shopInfo.currency +
-                " reste pour la livraison gratuite"
-              : "✓ Livraison gratuite"}
+                " left for free shipping"
+              : "✓ Free shipping"}
           </p>
           <br />
           <div className={styles.track}>
@@ -112,10 +112,10 @@ function CartContent({
         <thead>
           <tr>
             <th>image</th>
-            <th>désignation</th>
-            <th>prix</th>
-            <th>qté</th>
-            <th>t.u</th>
+            <th>designation</th>
+            <th>price</th>
+            <th>qty</th>
+            <th>total</th>
             <th></th>
           </tr>
         </thead>
@@ -139,11 +139,11 @@ function CartContent({
                       }}
                     />
                   </td>
-                  <td data-label="désignation">{product.designation}</td>
-                  <td data-label="prix">
+                  <td data-label="designation">{product.designation}</td>
+                  <td data-label="price">
                     {product.price.toLocaleString() + " " + shopInfo.currency}
                   </td>
-                  <td data-label="qté">
+                  <td data-label="qty">
                     <div
                       className="row"
                       style={{
@@ -213,8 +213,8 @@ function CartContent({
               {cart.content.reduce((sum, product) => {
                 return sum + product.price * product.qty;
               }, 0) > shopInfo.freeShipping
-                ? "✓ Livraison gratuite"
-                : "frais de livraison : " +
+                ? "✓ Free shipping"
+                : "shipping fee : " +
                   shopInfo.shippingFee +
                   " " +
                   shopInfo.currency}
@@ -226,7 +226,7 @@ function CartContent({
         <XButton
           color={shopInfo.settings.primaryColor}
           inversed={true}
-          text={"vider le panier"}
+          text={"empty cart"}
           action={() => setEmptyCartAction(true)}
         />
         &nbsp;
@@ -234,7 +234,7 @@ function CartContent({
           <XButton
             color={shopInfo.settings.primaryColor}
             inversed={true}
-            text={"Finir Vos Achats"}
+            text={"Complete Your Purchase"}
             action={() => {
               dispatch({ type: "TOGGLE_CART_PREVIEW" });
               router.push(

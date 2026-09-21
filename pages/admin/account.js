@@ -2,7 +2,6 @@ import { Check } from "@mui/icons-material";
 import {
   CircularProgress,
   IconButton,
-  Tooltip,
   useMediaQuery,
 } from "@mui/material";
 import axios from "axios";
@@ -20,9 +19,6 @@ import { checkExpirity } from "../../utils/shared/checkExpirity";
 import { getError } from "../../utils/shared/getError";
 import {
   AccountCircleIcon,
-  CheckCircleIcon,
-  CloseIcon,
-  SettingsIcon,
   VisibilityIcon,
   VisibilityOffIcon,
 } from "../../utils/theme/icons";
@@ -39,10 +35,10 @@ function Account(props) {
   const pack = userInfo?.shop.pack;
 
   const offers = [
-    { period: "1 Mois", price: 49 },
-    { period: "3 Mois", price: 139 },
-    { period: "6 Mois", price: 259 },
-    { period: "12 Mois", price: 499 },
+    { period: "1 Month", price: 49 },
+    { period: "3 Months", price: 139 },
+    { period: "6 Months", price: 259 },
+    { period: "12 Months", price: 499 },
   ];
 
   const [upgradeDemand, setUpgradeDemand] = useState(null);
@@ -104,7 +100,7 @@ function Account(props) {
     if (password !== confirmPassword) {
       setLoadingAccount(false);
 
-      return enqueueSnackbar("Les mots de passe ne correspond pas !", {
+      return enqueueSnackbar("Passwords do not match!", {
         variant: "error",
       });
     }
@@ -176,13 +172,13 @@ function Account(props) {
           setAction("");
         }
       } else {
-        enqueueSnackbar("Sélectionnez d'abord un forfait !", {
+        enqueueSnackbar("Select a plan first!", {
           variant: "warning",
         });
       }
     } else {
       enqueueSnackbar(
-        "Remplir Vos Coordonnées D'abord pour qu'ont peut vous contactez !",
+        "Please fill in your contact details first so we can reach you!",
         { variant: "warning" }
       );
       setOffer(null);
@@ -206,8 +202,8 @@ function Account(props) {
           loading={loadingSubscription}
           title={
             action === "EXTEND"
-              ? "Prolongez votre abonnement"
-              : "Mettez à niveau votre abonnement"
+              ? "Extend your subscription"
+              : "Upgrade your subscription"
           }
           size={isMobile ? ModalSizes.BIG : ModalSizes.MEDIUM}
         >
@@ -232,15 +228,15 @@ function Account(props) {
               })}
             </div>
             <p>
-              sélectionner une offre et procéder à l&apos;exécution de la
-              transaction :
+              select an offer and proceed with the
+              transaction:
             </p>
             <br />
             {offer && (
               <span>
                 <p style={{ color: "blue" }}>
-                  Après confirmation, Envoyer {offer.price}
-                  &nbsp;DT à:
+                  After confirmation, send {offer.price}
+                  &nbsp;DT to:
                 </p>
                 <ul style={{ color: "blue" }}>
                   <li>RIB: 17503000000268993518</li>{" "}
@@ -261,31 +257,31 @@ function Account(props) {
                     </a>
                   </li>{" "}
                   <li>
-                    Après contactez nous sur whatsapp{" "}
+                    Then contact us on WhatsApp{" "}
                     <a style={{ textDecoration: "underline" }}>47 010 114</a>{" "}
-                    avec une preuve de paiement.
+                    with proof of payment.
                   </li>
                 </ul>{" "}
               </span>
             )}
             <p>
-              accédez au tableau de bord en déplacement et brisez les
-              restrictions !
+              access the dashboard on the go and break the
+              restrictions!
             </p>
             <hr />
             <ul style={{ listStyle: "none", marginLeft: "-20px" }}>
-              <li>- catégories: illimité ✓</li>
-              <li>- produits: illimité ✓</li>
-              <li>- images par produit: jusqu&apos;à 6 ✓</li>
-              <li>- diapositives de la page d&apos;accueil: illimité ✓</li>
-              <li>- génération des factures: permise ✓</li>
-              <li>- nom de domaine de votre choix: permise ✓</li>
+              <li>- categories: unlimited ✓</li>
+              <li>- products: unlimited ✓</li>
+              <li>- images per product: up to 6 ✓</li>
+              <li>- home page slides: unlimited ✓</li>
+              <li>- invoice generation: allowed ✓</li>
+              <li>- custom domain name: allowed ✓</li>
             </ul>
           </section>
         </XModal>
         <section className={styles.container}>
           <div className={styles.controls}>
-            <h1>Compte et abonnement</h1>
+            <h1>Account and subscription</h1>
           </div>
           {userInfo && (
             <section className={styles.account}>
@@ -302,9 +298,10 @@ function Account(props) {
                   {userInfo?.shop.logo ? (
                     <img
                       alt="logo"
-                      src={userInfo?.shop.logo}
+                      src={`/api/images/${userInfo.shop.logo.split("/").pop()}`}
                       onError={(e) => {
-                        setLogo("/images/default-store.png");
+                        e.currentTarget.onerror = null;
+                        e.currentTarget.src = "/images/default-store.png";
                       }}
                       width={"80"}
                       height={"80"}
@@ -324,39 +321,39 @@ function Account(props) {
                   {pack.type !== "FREE" ? (
                     <>
                       <Check />
-                      &nbsp;impression de factures
+                      &nbsp;invoice printing
                     </>
                   ) : null}
                 </p>
                 <p>
                   <Check />
-                  &nbsp;catégories{" "}
-                  {pack.type === "FREE" ? "limité à 5" : "illimitées"}
+                  &nbsp;categories{" "}
+                  {pack.type === "FREE" ? "limited to 5" : "unlimited"}
                 </p>
                 <p>
                   <Check />
-                  &nbsp;produits{" "}
-                  {pack.type === "FREE" ? "limité à 10" : "illimités"}
-                </p>
-                <p>
-                  <Check />
-                  &nbsp;
-                  {pack.type === "FREE"
-                    ? "1 seule image par produit"
-                    : "jusqu'à 6 images par produit"}
+                  &nbsp;products{" "}
+                  {pack.type === "FREE" ? "limited to 10" : "unlimited"}
                 </p>
                 <p>
                   <Check />
                   &nbsp;
                   {pack.type === "FREE"
-                    ? "diapositives limitées à 3"
-                    : "diapositives illimitées"}
+                    ? "1 image per product"
+                    : "up to 6 images per product"}
+                </p>
+                <p>
+                  <Check />
+                  &nbsp;
+                  {pack.type === "FREE"
+                    ? "slides limited to 3"
+                    : "unlimited slides"}
                 </p>
                 <p>
                   {pack.type !== "FREE" ? (
                     <>
                       <Check />
-                      &nbsp;nom de domaine de votre choix
+                      &nbsp;custom domain name
                     </>
                   ) : null}
                 </p>
@@ -364,32 +361,32 @@ function Account(props) {
                 <h5>Pack: {pack.type}</h5>
                 {pack.type !== "FREE" && (
                   <h5>
-                    Expire dans: {moment(pack.expiresIn).format("DD-MM-YYYY")}
+                    Expires on: {moment(pack.expiresIn).format("DD-MM-YYYY")}
                   </h5>
                 )}
                 {pack.type === "FREE" && !upgradeDemand && (
                   <>
-                    <p>passez à premium et bénéficiez de nos services !</p>
+                    <p>upgrade to premium and enjoy our services!</p>
                     <ul>
-                      <li>Impression de facture</li>
-                      <li>Intégration de Nom de domaine de votre choix</li>
-                      <li>Catégories illimitées</li>
-                      <li>Produits illimités</li>
-                      <li>Jusqu&apos;à 6 images par produits</li>
-                      <li>Diapositifs illimitées</li>
-                      <li>Intégration de Nom de domaine de votre choix</li>
+                      <li>Invoice printing</li>
+                      <li>Custom domain name integration</li>
+                      <li>Unlimited categories</li>
+                      <li>Unlimited products</li>
+                      <li>Up to 6 images per product</li>
+                      <li>Unlimited slides</li>
+                      <li>Custom domain name integration</li>
                     </ul>
                   </>
                 )}
                 {upgradeDemand ? (
                   <span>
                     <h4 style={{ color: "blue" }}>
-                      Transférez{" "}
+                      Transfer{" "}
                       {
                         offers.find((o) => o.period === upgradeDemand.period)
                           .price
                       }
-                      &nbsp;DT à:
+                      &nbsp;DT to:
                     </h4>
                     <ul style={{ color: "blue" }}>
                       <li>
@@ -408,15 +405,15 @@ function Account(props) {
                       </li>
                       <li>
                         <h4>
-                          après contactez nous sur whatsapp{" "}
+                          then contact us on WhatsApp{" "}
                           <a style={{ textDecoration: "underline" }}>
                             47 010 114
                           </a>{" "}
-                          avec le numéro de demande{" "}
+                          with the request number{" "}
                           <a style={{ textDecoration: "underline" }}>
                             {upgradeDemand.orderNumber}
                           </a>{" "}
-                          et une preuve de paiement.
+                          and proof of payment.
                         </h4>
                       </li>
                     </ul>
@@ -426,8 +423,8 @@ function Account(props) {
                     color={"#ffc800"}
                     text={
                       pack.type === "FREE"
-                        ? "passer à premium"
-                        : "prolonger l'abonnement"
+                        ? "upgrade to premium"
+                        : "extend subscription"
                     }
                     action={
                       pack.type === "FREE"
@@ -444,34 +441,34 @@ function Account(props) {
                   {loadingAccount ? (
                     <CircularProgress color="black" size={30} />
                   ) : editAccount ? (
-                    <div className="row">
-                      <IconButton color="success" type="submit" form="account">
-                        <Tooltip title="sauvegarder">
-                          <CheckCircleIcon />
-                        </Tooltip>
-                      </IconButton>
-                      <IconButton
-                        color="error"
+                    <div className="btn-group" style={{ marginLeft: "10px" }}>
+                      <button
+                        className="btn btn-sm btn-success"
+                        type="submit"
+                        form="account"
+                      >
+                        Save
+                      </button>
+                      <button
+                        className="btn btn-sm"
+                        type="button"
                         onClick={() => setEditAccount(false)}
                       >
-                        <Tooltip title="annuler">
-                          <CloseIcon />
-                        </Tooltip>
-                      </IconButton>
+                        Cancel
+                      </button>
                     </div>
                   ) : (
-                    <IconButton
-                      color="warning"
+                    <button
+                      className="btn btn-sm"
+                      style={{ marginLeft: "10px" }}
                       onClick={() => {
                         setTimeout(() => {
                           setEditAccount(true);
                         }, 100);
                       }}
                     >
-                      <Tooltip title="modifier">
-                        <SettingsIcon />
-                      </Tooltip>
-                    </IconButton>
+                      Edit account
+                    </button>
                   )}
                 </div>
                 <p>{firstName + " " + lastName}</p>
@@ -494,7 +491,7 @@ function Account(props) {
                     value={phone}
                     name="phone"
                     id="phone"
-                    placeholder="téléphone"
+                    placeholder="phone"
                     onChange={onChange}
                   />
                   <input
@@ -504,7 +501,7 @@ function Account(props) {
                     }
                     value={address}
                     name="address"
-                    placeholder="adresse"
+                    placeholder="address"
                     onChange={onChange}
                   />
                   <div className={styles.passwordContainer}>
@@ -515,7 +512,7 @@ function Account(props) {
                       onChange={onChange}
                       type={passwordVisible ? "text" : "password"}
                       name="password"
-                      placeholder="mot de passe"
+                      placeholder="password"
                       autoComplete="off"
                     />
 
@@ -540,7 +537,7 @@ function Account(props) {
                     }
                     value={confirmPassword}
                     name="confirmPassword"
-                    placeholder="confirmer mot de passe"
+                    placeholder="confirm password"
                     onChange={onChange}
                     autoComplete="off"
                   />

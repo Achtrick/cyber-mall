@@ -1,46 +1,23 @@
-import fs from "fs";
 import mongoose from "mongoose";
 import nc from "next-connect";
-import path from "path";
 import auth from "../../../middlewares/super-admin-auth";
 import DomainDemand from "../../../models/domainDemand.model";
 import Shop from "../../../models/shop.model";
 import User from "../../../models/user.model";
 import connectDB from "../../../utils/connectDB";
+import { escapeHtml, fail, isHostname, isObjectId, str } from "../../../utils/shared/security";
 import { mailcss, transporter } from "../../../utils/shared/mailer";
-import { updateManifestJsonFile } from "../admin/shop/update-logo";
-
-const updateDomainsJsonFile = (shopName, domainName) => {
-  const domainsFilePath = path.join(
-    process.cwd(),
-    "public/domainNames/domainNames.json"
-  );
-
-  const domainsFileContent = JSON.parse(
-    fs.readFileSync(domainsFilePath, "utf8")
-  );
-  let foundOneAndEdited = false;
-  domainsFileContent.map((_) => {
-    if (_.shop === shopName) {
-      _.domain = domainName;
-      foundOneAndEdited = true;
-    }
-  });
-  if (!foundOneAndEdited) {
-    domainsFileContent.push({ shop: shopName, domain: domainName });
-  }
-
-  fs.writeFileSync(
-    domainsFilePath,
-    JSON.stringify(domainsFileContent, null, 2)
-  );
-};
 
 const handler = nc();
 
 handler.post(auth, async (req, res) => {
   await connectDB();
-  const { shopId, domainName } = req.body;
+  const shopId = req.body?.shopId;
+  // bare hostname only: it drives host -> shop routing and goes into an email
+  const domainName = str(req.body?.domainName, 253).toLowerCase().replace(/^www\./, "");
+  if (!isObjectId(shopId) || !isHostname(domainName)) {
+    return res.status(400).json({ message: "Invalid domain name" });
+  }
 
   try {
     const shop = await Shop.findOne({ _id: shopId });
@@ -48,13 +25,6 @@ handler.post(auth, async (req, res) => {
       shop: mongoose.Types.ObjectId(shopId),
     });
     shop.domainName = domainName;
-    updateDomainsJsonFile(shop.name, domainName);
-    updateManifestJsonFile(
-      shop.name,
-      domainName,
-      `/api/images/fill/${shop.logo.split("/").pop()}`,
-      shop.settings.primaryColor
-    );
     await shop.save();
     await DomainDemand.findOneAndRemove({
       shop: mongoose.Types.ObjectId(shopId),
@@ -66,8 +36,8 @@ handler.post(auth, async (req, res) => {
           from: process.env.AUTH_SUPERADMIN_EMAIL,
           to: user.email,
           replyTo: process.env.AUTH_SUPERADMIN_EMAIL,
-          subject: "Intégration de nom de domaine",
-          text: "Intégration de nom de domaine est effectuée avec success.",
+          subject: "Domain name integration",
+          text: "Your domain name integration has been completed successfully.",
           html:
             `<div ` +
             mailcss.background +
@@ -82,13 +52,13 @@ handler.post(auth, async (req, res) => {
             >
             <img style="object-fit: contain;" alt="Cyber-Mall" title="Cyber-Mall" src="https://cyber-mall.tn/images/logo.png" width="70%" height="80px">
             </div>
-            <h1 style="text-transform: capitalize; font-size: 15px; font-wheight:500;" width="100%" text-align="center">Intégration de nom de domaine est effectuée avec success.</h1>
+            <h1 style="text-transform: capitalize; font-size: 15px; font-wheight:500;" width="100%" text-align="center">Domain name integration completed successfully.</h1>
               <div` +
             mailcss.body +
             `>
-              <h3 style="font-size: 10px; font-wheight:300;">félicitation, l'ntégration de votre nom de domaine est effectuée avec success.</h3>
+              <h3 style="font-size: 10px; font-wheight:300;">Congratulations, the integration of your domain name has been completed successfully.</h3>
               <hr/>
-              <h3 style="font-size: 10px; font-wheight:300;">Vous pouvez maintenant accéder à votre site sous l'url: ${domainName}</h3>
+              <h3 style="font-size: 10px; font-wheight:300;">You can now access your site at: ${escapeHtml(domainName)}</h3>
           </div>`,
         },
         (err, info) => {
@@ -101,11 +71,10 @@ handler.post(auth, async (req, res) => {
       );
     });
     res.status(200).json({
-      message: "Nom de domaine modifié.",
+      message: "Domain name updated.",
     });
   } catch (err) {
-    console.log(err);
-    res.status(400).json(err);
+    return fail(res, err);
   }
 });
 

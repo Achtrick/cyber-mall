@@ -102,19 +102,19 @@ function AdminLayout(props) {
           <Link onClick={toggleDrawer} href="/admin/account">
             <div className={`${styles.link} + hoverable`}>
               <Subscription color="primary" />
-              <p>mon compte</p>
+              <p>my account</p>
             </div>
           </Link>
           <Link onClick={toggleDrawer} href="/admin/categories">
             <div className={`${styles.link} + hoverable`}>
               <CategoryIcon color="shop2" />
-              <p>catégories</p>
+              <p>categories</p>
             </div>
           </Link>
           <Link onClick={toggleDrawer} href="/admin/inventory">
             <div className={`${styles.link} + hoverable`}>
               <InventoryIcon color="shop3" />
-              <p>Produits</p>
+              <p>Products</p>
             </div>
           </Link>
           <Link onClick={toggleDrawer} href="/admin/orders">
@@ -122,25 +122,25 @@ function AdminLayout(props) {
               <Badge badgeContent={ordersCount} color="secondary">
                 <LocalShippingIcon color="shop4" />
               </Badge>
-              <p>commandes</p>
+              <p>orders</p>
             </div>
           </Link>
           <Link onClick={toggleDrawer} href="/admin/theme">
             <div className={`${styles.link} + hoverable`}>
               <PaletteIcon color="shop5" />
-              <p>Thème</p>
+              <p>Theme</p>
             </div>
           </Link>
           <Link onClick={toggleDrawer} href="/admin/architecture">
             <div className={`${styles.link} + hoverable`}>
               <SettingsIcon color="shop6" />
-              <p>configurer ma shop</p>
+              <p>configure my shop</p>
             </div>
           </Link>
           <Link onClick={toggleDrawer} href="/admin/domain-name">
             <div className={`${styles.link} + hoverable`}>
               <Language color="shop7" />
-              <p>Nom de domaine</p>
+              <p>Domain name</p>
             </div>
           </Link>
           <Link
@@ -155,12 +155,12 @@ function AdminLayout(props) {
           >
             <div className={`${styles.link} + hoverable`}>
               <TravelExploreIcon />
-              <p>visitez ma shop</p>
+              <p>visit my shop</p>
             </div>
           </Link>
           <span className={styles.logout}>
             <Button variant="contained" color="secondary" onClick={logout}>
-              <ExitToAppIcon></ExitToAppIcon>&nbsp;déconnecter
+              <ExitToAppIcon></ExitToAppIcon>&nbsp;log out
             </Button>
           </span>
         </section>

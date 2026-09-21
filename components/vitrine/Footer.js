@@ -11,7 +11,7 @@ function Footer(props) {
     <section className={styles.container}>
       <div className={styles.row}>
         <div className={styles.col}>
-          <p>réseaux sociaux</p>
+          <p>social media</p>
           <Link
             rel="noreferrer"
             target="_blank"
@@ -39,32 +39,32 @@ function Footer(props) {
         <div className={styles.col}>
           <p>Services</p>
           <p>
-            <Link href={"/#customize"}>Personnalisez votre shop</Link>
+            <Link href={"/#customize"}>Customize your shop</Link>
           </p>
           <p>
-            <Link href={"/#dashboard"}>Tableau de bord tout-en-un</Link>
+            <Link href={"/#dashboard"}>All-in-one dashboard</Link>
           </p>
           <p>
-            <Link href={"/#receipts"}>Générer des factures</Link>
+            <Link href={"/#receipts"}>Generate invoices</Link>
           </p>
           <p>
-            <Link href={"/#domain"}>Intégrer votre nom de domaine</Link>
+            <Link href={"/#domain"}>Integrate your domain name</Link>
           </p>
         </div>
         <div className={styles.col}>
-          <p>Sécurité</p>
+          <p>Security</p>
           <p>
             <Link href={"/condition-of-use"}>
-              Conditions d&apos;utilisation
+              Terms of use
             </Link>
           </p>
           <p>
-            <Link href={"/privacy-policy"}>Politique de confidentialité</Link>
+            <Link href={"/privacy-policy"}>Privacy policy</Link>
           </p>
         </div>
       </div>
       <div className={styles.shoutout}>
-        Développé par&nbsp;
+        Developed by&nbsp;
         <Link rel="noreferrer" target="_blank" href="https://ashref-mtir.dev">
           Ashref-mtir
         </Link>

@@ -1,4 +1,4 @@
-import { CircularProgress, IconButton, Skeleton, Tooltip } from "@mui/material";
+import { CircularProgress, Skeleton } from "@mui/material";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
@@ -22,20 +22,13 @@ import {
 import { checkExpirity } from "../../utils/shared/checkExpirity";
 import { getError } from "../../utils/shared/getError";
 import {
-  AddIcon,
   AddressIcon,
-  ChangeCircleIcon,
-  CheckCircleIcon,
-  CloseIcon,
   FacebookIcon,
   InstagramIcon,
   LinkedInIcon,
   MailIcon,
   PhoneEnabledIcon,
-  SettingsIcon,
   TiktokIcon,
-  VisibilityIcon,
-  VisibilityOffIcon,
   YouTubeIcon,
 } from "../../utils/theme/icons";
 import XGridSkeleton from "./../../components/ui-components/XGridSkeleton";
@@ -503,7 +496,7 @@ function Architecture(props) {
         setSlideImageLoading(false);
       }
     } else {
-      enqueueSnackbar("l'image de la diapositive est requise", {
+      enqueueSnackbar("the slide image is required", {
         variant: "warning",
       });
     }
@@ -581,7 +574,7 @@ function Architecture(props) {
         setGalleryItemImageLoading(false);
       }
     } else {
-      enqueueSnackbar("l'image de l'élément de la galerie est requise", {
+      enqueueSnackbar("the gallery item image is required", {
         variant: "warning",
       });
     }
@@ -622,29 +615,13 @@ function Architecture(props) {
               onError={(e) => {
                 e.target.src = isBase64(slide.image)
                   ? slide.image
-                  : "/images/default-placeholder.jpg";
+                  : "/images/image-placeholder.jpg";
               }}
             />
           ) : null}
-          <Tooltip title="Insérer image">
-            <IconButton
-              color="success"
-              style={{ width: "35px", height: "35px", marginBottom: "20px" }}
-            >
-              <label
-                style={{ cursor: "pointer", width: "25px", height: "25px" }}
-                htmlFor="slide"
-              >
-                {slide.image.length ? (
-                  <ChangeCircleIcon></ChangeCircleIcon>
-                ) : (
-                  <AddIcon></AddIcon>
-                )}
-              </label>
-            </IconButton>
-          </Tooltip>
+          <label className="btn btn-sm" style={{ marginBottom: "20px" }} htmlFor="slide">{slide.image.length ? "Change image" : "Add image"}</label>
           <p>
-            lien de catégorie:{" "}
+            category link:{" "}
             <select
               className="defaultInput"
               value={slide.category}
@@ -657,8 +634,8 @@ function Architecture(props) {
               }
             >
               <option value="">
-                Sélectionnez une catégorie (si vous avez un lien personnalisé,
-                il remplacera ce)
+                Select a category (if you have a custom link,
+                it will replace this one)
               </option>
               {categories.map((category) => {
                 return (
@@ -670,7 +647,7 @@ function Architecture(props) {
             </select>
           </p>
           <p>
-            lien personnalisé:{" "}
+            custom link:{" "}
             <input
               type="text"
               className="defaultInput"
@@ -695,15 +672,15 @@ function Architecture(props) {
 
   const deleteSlideForm = (
     <div>
-      <p>êtes-vous sûr de vouloir supprimer cette diapositive ?</p>
+      <p>are you sure you want to delete this slide?</p>
     </div>
   );
 
   const categoriesGridForm = (
     <form>
       <p>
-        index visible : (cela déterminera l&apos;ordre d&apos;affichage de cette
-        section sur votre page d&apos;accueil)
+        visible index : (this will determine the display order of this
+        section on your home page)
         <input
           type="number"
           min={0}
@@ -720,28 +697,25 @@ function Architecture(props) {
           return (
             <div key={index} className={styles.imgPreview}>
               <div className={styles.closeIcon}>
-                <Tooltip title="Selectionner">
-                  <IconButton
-                    style={{ width: "30px", height: "30px" }}
-                    onClick={(e) => {
+                <button
+                  type="button"
+                  className={`btn btn-sm ${
+                    architecture?.home?.categoriesComponent?.selectedCategoriesIds?.includes(
+                          category._id
+                        ) ? "btn-primary" : ""
+                  }`}
+                  onClick={(e) => {
                       updateCategoriesGrid(
                         e,
                         "selectedCategoriesIds",
                         category._id
                       );
                     }}
-                  >
-                    <CheckCircleIcon
-                      color={
-                        architecture?.home?.categoriesComponent?.selectedCategoriesIds?.includes(
+                >
+                  {architecture?.home?.categoriesComponent?.selectedCategoriesIds?.includes(
                           category._id
-                        )
-                          ? "info"
-                          : "default"
-                      }
-                    />
-                  </IconButton>
-                </Tooltip>
+                        ) ? "Selected" : "Select"}
+                </button>
               </div>
               <img
                 alt={index}
@@ -760,8 +734,8 @@ function Architecture(props) {
   const discountsSectionForm = (
     <form>
       <p>
-        index visible : (cela déterminera l&apos;ordre d&apos;affichage de cette
-        section sur votre page d&apos;accueil)
+        visible index : (this will determine the display order of this
+        section on your home page)
         <input
           type="number"
           min={0}
@@ -787,8 +761,8 @@ function Architecture(props) {
   const galleryOrderForm = (
     <form>
       <p>
-        index visible : (cela déterminera l&apos;ordre d&apos;affichage de cette
-        section sur votre page d&apos;accueil)
+        visible index : (this will determine the display order of this
+        section on your home page)
         <input
           type="number"
           min={0}
@@ -820,23 +794,7 @@ function Architecture(props) {
               }}
             />
           ) : null}
-          <Tooltip title="Insérer image">
-            <IconButton
-              color="success"
-              style={{ width: "35px", height: "35px", marginBottom: "20px" }}
-            >
-              <label
-                style={{ cursor: "pointer", width: "25px", height: "25px" }}
-                htmlFor="item"
-              >
-                {galleryItem.image.length ? (
-                  <ChangeCircleIcon></ChangeCircleIcon>
-                ) : (
-                  <AddIcon></AddIcon>
-                )}
-              </label>
-            </IconButton>
-          </Tooltip>
+          <label className="btn btn-sm" style={{ marginBottom: "20px" }} htmlFor="item">{galleryItem.image.length ? "Change image" : "Add image"}</label>
           <p>
             text:
             <input
@@ -849,7 +807,7 @@ function Architecture(props) {
             />
           </p>
           <p>
-            lien de catégorie:{" "}
+            category link:{" "}
             <select
               className="defaultInput"
               value={galleryItem.category}
@@ -864,8 +822,8 @@ function Architecture(props) {
               }
             >
               <option value="">
-                Sélectionnez une catégorie (si vous avez un lien personnalisé,
-                il remplacera ce)
+                Select a category (if you have a custom link,
+                it will replace this one)
               </option>
               {categories.map((category) => {
                 return (
@@ -877,7 +835,7 @@ function Architecture(props) {
             </select>
           </p>
           <p>
-            lien personnalisé:
+            custom link:
             <input
               type="text"
               className="defaultInput"
@@ -909,7 +867,7 @@ function Architecture(props) {
 
   const deleteGalleryForm = (
     <div>
-      <p>voulez vous supprimer cet élément de la galerie ?</p>
+      <p>do you want to delete this gallery item?</p>
     </div>
   );
 
@@ -972,13 +930,9 @@ function Architecture(props) {
         </XModal>
         <section className={styles.container}>
           <div style={{ padding: "10px" }}>
-            <h1>Configurez votre shop à votre goût</h1>
+            <h1>Configure your shop your way</h1>
             <p>
-              lorsque vous avez terminé, cliquez sur{" "}
-              <IconButton disabled>
-                <CheckCircleIcon />
-              </IconButton>{" "}
-              pour enregistrer vos paramètres
+              when you are done, click on the Save buttons to save your settings
             </p>
           </div>
           {loading && !architecture.home ? (
@@ -997,7 +951,11 @@ function Architecture(props) {
                       {logo ? (
                         <img
                           alt="logo"
-                          src={logo}
+                          src={
+                            logo.startsWith("data:") || logo.startsWith("/cyber-mall")
+                              ? logo
+                              : `/api/images/${logo.split("/").pop()}`
+                          }
                           onError={(e) => {
                             setLogo("/cyber-mall.png");
                           }}
@@ -1043,59 +1001,37 @@ function Architecture(props) {
                   }}
                 />
                 &nbsp;&nbsp;
-                <Tooltip title="Modifier logo">
-                  {compressingLogo ? (
-                    <IconButton>
-                      <CircularProgress size={21} />
-                    </IconButton>
-                  ) : (
-                    <IconButton color="info">
-                      <label
-                        style={{
-                          cursor: "pointer",
-                          width: "25px",
-                          height: "25px",
-                        }}
-                        htmlFor="logo"
-                      >
-                        <SettingsIcon />
-                      </label>
-                    </IconButton>
-                  )}
-                </Tooltip>{" "}
+                {compressingLogo ? (
+                  <span className="btn btn-sm">
+                    <CircularProgress size={16} />
+                  </span>
+                ) : (
+                  <label className="btn btn-sm" htmlFor="logo">
+                    Change logo
+                  </label>
+                )}{" "}
                 |{" "}
-                <Tooltip title="Enregistrer">
-                  {uploadingLogo ? (
-                    <IconButton>
-                      <CircularProgress size={21} />
-                    </IconButton>
-                  ) : (
-                    <span>
-                      <IconButton
-                        disabled={!compressedLogo}
-                        color="info"
-                        onClick={updateLogo}
-                      >
-                        <label
-                          style={{
-                            cursor: "pointer",
-                            width: "25px",
-                            height: "25px",
-                          }}
-                        >
-                          <CheckCircleIcon />
-                        </label>
-                      </IconButton>
-                    </span>
-                  )}
-                </Tooltip>{" "}
+                {uploadingLogo ? (
+                  <span className="btn btn-sm">
+                    <CircularProgress size={16} />
+                  </span>
+                ) : (
+                  <button
+                    type="button"
+                    className="btn btn-sm btn-success"
+                    disabled={!compressedLogo}
+                    onClick={updateLogo}
+                  >
+                    Save logo
+                  </button>
+                )}{" "}
               </div>
               <br />
               <br />
               <hr />
               <br />
               <br />
-              <h1>Devise de shop</h1>
+              <h1>Shop currency</h1>
               <div className="row" style={{ width: "150px" }}>
                 <XAutoComplete
                   options={currencies}
@@ -1106,7 +1042,7 @@ function Architecture(props) {
                     setCurrency(value?.name ?? "");
                     updateCurrency(value?.name ?? "");
                   }}
-                  placeholder="devise"
+                  placeholder="currency"
                 />
               </div>
               <br />
@@ -1114,10 +1050,10 @@ function Architecture(props) {
               <hr />
               <br />
               <br />
-              <h1>Page D&apos;Accueil</h1>
+              <h1>Home Page</h1>
               <p>
-                Glissière, il faut que les images soit la même résolution pour
-                un affichage optimale (la résolution recommandée est de 1500 x
+                Slider: the images must have the same resolution for
+                optimal display (the recommended resolution is 1500 x
                 600)
               </p>
               {loadingSlider ? (
@@ -1142,19 +1078,11 @@ function Architecture(props) {
                           }}
                         >
                           <span className={styles.closeIcon}>
-                            <Tooltip title="Supprimer diapositive">
-                              <IconButton
-                                color="error"
-                                onClick={() => {
+                            <button type="button" className="btn btn-sm btn-danger" onClick={() => {
                                   setSlide(slide);
-                                  setTitle("supprimer la diapositive");
+                                  setTitle("delete the slide");
                                   setAction("DELETE-SLIDE-FORM");
-                                }}
-                                size="small"
-                              >
-                                <CloseIcon />
-                              </IconButton>
-                            </Tooltip>
+                                }}>Delete</button>
                           </span>
                           <img
                             alt={slide.category}
@@ -1163,44 +1091,24 @@ function Architecture(props) {
                               e.target.src = "/images/image-placeholder.jpg";
                             }}
                           />
-                          {slide.link.length ? <p>lien personnalisé</p> : null}
-                          {slide.category.length ? (
-                            <p>catégorie: {slide.category}</p>
+                          {slide.link?.length ? <p>custom link</p> : null}
+                          {slide.category?.length ? (
+                            <p>category: {slide.category}</p>
                           ) : null}
                         </div>
                       );
                     })}
                     {sliderInfo?.length < 3 ||
                     userInfo?.shop.pack.type === "PREMIUM" ? (
-                      <Tooltip title="Ajouter diapositive">
-                        <IconButton
-                          color="success"
-                          onClick={() => {
-                            setTitle("Ajouter diapositive");
+                      <button type="button" className="btn btn-sm btn-primary" onClick={() => {
+                            setTitle("Add slide");
                             setAction("ADD-SLIDE-FROM");
-                          }}
-                          sx={{
-                            width: "45px",
-                            height: "45px",
-                            margin: "30px",
-                          }}
-                        >
-                          <label
-                            style={{
-                              cursor: "pointer",
-                              width: "25px",
-                              height: "25px",
-                            }}
-                          >
-                            <AddIcon></AddIcon>
-                          </label>
-                        </IconButton>
-                      </Tooltip>
+                          }}>+ Add slide</button>
                     ) : null}
                   </div>
                   <br />
                   <br />
-                  <p>Aperçu</p>
+                  <p>Preview</p>
                   <HomeSlider
                     disabled={true}
                     slides={
@@ -1224,41 +1132,17 @@ function Architecture(props) {
               <br />
               <br />
               <p>
-                grille de catégories (sélectionnez les catégories à afficher){" "}
-                <Tooltip title="Modifier">
-                  <IconButton
-                    color="info"
-                    onClick={() => {
+                categories grid (select the categories to display){" "}
+                <button type="button" className="btn btn-sm" onClick={() => {
                       setTitle(
-                        "sélectionner les catégories à afficher dans la grille"
+                        "select the categories to display in the grid"
                       );
                       setAction("CATEGORIES-GRID-FORM");
-                    }}
-                  >
-                    <SettingsIcon />
-                  </IconButton>
-                </Tooltip>{" "}
+                    }}>Edit</button>{" "}
                 |{" "}
-                <Tooltip
-                  title={
-                    architecture.home.categoriesComponent.visible
-                      ? "Masquer de la page d'accueil"
-                      : "Afficher sur la page d'accueil"
-                  }
-                >
-                  <IconButton
-                    color="info"
-                    onClick={async () => {
+                <button type="button" className="btn btn-sm" onClick={async () => {
                       await toggleComponentVisibility("categoriesComponent");
-                    }}
-                  >
-                    {architecture.home.categoriesComponent.visible ? (
-                      <VisibilityOffIcon />
-                    ) : (
-                      <VisibilityIcon />
-                    )}
-                  </IconButton>
-                </Tooltip>{" "}
+                    }}>{architecture.home.categoriesComponent.visible ? "Hide" : "Show"}</button>{" "}
               </p>
               {categories.length ? (
                 <CategoriesGrid
@@ -1268,7 +1152,7 @@ function Architecture(props) {
                   shopInfo={shopInfo}
                 />
               ) : (
-                <XGridSkeleton title={"Découvrir Nos Catégories"} />
+                <XGridSkeleton title={"Discover Our Categories"} />
               )}
               <br />
               <br />
@@ -1276,52 +1160,28 @@ function Architecture(props) {
               <br />
               <br />
               <p>
-                section de réduction (cela affichera des produits à prix réduits
-                aléatoires pour achat rapide)
-                <Tooltip title="Modifier">
-                  <IconButton
-                    color="info"
-                    onClick={() => {
+                discounts section (this will display random discounted
+                products for quick purchase)
+                <button type="button" className="btn btn-sm" onClick={() => {
                       setTitle(
-                        "définir l'ordre d'affichage de la section réductions"
+                        "set the display order of the discounts section"
                       );
                       setAction("DISCOUNT-FORM");
-                    }}
-                  >
-                    <SettingsIcon />
-                  </IconButton>
-                </Tooltip>{" "}
+                    }}>Edit</button>{" "}
                 |{" "}
-                <Tooltip
-                  title={
-                    architecture.home.discountComponent.visible
-                      ? "Masquer de la page d'accueil"
-                      : "Afficher sur la page d'accueil"
-                  }
-                >
-                  <IconButton
-                    color="info"
-                    onClick={async () => {
+                <button type="button" className="btn btn-sm" onClick={async () => {
                       await toggleComponentVisibility("discountComponent");
-                    }}
-                  >
-                    {architecture.home.discountComponent.visible ? (
-                      <VisibilityOffIcon />
-                    ) : (
-                      <VisibilityIcon />
-                    )}
-                  </IconButton>
-                </Tooltip>{" "}
+                    }}>{architecture.home.discountComponent.visible ? "Hide" : "Show"}</button>{" "}
               </p>
               {discounts.length ? (
                 <ProductsSlider
                   disabled={true}
                   products={discounts}
                   shopInfo={shopInfo}
-                  title={"Obtenez plus pour moins cher !"}
+                  title={"Get more for less!"}
                 />
               ) : (
-                <XGridSkeleton title={"Obtenez plus pour moins cher !"} />
+                <XGridSkeleton title={"Get more for less!"} />
               )}
               <br />
               <br />
@@ -1329,43 +1189,19 @@ function Architecture(props) {
               <br />
               <br />
               <p>
-                composant de galerie (cela affichera les images sélectionnées
-                avec chacune d&apos;elles contenant un titre qui s&apos;affiche
-                au survol){" "}
-                <Tooltip title="Ordre d'affichage">
-                  <IconButton
-                    color="info"
-                    onClick={() => {
+                gallery component (this will display the selected images
+                with each of them having a title that is shown
+                on hover){" "}
+                <button type="button" className="btn btn-sm" onClick={() => {
                       setTitle(
-                        "définir l'ordre d'affichage de la section galerie"
+                        "set the display order of the gallery section"
                       );
                       setAction("GALLERY-ORDER-FORM");
-                    }}
-                  >
-                    <SettingsIcon />
-                  </IconButton>
-                </Tooltip>
+                    }}>Display order</button>
                 |{" "}
-                <Tooltip
-                  title={
-                    galleryInfo.visible
-                      ? "Masquer de la page d'accueil"
-                      : "Afficher sur la page d'accueil"
-                  }
-                >
-                  <IconButton
-                    color="info"
-                    onClick={async () => {
+                <button type="button" className="btn btn-sm" onClick={async () => {
                       await toggleComponentVisibility("galleryComponent");
-                    }}
-                  >
-                    {galleryInfo.visible ? (
-                      <VisibilityOffIcon />
-                    ) : (
-                      <VisibilityIcon />
-                    )}
-                  </IconButton>
-                </Tooltip>{" "}
+                    }}>{galleryInfo.visible ? "Hide" : "Show"}</button>{" "}
               </p>
               {loadingGallery ? (
                 <Skeleton
@@ -1390,19 +1226,11 @@ function Architecture(props) {
                           }}
                         >
                           <span className={styles.closeIcon}>
-                            <Tooltip title="Supprimer">
-                              <IconButton
-                                color="error"
-                                onClick={() => {
+                            <button type="button" className="btn btn-sm btn-danger" onClick={() => {
                                   setGalleryItem(block);
-                                  setTitle("supprimer l'élément");
+                                  setTitle("delete the item");
                                   setAction("DELETE-GALLERY-FORM");
-                                }}
-                                size="small"
-                              >
-                                <CloseIcon />
-                              </IconButton>
-                            </Tooltip>
+                                }}>Delete</button>
                           </span>
                           <img
                             alt={block.category}
@@ -1414,42 +1242,22 @@ function Architecture(props) {
                           {block.text?.length ? (
                             <p>text: {block.text}</p>
                           ) : null}
-                          {block.link.length ? <p>lien personnalisé</p> : null}
-                          {block.category.length ? (
-                            <p>catégorie: {block.category}</p>
+                          {block.link?.length ? <p>custom link</p> : null}
+                          {block.category?.length ? (
+                            <p>category: {block.category}</p>
                           ) : null}
                         </div>
                       );
                     })}
                     {galleryInfo?.content?.length < 4 ? (
-                      <Tooltip title="Ajouter">
-                        <IconButton
-                          color="success"
-                          onClick={() => {
-                            setTitle("Ajouter un élément de galerie");
+                      <button type="button" className="btn btn-sm btn-primary" onClick={() => {
+                            setTitle("Add a gallery item");
                             setAction("ADD-GALLERY-FROM");
-                          }}
-                          sx={{
-                            width: "45px",
-                            height: "45px",
-                            margin: "30px",
-                          }}
-                        >
-                          <label
-                            style={{
-                              cursor: "pointer",
-                              width: "25px",
-                              height: "25px",
-                            }}
-                          >
-                            <AddIcon></AddIcon>
-                          </label>
-                        </IconButton>
-                      </Tooltip>
+                          }}>+ Add item</button>
                     ) : null}
                   </div>
                   <br />
-                  <p>Aperçu</p>
+                  <p>Preview</p>
                   <XGallery
                     disabled={true}
                     shopInfo={shopInfo}
@@ -1462,25 +1270,18 @@ function Architecture(props) {
               <hr />
               <br />
               <br />
-              <h1>Informations de livraison</h1>
+              <h1>Shipping information</h1>
               <p>
-                remplissez vos frais de livraison
-                <Tooltip title="Enregistrer">
-                  <IconButton
-                    color="info"
-                    onClick={() => saveArchitecture("shippingFee")}
-                  >
-                    <CheckCircleIcon />
-                  </IconButton>
-                </Tooltip>{" "}
+                fill in your shipping fees
+                <button type="button" className="btn btn-sm btn-success" onClick={() => saveArchitecture("shippingFee")}>Save</button>{" "}
               </p>
               <div className="labeledInput">
-                <label>Frais de livraison :</label>
+                <label>Shipping fee :</label>
               </div>
               <input
                 type="number"
                 name="shippingFee"
-                placeholder={`0,0 ${shopInfo.currency}`}
+                placeholder={`0.0 ${shopInfo.currency}`}
                 value={shopInfo.shippingFee}
                 onChange={(e) => {
                   setShopInfo({
@@ -1493,12 +1294,12 @@ function Architecture(props) {
               />{" "}
               {shopInfo.currency}
               <div className="labeledInput">
-                <label>Livraison gratuite à partir de :</label>
+                <label>Free shipping starting from :</label>
               </div>
               <input
                 type="number"
                 name="freeShipping"
-                placeholder={`0,0 ${shopInfo.currency}`}
+                placeholder={`0.0 ${shopInfo.currency}`}
                 value={shopInfo.freeShipping}
                 onChange={(e) => {
                   setShopInfo({
@@ -1515,24 +1316,17 @@ function Architecture(props) {
               <hr />
               <br />
               <br />
-              <h1>Informations de contact</h1>
+              <h1>Contact information</h1>
               <p>
-                remplissez vos coordonnées
-                <Tooltip title="Enregistrer">
-                  <IconButton
-                    color="info"
-                    onClick={() => saveArchitecture("contactComponent")}
-                  >
-                    <CheckCircleIcon />
-                  </IconButton>
-                </Tooltip>{" "}
+                fill in your contact details
+                <button type="button" className="btn btn-sm btn-success" onClick={() => saveArchitecture("contactComponent")}>Save</button>{" "}
               </p>
               <div className="row" style={{ justifyContent: "flex-start" }}>
                 <AddressIcon />
                 &nbsp;
                 <input
                   name="address"
-                  placeholder="adresse"
+                  placeholder="address"
                   value={architecture.contact.address}
                   onChange={(e) => {
                     setArchitecture({
@@ -1577,7 +1371,7 @@ function Architecture(props) {
                 <input
                   type="number"
                   name="phone"
-                  placeholder="téléphone"
+                  placeholder="phone"
                   value={architecture.contact.direct.phone}
                   onChange={(e) => {
                     setArchitecture({
@@ -1660,22 +1454,15 @@ function Architecture(props) {
               <hr />
               <br />
               <br />
-              <h1>À propos de votre shop</h1>
+              <h1>About your shop</h1>
               <p>
-                qui êtes-vous et que vendez-vous ?
-                <Tooltip title="Enregistrer">
-                  <IconButton
-                    color="info"
-                    onClick={() => saveArchitecture("aboutComponent")}
-                  >
-                    <CheckCircleIcon />
-                  </IconButton>
-                </Tooltip>{" "}
+                who are you and what do you sell?
+                <button type="button" className="btn btn-sm btn-success" onClick={() => saveArchitecture("aboutComponent")}>Save</button>{" "}
               </p>
               <textarea
                 rows={5}
                 name="about"
-                placeholder="je suis une entreprise et je vends des trucs géniaux"
+                placeholder="I am a company and I sell awesome things"
                 value={architecture.about}
                 onChange={(e) => {
                   setArchitecture({ ...architecture, about: e.target.value });

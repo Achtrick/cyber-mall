@@ -16,10 +16,10 @@ export default function Demands(props) {
   let executeSearchTimeout;
 
   const offers = [
-    { period: "1 Mois", price: 30 },
-    { period: "3 Mois", price: 85 },
-    { period: "6 Mois", price: 160 },
-    { period: "12 Mois", price: 300 },
+    { period: "1 Month", price: 49 },
+    { period: "3 Months", price: 139 },
+    { period: "6 Months", price: 259 },
+    { period: "12 Months", price: 499 },
   ];
 
   const { enqueueSnackbar } = useSnackbar();
@@ -160,7 +160,11 @@ export default function Demands(props) {
                       <h4>Order number: {demand.orderNumber}</h4>
                       <h4>
                         Requested Pack: {demand.period} for{" "}
-                        {offers.find((o) => o.period === demand.period).price}
+                        {
+                          offers.find(
+                            (o) => parseInt(o.period) === parseInt(demand.period)
+                          )?.price
+                        }
                       </h4>
                       <LinearProgress />
                       <br />

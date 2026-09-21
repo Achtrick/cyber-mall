@@ -3,27 +3,24 @@ import auth from "../../../middlewares/super-admin-auth";
 import Shop from "../../../models/shop.model";
 import User from "../../../models/user.model";
 import connectDB from "../../../utils/connectDB";
+import { fail, num, searchRegexes } from "../../../utils/shared/security";
 
 const handler = nc();
 
 handler.post(auth, async (req, res) => {
-  const { searchTerm, page } = req.body;
+  const { searchTerm } = req.body || {};
+  const pageNumber = num(req.body?.page, { min: 1, max: 100000, def: 1, int: true });
   const query = {};
 
-  if (searchTerm && searchTerm !== "") {
-    const blocks = searchTerm.split(" ");
-    const terms = blocks.map((b) => ({
-      name: { $regex: ".*" + b + ".*", $options: "i" },
-    }));
-    query.$or = terms;
-  }
+  const terms = searchRegexes(searchTerm).map((r) => ({ name: r }));
+  if (terms.length) query.$or = terms;
 
   try {
     await connectDB();
     const shops = await Shop.find(query)
       .sort({ "pack.type": -1 })
       .limit(20)
-      .skip((page - 1) * 20);
+      .skip((pageNumber - 1) * 20);
     const totalShops = await Shop.countDocuments(query);
     const count = Math.ceil(totalShops / 20);
 
@@ -51,8 +48,7 @@ handler.post(auth, async (req, res) => {
 
     res.status(200).json({ shops: shopsWithUserInfo, count: count });
   } catch (err) {
-    console.log(err);
-    res.status(400).json(err);
+    return fail(res, err);
   }
 });
 

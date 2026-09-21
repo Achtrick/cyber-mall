@@ -2,25 +2,24 @@ import nc from "next-connect";
 import auth from "../../../../middlewares/admin-auth";
 import Order from "../../../../models/order.model";
 import connectDB from "../../../../utils/connectDB";
+import { resolveShop } from "../../../../utils/shared/auth";
+import { fail, num, searchRegexes } from "../../../../utils/shared/security";
 
 const handler = nc();
 
 handler.post(auth, async (req, res) => {
-  const { searchTerm, page, shop } = req.body;
+  const { searchTerm, page, shop } = req.body || {};
+  // always the caller's own shop; a foreign shop id in the body is rejected
+  const shopId = resolveShop(req, res, shop);
+  if (!shopId) return;
 
-  const query = { shop: shop };
+  const query = { shop: shopId };
 
-  if (searchTerm && searchTerm !== "") {
-    var blocks = searchTerm.split(" ");
-    var terms = await blocks.map((b) => ({
-      $or: [
-        { "user.firstName": { $regex: ".*" + b + ".*", $options: "i" } },
-        { "user.lastName": { $regex: ".*" + b + ".*", $options: "i" } },
-      ],
-    }));
-
-    query.$or = terms;
-  }
+  const terms = searchRegexes(searchTerm).map((r) => ({
+    $or: [{ "user.firstName": r }, { "user.lastName": r }],
+  }));
+  if (terms.length) query.$or = terms;
+  const pageNumber = num(page, { min: 1, max: 100000, def: 1, int: true });
 
   try {
     await connectDB();
@@ -29,7 +28,7 @@ handler.post(auth, async (req, res) => {
       .sort({ state: -1 })
       .sort({ createdAt: -1 })
       .limit(20)
-      .skip((page - 1) * 20);
+      .skip((pageNumber - 1) * 20);
 
     const totalOrders = await Order.countDocuments(query);
 
@@ -37,7 +36,7 @@ handler.post(auth, async (req, res) => {
 
     res.status(200).json({ orders: orders, count: count });
   } catch (err) {
-    res.status(400).json(err);
+    fail(res, err);
   }
 });
 

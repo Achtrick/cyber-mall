@@ -12,15 +12,15 @@ function Steps(props) {
   const isMobile = useMediaQuery("(max-width:800px)");
   return (
     <section className={styles.container}>
-      <p>Comment ça marche</p>
+      <p>How it works</p>
       <div className={styles.steps}>
         <div className={styles.step} data-aos="fade-up" data-aos-delay="100">
           <div className={styles.icon}>
             <AppRegistrationIcon color="white" />
           </div>
-          <p>S&apos;inscrire</p>
+          <p>Sign up</p>
           <p>
-            créez votre compte et choisissez un nom unique pour votre business.
+            create your account and choose a unique name for your business.
           </p>
         </div>
         <div align="center">
@@ -30,9 +30,9 @@ function Steps(props) {
           <div className={styles.icon}>
             <CategoryIcon color="white" />
           </div>
-          <p>créez vos catégories</p>
+          <p>create your categories</p>
           <p>
-            organisez vos catégories pour grouper les produits de votre shop.
+            organize your categories to group your shop&apos;s products.
           </p>
         </div>
         <div align="center">
@@ -42,8 +42,8 @@ function Steps(props) {
           <div className={styles.icon}>
             <InventoryIcon color="white" />
           </div>
-          <p>créez vos produits</p>
-          <p>Organisez les produits sous les catégories qui correspondent.</p>
+          <p>create your products</p>
+          <p>Organize products under the matching categories.</p>
         </div>
         {isMobile ? (
           <div align="center">
@@ -54,10 +54,10 @@ function Steps(props) {
           <div className={styles.icon}>
             <Palette color="white" />
           </div>
-          <p>thème et structure</p>
+          <p>theme and structure</p>
           <p>
-            personnalisez votre shop à votre goût et organisez la structure des
-            blocs.
+            customize your shop to your taste and organize the structure of
+            the blocks.
           </p>
         </div>
         <div align="center">
@@ -67,10 +67,10 @@ function Steps(props) {
           <div className={styles.icon}>
             <Language color="white" />
           </div>
-          <p>nom de domaine</p>
+          <p>domain name</p>
           <p>
-            Ajoutez votre nom de domaine afin de rendre l&apos;accès à vos
-            services plus facile. clients.
+            Add your domain name to make it easier for your customers to
+            access your services.
           </p>
         </div>
         <div align="center">
@@ -80,10 +80,10 @@ function Steps(props) {
           <div className={styles.icon}>
             <StorefrontIcon color="white" />
           </div>
-          <p>vente et facturation</p>
+          <p>sales and invoicing</p>
           <p>
-            Tout est fait. Vous pouvez maintenant commencer à accepter des
-            commandes et générer des factures pour vos clients.
+            You&apos;re all set. You can now start accepting orders and
+            generating invoices for your customers.
           </p>
         </div>
       </div>

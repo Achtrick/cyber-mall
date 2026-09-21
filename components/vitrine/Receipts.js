@@ -8,11 +8,11 @@ function Receipts(props) {
           <img data-aos="fade-in" src="/images/invoices.svg" alt="receipts" />
         </div>
         <div className="col">
-          <p data-aos="fade-up">générer les factures</p>
+          <p data-aos="fade-up">generate invoices</p>
           <p data-aos="fade-up">
-            générer des reçus pour les commandes de vos clients
+            generate receipts for your customers&apos; orders
           </p>
-          <p data-aos="fade-up">en un seul clic, vous êtes prêt à partir !</p>
+          <p data-aos="fade-up">in a single click, you&apos;re ready to go!</p>
         </div>
       </div>
     </section>

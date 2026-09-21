@@ -36,7 +36,7 @@ function Cart({ shop }) {
       getShopInfo();
       setCart(carts.find((cart) => cart.shop === shop));
     } else {
-      enqueueSnackbar("Lien de shop invalide", { variant: "error" });
+      enqueueSnackbar("Invalid shop link", { variant: "error" });
       router.push("/");
     }
   }, [carts]);
@@ -118,7 +118,7 @@ function Cart({ shop }) {
         <LoadingScreen />
       ) : (
         <ShopLayout
-          title={"Mon panier"}
+          title={"My cart"}
           description={shopInfo.architecture.about}
           shopInfo={shopInfo}
         >
@@ -147,7 +147,7 @@ function Cart({ shop }) {
                   <div className="row">
                     <input
                       name="firstName"
-                      placeholder="Prénom"
+                      placeholder="First name"
                       type="text"
                       className="defaultInput"
                       value={user.firstName}
@@ -157,7 +157,7 @@ function Cart({ shop }) {
                     &nbsp;
                     <input
                       name="lastName"
-                      placeholder="Nom"
+                      placeholder="Last name"
                       type="text"
                       className="defaultInput"
                       value={user.lastName}
@@ -168,7 +168,7 @@ function Cart({ shop }) {
                   <div className="row">
                     <input
                       name="address"
-                      placeholder="Adresse"
+                      placeholder="Address"
                       type="text"
                       className="defaultInput"
                       value={user.address}
@@ -179,7 +179,7 @@ function Cart({ shop }) {
                   <div className="row">
                     <input
                       name="postalCode"
-                      placeholder="Code Postal"
+                      placeholder="Postal code"
                       type="text"
                       className="defaultInput"
                       value={user.postalCode}
@@ -189,7 +189,7 @@ function Cart({ shop }) {
                     &nbsp;
                     <input
                       name="city"
-                      placeholder="Ville"
+                      placeholder="City"
                       type="text"
                       className="defaultInput"
                       value={user.city}
@@ -200,7 +200,7 @@ function Cart({ shop }) {
                   <div className="row">
                     <input
                       name="phone"
-                      placeholder="Téléphone"
+                      placeholder="Phone"
                       type="number"
                       className="defaultInput"
                       value={user.phone}
@@ -212,7 +212,7 @@ function Cart({ shop }) {
                     <XButton
                       color={shopInfo.settings.primaryColor}
                       inversed={true}
-                      text={"Passer la commande"}
+                      text={"Place order"}
                       loading={loadingOrder}
                     />
                   </div>
@@ -220,13 +220,13 @@ function Cart({ shop }) {
               </CartContent>
             ) : (
               <div className={styles.emptyContainer}>
-                <h2>Votre panier est vide !</h2>
+                <h2>Your cart is empty!</h2>
                 <div className="row">
                   <XHr color={shopInfo.settings.primaryColor} width="50px" />
                 </div>
                 <XButton
                   color={shopInfo.settings.primaryColor}
-                  text={"allez faire du shopping"}
+                  text={"go shopping"}
                   action={() => router.push(`/${shop}/products`)}
                 />
               </div>

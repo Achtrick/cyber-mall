@@ -52,12 +52,12 @@ function DomainName(props) {
           formId={"domain_name_form"}
           cancelAction={cancelAction}
           size={ModalSizes.SMALL}
-          title="Modifier votre nom de domaine"
+          title="Edit your domain name"
         >
           <form id="domain_name_form" onSubmit={updateDomainName}>
             <div className="labeledInput">
               <label>
-                Nouveau Nom de domaine sans http:// et sans www (exemple:
+                New domain name without http:// and without www (example:
                 domain.com)
               </label>
               <input
@@ -67,8 +67,8 @@ function DomainName(props) {
                 onChange={(e) => setDomainName(e.target.value)}
               />
               <p>
-                Après modification de nom de domaine ajouter ces informations
-                dans votre espace DNS:
+                After changing the domain name, add this information
+                to your DNS settings:
               </p>
               <br />
               <table className="fixedTable">
@@ -85,7 +85,7 @@ function DomainName(props) {
                     <td>{domainName.length ? domainName : "example.com"}</td>
                     <td>0</td>
                     <td>A</td>
-                    <td>194.164.51.41</td>
+                    <td>76.76.21.21</td>
                   </tr>
                 </tbody>
               </table>
@@ -94,27 +94,27 @@ function DomainName(props) {
         </XModal>
         <section className={styles.container}>
           <div className={styles.controls} style={{ justifyContent: "center" }}>
-            <h1>Nom de domaine</h1>
+            <h1>Domain name</h1>
           </div>
           {userInfo?.shop.pack.type === "FREE" ? (
             <>
               <p>
-                vous devez etre sous pack PREMIUM pour bénéficiez de nom de
-                domaine personnalisé !
+                you must be on the PREMIUM pack to benefit from a custom
+                domain name!
               </p>
               <Link
                 style={{ color: "blue", textDecoration: "underline" }}
                 href={"/admin/account"}
               >
-                Passer à PREMIUM maintenant !
+                Upgrade to PREMIUM now!
               </Link>
             </>
           ) : (
             <section align="center">
               <p style={{ textTransform: "unset", fontWeight: "500" }}>
                 {userInfo?.shop?.domainName.length
-                  ? "Nom de domaine: " + userInfo?.shop?.domainName
-                  : "Votre shop est maitenant accessible sous le lien : https://cyber-mall.tn/" +
+                  ? "Domain name: " + userInfo?.shop?.domainName
+                  : "Your shop is now available at: https://cyber-mall.tn/" +
                     userInfo?.shop.name}
               </p>
               <br />
@@ -128,7 +128,7 @@ function DomainName(props) {
                 }}
                 onClick={() => setAction("UPDATE")}
               >
-                Changer le nom de domaine
+                Change the domain name
               </Button>
             </section>
           )}

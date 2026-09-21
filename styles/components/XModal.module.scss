@@ -4,37 +4,39 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  outline: none;
 }
 .modal {
   position: relative;
-  background-color: white;
-  border-radius: 4px;
+  background-color: #fff;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 24px 64px rgba(27, 22, 34, 0.35);
+  overflow: hidden;
+  animation: modalIn 0.22s ease both;
   .header {
-    height: 40px;
-    padding: 10px 5px;
+    height: 52px;
+    padding: 6px 8px 6px 18px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: black;
-    border-radius: 4px 4px 0px 0px;
-    border: 1px solid #ccc;
+    background: linear-gradient(120deg, #1b1622 0%, #3a2450 100%);
     p {
       margin: 0px;
-      padding: 5px;
-      font-size: 14px;
+      padding: 5px 0;
+      font-size: 13px;
+      font-weight: 600;
       color: white;
       text-transform: uppercase;
-      letter-spacing: 2px;
-      line-height: 15px;
+      letter-spacing: 0.14em;
+      line-height: 16px;
     }
   }
   .content {
-    padding: 10px;
-    padding-bottom: 60px;
+    padding: 18px 20px;
+    padding-bottom: 80px;
     overflow-y: auto;
     width: 100%;
-    height: calc(100% - 40px);
-    overflow-y: auto;
+    height: calc(100% - 52px);
     overflow-x: hidden;
     p {
       margin: 0px;
@@ -42,13 +44,18 @@
     }
   }
   .controls {
-    height: 55px;
+    height: 64px;
     display: flex;
     align-items: center;
     justify-content: flex-end;
     position: absolute;
-    right: 15px;
-    bottom: 2px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 0 20px;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(6px);
+    border-top: 1px solid var(--line);
   }
 }
 .big {
@@ -61,11 +68,36 @@
 }
 .small {
   width: 60vw;
+  max-width: 720px;
   max-height: 60vh;
 }
 .xsmall {
   width: 30vw;
-  max-height: 30vh;
+  min-width: 340px;
+  max-width: 92vw;
+  max-height: 40vh;
+}
+
+.small,
+.xsmall {
+  display: flex;
+  flex-direction: column;
+  .content {
+    flex: 1 1 auto;
+    min-height: 0;
+    height: auto;
+  }
+}
+
+@keyframes modalIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 @media (max-width: 800px) {
@@ -75,22 +107,28 @@
     margin-top: -5vh;
   }
   .medium {
-    width: 90vw;
-    height: 65vh;
+    width: 92vw;
+    height: 70vh;
   }
   .small {
-    width: 90vw;
-    max-height: 70vh;
+    width: 92vw;
+    max-height: 75vh;
   }
   .xsmall {
-    width: 90vw;
-    max-height: 55vh;
+    width: 92vw;
+    min-width: 0;
+    max-height: 60vh;
   }
   .modal {
     .content {
+      padding: 16px;
+      padding-bottom: 80px;
       p {
         font-size: 13px;
       }
+    }
+    .controls {
+      padding: 0 16px;
     }
   }
 }

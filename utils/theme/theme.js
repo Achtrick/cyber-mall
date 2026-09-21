@@ -1,10 +1,70 @@
 import { createTheme } from "@mui/material/styles";
 
+const bodyFont = "var(--font-body), system-ui, sans-serif";
+const headingFont = "var(--font-heading), var(--font-body), sans-serif";
+
 const lightTheme = createTheme({
+  shape: { borderRadius: 12 },
+  typography: {
+    fontFamily: bodyFont,
+    h1: { fontFamily: headingFont, fontWeight: 700 },
+    h2: { fontFamily: headingFont, fontWeight: 700 },
+    h3: { fontFamily: headingFont, fontWeight: 600 },
+    h4: { fontFamily: headingFont, fontWeight: 600 },
+    h5: { fontFamily: headingFont, fontWeight: 600 },
+    h6: { fontFamily: headingFont, fontWeight: 600 },
+    button: { fontWeight: 600 },
+  },
   components: {
     MuiButton: {
       styleOverrides: {
-        root: { minWidth: 0 },
+        root: {
+          minWidth: 0,
+          borderRadius: 10,
+          transition: "all 0.25s ease",
+        },
+      },
+    },
+    MuiPaper: {
+      styleOverrides: {
+        root: { transition: "box-shadow 0.3s ease, transform 0.3s ease" },
+      },
+    },
+    MuiOutlinedInput: {
+      styleOverrides: {
+        root: {
+          borderRadius: 12,
+          backgroundColor: "#fff",
+          fontSize: 14,
+          transition: "box-shadow 0.2s ease",
+          "& .MuiOutlinedInput-notchedOutline": {
+            borderColor: "#cfc7dc",
+            transition: "border-color 0.2s ease",
+          },
+          "&:hover .MuiOutlinedInput-notchedOutline": {
+            borderColor: "#bb84e8",
+          },
+          "&.Mui-focused": { boxShadow: "0 0 0 3px #bb84e83d" },
+          "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+            borderColor: "#bb84e8",
+            borderWidth: 1,
+          },
+        },
+      },
+    },
+    MuiTextField: {
+      defaultProps: { size: "small" },
+      styleOverrides: { root: { maxWidth: "100%" } },
+    },
+    MuiAutocomplete: {
+      styleOverrides: {
+        paper: {
+          borderRadius: 12,
+          marginTop: 6,
+          boxShadow: "0 12px 32px rgba(27, 22, 34, 0.16)",
+          border: "1px solid #e6e1ee",
+        },
+        option: { fontSize: 14 },
       },
     },
   },

@@ -5,12 +5,16 @@ export async function middleware(request) {
   const hostname = request.headers.get("host");
 
   const url = new URL(request.url);
-  const domainsJsonUrl = `${url.origin}/domainNames/domainNames.json`;
+  const domainsJsonUrl = `${url.origin}/api/domains`;
 
   let basePath = "";
 
   // READ DOMAIN NAME FILE
-  const domains = await (await fetch(domainsJsonUrl)).json();
+  let domains = [];
+  try {
+    const r = await fetch(domainsJsonUrl, { next: { revalidate: 60 } });
+    if (r.ok) domains = await r.json();
+  } catch (e) {}
 
   // DOMAIN NAMES SECTION
   domains.forEach((_) => {

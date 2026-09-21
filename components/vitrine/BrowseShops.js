@@ -5,6 +5,7 @@ import { useSnackbar } from "notistack";
 import React, { useEffect, useState } from "react";
 import { ActivityDomains } from "../../utils/shared/activityDomains";
 import { getError } from "../../utils/shared/getError";
+import EmptyState from "../ui-components/EmptyState";
 import XAutoComplete from "../ui-components/XAutoComplete";
 import XPagination from "../ui-components/XPagination";
 
@@ -59,7 +60,7 @@ function BrowseShops(props) {
   return (
     <section className="vitrine-block">
       <p data-aos="fade-up">
-        Veux-tu faire du shopping? Va faire un tour dans nos shops.
+        Want to go shopping? Take a look around our shops.
       </p>
       <div className="row" data-aos="fade-up" data-aos-delay="200">
         <XAutoComplete
@@ -71,7 +72,7 @@ function BrowseShops(props) {
             setActivityDomain(value?.name ?? "");
           }}
           required={true}
-          placeholder="domaine d'activité"
+          placeholder="activity domain"
         />
       </div>
       <br />
@@ -125,10 +126,11 @@ function BrowseShops(props) {
               />
             </>
           ) : activityDomain.length ? (
-            <p>
-              Aucun résultat n&apos;a été trouvé pour ce domaine
-              d&apos;activité.
-            </p>
+            <EmptyState
+              art="search"
+              title="No shops here yet"
+              text="No results were found for this activity domain."
+            />
           ) : null}
         </>
       )}

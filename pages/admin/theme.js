@@ -1,6 +1,4 @@
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import ContentPasteIcon from "@mui/icons-material/ContentPaste";
-import { CircularProgress, IconButton, Skeleton, Tooltip } from "@mui/material";
+import { CircularProgress, IconButton, Skeleton } from "@mui/material";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
@@ -18,7 +16,7 @@ import themeStyles from "../../styles/admin/Theme.module.scss";
 import { deduceColor } from "../../utils/config/convertHelper";
 import { checkExpirity } from "../../utils/shared/checkExpirity";
 import { getError } from "../../utils/shared/getError";
-import { PaletteIcon, ShoppingCartIcon } from "../../utils/theme/icons";
+import { ShoppingCartIcon } from "../../utils/theme/icons";
 function Theme(props) {
   const { userInfo } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
@@ -94,12 +92,12 @@ function Theme(props) {
         settings: { ...colors, [color]: copiedColor },
       });
       setCopiedColor(null);
-      enqueueSnackbar("Couleur appliquée", {
+      enqueueSnackbar("Color applied", {
         variant: "info",
       });
     } else {
       setCopiedColor(colors[color]);
-      enqueueSnackbar("Couleur copiée", {
+      enqueueSnackbar("Color copied", {
         variant: "info",
       });
     }
@@ -134,14 +132,10 @@ function Theme(props) {
         </XModal>
         <section className={styles.container}>
           <div className={styles.controls} style={{ justifyContent: "center" }}>
-            <h1>Thème</h1>
+            <h1>Theme</h1>
           </div>
           <p>
-            cliquer sur{" "}
-            <IconButton disabled>
-              <PaletteIcon color="warning" />
-            </IconButton>{" "}
-            pour changer le couleur
+            use the Change color buttons below to edit each color
           </p>
 
           {loading ? (
@@ -161,42 +155,30 @@ function Theme(props) {
                     color: deduceColor(colors.headerColor),
                   }}
                 >
-                  voici à quoi ressemblera votre barre de navigation
-                  <Tooltip title="Modifier">
-                    <IconButton
-                      onClick={() => {
-                        setTitle("changer la couleur de l'en-tête");
+                  this is what your navigation bar will look like
+                  <button
+                    className="btn btn-sm"
+                    onClick={() => {
+                        setTitle("change the header color");
                         setCurrentColor("headerColor");
                         setAction(AdminActions.UPDATE);
                       }}
-                    >
-                      <PaletteIcon color="warning" />
-                    </IconButton>
-                  </Tooltip>{" "}
-                  |{" "}
-                  <Tooltip
-                    title={
-                      copiedColor
-                        ? "Appliquer le couleur copiée"
-                        : "Copier le couleur"
-                    }
                   >
-                    <IconButton
-                      onClick={() => {
-                        handleColorCopyPaste("headerColor");
-                      }}
-                    >
-                      {copiedColor ? (
-                        <ContentPasteIcon color="info" />
-                      ) : (
-                        <ContentCopyIcon color="info" />
-                      )}
-                    </IconButton>
-                  </Tooltip>
+                    Change color
+                  </button>{" "}
+                  |{" "}
+                  <button
+                    className="btn btn-sm"
+                    onClick={() => {
+                      handleColorCopyPaste("headerColor");
+                    }}
+                  >
+                    {copiedColor ? "Apply copied color" : "Copy color"}
+                  </button>
                 </div>
                 <br />
                 <div className={themeStyles.bodyPreview}>
-                  <p>la couleur principale ressemblera à ceci :</p>
+                  <p>the main color will look like this:</p>
                   <br />
                   <div className="row" style={{ justifyContent: "flex-start" }}>
                     <div
@@ -205,40 +187,28 @@ function Theme(props) {
                         backgroundColor: colors.primaryColor,
                       }}
                     />
-                    <Tooltip title="Modifier">
-                      <IconButton
-                        onClick={() => {
-                          setTitle("changer la couleur primaire");
+                    <button
+                    className="btn btn-sm"
+                    onClick={() => {
+                          setTitle("change the primary color");
                           setCurrentColor("primaryColor");
                           setAction(AdminActions.UPDATE);
                         }}
-                      >
-                        <PaletteIcon color="warning" />
-                      </IconButton>
-                    </Tooltip>
+                  >
+                    Change color
+                  </button>
                     |{" "}
-                    <Tooltip
-                      title={
-                        copiedColor
-                          ? "Appliquer le couleur copiée"
-                          : "Copier le couleur"
-                      }
-                    >
-                      <IconButton
-                        onClick={() => {
-                          handleColorCopyPaste("primaryColor");
-                        }}
-                      >
-                        {copiedColor ? (
-                          <ContentPasteIcon color="info" />
-                        ) : (
-                          <ContentCopyIcon color="info" />
-                        )}
-                      </IconButton>
-                    </Tooltip>
+                    <button
+                    className="btn btn-sm"
+                    onClick={() => {
+                      handleColorCopyPaste("primaryColor");
+                    }}
+                  >
+                    {copiedColor ? "Apply copied color" : "Copy color"}
+                  </button>
                   </div>
                   <br />
-                  <p>les contrôles ressembleront à ceci :</p>
+                  <p>the controls will look like this:</p>
                   <br />
                   <div className="row" style={{ justifyContent: "flex-start" }}>
                     <XButton text="action" color={colors.primaryColor} />
@@ -257,7 +227,7 @@ function Theme(props) {
                     />
                   </div>
                   <br />
-                  <p>la couleur secondaire ressemblera à ceci :</p>
+                  <p>the secondary color will look like this:</p>
                   <br />
                   <div className="row" style={{ justifyContent: "flex-start" }}>
                     <div
@@ -266,40 +236,28 @@ function Theme(props) {
                         backgroundColor: colors.secondaryColor,
                       }}
                     />
-                    <Tooltip title="Modifier">
-                      <IconButton
-                        onClick={() => {
-                          setTitle("changer la couleur secondaire");
+                    <button
+                    className="btn btn-sm"
+                    onClick={() => {
+                          setTitle("change the secondary color");
                           setCurrentColor("secondaryColor");
                           setAction(AdminActions.UPDATE);
                         }}
-                      >
-                        <PaletteIcon color="warning" />
-                      </IconButton>
-                    </Tooltip>
+                  >
+                    Change color
+                  </button>
                     |{" "}
-                    <Tooltip
-                      title={
-                        copiedColor
-                          ? "Appliquer le couleur copiée"
-                          : "Copier le couleur"
-                      }
-                    >
-                      <IconButton
-                        onClick={() => {
-                          handleColorCopyPaste("secondaryColor");
-                        }}
-                      >
-                        {copiedColor ? (
-                          <ContentPasteIcon color="info" />
-                        ) : (
-                          <ContentCopyIcon color="info" />
-                        )}
-                      </IconButton>
-                    </Tooltip>
+                    <button
+                    className="btn btn-sm"
+                    onClick={() => {
+                      handleColorCopyPaste("secondaryColor");
+                    }}
+                  >
+                    {copiedColor ? "Apply copied color" : "Copy color"}
+                  </button>
                   </div>
                   <br />
-                  <p>les accents ressembleront à ceci</p>
+                  <p>the accents will look like this</p>
                   <br />
                   <div className="row" style={{ justifyContent: "flex-start" }}>
                     <XHr color={colors.secondaryColor} />
@@ -315,38 +273,26 @@ function Theme(props) {
                     border: `1px solid ${deduceColor(colors.footerColor)}`,
                   }}
                 >
-                  voici à quoi ressemblera votre pied de page
-                  <Tooltip title="Modifier">
-                    <IconButton
-                      onClick={() => {
-                        setTitle("changer la couleur du pied de page");
+                  this is what your footer will look like
+                  <button
+                    className="btn btn-sm"
+                    onClick={() => {
+                        setTitle("change the footer color");
                         setCurrentColor("footerColor");
                         setAction(AdminActions.UPDATE);
                       }}
-                    >
-                      <PaletteIcon color="warning" />
-                    </IconButton>
-                  </Tooltip>
-                  |{" "}
-                  <Tooltip
-                    title={
-                      copiedColor
-                        ? "Appliquer le couleur copiée"
-                        : "Copier le couleur"
-                    }
                   >
-                    <IconButton
-                      onClick={() => {
-                        handleColorCopyPaste("footerColor");
-                      }}
-                    >
-                      {copiedColor ? (
-                        <ContentPasteIcon color="info" />
-                      ) : (
-                        <ContentCopyIcon color="info" />
-                      )}
-                    </IconButton>
-                  </Tooltip>
+                    Change color
+                  </button>
+                  |{" "}
+                  <button
+                    className="btn btn-sm"
+                    onClick={() => {
+                      handleColorCopyPaste("footerColor");
+                    }}
+                  >
+                    {copiedColor ? "Apply copied color" : "Copy color"}
+                  </button>
                 </div>
               </div>
             </section>

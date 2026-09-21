@@ -95,7 +95,7 @@ function Product({ shop, slug }) {
       },
     });
     dispatch({ type: "TOGGLE_CART_PREVIEW" });
-    enqueueSnackbar(`${product.designation} Ajouté au panier`, {
+    enqueueSnackbar(`${product.designation} added to cart`, {
       variant: "info",
     });
   };
@@ -199,7 +199,7 @@ function Product({ shop, slug }) {
                   {product.variants.length ? (
                     <>
                       <br />
-                      <label>variantes</label>
+                      <label>variants</label>
                       <div style={{ marginTop: "5px" }} className="tagsRow">
                         {product.variants.map((variant, key) => {
                           return (
@@ -232,7 +232,7 @@ function Product({ shop, slug }) {
                   ) : null}
 
                   <br />
-                  <label>quantité</label>
+                  <label>quantity</label>
                   <div className={styles.quantity}>
                     <Button
                       style={{
@@ -264,7 +264,7 @@ function Product({ shop, slug }) {
                   <XButton
                     color={shopInfo.settings.primaryColor}
                     width={"100px"}
-                    text={"Acheter"}
+                    text={"Buy"}
                     disabled={product.qty < 1}
                     action={() => {
                       addTocart(shop, {
@@ -293,7 +293,7 @@ function Product({ shop, slug }) {
               <ProductsSlider
                 shopInfo={shopInfo}
                 products={similars}
-                title={"Découvrir des produits similaires !"}
+                title={"Discover similar products!"}
                 buttonAction={addTocart}
               />
             )}

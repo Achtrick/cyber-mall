@@ -1,10 +1,12 @@
 import {
   CircularProgress,
+  Drawer,
   IconButton,
   Skeleton,
   useMediaQuery,
 } from "@mui/material";
 import axios from "axios";
+import EmptyState from "../../components/ui-components/EmptyState";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
@@ -13,7 +15,6 @@ import { useDispatch } from "react-redux";
 import LoadingScreen from "../../components/shop/LoadingScreen";
 import OutOfStock from "../../components/shop/OutOfStock";
 import ShopLayout from "../../components/shop/ShopLayout";
-import XAutoComplete from "../../components/ui-components/XAutoComplete";
 import XButton from "../../components/ui-components/XButton";
 import XPagination from "../../components/ui-components/XPagination";
 import styles from "../../styles/shop/Products.module.scss";
@@ -29,8 +30,8 @@ function Products({ shop }) {
   const { category, searchTerm, sort } = router.query;
 
   const sortOptions = [
-    { name: "Ascendant", value: "ascending" },
-    { name: "Descendant", value: "descending" },
+    { name: "Price: low to high", value: "ascending" },
+    { name: "Price: high to low", value: "descending" },
   ];
 
   const dispatch = useDispatch();
@@ -50,6 +51,10 @@ function Products({ shop }) {
   const [page, setPage] = useState(0);
   const [count, setCount] = useState(0);
 
+  const [filtersOpen, setFiltersOpen] = useState(false);
+  const [draftCategory, setDraftCategory] = useState("");
+  const [draftSort, setDraftSort] = useState("");
+
   const [selectedVariant, setSelectedVariant] = useState(null);
   const [selectedProduct, setSelectedProduct] = useState(null);
 
@@ -57,7 +62,7 @@ function Products({ shop }) {
     if (shop) {
       getShopInfo();
     } else {
-      enqueueSnackbar("Lien de shop invalide", { variant: "error" });
+      enqueueSnackbar("Invalid shop link", { variant: "error" });
       router.push("/");
     }
   }, []);
@@ -120,15 +125,87 @@ function Products({ shop }) {
     window.scroll({ top: 0, behavior: "smooth" });
   };
 
-  const filter = async (filterOption, filterValue) => {
+  const applyFilters = (nextCategory, nextSort) => {
     const pathname = router.pathname;
-    let query = router.query;
-    query = { ...query, [filterOption]: filterValue };
+    const query = { ...router.query, category: nextCategory, sort: nextSort };
+    if (!nextCategory) delete query.category;
+    if (!nextSort) delete query.sort;
+    setPage(0);
     router.push({
       pathname: shopInfo?.domainName.length ? "/products" : pathname,
       query: query,
     });
   };
+
+  const openFilters = () => {
+    setDraftCategory(category || "");
+    setDraftSort(sort || "");
+    setFiltersOpen(true);
+  };
+
+  const activeFilterCount = (category ? 1 : 0) + (sort ? 1 : 0);
+
+  const chipStyle = (active) => ({
+    borderColor: shopInfo?.settings.primaryColor,
+    backgroundColor: active ? shopInfo?.settings.primaryColor : "transparent",
+    color: active
+      ? deduceColor(shopInfo?.settings.primaryColor)
+      : shopInfo?.settings.primaryColor,
+  });
+
+  // one chip group, used inline on desktop and inside the sheet on mobile
+  const renderFilterGroups = (selectedCategory, selectedSort, onPick) => (
+    <>
+      <div className={styles.filterGroup}>
+        <h4>Category</h4>
+        <div className={styles.chips}>
+          <button
+            type="button"
+            className={styles.chip}
+            style={chipStyle(!selectedCategory)}
+            onClick={() => onPick("", selectedSort)}
+          >
+            All
+          </button>
+          {categories.map((c) => (
+            <button
+              type="button"
+              key={c._id}
+              className={styles.chip}
+              style={chipStyle(selectedCategory === c.name)}
+              onClick={() => onPick(c.name, selectedSort)}
+            >
+              {c.name}
+            </button>
+          ))}
+        </div>
+      </div>
+      <div className={styles.filterGroup}>
+        <h4>Sort by price</h4>
+        <div className={styles.chips}>
+          <button
+            type="button"
+            className={styles.chip}
+            style={chipStyle(!selectedSort)}
+            onClick={() => onPick(selectedCategory, "")}
+          >
+            Newest
+          </button>
+          {sortOptions.map((o) => (
+            <button
+              type="button"
+              key={o.value}
+              className={styles.chip}
+              style={chipStyle(selectedSort === o.value)}
+              onClick={() => onPick(selectedCategory, o.value)}
+            >
+              {o.name}
+            </button>
+          ))}
+        </div>
+      </div>
+    </>
+  );
 
   const addTocart = (shop, product) => {
     dispatch({
@@ -145,7 +222,7 @@ function Products({ shop }) {
       },
     });
     dispatch({ type: "TOGGLE_CART_PREVIEW" });
-    enqueueSnackbar(`${product.designation} ajouté au panier`, {
+    enqueueSnackbar(`${product.designation} added to cart`, {
       variant: "info",
     });
   };
@@ -166,10 +243,6 @@ function Products({ shop }) {
   };
 
   const resetSearch = (searchTerm) => {
-    let query = router.query;
-
-    query = { ...query, searchTerm: searchTerm };
-
     router.push(
       shopInfo?.domainName.length
         ? `/products?searchTerm=${searchTerm ? searchTerm : ""}`
@@ -207,13 +280,13 @@ function Products({ shop }) {
         <ShopLayout
           title={
             searchTerm?.length
-              ? `Résultats de recherche pour "${searchTerm}"`
+              ? `Search results for "${searchTerm}"`
               : category?.length
               ? category[0].toUpperCase() + category.substring(1)
-              : "Nos produits"
+              : "Our products"
           }
           description={
-            "Laissez-nous tenir votre café pendant que vous faites vos shopping !"
+            "Let us keep your coffee warm while you shop!"
           }
           shopInfo={shopInfo}
         >
@@ -254,7 +327,7 @@ function Products({ shop }) {
                         : null
                     }
                   >
-                    Résultats Pour : {searchTerm}{" "}
+                    Results For : {searchTerm}{" "}
                     <IconButton onClick={() => resetSearch()}>
                       <ResetIcon />
                     </IconButton>
@@ -267,32 +340,52 @@ function Products({ shop }) {
                     style={{ color: shopInfo.settings.primaryColor }}
                     size={"17px"}
                   />
+                ) : isMobile ? (
+                  <button
+                    type="button"
+                    className={styles.filterButton}
+                    style={{
+                      borderColor: shopInfo.settings.primaryColor,
+                      color: shopInfo.settings.primaryColor,
+                    }}
+                    onClick={openFilters}
+                  >
+                    <svg
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      aria-hidden="true"
+                    >
+                      <path d="M4 6h10M20 6h0M4 12h2M12 12h8M4 18h9M20 18h0" />
+                      <circle cx="16" cy="6" r="2" />
+                      <circle cx="9" cy="12" r="2" />
+                      <circle cx="16" cy="18" r="2" />
+                    </svg>
+                    Filters
+                    {activeFilterCount ? (
+                      <span
+                        className={styles.filterCount}
+                        style={{
+                          backgroundColor: shopInfo.settings.primaryColor,
+                          color: deduceColor(shopInfo.settings.primaryColor),
+                        }}
+                      >
+                        {activeFilterCount}
+                      </span>
+                    ) : null}
+                  </button>
                 ) : (
-                  <>
-                    <XAutoComplete
-                      placeholder="Catégorie"
-                      options={categories}
-                      value={
-                        categories.find((c) => c.name === category)?.name || ""
-                      }
-                      optionDisplayExpr="name"
-                      optionValueExpr="name"
-                      onChange={(e, val) => {
-                        filter("category", val?.name || "");
-                      }}
-                    />
-                    &nbsp;
-                    <XAutoComplete
-                      placeholder="Trier Par Prix"
-                      options={sortOptions}
-                      value={sort}
-                      optionDisplayExpr="name"
-                      optionValueExpr="value"
-                      onChange={(e, val) => {
-                        filter("sort", val?.value || "");
-                      }}
-                    />
-                  </>
+                  <div className={styles.inlineFilters}>
+                    {renderFilterGroups(
+                      category || "",
+                      sort || "",
+                      applyFilters
+                    )}
+                  </div>
                 )}
               </div>
             </div>
@@ -408,7 +501,7 @@ function Products({ shop }) {
                           {product.qty < 1 ? <OutOfStock /> : null}
                           <XButton
                             color={shopInfo.settings.primaryColor}
-                            text={"Acheter"}
+                            text={"Buy"}
                             action={() => checkVariants(product)}
                           />
                         </div>
@@ -418,6 +511,13 @@ function Products({ shop }) {
                 })}
               </div>
             )}
+            {!loadingProducts && !products.length ? (
+              <EmptyState
+                art="box"
+                title="No products found"
+                text="Try another category or clear your search to see everything in this shop."
+              />
+            ) : null}
             <br />
             <div className={styles.header}>
               <XPagination
@@ -427,6 +527,58 @@ function Products({ shop }) {
               />
             </div>
           </section>
+          <Drawer
+            anchor="bottom"
+            open={isMobile && filtersOpen}
+            onClose={() => setFiltersOpen(false)}
+            sx={{ zIndex: 3000 }}
+            PaperProps={{ className: styles.sheet }}
+          >
+            <div className={styles.grabber} />
+            <div className={styles.sheetHeader}>
+              <h3>Filters</h3>
+              <button
+                type="button"
+                className={styles.sheetClose}
+                aria-label="Close filters"
+                onClick={() => setFiltersOpen(false)}
+              >
+                &times;
+              </button>
+            </div>
+            <div className={styles.sheetBody}>
+              {renderFilterGroups(draftCategory, draftSort, (c, so) => {
+                setDraftCategory(c);
+                setDraftSort(so);
+              })}
+            </div>
+            <div className={styles.sheetFooter}>
+              <button
+                type="button"
+                className={styles.sheetClear}
+                onClick={() => {
+                  setDraftCategory("");
+                  setDraftSort("");
+                }}
+              >
+                Clear all
+              </button>
+              <button
+                type="button"
+                className={styles.sheetApply}
+                style={{
+                  backgroundColor: shopInfo?.settings.primaryColor,
+                  color: deduceColor(shopInfo?.settings.primaryColor),
+                }}
+                onClick={() => {
+                  applyFilters(draftCategory, draftSort);
+                  setFiltersOpen(false);
+                }}
+              >
+                Show results
+              </button>
+            </div>
+          </Drawer>
         </ShopLayout>
       )}
     </>

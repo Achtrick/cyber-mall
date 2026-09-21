@@ -1,20 +1,33 @@
 import nc from "next-connect";
 import { transporter } from "../../utils/shared/mailer";
+import { isEmail, rateLimit, singleLine, str } from "../../utils/shared/security";
 
 const handler = nc();
 
 handler.post(async (req, res) => {
-  const { message, email, subject, phone } = req.body;
+  // public endpoint that sends email: throttle it to limit spam / mail abuse
+  if (!rateLimit(req, res, { name: "contact", max: 5, windowMs: 60 * 60 * 1000 })) return;
+
+  const email = str(req.body?.email, 254);
+  const message = str(req.body?.message, 5000);
+  const subject = singleLine(req.body?.subject, 150) || "Contact form";
+  const phone = singleLine(req.body?.phone, 30);
+
+  if (!isEmail(email) || !message) {
+    return res.status(400).json({ message: "Please provide a valid email and a message." });
+  }
+
   try {
     await new Promise((resolve, reject) => {
-      // send mail
+      // send mail: the sender is always our own account, the visitor's address
+      // only goes in replyTo (no spoofed From, no header injection)
       transporter.sendMail(
         {
           replyTo: email,
-          from: email,
+          from: process.env.AUTH_SUPERADMIN_EMAIL,
           to: process.env.AUTH_SUPERADMIN_EMAIL,
           subject: subject,
-          text: `Message: ${message}\n\nPhone: ${phone}`,
+          text: `Message: ${message}\n\nFrom: ${email}\nPhone: ${phone}`,
         },
         (err, info) => {
           if (err) {
@@ -27,10 +40,11 @@ handler.post(async (req, res) => {
     });
     res.status(200).json({
       message:
-        "Nous avons bien reçu votre message et nous vous contacterons dès que possible.",
+        "We have received your message and will contact you as soon as possible.",
     });
   } catch (error) {
-    res.status(400).json(error);
+    console.error(error);
+    res.status(400).json({ message: "Your message could not be sent, please try again later." });
   }
 });
 

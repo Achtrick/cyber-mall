@@ -2,16 +2,20 @@ import mongoose from "mongoose";
 import nc from "next-connect";
 import Product from "../../../models/product.model";
 import connectDB from "../../../utils/connectDB";
+import { fail, isObjectId } from "../../../utils/shared/security";
 
 const handler = nc();
 
 handler.post(async (req, res) => {
-  const { shopId } = req.body;
+  const { shopId } = req.body || {};
+  if (!isObjectId(shopId)) {
+    return res.status(400).json({ message: "Invalid shop" });
+  }
   try {
     await connectDB();
     const products = await Product.aggregate([
       {
-        $match: { shop: mongoose.Types.ObjectId(shopId), discount: { $ne: 0 } },
+        $match: { shop: new mongoose.Types.ObjectId(shopId), discount: { $ne: 0 } },
       },
       { $sample: { size: 6 } },
       {
@@ -30,7 +34,7 @@ handler.post(async (req, res) => {
 
     res.status(200).json(products);
   } catch (err) {
-    res.status(400).json(err);
+    fail(res, err);
   }
 });
 

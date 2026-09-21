@@ -19,6 +19,7 @@ const XAutoComplete = ({
       size="small"
       sx={{
         width: "100%",
+        maxWidth: "520px",
         margin: "5px 0px",
       }}
       value={options.find((option) => option[optionValueExpr] === value)}
@@ -39,14 +40,9 @@ const XAutoComplete = ({
           placeholder={placeholder}
           required={required}
           sx={{
-            backgroundColor: "white",
-            "& .MuiOutlinedInput-notchedOutline": {
-              borderRadius: "5px !important",
-              border: "1px solid #ccc !important",
-            },
             "& .MuiAutocomplete-input": {
-              fontFamily: "sans-serif",
-              padding: " 4px 0px !important",
+              fontFamily: "inherit",
+              minHeight: "24px",
               fontWeight: "400",
               fontSize: "14px",
             },

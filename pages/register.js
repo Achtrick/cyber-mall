@@ -63,13 +63,13 @@ function Register(props) {
     setLoading(true);
     if (formData.password !== formData.confirmPassword) {
       setLoading(false);
-      return enqueueSnackbar("les mots de passe ne correspondent pas", {
+      return enqueueSnackbar("passwords do not match", {
         variant: "warning",
       });
     }
     try {
       await axios.post("api/auth/register", formData);
-      enqueueSnackbar("vérifiez votre email pour vérifier votre compte.", {
+      enqueueSnackbar("check your email to verify your account.", {
         variant: "info",
       });
       setLoading(false);
@@ -85,15 +85,15 @@ function Register(props) {
       <XModal
         open={conditions}
         onClose={toggleConditions}
-        title={"condition d'utilisation"}
+        title={"terms of use"}
         size={ModalSizes.BIG}
         hideControls={true}
       >
         {conditionOfUse}
       </XModal>
       <Layout
-        title={"S'inscrire"}
-        description={"Inscrivez-vous et bonne vente"}
+        title={"Sign up"}
+        description={"Sign up and happy selling"}
         image={"/images/register.svg"}
       >
         <section className={styles.container}>
@@ -105,7 +105,7 @@ function Register(props) {
                   data-aos-offset="100"
                   data-aos-delay="100"
                 >
-                  créez votre shop
+                  create your shop
                 </h1>
                 <input
                   className="defaultInput"
@@ -113,7 +113,7 @@ function Register(props) {
                   onChange={onChange}
                   type="text"
                   name="firstName"
-                  placeholder="Prénom"
+                  placeholder="First name"
                   data-aos="fade-up"
                   data-aos-offset="100"
                   data-aos-delay="200"
@@ -124,7 +124,7 @@ function Register(props) {
                   onChange={onChange}
                   type="text"
                   name="lastName"
-                  placeholder="Nom"
+                  placeholder="Last name"
                   data-aos="fade-up"
                   data-aos-offset="100"
                   data-aos-delay="300"
@@ -135,7 +135,7 @@ function Register(props) {
                   onChange={onChange}
                   type="number"
                   name="phone"
-                  placeholder="téléphone"
+                  placeholder="phone"
                   data-aos="fade-up"
                   data-aos-offset="100"
                   data-aos-delay="400"
@@ -162,12 +162,12 @@ function Register(props) {
                     minLength="8"
                     maxLength="20"
                     pattern="^[a-zA-Z0-9]{8,20}$"
-                    title="Le mot de passe doit comporter entre 8 et 20 caractères et contenir uniquement des lettres et des chiffres."
+                    title="Password must be between 8 and 20 characters and contain only letters and digits."
                     required
                     onChange={onChange}
                     type={passwordVisible ? "text" : "password"}
                     name="password"
-                    placeholder="mot de passe"
+                    placeholder="password"
                   />
 
                   <IconButton
@@ -188,7 +188,7 @@ function Register(props) {
                   onChange={onChange}
                   type={passwordVisible ? "text" : "password"}
                   name="confirmPassword"
-                  placeholder="confirmer mot de passe"
+                  placeholder="confirm password"
                   data-aos="fade-up"
                   data-aos-offset="100"
                   data-aos-delay="700"
@@ -206,7 +206,7 @@ function Register(props) {
                     formData={formData}
                     setFormData={setFormData}
                     required={true}
-                    placeholder="domaine d'activité"
+                    placeholder="activity domain"
                     attributeKey="activityDomain"
                   />
                 </div>
@@ -217,8 +217,8 @@ function Register(props) {
                   className="labeledInput"
                 >
                   <label style={{ color: labelColor }}>
-                    Choisissez un nom unique qui ne contient pas de caractères
-                    spéciaux et pas d&apos;espaces.
+                    Choose a unique name that contains no special characters
+                    and no spaces.
                   </label>
                   <input
                     id="shopName"
@@ -227,7 +227,7 @@ function Register(props) {
                     onChange={onChange}
                     type="text"
                     name="shopName"
-                    placeholder="Nom de shop"
+                    placeholder="Shop name"
                   />
                 </div>
                 <div
@@ -238,7 +238,7 @@ function Register(props) {
                 >
                   <input value={conditions} required type="checkbox" />
                   <label onClick={toggleConditions}>
-                    Condition d&apos;utilisation.
+                    Terms of use.
                   </label>
                 </div>
                 <br />
@@ -262,7 +262,7 @@ function Register(props) {
                     {loading ? (
                       <CircularProgress style={{ color: "white" }} size={20} />
                     ) : (
-                      "S'inscrire"
+                      "Sign up"
                     )}
                   </Button>
                 </div>
@@ -273,8 +273,8 @@ function Register(props) {
                   data-aos-offset="100"
                   data-aos-delay="1200"
                 >
-                  Vous avez déjà un compte ?{" "}
-                  <Link href={"/login"}>Se connecter !</Link>
+                  Already have an account?{" "}
+                  <Link href={"/login"}>Log in!</Link>
                 </p>
                 <br />
               </form>

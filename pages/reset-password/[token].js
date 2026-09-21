@@ -46,7 +46,7 @@ function ResetPassword(props) {
     setFormLoading(true);
     if (password !== confirmPassword) {
       return (
-        enqueueSnackbar("Les mots de passes ne correspond pas !", {
+        enqueueSnackbar("Passwords do not match!", {
           variant: "warning",
         }),
         setFormLoading(false)
@@ -55,6 +55,7 @@ function ResetPassword(props) {
     try {
       const { data } = await axios.put(`/api/auth/changePassword/${userId}`, {
         password: password,
+        token: token,
       });
       enqueueSnackbar(data.message, { variant: "success" });
       router.push("/");
@@ -67,8 +68,8 @@ function ResetPassword(props) {
   return (
     <ConnectedGuard>
       <Layout
-        title={"Chnager le mot de passe"}
-        description={"Entrez votre nouveau mot de passe"}
+        title={"Change password"}
+        description={"Enter your new password"}
         image={"/images/forgot_password.svg"}
       >
         {loading ? (
@@ -79,15 +80,15 @@ function ResetPassword(props) {
           <div className={styles.row}>
             <div className={styles.container}>
               <form id="form" onSubmit={changePassword} className={styles.form}>
-                <h1>changer votre mot de passe</h1>
+                <h1>change your password</h1>
                 <div className="labeledInput">
-                  <label>mot de passe</label>
+                  <label>password</label>
                   <input
                     required
                     minLength="8"
                     maxLength="20"
                     pattern="^[a-zA-Z0-9]{8,20}$"
-                    title="Le mot de passe doit comporter entre 8 et 20 caractères et contenir uniquement des lettres et des chiffres."
+                    title="Password must be between 8 and 20 characters and contain only letters and digits."
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     className="defaultInput"
@@ -95,13 +96,13 @@ function ResetPassword(props) {
                   />
                 </div>
                 <div className="labeledInput">
-                  <label>confirmer le mot de passe</label>
+                  <label>confirm password</label>
                   <input
                     required
                     minLength="8"
                     maxLength="20"
                     pattern="^[a-zA-Z0-9]{8,20}$"
-                    title="Le mot de passe doit comporter entre 8 et 20 caractères et contenir uniquement des lettres et des chiffres."
+                    title="Password must be between 8 and 20 characters and contain only letters and digits."
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     className="defaultInput"
@@ -124,7 +125,7 @@ function ResetPassword(props) {
                   {formLoading ? (
                     <CircularProgress style={{ color: "white" }} size={20} />
                   ) : (
-                    "confirmer"
+                    "confirm"
                   )}
                 </Button>
               </form>

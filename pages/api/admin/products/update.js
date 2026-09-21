@@ -2,35 +2,45 @@ import nc from "next-connect";
 import auth from "../../../../middlewares/admin-auth";
 import Product from "../../../../models/product.model";
 import connectDB from "../../../../utils/connectDB";
-import { removeFile } from "../../../../utils/shared/removeFile";
+import { ownsShop } from "../../../../utils/shared/auth";
+import { fail, isObjectId } from "../../../../utils/shared/security";
+import { cleanProduct } from "../../../../utils/shared/productInput";
+import { removeFile } from "../../../../utils/shared/storage";
 
 const handler = nc();
 
 handler.put(auth, async (req, res) => {
-  await connectDB();
-  const data = req.body;
-  try {
-    const product = await Product.findById(data._id);
+  const data = req.body || {};
+  if (!isObjectId(data._id)) {
+    return res.status(400).json({ message: "Invalid product" });
+  }
 
-    if (data.images) {
-      for (let image of product.images) removeFile(image.split("/").pop());
-      product.images = data.images;
+  try {
+    await connectDB();
+    const product = await Product.findById(data._id);
+    // same answer for "missing" and "not yours" (no id probing)
+    if (!product || !ownsShop(req, product.shop)) {
+      return res.status(404).json({ message: "Product not found" });
     }
 
-    product.category = data.category;
-    product.designation = data.designation;
-    product.slug = data.slug;
-    product.description = data.description;
-    product.variants = data.variants;
-    product.price = data.price;
-    product.discount = data.discount;
-    product.qty = data.qty;
+    // whitelisted + validated fields only (no mass assignment: shop can't change)
+    const clean = await cleanProduct(data, String(product.shop), product.images);
+    if (clean.error) return res.status(400).json({ message: clean.error });
+    const { images, ...fields } = clean.value;
 
+    if (images) {
+      for (let image of product.images) {
+        if (!images.includes(image)) await removeFile(image.split("/").pop());
+      }
+      product.images = images;
+    }
+
+    Object.assign(product, fields);
     await product.save();
 
-    res.status(200).json({ message: "Produit Modifié" });
+    res.status(200).json({ message: "Product updated" });
   } catch (err) {
-    res.status(400).json(err);
+    fail(res, err, 400, "Could not update the product");
   }
 });
 
@@ -39,7 +49,7 @@ export default handler;
 export const config = {
   api: {
     bodyParser: {
-      sizeLimit: "8mb",
+      sizeLimit: "1mb",
     },
   },
 };

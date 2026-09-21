@@ -15,7 +15,7 @@ export default function Home() {
   return (
     <ConnectedGuard>
       <Layout
-        description={"Rendre le commerce meilleur pour tous"}
+        description={"Making commerce better for everyone"}
         image={"/logo-512.png"}
       >
         <HomeHedaer />

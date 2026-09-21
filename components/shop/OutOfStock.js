@@ -12,7 +12,7 @@ function OutOfStock(props) {
       }}
     >
       <InfoOutlined style={{ fontSize: "14px" }} />
-      &nbsp; Hors stock.
+      &nbsp; Out of stock.
     </p>
   );
 }

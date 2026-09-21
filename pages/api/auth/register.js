@@ -1,41 +1,67 @@
 import bcrypt from "bcryptjs";
-import crypto from "crypto";
 import nc from "next-connect";
 import Shop from "../../../models/shop.model";
 import User from "../../../models/user.model";
 import connectDB from "../../../utils/connectDB";
+import { ActivityDomains } from "../../../utils/shared/activityDomains";
 import { mailcss, transporter } from "../../../utils/shared/mailer";
-
-const token = crypto.randomBytes(10).toString("hex");
+import {
+  SHOP_NAME_RESERVED,
+  fail,
+  getSiteUrl,
+  isEmail,
+  isPassword,
+  newToken,
+  rateLimit,
+  str,
+} from "../../../utils/shared/security";
 
 const handler = nc();
 
 handler.post(async (req, res) => {
-  var salt = bcrypt.genSaltSync(10);
-  await connectDB();
-  const url = `https://cyber-mall.tn/api/auth/activate/${token}`;
-  const data = req.body;
+  if (!rateLimit(req, res, { name: "register", max: 10, windowMs: 60 * 60 * 1000 })) return;
+
+  // never spread req.body into the model (mass assignment): pick and validate
+  const body = req.body || {};
+  const email = str(body.email, 254).toLowerCase();
+  const shopName = str(body.shopName, 40).toLowerCase();
+  const activityDomain = str(body.activityDomain, 100);
+  const invalid = (message) => res.status(400).json({ message });
+
+  if (!isEmail(email)) return invalid("Invalid email address!");
+  if (!isPassword(body.password)) {
+    return invalid("Password must be between 8 and 72 characters!");
+  }
+  if (!/^[a-z0-9_-]{1,40}$/.test(shopName) || SHOP_NAME_RESERVED.has(shopName)) {
+    return invalid("Invalid shop name!");
+  }
+  if (!ActivityDomains.some((d) => d.name === activityDomain)) {
+    return invalid("Invalid activity domain!");
+  }
+
+  // one unique, unguessable activation token per registration; only its hash is stored
+  const token = newToken();
+  const url = `${getSiteUrl(req)}/api/auth/activate/${token.raw}`;
 
   try {
-    const userExists = await User.findOne({ email: data.email.toLowerCase() });
+    await connectDB();
+    const userExists = await User.findOne({ email });
     if (userExists) {
       return res
         .status(403)
-        .json({ message: "Il y a un utilisateur avec cette addresse email !" });
+        .json({ message: "A user with this email address already exists!" });
     }
 
-    const shopExists = await Shop.findOne({
-      name: data.shopName.toLowerCase(),
-    });
+    const shopExists = await Shop.findOne({ name: shopName });
 
     if (shopExists) {
-      return res.status(403).json({ message: "Il y a une shop avec ce nom !" });
+      return res.status(403).json({ message: "A shop with this name already exists!" });
     }
 
     const shop = await Shop.create({
-      name: data.shopName.toLowerCase(),
+      name: shopName,
       domainName: "",
-      activityDomain: data.activityDomain,
+      activityDomain: activityDomain,
       pack: { type: "FREE", expiresIn: "" },
       settings: {
         headerColor: "#ffffff",
@@ -77,14 +103,23 @@ handler.post(async (req, res) => {
       },
     });
 
-    const user = await User.create({
-      ...data,
-      role: "ADMIN",
-      email: data.email.toLowerCase(),
-      password: bcrypt.hashSync(data.password, salt),
-      shop: shop._id,
-      token: token,
-    });
+    let user;
+    try {
+      user = await User.create({
+        firstName: str(body.firstName, 60),
+        lastName: str(body.lastName, 60),
+        phone: str(body.phone, 30),
+        address: str(body.address, 300),
+        role: "ADMIN",
+        email,
+        password: await bcrypt.hash(body.password, 10),
+        shop: shop._id,
+        token: token.hash,
+      });
+    } catch (err) {
+      await Shop.findByIdAndDelete(shop._id); // do not leave an orphan shop behind
+      throw err;
+    }
 
     await new Promise((resolve, reject) => {
       // send mail
@@ -93,8 +128,8 @@ handler.post(async (req, res) => {
           from: process.env.AUTH_SUPERADMIN_EMAIL,
           to: user.email,
           replyTo: process.env.AUTH_SUPERADMIN_EMAIL,
-          subject: "Vérification de votre email",
-          text: "Suivez ce lien pour activer votre shop.",
+          subject: "Verify your email",
+          text: "Follow this link to activate your shop.",
           html:
             `<div ` +
             mailcss.background +
@@ -109,7 +144,7 @@ handler.post(async (req, res) => {
             >
             <img style="object-fit: contain;" alt="Cyber-Mall" title="Cyber-Mall" src="https://cyber-mall.tn/images/logo.png" width="70%" height="80px">
             </div>
-            <h1 style="text-transform: capitalize; font-size: 15px; font-wheight:500;" width="100%" text-align="center">Suivez ce lien pour activer votre shop:</h1>
+            <h1 style="text-transform: capitalize; font-size: 15px; font-wheight:500;" width="100%" text-align="center">Follow this link to activate your shop:</h1>
               <div` +
             mailcss.body +
             `>
@@ -124,12 +159,16 @@ handler.post(async (req, res) => {
           }
         }
       );
+    }).catch(async (err) => {
+      // the activation mail could not be sent: do not leave an account nobody can activate
+      await User.findByIdAndDelete(user._id);
+      await Shop.findByIdAndDelete(shop._id);
+      throw err;
     });
 
     res.status(200).json("success");
   } catch (err) {
-    console.log(err);
-    res.status(400).json(err);
+    return fail(res, err, 400, "Registration failed, please try again.");
   }
 });
 

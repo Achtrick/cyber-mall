@@ -5,19 +5,30 @@ import DomainDemand from "../../../../models/domainDemand.model";
 import Shop from "../../../../models/shop.model";
 import User from "../../../../models/user.model";
 import connectDB from "../../../../utils/connectDB";
+import { resolveShop } from "../../../../utils/shared/auth";
+import { escapeHtml, fail, isHostname, rateLimit, str } from "../../../../utils/shared/security";
 import { mailcss, transporter } from "../../../../utils/shared/mailer";
 
 const handler = nc();
 
 handler.post(auth, async (req, res) => {
-  await connectDB();
-  const { shopId, domainName } = req.body;
+  // always the caller's own shop; a foreign shop id in the body is rejected
+  const shopId = resolveShop(req, res, req.body?.shopId);
+  if (!shopId) return;
+  if (!rateLimit(req, res, { name: "domain-demand", key: req.auth.userId, max: 10, windowMs: 60 * 60 * 1000 })) return;
+  // bare hostname only: it ends up in an email and later in host -> shop routing
+  const domainName = str(req.body?.domainName, 253).toLowerCase().replace(/^www\./, "");
+  if (!isHostname(domainName)) {
+    return res.status(400).json({ message: "Invalid domain name" });
+  }
 
   try {
+    await connectDB();
     const shop = await Shop.findOne({ _id: shopId });
     const user = await User.findOne({
       shop: mongoose.Types.ObjectId(shopId),
     });
+    if (!shop || !user) return res.status(404).json({ message: "Shop not found" });
     const demand = await DomainDemand.findOne({
       shop: mongoose.Types.ObjectId(shopId),
     });
@@ -39,8 +50,8 @@ handler.post(auth, async (req, res) => {
         {
           from: process.env.AUTH_SUPERADMIN_EMAIL,
           to: process.env.AUTH_SUPERADMIN_EMAIL,
-          subject: "Demande intégration nom de domaine",
-          text: "Demande intégration nom de domaine.",
+          subject: "Domain name integration request",
+          text: "Domain name integration request.",
           html:
             `<div ` +
             mailcss.background +
@@ -55,21 +66,17 @@ handler.post(auth, async (req, res) => {
             >
             <img style="object-fit: contain;" alt="Cyber-Mall" title="Cyber-Mall" src="https://cyber-mall.tn/images/logo.png" width="70%" height="80px">
             </div>
-            <h1 style="text-transform: capitalize; font-size: 15px; font-wheight:500;" width="100%" text-align="center">Je veux changer mon nom de domaine.</h1>
+            <h1 style="text-transform: capitalize; font-size: 15px; font-wheight:500;" width="100%" text-align="center">I want to change my domain name.</h1>
               <div` +
             mailcss.body +
             `>
-              <h3 style="font-size: 10px; font-wheight:300;">Nom D'utilisateur: ${
+              <h3 style="font-size: 10px; font-wheight:300;">Username: ${escapeHtml(
                 user.firstName + " " + user.lastName
-              }</h3>
-              <h3 style="font-size: 10px; font-wheight:300;">Shop: ${
-                shop.name
-              }</h3>
-              <h3 style="font-size: 10px; font-wheight:300;">Téléphone: ${
-                user.phone
-              }</h3>
+              )}</h3>
+              <h3 style="font-size: 10px; font-wheight:300;">Shop: ${escapeHtml(shop.name)}</h3>
+              <h3 style="font-size: 10px; font-wheight:300;">Phone: ${escapeHtml(user.phone)}</h3>
               <hr/>
-              <h3 style="font-size: 10px; font-wheight:300;">Nom de domaine: ${domainName}</h3>
+              <h3 style="font-size: 10px; font-wheight:300;">Domain name: ${escapeHtml(domainName)}</h3>
           </div>`,
         },
         (err, info) => {
@@ -83,10 +90,10 @@ handler.post(auth, async (req, res) => {
     });
     res.status(200).json({
       message:
-        "Nom de domaine modifié, Nos techniciens vous appelleront le plus tôt possible.",
+        "Domain name updated, our technicians will call you as soon as possible.",
     });
   } catch (err) {
-    res.status(400).json(err);
+    fail(res, err, 400, "Could not send the request");
   }
 });
 

@@ -134,7 +134,7 @@ export default function Shops(props) {
     <DisconnectedGuard>
       <XModal
         loading={loading}
-        open={action.length}
+        open={action.length > 0}
         onClose={cancelAction}
         formId={action === "DOMAIN" ? "domain_name_form" : null}
         cancelAction={cancelAction}
@@ -142,9 +142,9 @@ export default function Shops(props) {
         size={ModalSizes.SMALL}
         title={
           action === "DOMAIN"
-            ? "Modifier le nom de domaine"
+            ? "Edit the domain name"
             : action === "DELETE"
-            ? `Supprimer le shop: ${
+            ? `Delete the shop: ${
                 shops.find((_) => _._id === shopId).name
               } ?!`
             : null
@@ -154,7 +154,7 @@ export default function Shops(props) {
           {action === "DOMAIN" ? (
             <form id="domain_name_form" onSubmit={updateDomainName}>
               <div className="labeledInput">
-                <label>Nouveau Nom de domaine (sans www)</label>
+                <label>New domain name (without www)</label>
                 <input
                   type="text"
                   className="defaultInput"

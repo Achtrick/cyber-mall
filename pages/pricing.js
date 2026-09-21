@@ -10,9 +10,9 @@ function Pricing(props) {
   return (
     <ConnectedGuard>
       <Layout
-        title={"Tarifs et abonnements"}
+        title={"Pricing and subscriptions"}
         description={
-          "nous proposons différents packs flexibles pour répondre à vos besoins !"
+          "we offer different flexible packs to meet your needs!"
         }
         image={"/images/pricing.svg"}
       >
@@ -24,19 +24,19 @@ function Pricing(props) {
               className={styles.pack}
             >
               <div style={{ width: "100%" }}>
-                <p>basique</p>
-                <p>Gratuit</p>
+                <p>basic</p>
+                <p>Free</p>
                 <XHr color={"#f2f2f2"} />
               </div>
               <ul>
-                <li>création de shop</li>
-                <li>ajouter un logo</li>
-                <li>personnaliser le thème</li>
-                <li>personnaliser la structure</li>
-                <li>catégories : 5</li>
-                <li>produits : 10</li>
-                <li>images par produit : 1</li>
-                <li>diapositives d&apos;accueil : 3</li>
+                <li>shop creation</li>
+                <li>add a logo</li>
+                <li>customize the theme</li>
+                <li>customize the structure</li>
+                <li>categories: 5</li>
+                <li>products: 10</li>
+                <li>images per product: 1</li>
+                <li>home slides: 3</li>
               </ul>
               <Link href={"/register"}>
                 <Button
@@ -47,7 +47,7 @@ function Pricing(props) {
                   }}
                   variant="contained"
                 >
-                  S&apos;inscrire
+                  Sign up
                 </Button>
               </Link>
             </div>
@@ -57,21 +57,21 @@ function Pricing(props) {
               className={styles.pack}
             >
               <div style={{ width: "100%" }}>
-                <p>premium mensuelle</p>
+                <p>premium monthly</p>
                 <p>49 DT</p>
                 <XHr color={"#f2f2f2"} />
               </div>
               <ul>
-                <li>création de shop</li>
-                <li>ajouter un logo</li>
-                <li>personnaliser le thème</li>
-                <li>personnaliser la structure</li>
-                <li>catégories : illimitées</li>
-                <li>produits : illimité</li>
-                <li>images par produit : 6</li>
-                <li>diapositives d&apos;accueil : illimitées</li>
-                <li>génération de facture</li>
-                <li>Nom de domaine de votre choix</li>
+                <li>shop creation</li>
+                <li>add a logo</li>
+                <li>customize the theme</li>
+                <li>customize the structure</li>
+                <li>categories: unlimited</li>
+                <li>products: unlimited</li>
+                <li>images per product: 6</li>
+                <li>home slides: unlimited</li>
+                <li>invoice generation</li>
+                <li>Domain name of your choice</li>
               </ul>
               <Link href={"/register"}>
                 <Button
@@ -82,7 +82,7 @@ function Pricing(props) {
                   }}
                   variant="contained"
                 >
-                  S&apos;inscrire
+                  Sign up
                 </Button>
               </Link>
             </div>
@@ -92,7 +92,7 @@ function Pricing(props) {
               className={styles.pack}
             >
               <div style={{ width: "100%" }}>
-                <p>premium annuelle</p>
+                <p>premium yearly</p>
                 <div className="row">
                   <p style={{ textDecoration: "line-through" }}>588 DT</p>&nbsp;
                   <p>499 DT</p>
@@ -100,16 +100,16 @@ function Pricing(props) {
                 <XHr color={"#f2f2f2"} />
               </div>
               <ul>
-                <li>création de shop</li>
-                <li>ajouter un logo</li>
-                <li>personnaliser le thème</li>
-                <li>personnaliser la structure</li>
-                <li>catégories : illimitées</li>
-                <li>produits : illimité</li>
-                <li>images par produit : 6</li>
-                <li>diapositives d&apos;accueil : illimitées</li>
-                <li>génération de facture</li>
-                <li>Nom de domaine de votre choix</li>
+                <li>shop creation</li>
+                <li>add a logo</li>
+                <li>customize the theme</li>
+                <li>customize the structure</li>
+                <li>categories: unlimited</li>
+                <li>products: unlimited</li>
+                <li>images per product: 6</li>
+                <li>home slides: unlimited</li>
+                <li>invoice generation</li>
+                <li>Domain name of your choice</li>
               </ul>
               <Link href={"/register"}>
                 <Button
@@ -120,7 +120,7 @@ function Pricing(props) {
                   }}
                   variant="contained"
                 >
-                  S&apos;inscrire
+                  Sign up
                 </Button>
               </Link>
             </div>
@@ -131,11 +131,11 @@ function Pricing(props) {
           </div>
           <br />
           <p data-aos="fade-up" data-aos-offset="100">
-            Choisissez un plan pour développer votre business
+            Choose a plan to grow your business
           </p>
           <p data-aos="fade-up" data-aos-offset="100">
-            nous proposons différents packs flexibles pour répondre à vos
-            besoins !
+            we offer different flexible packs to meet your
+            needs!
           </p>
 
           <br />

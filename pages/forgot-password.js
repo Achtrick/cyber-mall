@@ -44,9 +44,9 @@ function ForgotPassword(props) {
   return (
     <ConnectedGuard>
       <Layout
-        title={"Mot de passe oublié"}
+        title={"Forgot password"}
         description={
-          "Vous avez oubliée votre mot de passe, ce n'est pas un problème, ont est là !."
+          "Forgot your password? No problem, we are here to help!"
         }
         image={"/images/forgot_password.svg"}
       >
@@ -54,7 +54,7 @@ function ForgotPassword(props) {
           <div className={styles.container}>
             <form id="form" onSubmit={recoverPassword} className={styles.form}>
               <h1 data-aos="fade-up" data-aos-offset="100" data-aos-delay="100">
-                récupérer votre mot de passe
+                recover your password
               </h1>
               <div
                 data-aos="fade-up"
@@ -92,13 +92,13 @@ function ForgotPassword(props) {
                   {loading ? (
                     <CircularProgress style={{ color: "white" }} size={20} />
                   ) : (
-                    "récupérer"
+                    "recover"
                   )}
                 </Button>
               </div>
             </form>
             <p data-aos="fade-up" data-aos-offset="100" data-aos-delay="400">
-              un lien de récupération vas être envoyer à votre email.
+              a recovery link will be sent to your email.
             </p>
             <p
               data-aos="fade-up"
@@ -106,8 +106,8 @@ function ForgotPassword(props) {
               data-aos-delay="500"
               style={{ color: "red" }}
             >
-              S&apos;il vous plaît vérifiez votre dossier spam si vous ne
-              recevez pas le lien dans votre Inbox pour quelques raisons !
+              Please check your spam folder if you do not
+              receive the link in your inbox for any reason!
             </p>
           </div>
 

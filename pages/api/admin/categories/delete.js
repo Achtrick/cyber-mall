@@ -5,33 +5,43 @@ import Product from "../../../../models/product.model";
 import ProductCategory from "../../../../models/productCategory.model";
 import Shop from "../../../../models/shop.model";
 import connectDB from "../../../../utils/connectDB";
-import { removeFile } from "../../../../utils/shared/removeFile";
+import { ownsShop } from "../../../../utils/shared/auth";
+import { fail, isObjectId } from "../../../../utils/shared/security";
+import { removeFile } from "../../../../utils/shared/storage";
 import { deleteProduct } from "../products/delete";
 
 const handler = nc();
 
 handler.post(auth, async (req, res) => {
-  await connectDB();
+  const categoryId = req.body?.categoryId;
+  if (!isObjectId(categoryId)) {
+    return res.status(400).json({ message: "Invalid category" });
+  }
 
   try {
-    const { categoryId } = req.body;
+    await connectDB();
+    // only the owning shop's admin may delete a category (IDOR)
+    const category = await ProductCategory.findById(categoryId).select("shop");
+    if (!category || !ownsShop(req, category.shop)) {
+      return res.status(404).json({ message: "Category not found" });
+    }
     await deleteCategory(categoryId);
 
     res
       .status(200)
-      .json({ message: "Catégorie et produits associés sont supprimée" });
+      .json({ message: "Category and its associated products deleted" });
   } catch (err) {
-    res.status(500).json({ error: "Erreur interne du serveur" });
+    fail(res, err, 500, "Could not delete the category");
   }
 });
 
 export const deleteCategory = async (categoryId) => {
   const category = await ProductCategory.findById(categoryId);
-  const shop = await Shop.findById(mongoose.Types.ObjectId(category.shop));
   if (!category) {
-    return res.status(404).json({ message: "Catégorie introuvable" });
+    throw new Error("Category not found");
   }
-  removeFile(category.icon.split("/").pop());
+  const shop = await Shop.findById(mongoose.Types.ObjectId(category.shop));
+  await removeFile(category.icon.split("/").pop());
 
   const products = await Product.find({
     category: mongoose.Types.ObjectId(category._id),
@@ -40,6 +50,7 @@ export const deleteCategory = async (categoryId) => {
     await deleteProduct(product._id);
   }
   await ProductCategory.findByIdAndDelete(categoryId);
+  if (!shop) return;
   shop.architecture = {
     ...shop.architecture,
     home: {
@@ -48,7 +59,7 @@ export const deleteCategory = async (categoryId) => {
         ...shop.architecture.home.categoriesComponent,
         selectedCategoriesIds:
           shop.architecture.home.categoriesComponent.selectedCategoriesIds.filter(
-            (id) => id !== categoryId
+            (id) => String(id) !== String(categoryId)
           ),
       },
     },

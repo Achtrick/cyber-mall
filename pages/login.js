@@ -47,8 +47,8 @@ function Login(props) {
   return (
     <ConnectedGuard>
       <Layout
-        title={"Se connecter"}
-        description={"Connecter-vous et bonne vente"}
+        title={"Log in"}
+        description={"Log in and happy selling"}
         image={"/images/login.svg"}
       >
         <section className={styles.container}>
@@ -60,7 +60,7 @@ function Login(props) {
                   data-aos-offset="100"
                   data-aos-delay="100"
                 >
-                  Se connecter
+                  Log in
                 </h1>
                 <form id="form" onSubmit={login}>
                   <input
@@ -86,7 +86,7 @@ function Login(props) {
                       onChange={onChange}
                       type={passwordVisible ? "text" : "password"}
                       name="password"
-                      placeholder="mot de passe"
+                      placeholder="password"
                     />
 
                     <IconButton
@@ -125,7 +125,7 @@ function Login(props) {
                           size={20}
                         />
                       ) : (
-                        "se connecter"
+                        "log in"
                       )}
                     </Button>
                   </div>
@@ -136,16 +136,16 @@ function Login(props) {
                   data-aos-offset="100"
                   data-aos-delay="900"
                 >
-                  Vous n&apos;avez pas de compte ?{" "}
-                  <Link href={"/register"}>S&apos;inscrire !</Link>
+                  Don&apos;t have an account?{" "}
+                  <Link href={"/register"}>Sign up!</Link>
                 </p>
                 <p
                   data-aos="fade-up"
                   data-aos-offset="100"
                   data-aos-delay="1100"
                 >
-                  Mot de passe oublié ?{" "}
-                  <Link href={"/forgot-password"}>Récupérez-le !</Link>
+                  Forgot your password?{" "}
+                  <Link href={"/forgot-password"}>Recover it!</Link>
                 </p>
               </section>
             </div>

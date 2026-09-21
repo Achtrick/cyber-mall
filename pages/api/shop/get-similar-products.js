@@ -2,18 +2,22 @@ import mongoose from "mongoose";
 import nc from "next-connect";
 import Product from "../../../models/product.model";
 import connectDB from "../../../utils/connectDB";
+import { fail, isObjectId } from "../../../utils/shared/security";
 
 const handler = nc();
 
 handler.post(async (req, res) => {
-  const { shopId, categoryId } = req.body;
+  const { shopId, categoryId } = req.body || {};
+  if (!isObjectId(shopId) || !isObjectId(categoryId)) {
+    return res.status(400).json({ message: "Invalid request" });
+  }
   try {
     await connectDB();
     const products = await Product.aggregate([
       {
         $match: {
-          shop: mongoose.Types.ObjectId(shopId),
-          category: mongoose.Types.ObjectId(categoryId),
+          shop: new mongoose.Types.ObjectId(shopId),
+          category: new mongoose.Types.ObjectId(categoryId),
         },
       },
       { $sample: { size: 6 } },
@@ -33,7 +37,7 @@ handler.post(async (req, res) => {
 
     res.status(200).json(products);
   } catch (err) {
-    res.status(400).json(err);
+    fail(res, err);
   }
 });
 

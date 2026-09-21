@@ -32,3 +32,10 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+## Deploying on Vercel
+
+- Uploaded images are stored in **Vercel Blob** (`utils/shared/storage.js`) and served through `/api/images/<file>` (resized with sharp, CDN-cached).
+- PWA manifests (`/manifests/<shop>.webmanifest`) and the custom-domain map used by `middleware.js` (`/api/domains`) are generated from MongoDB; nothing is written to disk.
+- Set the env vars listed in `.env.example` in the Vercel project settings. Create a Blob store under Storage and connect it to the project so `BLOB_READ_WRITE_TOKEN` is set.
+- Vercel limits request bodies to 4.5 MB, so uploads are capped at 4 MB per request.

@@ -17,21 +17,166 @@
 }
 .filter {
   @include flexLayout(center, flex-end);
-  width: 50%;
+  width: 60%;
+}
+.inlineFilters {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px 28px;
+}
+.filterGroup {
+  h4 {
+    margin: 0 0 8px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+}
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.chip {
+  border: 1px solid;
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  text-transform: capitalize;
+  cursor: pointer;
+  background: transparent;
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  &:hover {
+    transform: translateY(-1px);
+  }
+}
+.filterButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid;
+  border-radius: 999px;
+  padding: 9px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  background: transparent;
+  cursor: pointer;
+}
+.filterCount {
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 999px;
+  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.sheet {
+  border-radius: 22px 22px 0 0 !important;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.18) !important;
+}
+.grabber {
+  width: 42px;
+  height: 4px;
+  border-radius: 4px;
+  background: #d5d0dd;
+  margin: 10px auto 2px;
+}
+.sheetHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 20px 10px;
+  h3 {
+    margin: 0;
+    font-size: 18px;
+  }
+}
+.sheetClose {
+  border: none;
+  background: transparent;
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 4px;
+}
+.sheetBody {
+  flex: 1;
+  overflow-y: auto;
+  padding: 4px 20px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+.sheetFooter {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  gap: 12px;
+  padding: 14px 20px calc(14px + env(safe-area-inset-bottom));
+  background: #fff;
+  border-top: 1px solid var(--line);
+}
+.sheetClear,
+.sheetApply {
+  flex: 1;
+  border-radius: 12px;
+  padding: 13px 16px;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+}
+.sheetClear {
+  background: transparent;
+  border: 1px solid var(--line-strong);
+  color: var(--ink);
+}
+.sheetApply {
+  border: none;
 }
 .product {
-  padding: 5px;
   width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
   justify-content: flex-start;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 20px;
   overflow: hidden;
+  transition: box-shadow 0.3s ease, transform 0.3s ease, border-color 0.3s ease;
+  &:hover {
+    border-color: var(--line-strong);
+    box-shadow: 0 18px 40px -18px rgba(84, 41, 128, 0.35);
+    transform: translateY(-4px);
+  }
+  > a {
+    display: block;
+    width: 100%;
+    margin-bottom: 12px;
+    background: var(--surface-alt);
+    overflow: hidden;
+  }
   p {
-    text-transform: uppercase;
-    font-weight: 300;
-    font-size: 15px;
+    text-transform: capitalize;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 1.35;
     margin: 0px;
+    padding: 0 14px;
+    color: var(--ink);
     text-overflow: ellipsis;
     width: 100%;
     overflow: hidden;
@@ -39,16 +184,38 @@
   }
   .oldPrice {
     text-decoration: line-through;
-    font-weight: 100;
+    font-weight: 400;
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 2px;
   }
   .price {
-    text-transform: uppercase;
-    font-weight: 500;
+    font-size: 16px;
+    font-weight: 700;
+    margin-top: 2px;
+    color: var(--ink);
   }
   img {
+    display: block;
     width: 100%;
-    height: 200px;
-    object-fit: contain;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 0;
+    transition: transform 0.5s ease;
+  }
+  &:hover img {
+    transform: scale(1.06);
+  }
+  :global(.variantPickerContainer) {
+    padding: 4px 14px 14px;
+    p {
+      padding: 0;
+    }
+    button {
+      width: 100% !important;
+      margin: 6px 0 0 !important;
+      border-radius: 12px;
+    }
   }
 }
 
@@ -60,6 +227,8 @@
   .filter {
     margin-top: 15px;
     width: 100%;
+    justify-content: flex-start;
+    padding: 0 6px;
   }
   .container {
     padding: 20px 5px;

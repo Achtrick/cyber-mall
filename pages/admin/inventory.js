@@ -1,12 +1,6 @@
-import { Edit } from "@mui/icons-material";
-import {
-  CircularProgress,
-  IconButton,
-  Skeleton,
-  Tooltip,
-  useMediaQuery,
-} from "@mui/material";
+import { CircularProgress, Skeleton, useMediaQuery } from "@mui/material";
 import axios from "axios";
+import EmptyState from "../../components/ui-components/EmptyState";
 import { useSnackbar } from "notistack";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -26,12 +20,7 @@ import {
 import { checkExpirity } from "../../utils/shared/checkExpirity";
 import { checkPremium } from "../../utils/shared/checkPremium";
 import { getError } from "../../utils/shared/getError";
-import {
-  AddIcon,
-  DeleteIcon,
-  ModeEditIcon,
-  SearchIcon,
-} from "../../utils/theme/icons";
+import { AddIcon, SearchIcon } from "../../utils/theme/icons";
 
 function Inventory(props) {
   let executeSearchTimeout;
@@ -122,7 +111,7 @@ function Inventory(props) {
           compressedImages.push(base64);
           imagesToUpload.push(compressedImage);
         } else {
-          enqueueSnackbar("Ne dépasser pas 6 images par produit.", {
+          enqueueSnackbar("Do not exceed 6 images per product.", {
             variant: "warning",
           });
         }
@@ -309,23 +298,23 @@ function Inventory(props) {
           }
           title={
             action === AdminActions.ADD
-              ? "ajouter produit"
+              ? "add product"
               : action === AdminActions.UPDATE
-              ? "modifier produit"
+              ? "edit product"
               : action === AdminActions.DELETE
-              ? "supprimer produit"
+              ? "delete product"
               : null
           }
         >
           {action === AdminActions.DELETE ? (
             <>
-              <p>suppression de &quot;{product.designation}&quot;.</p>
-              <p>êtes-vous sûr ?</p>
+              <p>deleting &quot;{product.designation}&quot;.</p>
+              <p>are you sure?</p>
             </>
           ) : (
             <form id="product_category_form" onSubmit={handleProduct}>
               <div className="labeledInput">
-                <label>catégorie</label>
+                <label>category</label>
                 <XAutoComplete
                   options={categories}
                   optionDisplayExpr={"name"}
@@ -338,7 +327,7 @@ function Inventory(props) {
                 />
               </div>
               <div className="labeledInput">
-                <label>désignation</label>
+                <label>designation</label>
                 <input
                   className="defaultInput"
                   type="text"
@@ -392,33 +381,24 @@ function Inventory(props) {
                   name="images"
                   onChange={onChange}
                 />
-                <Tooltip title={product.images.length ? "Modifier" : "Ajouter"}>
-                  <IconButton
-                    color={product.images.length ? "warning" : "secondary"}
-                  >
-                    <label
-                      style={{
-                        cursor: "pointer",
-                        width: "25px",
-                        height: "25px",
-                      }}
-                      htmlFor="images"
-                    >
-                      {imagesLoading ? null : product.images.length ? (
-                        <Edit />
-                      ) : (
-                        <AddIcon />
-                      )}
-                    </label>
-                  </IconButton>
-                </Tooltip>
+                <label
+                  className="btn btn-sm"
+                  style={{ marginTop: "8px" }}
+                  htmlFor="images"
+                >
+                  {imagesLoading
+                    ? "Uploading..."
+                    : product.images.length
+                    ? "Change images"
+                    : "Add images"}
+                </label>
               </div>
               <div style={{ position: "relative" }} className="labeledInput">
                 <label>
-                  variantes (tailles, couleurs ...)
+                  variants (sizes, colors ...)
                   {isMobile
                     ? ""
-                    : " cliquer sur 'entrée' ou ',' pour confirmer"}
+                    : " press 'enter' or ',' to confirm"}
                 </label>
                 <input
                   className="defaultInput"
@@ -450,7 +430,7 @@ function Inventory(props) {
                 ) : null}
               </div>
               <div className="labeledInput">
-                <label>prix</label>
+                <label>price</label>
                 <input
                   className="defaultInput"
                   type="number"
@@ -462,7 +442,7 @@ function Inventory(props) {
                 />
               </div>
               <div className="labeledInput">
-                <label>remise (%)</label>
+                <label>discount (%)</label>
                 <input
                   className="defaultInput"
                   type="number"
@@ -473,7 +453,7 @@ function Inventory(props) {
                 />
               </div>
               <div className="labeledInput">
-                <label>quantité</label>
+                <label>quantity</label>
                 <input
                   className="defaultInput"
                   type="number"
@@ -488,13 +468,13 @@ function Inventory(props) {
         </XModal>
         <section className={styles.container}>
           <div className={styles.controls}>
-            <h1>Produits</h1>
+            <h1>Products</h1>
             <div className="row">
               <SearchIcon color="secondary" style={{ marginRight: "-30px" }} />
               <input
                 style={{ paddingLeft: "30px" }}
                 className="defaultInput"
-                placeholder="Désignation..."
+                placeholder="Designation..."
                 onChange={onSearchTermChange}
               />
             </div>
@@ -511,13 +491,12 @@ function Inventory(props) {
                 ? null
                 : !categories.length && (
                     <p>
-                      créez des catégories pour commencer à ajouter des produits
+                      create categories to start adding products
                       !
                     </p>
                   )}
-              <Tooltip title="Ajouter">
-                <IconButton
-                  color="secondary"
+              <button
+                  className="btn btn-primary"
                   onClick={() => {
                     if (userInfo) {
                       checkPremium(
@@ -534,12 +513,10 @@ function Inventory(props) {
                       )();
                     }
                   }}
-                  icon="add"
                   disabled={!categories.length}
                 >
-                  <AddIcon />
-                </IconButton>
-              </Tooltip>
+                  + Add product
+                </button>
             </div>
           </div>
           {loading ? (
@@ -553,9 +530,9 @@ function Inventory(props) {
               <table className="defaultTable">
                 <thead>
                   <tr>
-                    <th>désignation</th>
-                    <th>prix</th>
-                    <th>quantité</th>
+                    <th>designation</th>
+                    <th>price</th>
+                    <th>quantity</th>
                     <th>actions</th>
                   </tr>
                 </thead>
@@ -586,68 +563,38 @@ function Inventory(props) {
                               : "all",
                         }}
                       >
-                        <td data-label="Désignation">{product.designation}</td>
-                        <td data-label="Prix">
+                        <td data-label="Designation">{product.designation}</td>
+                        <td data-label="Price">
                           {product.price.toLocaleString() +
                             " " +
                             userInfo?.shop.currency}
                         </td>
-                        <td data-label="Qté">{product.qty}</td>
+                        <td data-label="Qty">{product.qty}</td>
                         <td data-label="Actions">
-                          <div>
-                            {userInfo?.shop.pack.type === "PREMIUM" ? (
-                              <>
-                                {" "}
-                                <Tooltip title="Modifier">
-                                  <IconButton
-                                    color="warning"
-                                    onClick={() => {
-                                      setProduct(product);
-                                      setAction(AdminActions.UPDATE);
-                                    }}
-                                  >
-                                    <ModeEditIcon sx={{ width: "20px" }} />
-                                  </IconButton>
-                                </Tooltip>
-                                <Tooltip title="Supprimer">
-                                  <IconButton
-                                    color="error"
-                                    onClick={() => {
-                                      setProduct(product);
-                                      setAction(AdminActions.DELETE);
-                                    }}
-                                  >
-                                    <DeleteIcon sx={{ width: "20px" }} />
-                                  </IconButton>
-                                </Tooltip>
-                              </>
-                            ) : index > 9 ? (
-                              "Activer Premium Pour Prendre Contrôle de nouveau"
+                          <div className="btn-group">
+                            {userInfo?.shop.pack.type !== "PREMIUM" &&
+                            index > 9 ? (
+                              "Activate Premium To Regain Control"
                             ) : (
                               <>
-                                {" "}
-                                <Tooltip title="Modifier">
-                                  <IconButton
-                                    color="warning"
-                                    onClick={() => {
-                                      setProduct(product);
-                                      setAction(AdminActions.UPDATE);
-                                    }}
-                                  >
-                                    <ModeEditIcon sx={{ width: "20px" }} />
-                                  </IconButton>
-                                </Tooltip>
-                                <Tooltip title="Supprimer">
-                                  <IconButton
-                                    color="error"
-                                    onClick={() => {
-                                      setProduct(product);
-                                      setAction(AdminActions.DELETE);
-                                    }}
-                                  >
-                                    <DeleteIcon sx={{ width: "20px" }} />
-                                  </IconButton>
-                                </Tooltip>
+                                <button
+                                  className="btn btn-sm"
+                                  onClick={() => {
+                                    setProduct(product);
+                                    setAction(AdminActions.UPDATE);
+                                  }}
+                                >
+                                  Edit
+                                </button>
+                                <button
+                                  className="btn btn-sm btn-danger"
+                                  onClick={() => {
+                                    setProduct(product);
+                                    setAction(AdminActions.DELETE);
+                                  }}
+                                >
+                                  Delete
+                                </button>
                               </>
                             )}
                           </div>
@@ -657,6 +604,13 @@ function Inventory(props) {
                   })}
                 </tbody>
               </table>
+              {!products.length ? (
+                <EmptyState
+                  art="box"
+                  title="No products yet"
+                  text="Use the + button to add your first product."
+                />
+              ) : null}
             </section>
           )}
         </section>

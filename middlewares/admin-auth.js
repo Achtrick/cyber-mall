@@ -1,23 +1,23 @@
-import jwt from "jsonwebtoken";
+import { authenticate } from "../utils/shared/auth";
 
-const secret = process.env.JWT_ADMIN_SECRET;
-const superAdminSecret = process.env.JWT_SUPER_ADMIN_SECRET;
-
+// Shop admin (or super admin) authentication. On success `req.auth` holds
+// { userId, role, shopId, isSuperAdmin }; routes must scope every query to
+// req.auth.shopId instead of trusting a shop id from the request body.
 const auth = async (req, res, next) => {
-  const token = req.headers.authorization;
+  let session = null;
   try {
-    jwt.verify(token, secret);
-    next();
+    session = await authenticate(req, { allowAdmin: true, allowSuperAdmin: true });
   } catch (error) {
-    try {
-      jwt.verify(token, superAdminSecret);
-      next();
-    } catch (error) {
-      res
-        .status(401)
-        .json({ message: "Session expirée, Reconnectez Vous.", expired: true });
-    }
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
   }
+  if (!session) {
+    return res
+      .status(401)
+      .json({ message: "Session expired, please log in again.", expired: true });
+  }
+  req.auth = session;
+  next();
 };
 
 export default auth;

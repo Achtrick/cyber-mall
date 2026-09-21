@@ -7,10 +7,10 @@ function BecomeMember(props) {
   return (
     <section className={styles.container}>
       <h1 data-aos="fade-up" data-aos-offset="100" className={styles.title}>
-        Devenir <span className={styles.title__stress}>membre</span>
+        Become a <span className={styles.title__stress}>member</span>
         .<br />
-        Créer <span className={styles.title__stress}>Votre shop</span>{" "}
-        maintenant.
+        Create <span className={styles.title__stress}>your shop</span>{" "}
+        now.
       </h1>
       <Link href={"/register"}>
         <Button
@@ -23,7 +23,7 @@ function BecomeMember(props) {
           }}
           variant="contained"
         >
-          S&apos;inscrire
+          Sign up
         </Button>
       </Link>
     </section>

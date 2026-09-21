@@ -12,15 +12,15 @@ function HomeHedaer(props) {
     >
       <div className={styles.overlay}>
         <div className={styles.text}>
-          <h1>Rendre le commerce meilleur pour tous</h1>
+          <h1>Making commerce better for everyone</h1>
           <p>
-            Cyber-Mall accompagne la prochaine génération d&apos;entrepreneurs,
-            les plus grandes marques du monde, et tout entre les deux.
+            Cyber-Mall supports the next generation of entrepreneurs, the
+            world&apos;s biggest brands, and everything in between.
           </p>
         </div>
         <Link href={"/register"}>
-          <Button style={{ backgroundColor: "white", color: "black" }}>
-            s&apos;inscrire
+          <Button className={styles.cta}>
+            sign up
           </Button>
         </Link>
       </div>
