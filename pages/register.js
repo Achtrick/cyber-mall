@@ -107,92 +107,98 @@ function Register(props) {
                 >
                   create your shop
                 </h1>
-                <input
-                  className="defaultInput"
-                  required
-                  onChange={onChange}
-                  type="text"
-                  name="firstName"
-                  placeholder="First name"
-                  data-aos="fade-up"
-                  data-aos-offset="100"
-                  data-aos-delay="200"
-                />
-                <input
-                  className="defaultInput"
-                  required
-                  onChange={onChange}
-                  type="text"
-                  name="lastName"
-                  placeholder="Last name"
-                  data-aos="fade-up"
-                  data-aos-offset="100"
-                  data-aos-delay="300"
-                />
-                <input
-                  className="defaultInput"
-                  required
-                  onChange={onChange}
-                  type="number"
-                  name="phone"
-                  placeholder="phone"
-                  data-aos="fade-up"
-                  data-aos-offset="100"
-                  data-aos-delay="400"
-                />
-                <input
-                  className="defaultInput"
-                  required
-                  onChange={onChange}
-                  type="email"
-                  name="email"
-                  placeholder="email"
-                  data-aos="fade-up"
-                  data-aos-offset="100"
-                  data-aos-delay="500"
-                />
-                <div
-                  data-aos="fade-up"
-                  data-aos-offset="100"
-                  data-aos-delay="600"
-                  className={styles.passwordContainer}
-                >
+                <div className={styles.fieldRow}>
                   <input
                     className="defaultInput"
-                    minLength="8"
-                    maxLength="20"
-                    pattern="^[a-zA-Z0-9]{8,20}$"
-                    title="Password must be between 8 and 20 characters and contain only letters and digits."
+                    required
+                    onChange={onChange}
+                    type="text"
+                    name="firstName"
+                    placeholder="First name"
+                    data-aos="fade-up"
+                    data-aos-offset="100"
+                    data-aos-delay="200"
+                  />
+                  <input
+                    className="defaultInput"
+                    required
+                    onChange={onChange}
+                    type="text"
+                    name="lastName"
+                    placeholder="Last name"
+                    data-aos="fade-up"
+                    data-aos-offset="100"
+                    data-aos-delay="300"
+                  />
+                </div>
+                <div className={styles.fieldRow}>
+                  <input
+                    className="defaultInput"
+                    required
+                    onChange={onChange}
+                    type="number"
+                    name="phone"
+                    placeholder="phone"
+                    data-aos="fade-up"
+                    data-aos-offset="100"
+                    data-aos-delay="400"
+                  />
+                  <input
+                    className="defaultInput"
+                    required
+                    onChange={onChange}
+                    type="email"
+                    name="email"
+                    placeholder="email"
+                    data-aos="fade-up"
+                    data-aos-offset="100"
+                    data-aos-delay="500"
+                  />
+                </div>
+                <div className={styles.fieldRow}>
+                  <div
+                    data-aos="fade-up"
+                    data-aos-offset="100"
+                    data-aos-delay="600"
+                    className={styles.passwordContainer}
+                  >
+                    <input
+                      className="defaultInput"
+                      minLength="8"
+                      maxLength="20"
+                      pattern="^[a-zA-Z0-9]{8,20}$"
+                      title="Password must be between 8 and 20 characters and contain only letters and digits."
+                      required
+                      onChange={onChange}
+                      type={passwordVisible ? "text" : "password"}
+                      name="password"
+                      placeholder="password"
+                    />
+
+                    <IconButton
+                      className={styles.passwordVisibilityIcon}
+                      style={{ color: "black" }}
+                      onClick={togglePasswordVisibility}
+                    >
+                      {passwordVisible ? (
+                        <VisibilityOffIcon />
+                      ) : (
+                        <VisibilityIcon />
+                      )}
+                    </IconButton>
+                  </div>
+                  <input
+                    className="defaultInput"
                     required
                     onChange={onChange}
                     type={passwordVisible ? "text" : "password"}
-                    name="password"
-                    placeholder="password"
+                    name="confirmPassword"
+                    placeholder="confirm password"
+                    data-aos="fade-up"
+                    data-aos-offset="100"
+                    data-aos-delay="700"
                   />
-
-                  <IconButton
-                    className={styles.passwordVisibilityIcon}
-                    style={{ color: "black" }}
-                    onClick={togglePasswordVisibility}
-                  >
-                    {passwordVisible ? (
-                      <VisibilityOffIcon />
-                    ) : (
-                      <VisibilityIcon />
-                    )}
-                  </IconButton>
                 </div>
-                <input
-                  className="defaultInput"
-                  required
-                  onChange={onChange}
-                  type={passwordVisible ? "text" : "password"}
-                  name="confirmPassword"
-                  placeholder="confirm password"
-                  data-aos="fade-up"
-                  data-aos-offset="100"
-                  data-aos-delay="700"
-                />
                 <div
                   data-aos="fade-up"
                   data-aos-offset="100"

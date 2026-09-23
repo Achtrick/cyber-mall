@@ -12,12 +12,23 @@
   }
   form {
     width: 100%;
-    max-width: 360px;
+    max-width: 480px;
     margin: 0 auto;
     padding: 0;
     background: transparent;
     border: none;
     box-shadow: none;
+  }
+  // pairs of related fields (name, contact, password) sit side by side on
+  // desktop where there is room, and stack on mobile (see media query below)
+  .fieldRow {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    > * {
+      flex: 1 1 0;
+      min-width: 0;
+    }
   }
   a {
     color: var(--second-color);
@@ -29,7 +40,7 @@
   }
   .row {
     width: 100%;
-    max-width: 980px;
+    max-width: 1080px;
     margin: 24px 0 60px;
     display: flex;
     align-items: stretch;
@@ -122,11 +133,11 @@
 }
 .passwordContainer {
   width: 100%;
-  max-width: var(--form-max);
   position: relative;
   display: flex;
   align-items: center;
   input {
+    width: 100%;
     padding-right: 48px;
   }
 }
@@ -153,6 +164,10 @@
     }
     .col:last-child {
       display: none;
+    }
+    .fieldRow {
+      flex-direction: column;
+      gap: 0;
     }
   }
 }
