@@ -19,13 +19,6 @@
   @include flexLayout(center, flex-end);
   width: 60%;
 }
-.inlineFilters {
-  width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: 10px 28px;
-}
 .filterGroup {
   h4 {
     margin: 0 0 8px;

@@ -153,7 +153,7 @@ function Products({ shop }) {
       : shopInfo?.settings.primaryColor,
   });
 
-  // one chip group, used inline on desktop and inside the sheet on mobile
+  // one chip group, rendered inside the sliding filter sheet on every screen size
   const renderFilterGroups = (selectedCategory, selectedSort, onPick) => (
     <>
       <div className={styles.filterGroup}>
@@ -340,7 +340,7 @@ function Products({ shop }) {
                     style={{ color: shopInfo.settings.primaryColor }}
                     size={"17px"}
                   />
-                ) : isMobile ? (
+                ) : (
                   <button
                     type="button"
                     className={styles.filterButton}
@@ -378,14 +378,6 @@ function Products({ shop }) {
                       </span>
                     ) : null}
                   </button>
-                ) : (
-                  <div className={styles.inlineFilters}>
-                    {renderFilterGroups(
-                      category || "",
-                      sort || "",
-                      applyFilters
-                    )}
-                  </div>
                 )}
               </div>
             </div>
@@ -529,7 +521,7 @@ function Products({ shop }) {
           </section>
           <Drawer
             anchor="bottom"
-            open={isMobile && filtersOpen}
+            open={filtersOpen}
             onClose={() => setFiltersOpen(false)}
             sx={{ zIndex: 3000 }}
             PaperProps={{ className: styles.sheet }}
