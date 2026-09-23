@@ -173,16 +173,23 @@
 .offer {
   position: relative;
   width: 90%;
-  height: 200px;
+  min-height: 200px;
+  // room above the absolutely-positioned price ribbon so wrapped text on
+  // narrow screens never sits under (or overflows past) it
+  padding: 20px;
+  padding-bottom: 45px;
   background-image: url(/images/default-bg.svg);
   background-position: 0%;
   background-repeat: no-repeat;
-  padding: 20px;
   border-radius: 10px;
   border: 2px solid var(--line);
   box-shadow: var(--shadow-sm);
   transition: all 0.3s;
   cursor: pointer;
+  h1 {
+    margin: 0 0 4px;
+    font-size: 18px;
+  }
   p {
     font-size: 20px;
     font-weight: 500;
@@ -273,7 +280,20 @@
     padding: 14px 12px;
   }
   .offer {
-    width: 95%;
+    width: 100%;
+    min-height: 150px;
+    padding: 14px;
+    padding-bottom: 38px;
+    h1 {
+      font-size: 15px;
+    }
+    p {
+      font-size: 15px;
+    }
+    .price {
+      height: 30px;
+      font-size: 15px;
+    }
   }
   .imagesContainer {
     row-gap: 25px;
