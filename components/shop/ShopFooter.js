@@ -2,6 +2,7 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import styles from "../../styles/shop/ShopFooter.module.scss";
 import { deduceColor } from "../../utils/config/convertHelper";
+import { SITE_HOST, SITE_URL } from "../../utils/config/site";
 import {
   AddressIcon,
   FacebookIcon,
@@ -151,8 +152,8 @@ function ShopFooter({ shopInfo }) {
         Powered by&nbsp;
         <img alt="cyber-mall" src="/cyber-mall.png" />
         &nbsp;
-        <Link rel="noreferrer" target="_blank" href="https://cyber-mall.tn">
-          Cyber-mall.tn
+        <Link rel="noreferrer" target="_blank" href={SITE_URL}>
+          {SITE_HOST}
         </Link>
       </div>
     </>

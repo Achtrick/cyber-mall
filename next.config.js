@@ -40,13 +40,6 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   poweredByHeader: false,
-  experimental: {
-    // make sure sharp and its platform binaries (@img/*) ship with the API
-    // routes that use them (upload validation, image resize)
-    outputFileTracingIncludes: {
-      "/api/**/*": ["./node_modules/sharp/**/*", "./node_modules/@img/**/*"],
-    },
-  },
   async headers() {
     return [{ source: "/(.*)", headers: securityHeaders }];
   },

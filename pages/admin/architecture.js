@@ -21,6 +21,7 @@ import {
 } from "../../utils/config/convertHelper";
 import { checkExpirity } from "../../utils/shared/checkExpirity";
 import { getError } from "../../utils/shared/getError";
+import { uploadImages } from "../../utils/shared/uploadImages";
 import {
   AddressIcon,
   FacebookIcon,
@@ -439,12 +440,8 @@ function Architecture(props) {
 
   const updateLogo = async () => {
     setUploadingLogo(true);
-    const formData = new FormData();
-    formData.append("images", compressedLogo);
     try {
-      const { data } = await axios.post("/api/upload", formData, {
-        headers: { "content-type": "multipart/form-data" },
-      });
+      const data = await uploadImages([compressedLogo]);
       const result = await axios.post("/api/admin/shop/update-logo", {
         shopId: shopInfo._id,
         logo: "/uploads/" + data[0].filename,
@@ -478,14 +475,9 @@ function Architecture(props) {
   // SLIDES FUNCTIONS
   const addSlide = async (e) => {
     if (slideImage) {
-      const formData = new FormData();
-      formData.append("images", slideImage);
-
       setSlideImageLoading(true);
       try {
-        const { data } = await axios.post("/api/upload", formData, {
-          headers: { "content-type": "multipart/form-data" },
-        });
+        const data = await uploadImages([slideImage]);
         sliderInfo.push({ ...slide, image: "/uploads/" + data[0].filename });
         await saveArchitecture("sliderComponent");
         setSlideImageLoading(false);
@@ -553,14 +545,9 @@ function Architecture(props) {
   // GALLERY FUNCTIONS
   const addGalleryItem = async (e) => {
     if (galleryItemImage) {
-      const formData = new FormData();
-      formData.append("images", galleryItemImage);
-
       setGalleryItemImageLoading(true);
       try {
-        const { data } = await axios.post("/api/upload", formData, {
-          headers: { "content-type": "multipart/form-data" },
-        });
+        const data = await uploadImages([galleryItemImage]);
         galleryInfo.content.push({
           ...galleryItem,
           image: "/uploads/" + data[0].filename,

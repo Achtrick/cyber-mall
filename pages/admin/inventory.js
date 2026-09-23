@@ -20,6 +20,7 @@ import {
 import { checkExpirity } from "../../utils/shared/checkExpirity";
 import { checkPremium } from "../../utils/shared/checkPremium";
 import { getError } from "../../utils/shared/getError";
+import { uploadImages } from "../../utils/shared/uploadImages";
 import { AddIcon, SearchIcon } from "../../utils/theme/icons";
 
 function Inventory(props) {
@@ -164,18 +165,10 @@ function Inventory(props) {
     setModalLoading(true);
     let result = null;
 
-    let formData = new FormData();
-
-    for (let image of images) {
-      formData.append("images", image);
-    }
-
     try {
       switch (action) {
         case AdminActions.ADD:
-          const { data } = await axios.post("/api/upload", formData, {
-            headers: { "content-type": "multipart/form-data" },
-          });
+          const data = await uploadImages(images);
 
           const uploads = [];
 
@@ -203,9 +196,7 @@ function Inventory(props) {
           break;
         case AdminActions.UPDATE:
           if (images.length) {
-            const { data } = await axios.post("/api/upload", formData, {
-              headers: { "content-type": "multipart/form-data" },
-            });
+            const data = await uploadImages(images);
 
             const uploads = [];
 

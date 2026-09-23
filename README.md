@@ -35,7 +35,18 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 
 ## Deploying on Vercel
 
-- Uploaded images are stored in **Vercel Blob** (`utils/shared/storage.js`) and served through `/api/images/<file>` (resized with sharp, CDN-cached).
+- Uploaded images are stored in **Vercel Blob** (`utils/shared/storage.js`) and served through `/api/images/<file>` as-is, at their original resolution (CDN-cached). There is no server-side resizing.
 - PWA manifests (`/manifests/<shop>.webmanifest`) and the custom-domain map used by `middleware.js` (`/api/domains`) are generated from MongoDB; nothing is written to disk.
 - Set the env vars listed in `.env.example` in the Vercel project settings. Create a Blob store under Storage and connect it to the project so `BLOB_READ_WRITE_TOKEN` is set.
 - Vercel limits request bodies to 4.5 MB, so uploads are capped at 4 MB per request.
+
+### Changing the domain
+
+The public URL is controlled by **one** env var: `NEXT_PUBLIC_SITE_URL` (see `utils/config/site.js`). It feeds meta tags, canonical links, the footer/legal-page links, `sitemap.xml`/`robots.txt`, and the links sent in activation/reset/notification emails (`utils/shared/security.js`'s `getSiteUrl()`).
+
+To switch domains later (e.g. after buying `cyber-mall.tn`):
+1. Attach the domain to the Vercel project (Settings -> Domains).
+2. Set `NEXT_PUBLIC_SITE_URL=https://cyber-mall.tn` in Project Settings -> Environment Variables.
+3. Redeploy.
+
+No code changes needed. Until it's set, everything defaults to `https://cyber-mall.vercel.app`.

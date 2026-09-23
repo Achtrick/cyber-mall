@@ -1,4 +1,5 @@
 import crypto from "crypto";
+import { SITE_URL } from "../config/site";
 
 // ---------------------------------------------------------------------------
 // Small, dependency-free helpers shared by the API routes.
@@ -79,15 +80,15 @@ export const newToken = () => {
  * Base URL used in links sent by email. Never derived from the request's Host
  * header in production (host header poisoning would let an attacker get the
  * victim's reset/activation token sent to a domain they control).
- * Override with SITE_URL when deploying elsewhere.
+ * Backed by utils/config/site.js -- set NEXT_PUBLIC_SITE_URL to change it.
  */
 export const getSiteUrl = (req) => {
-  if (process.env.SITE_URL) return process.env.SITE_URL.replace(/\/+$/, "");
+  if (process.env.NEXT_PUBLIC_SITE_URL || process.env.SITE_URL) return SITE_URL;
   if (process.env.NODE_ENV !== "production" && req?.headers?.host) {
     const proto = req.headers["x-forwarded-proto"] || "http";
     return `${proto}://${req.headers.host}`;
   }
-  return "https://cyber-mall.tn";
+  return SITE_URL;
 };
 
 // ---------------------------------------------------------------------------

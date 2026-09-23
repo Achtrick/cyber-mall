@@ -1,6 +1,7 @@
 import Link from "next/link";
 import ConnectedGuard from "../components/guards/connectedGuard";
 import Layout from "../components/vitrine/Layout";
+import { SITE_URL } from "../utils/config/site";
 
 export default function Privacy(props) {
   return (
@@ -111,12 +112,8 @@ export default function Privacy(props) {
             <li>
               <p>
                 <strong>Website</strong> refers to cyber-mall, accessible from{" "}
-                <Link
-                  href="https://www.cyber-mall.tn"
-                  rel="noreferrer"
-                  target="_blank"
-                >
-                  https://www.cyber-mall.tn
+                <Link href={SITE_URL} rel="noreferrer" target="_blank">
+                  {SITE_URL}
                 </Link>
               </p>
             </li>
@@ -480,12 +477,8 @@ export default function Privacy(props) {
             <li>
               <p>
                 By visiting this page on our website:{" "}
-                <Link
-                  href="https://cyber-mall.tn"
-                  rel="noreferrer"
-                  target="_blank"
-                >
-                  https://cyber-mall.tn
+                <Link href={SITE_URL} rel="noreferrer" target="_blank">
+                  {SITE_URL}
                 </Link>
               </p>
             </li>

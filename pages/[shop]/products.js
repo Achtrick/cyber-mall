@@ -285,6 +285,7 @@ function Products({ shop }) {
               ? category[0].toUpperCase() + category.substring(1)
               : "Our products"
           }
+          url={router.asPath.replace(/^\//, "")}
           description={
             "Let us keep your coffee warm while you shop!"
           }

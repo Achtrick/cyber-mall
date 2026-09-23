@@ -21,6 +21,7 @@ import {
 import { checkExpirity } from "../../utils/shared/checkExpirity";
 import { checkPremium } from "../../utils/shared/checkPremium";
 import { getError } from "../../utils/shared/getError";
+import { uploadImages } from "../../utils/shared/uploadImages";
 
 function Categories() {
   const { userInfo } = useSelector((state) => state.auth);
@@ -95,9 +96,6 @@ function Categories() {
     setModalLoading(true);
     let result = null;
 
-    let formData = new FormData();
-    formData.append("images", images);
-
     try {
       switch (action) {
         case AdminActions.ADD:
@@ -107,9 +105,7 @@ function Categories() {
               variant: "error",
             });
           }
-          const { data } = await axios.post("/api/upload", formData, {
-            headers: { "content-type": "multipart/form-data" },
-          });
+          const data = await uploadImages([images]);
 
           result = await axios.post("/api/admin/categories/add", {
             shop: userInfo.shop._id,
@@ -120,9 +116,7 @@ function Categories() {
           break;
         case AdminActions.UPDATE:
           if (images !== "") {
-            const { data } = await axios.post("/api/upload", formData, {
-              headers: { "content-type": "multipart/form-data" },
-            });
+            const data = await uploadImages([images]);
             result = await axios.put("/api/admin/categories/update", {
               ...category,
               icon: "/uploads/" + data[0].filename,

@@ -128,6 +128,7 @@ function Product({ shop, slug }) {
         <ShopLayout
           title={product?.designation}
           description={product?.description}
+          url={router.asPath.replace(/^\//, "")}
           image={
             product?.image &&
             `/api/images/${product?.image

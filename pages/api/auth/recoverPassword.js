@@ -36,7 +36,8 @@ handler.post(async (req, res) => {
 
     // a fresh, unguessable token per request; only its hash is stored
     const token = newToken();
-    const url = `${getSiteUrl(req)}/reset-password/${token.raw}`;
+    const siteUrl = getSiteUrl(req);
+    const url = `${siteUrl}/reset-password/${token.raw}`;
 
     user.resetToken = token.hash;
     user.resetTokenExpires = new Date(Date.now() + RESET_TTL_MS);
@@ -63,7 +64,7 @@ handler.post(async (req, res) => {
                   padding: 20px 0px;
                 "
               >
-              <img style="object-fit: contain;" alt="Cyber-Mall" title="Cyber-Mall" src="https://cyber-mall.tn/images/logo.png" width="70%" height="80px">
+              <img style="object-fit: contain;" alt="Cyber-Mall" title="Cyber-Mall" src="${siteUrl}/images/logo.png" width="70%" height="80px">
               </div>
               <h1 style="text-transform: capitalize; font-size: 15px; font-wheight:500;" width="100%" text-align="center">Follow this link to change your password:</h1>
                 <div` +

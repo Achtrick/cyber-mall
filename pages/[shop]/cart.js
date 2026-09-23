@@ -121,6 +121,7 @@ function Cart({ shop }) {
           title={"My cart"}
           description={shopInfo.architecture.about}
           shopInfo={shopInfo}
+          url={router.asPath.replace(/^\//, "")}
         >
           <div className={styles.container}>
             {loading ? (

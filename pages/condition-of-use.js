@@ -1,6 +1,7 @@
 import Link from "next/link";
 import ConnectedGuard from "../components/guards/connectedGuard";
 import Layout from "../components/vitrine/Layout";
+import { SITE_URL } from "../utils/config/site";
 
 export const conditionOfUse = (
   <div style={{ padding: "20px", fontSize: "13px" }}>
@@ -55,8 +56,8 @@ export const conditionOfUse = (
       <li>
         <p>
           By visiting this page on our website:{" "}
-          <Link href="https://cyber-mall.tn" rel="noreferrer" target="_blank">
-            https://cyber-mall.tn
+          <Link href={SITE_URL} rel="noreferrer" target="_blank">
+            {SITE_URL}
           </Link>
         </p>
       </li>

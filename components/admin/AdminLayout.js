@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import InstallPWA from "../../components/installPwa";
 import styles from "../../styles/admin/AdminLayout.module.scss";
+import { SITE_HOST, SITE_URL } from "../../utils/config/site";
 import {
   CategoryIcon,
   CloseIcon,
@@ -54,10 +55,10 @@ function AdminLayout(props) {
       <Head>
         <title>Cyber-Mall</title>
         <meta name="description" content="Cyber-Mall Dashboard"></meta>
-        <meta property="og:locale" content="fr_TN" />
+        <meta property="og:locale" content="en_US" />
         <meta property="og:title" content="Cyber-Mall" />
         <meta property="og:description" content="Cyber-Mall Dashboard" />
-        <meta property="og:url" content="http://cyber-mall.tn/" />
+        <meta property="og:url" content={`${SITE_URL}/`} />
         <meta property="og:image" content="/logo-512.png" />
         <link
           rel="apple-touch-icon"
@@ -75,12 +76,12 @@ function AdminLayout(props) {
         <meta name="geo.position" content="35°50′N;10°38′E" />
         <meta name="ICBM" content="35°50′N , 10°38′E" />
         <meta property="og:type" content="website" />
-        <meta property="og:site_name" content="cyber-mall.tn" />
+        <meta property="og:site_name" content={SITE_HOST} />
         <meta name="msapplication-TileColor" content="#000000" />
         <meta name="msapplication-config" content="/browserconfig.xml" />
         <meta name="theme-color" content="#000" />
         <meta charSet="utf-8" />
-        <link rel="canonical" href="https://cyber-mall.tn" />
+        <link rel="canonical" href={SITE_URL} />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <meta name="robots" content="index, follow" />
       </Head>

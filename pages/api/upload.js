@@ -1,54 +1,53 @@
 import crypto from "crypto";
-import multer from "multer";
 import nc from "next-connect";
-import sharp from "sharp";
 import auth from "../../middlewares/admin-auth";
+import { detectImageFormat } from "../../utils/shared/imageFormat";
 import { rateLimit } from "../../utils/shared/security";
 import { saveFile } from "../../utils/shared/storage";
 
-// Only real raster images are accepted. SVG/HTML/etc. are rejected on purpose
-// (they can carry scripts). The type is decided from the file's content, never
-// from the client supplied mimetype / filename.
-const FORMATS = {
-  jpeg: { ext: "jpg", mimetype: "image/jpeg" },
-  png: { ext: "png", mimetype: "image/png" },
-  webp: { ext: "webp", mimetype: "image/webp" },
-  gif: { ext: "gif", mimetype: "image/gif" },
-  heif: { ext: "avif", mimetype: "image/avif" },
-};
-const ALLOWED_MIMETYPES = [
-  "image/jpeg",
-  "image/png",
-  "image/webp",
-  "image/gif",
-  "image/avif",
-];
+// Vercel caps request bodies at 4.5 MB; stay under that with room to spare.
+const MAX_UPLOAD_BYTES = 4 * 1024 * 1024;
 
-// Memory storage: Vercel's filesystem is read-only, files go to Vercel Blob.
-const upload = multer({
-  storage: multer.memoryStorage(),
-  limits: { fileSize: 4 * 1024 * 1024, files: 10, fields: 5, parts: 15 },
-  fileFilter: (req, file, cb) => {
-    if (!ALLOWED_MIMETYPES.includes(file.mimetype)) {
-      const err = new Error("Only JPEG, PNG, WebP, GIF or AVIF images are allowed");
-      err.status = 400;
-      return cb(err);
-    }
-    cb(null, true);
-  },
-});
+// One raw file per request -- no multipart parsing, no multer. The frontend
+// (utils/shared/uploadImages.js) posts the file's bytes directly with its
+// real Content-Type. Read as a plain Node stream (bodyParser is off below)
+// and cap the size manually, the same job multer's `limits.fileSize` did.
+const readBody = (req, maxBytes) =>
+  new Promise((resolve, reject) => {
+    const chunks = [];
+    let total = 0;
+    let tooLarge = false;
+    req.on("data", (chunk) => {
+      total += chunk.length;
+      // stop buffering once over the cap (the actual DoS concern), but keep
+      // draining the socket so the client still gets a clean JSON response
+      // instead of an abrupt connection reset
+      if (total > maxBytes) {
+        tooLarge = true;
+        return;
+      }
+      chunks.push(chunk);
+    });
+    req.on("end", () => {
+      if (tooLarge) {
+        const err = new Error("Image is too large (4 MB max)");
+        err.status = 400;
+        return reject(err);
+      }
+      resolve(Buffer.concat(chunks));
+    });
+    req.on("error", reject);
+  });
 
 const handler = nc({
   onError: (err, req, res) => {
-    const known = err?.status === 400 || err?.name === "MulterError";
+    const known = err?.status === 400;
     if (!known) console.error(err);
     // storage (Vercel Blob) errors are configuration problems and carry no secrets
     const storage = err?.name === "BlobError" || err?.constructor?.name?.startsWith("Blob");
     res.status(known ? 400 : 500).json({
       message: known
-        ? err.code === "LIMIT_FILE_SIZE"
-          ? "Image is too large (4 MB max)"
-          : err.message
+        ? err.message
         : storage
         ? `Storage error: ${String(err.message).slice(0, 200)}`
         : "Upload failed",
@@ -59,39 +58,28 @@ const handler = nc({
 handler
   .use(auth)
   .use((req, res, next) => {
-    if (!rateLimit(req, res, { name: "upload", key: req.auth.userId, max: 60, windowMs: 10 * 60 * 1000 })) return;
+    if (!rateLimit(req, res, { name: "upload", key: req.auth.userId, max: 120, windowMs: 10 * 60 * 1000 })) return;
     next();
   })
-  .use(upload.array("images"))
   .post(async (req, res) => {
-    // uploaded files are namespaced with the owner's shop id so a shop can only
-    // reference (and later delete) its own files, see cleanImage()
-    const owner = req.auth.shopId || "admin";
-    // validate every file first so a bad one does not leave partial uploads
-    const checked = [];
-    for (const file of req.files ?? []) {
-      let format;
-      try {
-        format = (await sharp(file.buffer).metadata()).format;
-      } catch (e) {
-        format = null;
-      }
-      const kind = FORMATS[format];
-      if (!kind) {
-        return res.status(400).json({ message: "Invalid image file" });
-      }
-      checked.push({ file, kind });
+    const buffer = await readBody(req, MAX_UPLOAD_BYTES);
+    if (!buffer.length) {
+      return res.status(400).json({ message: "No image received" });
     }
 
-    const files = [];
-    for (const [i, { file, kind }] of checked.entries()) {
-      const filename = `${owner}-${Date.now()}${i ? "-" + i : ""}-${crypto
-        .randomBytes(4)
-        .toString("hex")}.${kind.ext}`;
-      await saveFile(filename, file.buffer, kind.mimetype);
-      files.push({ filename, mimetype: kind.mimetype, size: file.size });
+    // the real file type is decided from its content, never from the client
+    // supplied Content-Type/filename (blocks SVG/HTML smuggled as images)
+    const format = detectImageFormat(buffer);
+    if (!format) {
+      return res.status(400).json({ message: "Invalid image file" });
     }
-    res.status(200).json(files);
+
+    // namespaced by owner so a shop can only reference (and later delete) its own files
+    const owner = req.auth.shopId || "admin";
+    const filename = `${owner}-${Date.now()}-${crypto.randomBytes(4).toString("hex")}.${format.ext}`;
+    await saveFile(filename, buffer, format.mimetype);
+
+    res.status(200).json({ filename, mimetype: format.mimetype, size: buffer.length });
   });
 
 export default handler;

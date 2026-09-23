@@ -41,7 +41,8 @@ handler.post(async (req, res) => {
 
   // one unique, unguessable activation token per registration; only its hash is stored
   const token = newToken();
-  const url = `${getSiteUrl(req)}/api/auth/activate/${token.raw}`;
+  const siteUrl = getSiteUrl(req);
+  const url = `${siteUrl}/api/auth/activate/${token.raw}`;
 
   try {
     await connectDB();
@@ -142,7 +143,7 @@ handler.post(async (req, res) => {
                 padding: 20px 0px;
               "
             >
-            <img style="object-fit: contain;" alt="Cyber-Mall" title="Cyber-Mall" src="https://cyber-mall.tn/images/logo.png" width="70%" height="80px">
+            <img style="object-fit: contain;" alt="Cyber-Mall" title="Cyber-Mall" src="${siteUrl}/images/logo.png" width="70%" height="80px">
             </div>
             <h1 style="text-transform: capitalize; font-size: 15px; font-wheight:500;" width="100%" text-align="center">Follow this link to activate your shop:</h1>
               <div` +

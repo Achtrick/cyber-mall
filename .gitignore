@@ -37,8 +37,6 @@ next-env.d.ts
 
 certificates
 
-/public/uploads
-
 # secrets / certificates (never commit)
 .env
 .env.production

@@ -9,6 +9,7 @@ import { ModalSizes } from "../../components/admin/ModalSettings";
 import DisconnectedGuard from "../../components/guards/disconnectedGuard";
 import XModal from "../../components/ui-components/XModal";
 import styles from "../../styles/admin/Dashboard.module.scss";
+import { SITE_URL } from "../../utils/config/site";
 import { getError } from "../../utils/shared/getError";
 
 function DomainName(props) {
@@ -114,7 +115,7 @@ function DomainName(props) {
               <p style={{ textTransform: "unset", fontWeight: "500" }}>
                 {userInfo?.shop?.domainName.length
                   ? "Domain name: " + userInfo?.shop?.domainName
-                  : "Your shop is now available at: https://cyber-mall.tn/" +
+                  : `Your shop is now available at: ${SITE_URL}/` +
                     userInfo?.shop.name}
               </p>
               <br />

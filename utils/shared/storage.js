@@ -1,6 +1,4 @@
 import { del, list, put } from "@vercel/blob";
-import fs from "fs";
-import path from "path";
 
 // All uploads live in Vercel Blob under the "uploads/" prefix.
 // The app keeps referring to images by bare filename ("/uploads/<name>" in DB,
@@ -40,17 +38,6 @@ export const getFileUrl = async (fileName) => {
   return blob ? blob.url : null;
 };
 
-// Legacy files that were uploaded to the local disk before the move to Blob.
-const readLocalFile = (fileName) => {
-  try {
-    return fs.readFileSync(
-      path.join(process.cwd(), "public/uploads", path.basename(fileName))
-    );
-  } catch (e) {
-    return null;
-  }
-};
-
 // Public blob URLs are deterministic (<storeId>.public.blob.vercel-storage.com/<pathname>) and the
 // store id is part of the read/write token, so the common case needs no list() call at all.
 const getDirectUrl = (fileName) => {
@@ -72,7 +59,7 @@ export const getFileBuffer = async (fileName) => {
     }
   }
   const url = await getFileUrl(fileName);
-  if (!url) return readLocalFile(fileName);
+  if (!url) return null;
   let r = await fetch(url);
   if (!r.ok && process.env.BLOB_READ_WRITE_TOKEN) {
     // private stores need the token to read
@@ -80,7 +67,7 @@ export const getFileBuffer = async (fileName) => {
       headers: { Authorization: `Bearer ${process.env.BLOB_READ_WRITE_TOKEN}` },
     });
   }
-  if (!r.ok) return readLocalFile(fileName);
+  if (!r.ok) return null;
   return Buffer.from(await r.arrayBuffer());
 };
 

@@ -153,6 +153,7 @@ function Shop({ shop }) {
         <ShopLayout
           shopInfo={shopInfo}
           description={shopInfo.architecture.about}
+          url={router.asPath.replace(/^\//, "")}
         >
           <section>
             <div style={{ marginBottom: "20px", width: "100%" }}>

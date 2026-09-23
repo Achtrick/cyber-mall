@@ -1,6 +1,7 @@
 import Head from "next/head";
 import React from "react";
 import InstallPWA from "../installPwa";
+import { SITE_HOST, SITE_URL } from "../../utils/config/site";
 import ShopFooter from "./ShopFooter";
 import ShopHeader from "./ShopHeader";
 
@@ -35,7 +36,7 @@ function ShopLayout({
           property="og:title"
           content={title ? `${title} - ${shopInfo.name}` : `${shopInfo.name}`}
         />
-        <meta property="og:url" content={`http://cyber-mall.tn/${url}`} />
+        <meta property="og:url" content={`${SITE_URL}/${url}`} />
         {description && (
           <meta property="og:description" content={description} />
         )}
@@ -56,7 +57,7 @@ function ShopLayout({
         />
         <link rel="manifest" href={`/manifests/${shopInfo.name}.webmanifest`} />
         <meta property="og:type" content="website" />
-        <meta property="og:site_name" content={`http://cyber-mall.tn/${url}`} />
+        <meta property="og:site_name" content={SITE_HOST} />
         <meta
           name="msapplication-TileColor"
           content={shopInfo.settings.headerColor}
