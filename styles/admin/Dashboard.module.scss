@@ -31,6 +31,98 @@
   gap: 10px;
   margin: 8px 0px 14px;
 }
+.controlsEnd {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.controlsHint {
+  margin: 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+// search input with a leading icon (properly layered, not a negative-margin hack)
+.searchBox {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 260px;
+  svg {
+    position: absolute;
+    left: 12px;
+    color: var(--muted);
+    font-size: 20px;
+    pointer-events: none;
+  }
+  input {
+    padding-left: 36px;
+    margin: 0;
+  }
+}
+// domain-name page
+.domainCard {
+  width: 100%;
+  max-width: 440px;
+  margin: 40px auto 0;
+  padding: 32px 28px;
+  text-align: center;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+
+  .domainIcon {
+    width: 52px;
+    height: 52px;
+    margin: 0 auto 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--tint);
+    color: var(--first-color);
+    svg {
+      font-size: 26px;
+    }
+  }
+  .domainStatus {
+    margin: 0 0 6px;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--ink);
+    text-transform: none;
+    word-break: break-word;
+  }
+  .domainSub {
+    margin: 0 0 20px;
+    font-size: 13px;
+    color: var(--muted);
+    text-transform: none;
+    word-break: break-word;
+  }
+  .connectedPill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    background: #dcf5df;
+    color: #1a6b2a;
+  }
+}
+.dnsHint {
+  margin: 14px 0 8px;
+  font-size: 13px;
+  color: var(--ink-soft);
+  text-transform: none;
+}
+
 .productImagesContainer {
   width: 100%;
   display: grid;
@@ -111,48 +203,154 @@
   }
 }
 .account {
-  .row {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 760px;
+
+  // shared card shell for the plan + profile sections
+  .planCard,
+  .profileCard {
     width: 100%;
-    padding: 10px;
-    background-repeat: no-repeat;
-    border-radius: 10px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    padding: 22px 24px;
+  }
+
+  .planCard {
+    border-top: 4px solid var(--line-strong);
+  }
+  .planFree {
+    border-top-color: #b9b9c2;
+  }
+  .planPremium {
+    border-top-color: #ffc800;
+  }
+
+  .planHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 16px;
+    img {
+      border-radius: var(--radius-sm);
+      background: var(--surface-alt);
+    }
+  }
+  .planHeaderInfo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    h2 {
+      margin: 0;
+      font-size: 1.3rem;
+      text-transform: capitalize;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+  .packPill {
+    flex-shrink: 0;
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+  .packFree {
+    background: var(--tint);
+    color: var(--ink-soft);
+  }
+  .packPremium {
+    background: #fff1d6;
+    color: #9a5b00;
+  }
+
+  .featureList {
+    list-style: none;
+    margin: 0 0 16px;
+    padding: 14px 0 0;
+    border-top: 1px solid var(--line);
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px 20px;
+    li {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin: 0;
+      font-size: 13px;
+      color: var(--ink-soft);
+      text-transform: capitalize;
+      svg {
+        font-size: 16px;
+        color: #1f9d63;
+        flex-shrink: 0;
+      }
+    }
+  }
+
+  .planFooter {
+    padding-top: 14px;
+    border-top: 1px solid var(--line);
+  }
+  .expiryNote {
+    margin: 0 0 10px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .planFooterHint {
+    margin: 0 0 12px;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    max-width: 480px;
+  }
+  .pendingLabel {
+    margin: 0 0 8px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  .profileHeader {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 18px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--line);
+  }
+  .profileHeaderInfo {
+    flex: 1;
+    min-width: 0;
+  }
+  .profileName {
+    margin: 0;
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--ink);
     text-transform: capitalize;
-    form {
-      @include flexLayout(flex-start, flex-start, column);
-    }
-    input {
-      max-width: 320px;
-    }
-    h5 {
-      margin: 0px;
-      font-size: 18px;
-    }
-    h1 {
-      font-size: clamp(2rem, 6vw, 2.8rem);
-      margin: 12px 0px;
-    }
-    p {
-      width: 100%;
-      margin: 10px 0px;
-      @include flexLayout(center, flex-start);
-    }
+  }
+  .profileSub {
+    font-size: 12px;
+    color: var(--muted);
   }
 
-  .silver {
-    background-image: url(/images/silver-bg.svg);
-    background-position: 0%;
-    background-position-y: -50px;
-  }
-
-  .gold {
-    background-image: url(/images/gold-bg.svg);
-    background-position: 0%;
-    background-position-y: -50px;
+  .profileForm {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px 20px;
   }
 
   .passwordContainer {
     width: 100%;
-    max-width: 320px;
     position: relative;
     display: flex;
     align-items: center;
@@ -167,6 +365,82 @@
     top: 50%;
     transform: translateY(-50%);
     margin-left: 0 !important;
+  }
+}
+
+@media (max-width: 800px) {
+  .account {
+    .profileForm {
+      grid-template-columns: 1fr;
+    }
+    .featureList {
+      grid-template-columns: 1fr;
+    }
+    .planHeader img {
+      width: 48px;
+      height: 48px;
+    }
+  }
+  .premiumPerks {
+    grid-template-columns: 1fr;
+  }
+}
+
+// shared payment-instructions callout (used in the upgrade/extend modal and
+// in the pending-request panel on the account page, so it lives outside any
+// ancestor-scoped block)
+.calloutBox {
+  background: var(--tint);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin: 6px 0 14px;
+}
+.calloutTitle {
+  margin: 0 0 8px;
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--ink);
+}
+.calloutList {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--ink-soft);
+  li {
+    margin: 4px 0;
+  }
+}
+.paypalRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  img {
+    border-radius: var(--radius-sm);
+  }
+}
+.modalHint {
+  margin: 4px 0 12px;
+  color: var(--ink-soft);
+}
+.premiumPerks {
+  list-style: none;
+  margin: 4px 0 0;
+  padding: 12px 0 0;
+  border-top: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px 16px;
+  li {
+    font-size: 13px;
+    color: var(--ink-soft);
+    &::before {
+      content: "\2713  ";
+      color: #1f9d63;
+      font-weight: 700;
+    }
   }
 }
 

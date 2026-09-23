@@ -12,7 +12,6 @@ import { useDispatch, useSelector } from "react-redux";
 import AdminLayout from "../../components/admin/AdminLayout";
 import { ModalSizes } from "../../components/admin/ModalSettings";
 import DisconnectedGuard from "../../components/guards/disconnectedGuard";
-import XButton from "../../components/ui-components/XButton";
 import XModal from "../../components/ui-components/XModal";
 import styles from "../../styles/admin/Dashboard.module.scss";
 import { checkExpirity } from "../../utils/shared/checkExpirity";
@@ -22,6 +21,35 @@ import {
   VisibilityIcon,
   VisibilityOffIcon,
 } from "../../utils/theme/icons";
+
+// payment instructions shown both while proposing an upgrade and while one
+// is pending confirmation
+function PaymentInstructions({ price, requestNumber }) {
+  return (
+    <div className={styles.calloutBox}>
+      <p className={styles.calloutTitle}>Send {price} DT to:</p>
+      <ul className={styles.calloutList}>
+        <li>RIB: 17503000000268993518</li>
+        <li className={styles.paypalRow}>
+          <span>PAYPAL: ashref.mtir@gmail.com</span>
+          <img alt="qrcode" width="72" height="72" src="/paypal.png" />
+        </li>
+        <li>
+          Then contact us on WhatsApp{" "}
+          <a style={{ textDecoration: "underline" }}>47 010 114</a>
+          {requestNumber ? (
+            <>
+              {" "}
+              with the request number{" "}
+              <a style={{ textDecoration: "underline" }}>{requestNumber}</a>
+            </>
+          ) : null}{" "}
+          with proof of payment.
+        </li>
+      </ul>
+    </div>
+  );
+}
 
 function Account(props) {
   const { userInfo } = useSelector((state) => state.auth);
@@ -214,7 +242,7 @@ function Account(props) {
                   <div
                     className={
                       o.price === offer?.price
-                        ? `${styles.offer} + ${styles.activeOffer}`
+                        ? `${styles.offer} ${styles.activeOffer}`
                         : styles.offer
                     }
                     key={index}
@@ -227,55 +255,17 @@ function Account(props) {
                 );
               })}
             </div>
-            <p>
-              select an offer and proceed with the
-              transaction:
+            <p className={styles.modalHint}>
+              Select a plan above, then confirm to see the payment details.
             </p>
-            <br />
-            {offer && (
-              <span>
-                <p style={{ color: "blue" }}>
-                  After confirmation, send {offer.price}
-                  &nbsp;DT to:
-                </p>
-                <ul style={{ color: "blue" }}>
-                  <li>RIB: 17503000000268993518</li>{" "}
-                  <li>
-                    <a
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                      }}
-                    >
-                      PAYPAL: ashref.mtir@gmail.com |{" "}
-                      <img
-                        alt="qrcode"
-                        width="100px"
-                        height="100px"
-                        src="/paypal.png"
-                      />
-                    </a>
-                  </li>{" "}
-                  <li>
-                    Then contact us on WhatsApp{" "}
-                    <a style={{ textDecoration: "underline" }}>47 010 114</a>{" "}
-                    with proof of payment.
-                  </li>
-                </ul>{" "}
-              </span>
-            )}
-            <p>
-              access the dashboard on the go and break the
-              restrictions!
-            </p>
-            <hr />
-            <ul style={{ listStyle: "none", marginLeft: "-20px" }}>
-              <li>- categories: unlimited ✓</li>
-              <li>- products: unlimited ✓</li>
-              <li>- images per product: up to 6 ✓</li>
-              <li>- home page slides: unlimited ✓</li>
-              <li>- invoice generation: allowed ✓</li>
-              <li>- custom domain name: allowed ✓</li>
+            {offer && <PaymentInstructions price={offer.price} />}
+            <ul className={styles.premiumPerks}>
+              <li>Unlimited categories</li>
+              <li>Unlimited products</li>
+              <li>Up to 6 images per product</li>
+              <li>Unlimited home page slides</li>
+              <li>Invoice generation</li>
+              <li>Custom domain name</li>
             </ul>
           </section>
         </XModal>
@@ -286,15 +276,21 @@ function Account(props) {
           {userInfo && (
             <section className={styles.account}>
               <div
-                className={`${styles.row} + ${
-                  pack.type === "FREE" ? styles.silver : styles.gold
+                className={`${styles.planCard} ${
+                  pack.type === "FREE" ? styles.planFree : styles.planPremium
                 }`}
               >
-                <div
-                  className="row"
-                  style={{ justifyContent: "space-between" }}
-                >
-                  <h1>{userInfo.shop.name}</h1>
+                <div className={styles.planHeader}>
+                  <div className={styles.planHeaderInfo}>
+                    <h2>{userInfo.shop.name}</h2>
+                    <span
+                      className={`${styles.packPill} ${
+                        pack.type === "FREE" ? styles.packFree : styles.packPremium
+                      }`}
+                    >
+                      {pack.type}
+                    </span>
+                  </div>
                   {userInfo?.shop.logo ? (
                     <img
                       alt="logo"
@@ -303,145 +299,113 @@ function Account(props) {
                         e.currentTarget.onerror = null;
                         e.currentTarget.src = "/images/default-store.png";
                       }}
-                      width={"80"}
-                      height={"80"}
+                      width={"64"}
+                      height={"64"}
                       style={{ objectFit: "contain" }}
                     />
                   ) : (
                     <img
                       alt="logo"
                       src={"/images/default-store.png"}
-                      width={"60"}
-                      height={"60"}
+                      width={"56"}
+                      height={"56"}
                       style={{ objectFit: "contain" }}
                     />
                   )}
                 </div>
-                <p>
-                  {pack.type !== "FREE" ? (
-                    <>
+
+                <ul className={styles.featureList}>
+                  {pack.type !== "FREE" && (
+                    <li>
                       <Check />
-                      &nbsp;invoice printing
-                    </>
-                  ) : null}
-                </p>
-                <p>
-                  <Check />
-                  &nbsp;categories{" "}
-                  {pack.type === "FREE" ? "limited to 5" : "unlimited"}
-                </p>
-                <p>
-                  <Check />
-                  &nbsp;products{" "}
-                  {pack.type === "FREE" ? "limited to 10" : "unlimited"}
-                </p>
-                <p>
-                  <Check />
-                  &nbsp;
-                  {pack.type === "FREE"
-                    ? "1 image per product"
-                    : "up to 6 images per product"}
-                </p>
-                <p>
-                  <Check />
-                  &nbsp;
-                  {pack.type === "FREE"
-                    ? "slides limited to 3"
-                    : "unlimited slides"}
-                </p>
-                <p>
-                  {pack.type !== "FREE" ? (
-                    <>
+                      invoice printing
+                    </li>
+                  )}
+                  <li>
+                    <Check />
+                    categories {pack.type === "FREE" ? "limited to 5" : "unlimited"}
+                  </li>
+                  <li>
+                    <Check />
+                    products {pack.type === "FREE" ? "limited to 10" : "unlimited"}
+                  </li>
+                  <li>
+                    <Check />
+                    {pack.type === "FREE"
+                      ? "1 image per product"
+                      : "up to 6 images per product"}
+                  </li>
+                  <li>
+                    <Check />
+                    {pack.type === "FREE" ? "slides limited to 3" : "unlimited slides"}
+                  </li>
+                  {pack.type !== "FREE" && (
+                    <li>
                       <Check />
-                      &nbsp;custom domain name
+                      custom domain name
+                    </li>
+                  )}
+                </ul>
+
+                <div className={styles.planFooter}>
+                  {pack.type !== "FREE" && (
+                    <p className={styles.expiryNote}>
+                      Expires on {moment(pack.expiresIn).format("DD-MM-YYYY")}
+                    </p>
+                  )}
+                  {upgradeDemand ? (
+                    <div>
+                      <p className={styles.pendingLabel}>
+                        Upgrade request #{upgradeDemand.orderNumber} awaiting confirmation
+                      </p>
+                      <PaymentInstructions
+                        price={
+                          offers.find((o) => o.period === upgradeDemand.period).price
+                        }
+                        requestNumber={upgradeDemand.orderNumber}
+                      />
+                    </div>
+                  ) : (
+                    <>
+                      {pack.type === "FREE" && (
+                        <p className={styles.planFooterHint}>
+                          Upgrade to premium for unlimited categories &amp;
+                          products, invoice printing and a custom domain name.
+                        </p>
+                      )}
+                      <button
+                        type="button"
+                        className="btn btn-primary"
+                        onClick={
+                          pack.type === "FREE"
+                            ? () => setAction("UPGRADE")
+                            : () => setAction("EXTEND")
+                        }
+                      >
+                        {pack.type === "FREE"
+                          ? "Upgrade to premium"
+                          : "Extend subscription"}
+                      </button>
                     </>
-                  ) : null}
-                </p>
-                <hr />
-                <h5>Pack: {pack.type}</h5>
-                {pack.type !== "FREE" && (
-                  <h5>
-                    Expires on: {moment(pack.expiresIn).format("DD-MM-YYYY")}
-                  </h5>
-                )}
-                {pack.type === "FREE" && !upgradeDemand && (
-                  <>
-                    <p>upgrade to premium and enjoy our services!</p>
-                    <ul>
-                      <li>Invoice printing</li>
-                      <li>Custom domain name integration</li>
-                      <li>Unlimited categories</li>
-                      <li>Unlimited products</li>
-                      <li>Up to 6 images per product</li>
-                      <li>Unlimited slides</li>
-                      <li>Custom domain name integration</li>
-                    </ul>
-                  </>
-                )}
-                {upgradeDemand ? (
-                  <span>
-                    <h4 style={{ color: "blue" }}>
-                      Transfer{" "}
-                      {
-                        offers.find((o) => o.period === upgradeDemand.period)
-                          .price
-                      }
-                      &nbsp;DT to:
-                    </h4>
-                    <ul style={{ color: "blue" }}>
-                      <li>
-                        <h4>RIB: 17503000000268993518</h4>
-                      </li>
-                      <li>
-                        <h4 style={{ display: "flex", alignItems: "center" }}>
-                          PAYPAL: ashref.mtir@gmail.com |{" "}
-                          <img
-                            width="100px"
-                            height="100px"
-                            alt="qrcode"
-                            src="/paypal.png"
-                          />
-                        </h4>{" "}
-                      </li>
-                      <li>
-                        <h4>
-                          then contact us on WhatsApp{" "}
-                          <a style={{ textDecoration: "underline" }}>
-                            47 010 114
-                          </a>{" "}
-                          with the request number{" "}
-                          <a style={{ textDecoration: "underline" }}>
-                            {upgradeDemand.orderNumber}
-                          </a>{" "}
-                          and proof of payment.
-                        </h4>
-                      </li>
-                    </ul>
-                  </span>
-                ) : (
-                  <XButton
-                    color={"#ffc800"}
-                    text={
-                      pack.type === "FREE"
-                        ? "upgrade to premium"
-                        : "extend subscription"
-                    }
-                    action={
-                      pack.type === "FREE"
-                        ? () => setAction("UPGRADE")
-                        : () => setAction("EXTEND")
-                    }
-                  />
-                )}
+                  )}
+                </div>
               </div>
-              <br />
-              <div className={styles.row}>
-                <div className="row" style={{ justifyContent: "flex-start" }}>
-                  <AccountCircleIcon sx={{ width: "70px", height: "70px" }} />
+
+              <div className={styles.profileCard}>
+                <div className={styles.profileHeader}>
+                  <AccountCircleIcon
+                    sx={{ width: 52, height: 52, color: "var(--ink-soft)" }}
+                  />
+                  <div className={styles.profileHeaderInfo}>
+                    <p className={styles.profileName}>
+                      {firstName + " " + lastName}
+                    </p>
+                    <span className={styles.profileSub}>Personal details</span>
+                  </div>
                   {loadingAccount ? (
-                    <CircularProgress color="black" size={30} />
+                    <CircularProgress color="black" size={26} />
                   ) : editAccount ? (
-                    <div className="btn-group" style={{ marginLeft: "10px" }}>
+                    <div className="btn-group">
                       <button
                         className="btn btn-sm btn-success"
                         type="submit"
@@ -460,7 +424,6 @@ function Account(props) {
                   ) : (
                     <button
                       className="btn btn-sm"
-                      style={{ marginLeft: "10px" }}
                       onClick={() => {
                         setTimeout(() => {
                           setEditAccount(true);
@@ -471,76 +434,92 @@ function Account(props) {
                     </button>
                   )}
                 </div>
-                <p>{firstName + " " + lastName}</p>
-                <form autoComplete="off" id="account" onSubmit={updateAccount}>
-                  <input
-                    type="email"
-                    className={
-                      editAccount ? "defaultInput" : "transparentInput"
-                    }
-                    value={email}
-                    name="email"
-                    placeholder="email"
-                    onChange={onChange}
-                  />
-                  <input
-                    type="number"
-                    className={
-                      editAccount ? "defaultInput" : "transparentInput"
-                    }
-                    value={phone}
-                    name="phone"
-                    id="phone"
-                    placeholder="phone"
-                    onChange={onChange}
-                  />
-                  <input
-                    type="text"
-                    className={
-                      editAccount ? "defaultInput" : "transparentInput"
-                    }
-                    value={address}
-                    name="address"
-                    placeholder="address"
-                    onChange={onChange}
-                  />
-                  <div className={styles.passwordContainer}>
+                <form
+                  autoComplete="off"
+                  id="account"
+                  onSubmit={updateAccount}
+                  className={styles.profileForm}
+                >
+                  <div className="labeledInput">
+                    <label>email</label>
                     <input
+                      type="email"
                       className={
                         editAccount ? "defaultInput" : "transparentInput"
                       }
+                      value={email}
+                      name="email"
+                      placeholder="email"
                       onChange={onChange}
-                      type={passwordVisible ? "text" : "password"}
-                      name="password"
-                      placeholder="password"
-                      autoComplete="off"
                     />
-
-                    {editAccount && (
-                      <IconButton
-                        className={styles.passwordVisibilityIcon}
-                        style={{ color: "black" }}
-                        onClick={togglePasswordVisibility}
-                      >
-                        {passwordVisible ? (
-                          <VisibilityOffIcon />
-                        ) : (
-                          <VisibilityIcon />
-                        )}
-                      </IconButton>
-                    )}
                   </div>
-                  <input
-                    type={passwordVisible ? "text" : "password"}
-                    className={
-                      editAccount ? "defaultInput" : "transparentInput"
-                    }
-                    value={confirmPassword}
-                    name="confirmPassword"
-                    placeholder="confirm password"
-                    onChange={onChange}
-                    autoComplete="off"
-                  />
+                  <div className="labeledInput">
+                    <label>phone</label>
+                    <input
+                      type="number"
+                      className={
+                        editAccount ? "defaultInput" : "transparentInput"
+                      }
+                      value={phone}
+                      name="phone"
+                      id="phone"
+                      placeholder="phone"
+                      onChange={onChange}
+                    />
+                  </div>
+                  <div className="labeledInput">
+                    <label>address</label>
+                    <input
+                      type="text"
+                      className={
+                        editAccount ? "defaultInput" : "transparentInput"
+                      }
+                      value={address}
+                      name="address"
+                      placeholder="address"
+                      onChange={onChange}
+                    />
+                  </div>
+                  {editAccount && (
+                    <>
+                      <div className="labeledInput">
+                        <label>new password</label>
+                        <div className={styles.passwordContainer}>
+                          <input
+                            className="defaultInput"
+                            onChange={onChange}
+                            type={passwordVisible ? "text" : "password"}
+                            name="password"
+                            placeholder="leave blank to keep current password"
+                            autoComplete="off"
+                          />
+                          <IconButton
+                            className={styles.passwordVisibilityIcon}
+                            style={{ color: "black" }}
+                            onClick={togglePasswordVisibility}
+                          >
+                            {passwordVisible ? (
+                              <VisibilityOffIcon />
+                            ) : (
+                              <VisibilityIcon />
+                            )}
+                          </IconButton>
+                        </div>
+                      </div>
+                      <div className="labeledInput">
+                        <label>confirm password</label>
+                        <input
+                          type={passwordVisible ? "text" : "password"}
+                          className="defaultInput"
+                          value={confirmPassword}
+                          name="confirmPassword"
+                          placeholder="confirm password"
+                          onChange={onChange}
+                          autoComplete="off"
+                        />
+                      </div>
+                    </>
+                  )}
                 </form>
               </div>
             </section>

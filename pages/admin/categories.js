@@ -263,14 +263,33 @@ function Categories() {
           )}
         </XModal>
         <section className={styles.container}>
-          <h1>Categories</h1>
+          <div className={styles.controls}>
+            <h1>Categories</h1>
+            <button
+              className="btn btn-primary"
+              onClick={() => {
+                if (userInfo) {
+                  checkPremium(
+                    userInfo,
+                    categories.length >= 5,
+                    () => {
+                      setAction(AdminActions.ADD);
+                    },
+                    enqueueSnackbar
+                  )();
+                }
+              }}
+            >
+              + Add category
+            </button>
+          </div>
           {loading ? (
             <Skeleton
               variant="rectangular"
               width={"100%"}
               height={"calc(100vh - 200px)"}
             />
-          ) : (
+          ) : categories.length ? (
             <div className="grid-5">
               {categories.map((category) => {
                 return (
@@ -310,34 +329,14 @@ function Categories() {
                   </div>
                 );
               })}
-              <div className="card" key={category._id}>
-                <button
-                  className="btn btn-primary"
-                  onClick={() => {
-                    if (userInfo) {
-                      checkPremium(
-                        userInfo,
-                        categories.length >= 5,
-                        () => {
-                          setAction(AdminActions.ADD);
-                        },
-                        enqueueSnackbar
-                      )();
-                    }
-                  }}
-                >
-                  + Add category
-                </button>
-              </div>
             </div>
-          )}
-          {!loading && !categories.length ? (
+          ) : (
             <EmptyState
               art="box"
               title="No categories yet"
-              text="Use the + button to create your first category."
+              text="Use the + Add category button to create your first category."
             />
-          ) : null}
+          )}
         </section>
       </DisconnectedGuard>
     </AdminLayout>

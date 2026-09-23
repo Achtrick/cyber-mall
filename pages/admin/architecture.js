@@ -13,6 +13,7 @@ import ProductsSlider from "../../components/shop/ProductsSlider";
 import XAutoComplete from "../../components/ui-components/XAutoComplete";
 import XGallery from "../../components/ui-components/XGallery";
 import XModal from "../../components/ui-components/XModal";
+import archStyles from "../../styles/admin/Architecture.module.scss";
 import styles from "../../styles/admin/Dashboard.module.scss";
 import {
   compressImage,
@@ -33,6 +34,12 @@ import {
   YouTubeIcon,
 } from "../../utils/theme/icons";
 import XGridSkeleton from "./../../components/ui-components/XGridSkeleton";
+
+const TABS = [
+  { id: "branding", label: "Branding & shipping" },
+  { id: "home", label: "Home page" },
+  { id: "contact", label: "Contact & about" },
+];
 
 function Architecture(props) {
   const { userInfo } = useSelector((state) => state.auth);
@@ -234,6 +241,7 @@ function Architecture(props) {
 
   const [action, setAction] = useState("");
   const [title, setTitle] = useState("");
+  const [activeTab, setActiveTab] = useState("branding");
 
   useEffect(() => {
     getShopInfo();
@@ -916,12 +924,14 @@ function Architecture(props) {
           </div>
         </XModal>
         <section className={styles.container}>
-          <div style={{ padding: "10px" }}>
+          <div className={styles.controls}>
             <h1>Configure your shop your way</h1>
-            <p>
-              when you are done, click on the Save buttons to save your settings
-            </p>
           </div>
+          <p className={archStyles.pageHint}>
+            Changes are saved per section — use each section&apos;s Save
+            button (or the modal&apos;s Confirm) once you&apos;re happy with
+            it.
+          </p>
           {loading && !architecture.home ? (
             <Skeleton
               variant="rectangular"
@@ -929,535 +939,603 @@ function Architecture(props) {
               height={"calc(100vh - 200px)"}
             />
           ) : (
-            <div className={styles.container}>
-              <h1>Logo</h1>
-              <div className="row" style={{ justifyContent: "flex-start" }}>
-                <>
-                  {!compressingLogo ? (
-                    <>
-                      {logo ? (
-                        <img
-                          alt="logo"
-                          src={
-                            logo.startsWith("data:") || logo.startsWith("/cyber-mall")
-                              ? logo
-                              : `/api/images/${logo.split("/").pop()}`
-                          }
-                          onError={(e) => {
-                            setLogo("/cyber-mall.png");
-                          }}
-                          width={"150"}
-                          height={"80"}
-                          style={{ objectFit: "contain" }}
-                        />
-                      ) : (
-                        <img
-                          alt="logo"
-                          src={"/cyber-mall.png"}
-                          width={"150"}
-                          height={"80"}
-                          style={{ objectFit: "contain" }}
-                        />
-                      )}
-                    </>
-                  ) : (
-                    <Skeleton
-                      variant="circular"
-                      width={"80px"}
-                      height={"80px"}
-                    />
-                  )}
-                </>
-                <input
-                  id="logo"
-                  hidden
-                  type="file"
-                  accept="image/*"
-                  name="logo"
-                  onChange={async (e) => {
-                    setCompressingLogo(true);
-                    const base64 = await getThumbnail(e.target.files[0]);
-                    const compressed = await compressImage(
-                      e.target.files[0],
-                      "png",
-                      198
-                    );
-                    setLogo(base64);
-                    setCompressedLogo(compressed);
-                    setCompressingLogo(false);
-                  }}
-                />
-                &nbsp;&nbsp;
-                {compressingLogo ? (
-                  <span className="btn btn-sm">
-                    <CircularProgress size={16} />
-                  </span>
-                ) : (
-                  <label className="btn btn-sm" htmlFor="logo">
-                    Change logo
-                  </label>
-                )}{" "}
-                |{" "}
-                {uploadingLogo ? (
-                  <span className="btn btn-sm">
-                    <CircularProgress size={16} />
-                  </span>
-                ) : (
+            <>
+              <div className={archStyles.tabBar} role="tablist">
+                {TABS.map((tab) => (
                   <button
+                    key={tab.id}
                     type="button"
-                    className="btn btn-sm btn-success"
-                    disabled={!compressedLogo}
-                    onClick={updateLogo}
+                    role="tab"
+                    aria-selected={activeTab === tab.id}
+                    className={`${archStyles.tabButton} ${
+                      activeTab === tab.id ? archStyles.tabActive : ""
+                    }`}
+                    onClick={() => setActiveTab(tab.id)}
                   >
-                    Save logo
+                    {tab.label}
                   </button>
-                )}{" "}
+                ))}
               </div>
-              <br />
-              <br />
-              <hr />
-              <br />
-              <br />
-              <h1>Shop currency</h1>
-              <div className="row" style={{ width: "150px" }}>
-                <XAutoComplete
-                  options={currencies}
-                  value={currency}
-                  optionDisplayExpr="name"
-                  optionValueExpr="name"
-                  onChange={(e, value) => {
-                    setCurrency(value?.name ?? "");
-                    updateCurrency(value?.name ?? "");
-                  }}
-                  placeholder="currency"
-                />
-              </div>
-              <br />
-              <br />
-              <hr />
-              <br />
-              <br />
-              <h1>Home Page</h1>
-              <p>
-                Slider: the images must have the same resolution for
-                optimal display (the recommended resolution is 1500 x
-                600)
-              </p>
-              {loadingSlider ? (
-                <Skeleton
-                  variant="rectangular"
-                  width={"100%"}
-                  height={"50vh"}
-                />
-              ) : (
-                <>
-                  <div className={styles.imagesContainer}>
-                    {sliderInfo.map((slide) => {
-                      return (
-                        <div
-                          key={slide.image}
-                          className={styles.imgPreview}
-                          style={{
-                            width: "90%",
-                            border: "1px solid #ccc",
-                            textAlign: "center",
-                            padding: "10px",
-                          }}
-                        >
-                          <span className={styles.closeIcon}>
-                            <button type="button" className="btn btn-sm btn-danger" onClick={() => {
-                                  setSlide(slide);
-                                  setTitle("delete the slide");
-                                  setAction("DELETE-SLIDE-FORM");
-                                }}>Delete</button>
-                          </span>
-                          <img
-                            alt={slide.category}
-                            src={`/api/images/${slide.image.split("/").pop()}`}
-                            onError={(e) => {
-                              e.target.src = "/images/image-placeholder.jpg";
-                            }}
+
+              {activeTab === "branding" && (
+                <div className={archStyles.tabPanel}>
+                  <div className={archStyles.sectionCard}>
+                    <h2>Logo</h2>
+                    <div className="row" style={{ justifyContent: "flex-start" }}>
+                      <>
+                        {!compressingLogo ? (
+                          <>
+                            {logo ? (
+                              <img
+                                alt="logo"
+                                src={
+                                  logo.startsWith("data:") ||
+                                  logo.startsWith("/cyber-mall")
+                                    ? logo
+                                    : `/api/images/${logo.split("/").pop()}`
+                                }
+                                onError={(e) => {
+                                  setLogo("/cyber-mall.png");
+                                }}
+                                width={"150"}
+                                height={"80"}
+                                style={{ objectFit: "contain" }}
+                              />
+                            ) : (
+                              <img
+                                alt="logo"
+                                src={"/cyber-mall.png"}
+                                width={"150"}
+                                height={"80"}
+                                style={{ objectFit: "contain" }}
+                              />
+                            )}
+                          </>
+                        ) : (
+                          <Skeleton
+                            variant="circular"
+                            width={"80px"}
+                            height={"80px"}
                           />
-                          {slide.link?.length ? <p>custom link</p> : null}
-                          {slide.category?.length ? (
-                            <p>category: {slide.category}</p>
+                        )}
+                      </>
+                      <input
+                        id="logo"
+                        hidden
+                        type="file"
+                        accept="image/*"
+                        name="logo"
+                        onChange={async (e) => {
+                          setCompressingLogo(true);
+                          const base64 = await getThumbnail(e.target.files[0]);
+                          const compressed = await compressImage(
+                            e.target.files[0],
+                            "png",
+                            198
+                          );
+                          setLogo(base64);
+                          setCompressedLogo(compressed);
+                          setCompressingLogo(false);
+                        }}
+                      />
+                      <div className={`btn-group ${archStyles.inlineActions}`}>
+                        {compressingLogo ? (
+                          <span className="btn btn-sm">
+                            <CircularProgress size={16} />
+                          </span>
+                        ) : (
+                          <label className="btn btn-sm" htmlFor="logo">
+                            Change logo
+                          </label>
+                        )}
+                        {uploadingLogo ? (
+                          <span className="btn btn-sm">
+                            <CircularProgress size={16} />
+                          </span>
+                        ) : (
+                          <button
+                            type="button"
+                            className="btn btn-sm btn-success"
+                            disabled={!compressedLogo}
+                            onClick={updateLogo}
+                          >
+                            Save logo
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className={archStyles.sectionCard}>
+                    <h2>Shop currency</h2>
+                    <div className="row" style={{ width: "150px", justifyContent: "flex-start" }}>
+                      <XAutoComplete
+                        options={currencies}
+                        value={currency}
+                        optionDisplayExpr="name"
+                        optionValueExpr="name"
+                        onChange={(e, value) => {
+                          setCurrency(value?.name ?? "");
+                          updateCurrency(value?.name ?? "");
+                        }}
+                        placeholder="currency"
+                      />
+                    </div>
+                  </div>
+
+                  <div className={archStyles.sectionCard}>
+                    <div className={archStyles.sectionHeader}>
+                      <h2>Shipping</h2>
+                      <button
+                        type="button"
+                        className="btn btn-sm btn-success"
+                        onClick={() => saveArchitecture("shippingFee")}
+                      >
+                        Save
+                      </button>
+                    </div>
+                    <div className={archStyles.shippingGrid}>
+                      <div className="labeledInput">
+                        <label>Shipping fee</label>
+                        <div className={archStyles.suffixInput}>
+                          <input
+                            type="number"
+                            name="shippingFee"
+                            placeholder={`0.0 ${shopInfo.currency}`}
+                            value={shopInfo.shippingFee}
+                            onChange={(e) => {
+                              setShopInfo({
+                                ...shopInfo,
+                                shippingFee: e.target.value,
+                              });
+                            }}
+                            className="defaultInput"
+                          />
+                          <span>{shopInfo.currency}</span>
+                        </div>
+                      </div>
+                      <div className="labeledInput">
+                        <label>Free shipping starting from</label>
+                        <div className={archStyles.suffixInput}>
+                          <input
+                            type="number"
+                            name="freeShipping"
+                            placeholder={`0.0 ${shopInfo.currency}`}
+                            value={shopInfo.freeShipping}
+                            onChange={(e) => {
+                              setShopInfo({
+                                ...shopInfo,
+                                freeShipping: e.target.value,
+                              });
+                            }}
+                            className="defaultInput"
+                          />
+                          <span>{shopInfo.currency}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {activeTab === "home" && (
+                <div className={archStyles.tabPanel}>
+                  <div className={archStyles.sectionCard}>
+                    <h2>Slider</h2>
+                    <p className={archStyles.sectionHint}>
+                      The images must have the same resolution for optimal
+                      display (recommended: 1500 x 600).
+                    </p>
+                    {loadingSlider ? (
+                      <Skeleton
+                        variant="rectangular"
+                        width={"100%"}
+                        height={"50vh"}
+                      />
+                    ) : (
+                      <>
+                        <div className={styles.imagesContainer}>
+                          {sliderInfo.map((slide) => {
+                            return (
+                              <div
+                                key={slide.image}
+                                className={`${styles.imgPreview} ${archStyles.thumbCard}`}
+                              >
+                                <span className={styles.closeIcon}>
+                                  <button
+                                    type="button"
+                                    className="btn btn-sm btn-danger"
+                                    onClick={() => {
+                                      setSlide(slide);
+                                      setTitle("delete the slide");
+                                      setAction("DELETE-SLIDE-FORM");
+                                    }}
+                                  >
+                                    Delete
+                                  </button>
+                                </span>
+                                <img
+                                  alt={slide.category}
+                                  src={`/api/images/${slide.image.split("/").pop()}`}
+                                  onError={(e) => {
+                                    e.target.src = "/images/image-placeholder.jpg";
+                                  }}
+                                />
+                                {slide.link?.length ? <p>custom link</p> : null}
+                                {slide.category?.length ? (
+                                  <p>category: {slide.category}</p>
+                                ) : null}
+                              </div>
+                            );
+                          })}
+                          {sliderInfo?.length < 3 ||
+                          userInfo?.shop.pack.type === "PREMIUM" ? (
+                            <button
+                              type="button"
+                              className="btn btn-sm btn-primary"
+                              onClick={() => {
+                                setTitle("Add slide");
+                                setAction("ADD-SLIDE-FROM");
+                              }}
+                            >
+                              + Add slide
+                            </button>
                           ) : null}
                         </div>
-                      );
-                    })}
-                    {sliderInfo?.length < 3 ||
-                    userInfo?.shop.pack.type === "PREMIUM" ? (
-                      <button type="button" className="btn btn-sm btn-primary" onClick={() => {
-                            setTitle("Add slide");
-                            setAction("ADD-SLIDE-FROM");
-                          }}>+ Add slide</button>
-                    ) : null}
+                        <p className={archStyles.previewLabel}>Preview</p>
+                        <HomeSlider
+                          disabled={true}
+                          slides={
+                            sliderInfo.length
+                              ? sliderInfo
+                              : [
+                                  {
+                                    link: "",
+                                    image: "slider-placeholder.jpg",
+                                  },
+                                ]
+                          }
+                          shopInfo={shopInfo}
+                        />
+                      </>
+                    )}
                   </div>
-                  <br />
-                  <br />
-                  <p>Preview</p>
-                  <HomeSlider
-                    disabled={true}
-                    slides={
-                      sliderInfo.length
-                        ? sliderInfo
-                        : [
-                            {
-                              link: "",
-                              image: "slider-placeholder.jpg",
-                            },
-                          ]
-                    }
-                    shopInfo={shopInfo}
-                  />
-                </>
-              )}
-              <br />
-              <br />
-              <hr />
-              <br />
-              <br />
-              <br />
-              <p>
-                categories grid (select the categories to display){" "}
-                <button type="button" className="btn btn-sm" onClick={() => {
-                      setTitle(
-                        "select the categories to display in the grid"
-                      );
-                      setAction("CATEGORIES-GRID-FORM");
-                    }}>Edit</button>{" "}
-                |{" "}
-                <button type="button" className="btn btn-sm" onClick={async () => {
-                      await toggleComponentVisibility("categoriesComponent");
-                    }}>{architecture.home.categoriesComponent.visible ? "Hide" : "Show"}</button>{" "}
-              </p>
-              {categories.length ? (
-                <CategoriesGrid
-                  disabled={true}
-                  categories={categories}
-                  architecture={architecture}
-                  shopInfo={shopInfo}
-                />
-              ) : (
-                <XGridSkeleton title={"Discover Our Categories"} />
-              )}
-              <br />
-              <br />
-              <hr />
-              <br />
-              <br />
-              <p>
-                discounts section (this will display random discounted
-                products for quick purchase)
-                <button type="button" className="btn btn-sm" onClick={() => {
-                      setTitle(
-                        "set the display order of the discounts section"
-                      );
-                      setAction("DISCOUNT-FORM");
-                    }}>Edit</button>{" "}
-                |{" "}
-                <button type="button" className="btn btn-sm" onClick={async () => {
-                      await toggleComponentVisibility("discountComponent");
-                    }}>{architecture.home.discountComponent.visible ? "Hide" : "Show"}</button>{" "}
-              </p>
-              {discounts.length ? (
-                <ProductsSlider
-                  disabled={true}
-                  products={discounts}
-                  shopInfo={shopInfo}
-                  title={"Get more for less!"}
-                />
-              ) : (
-                <XGridSkeleton title={"Get more for less!"} />
-              )}
-              <br />
-              <br />
-              <hr />
-              <br />
-              <br />
-              <p>
-                gallery component (this will display the selected images
-                with each of them having a title that is shown
-                on hover){" "}
-                <button type="button" className="btn btn-sm" onClick={() => {
-                      setTitle(
-                        "set the display order of the gallery section"
-                      );
-                      setAction("GALLERY-ORDER-FORM");
-                    }}>Display order</button>
-                |{" "}
-                <button type="button" className="btn btn-sm" onClick={async () => {
-                      await toggleComponentVisibility("galleryComponent");
-                    }}>{galleryInfo.visible ? "Hide" : "Show"}</button>{" "}
-              </p>
-              {loadingGallery ? (
-                <Skeleton
-                  variant="rectangular"
-                  width={"100%"}
-                  height={"50vh"}
-                />
-              ) : (
-                <>
-                  <div className={styles.imagesContainer}>
-                    {galleryInfo.content.map((block) => {
-                      return (
-                        <div
-                          key={block.image}
-                          className={styles.imgPreview}
-                          style={{
-                            width: "90%",
-                            border: "1px solid #ccc",
-                            padding: "20px",
-                            textAlign: "center",
-                            textTransform: "capitalize",
+
+                  <div className={archStyles.sectionCard}>
+                    <div className={archStyles.sectionHeader}>
+                      <h2>Categories grid</h2>
+                      <div className="btn-group">
+                        <button
+                          type="button"
+                          className="btn btn-sm"
+                          onClick={() => {
+                            setTitle("select the categories to display in the grid");
+                            setAction("CATEGORIES-GRID-FORM");
                           }}
                         >
-                          <span className={styles.closeIcon}>
-                            <button type="button" className="btn btn-sm btn-danger" onClick={() => {
-                                  setGalleryItem(block);
-                                  setTitle("delete the item");
-                                  setAction("DELETE-GALLERY-FORM");
-                                }}>Delete</button>
-                          </span>
-                          <img
-                            alt={block.category}
-                            src={`/api/images/${block.image.split("/").pop()}`}
-                            onError={(e) => {
-                              e.target.src = "/images/image-placeholder.jpg";
-                            }}
-                          />
-                          {block.text?.length ? (
-                            <p>text: {block.text}</p>
-                          ) : null}
-                          {block.link?.length ? <p>custom link</p> : null}
-                          {block.category?.length ? (
-                            <p>category: {block.category}</p>
+                          Edit
+                        </button>
+                        <button
+                          type="button"
+                          className="btn btn-sm"
+                          onClick={async () => {
+                            await toggleComponentVisibility("categoriesComponent");
+                          }}
+                        >
+                          {architecture.home.categoriesComponent.visible ? "Hide" : "Show"}
+                        </button>
+                      </div>
+                    </div>
+                    <p className={archStyles.sectionHint}>
+                      Select which categories are featured in this section.
+                    </p>
+                    {categories.length ? (
+                      <CategoriesGrid
+                        disabled={true}
+                        categories={categories}
+                        architecture={architecture}
+                        shopInfo={shopInfo}
+                      />
+                    ) : (
+                      <XGridSkeleton title={"Discover Our Categories"} />
+                    )}
+                  </div>
+
+                  <div className={archStyles.sectionCard}>
+                    <div className={archStyles.sectionHeader}>
+                      <h2>Discounts</h2>
+                      <div className="btn-group">
+                        <button
+                          type="button"
+                          className="btn btn-sm"
+                          onClick={() => {
+                            setTitle("set the display order of the discounts section");
+                            setAction("DISCOUNT-FORM");
+                          }}
+                        >
+                          Edit
+                        </button>
+                        <button
+                          type="button"
+                          className="btn btn-sm"
+                          onClick={async () => {
+                            await toggleComponentVisibility("discountComponent");
+                          }}
+                        >
+                          {architecture.home.discountComponent.visible ? "Hide" : "Show"}
+                        </button>
+                      </div>
+                    </div>
+                    <p className={archStyles.sectionHint}>
+                      Displays random discounted products for quick purchase.
+                    </p>
+                    {discounts.length ? (
+                      <ProductsSlider
+                        disabled={true}
+                        products={discounts}
+                        shopInfo={shopInfo}
+                        title={"Get more for less!"}
+                      />
+                    ) : (
+                      <XGridSkeleton title={"Get more for less!"} />
+                    )}
+                  </div>
+
+                  <div className={archStyles.sectionCard}>
+                    <div className={archStyles.sectionHeader}>
+                      <h2>Gallery</h2>
+                      <div className="btn-group">
+                        <button
+                          type="button"
+                          className="btn btn-sm"
+                          onClick={() => {
+                            setTitle("set the display order of the gallery section");
+                            setAction("GALLERY-ORDER-FORM");
+                          }}
+                        >
+                          Display order
+                        </button>
+                        <button
+                          type="button"
+                          className="btn btn-sm"
+                          onClick={async () => {
+                            await toggleComponentVisibility("galleryComponent");
+                          }}
+                        >
+                          {galleryInfo.visible ? "Hide" : "Show"}
+                        </button>
+                      </div>
+                    </div>
+                    <p className={archStyles.sectionHint}>
+                      Displays the selected images, each with a title shown on
+                      hover.
+                    </p>
+                    {loadingGallery ? (
+                      <Skeleton
+                        variant="rectangular"
+                        width={"100%"}
+                        height={"50vh"}
+                      />
+                    ) : (
+                      <>
+                        <div className={styles.imagesContainer}>
+                          {galleryInfo.content.map((block) => {
+                            return (
+                              <div
+                                key={block.image}
+                                className={`${styles.imgPreview} ${archStyles.thumbCard}`}
+                              >
+                                <span className={styles.closeIcon}>
+                                  <button
+                                    type="button"
+                                    className="btn btn-sm btn-danger"
+                                    onClick={() => {
+                                      setGalleryItem(block);
+                                      setTitle("delete the item");
+                                      setAction("DELETE-GALLERY-FORM");
+                                    }}
+                                  >
+                                    Delete
+                                  </button>
+                                </span>
+                                <img
+                                  alt={block.category}
+                                  src={`/api/images/${block.image.split("/").pop()}`}
+                                  onError={(e) => {
+                                    e.target.src = "/images/image-placeholder.jpg";
+                                  }}
+                                />
+                                {block.text?.length ? <p>text: {block.text}</p> : null}
+                                {block.link?.length ? <p>custom link</p> : null}
+                                {block.category?.length ? (
+                                  <p>category: {block.category}</p>
+                                ) : null}
+                              </div>
+                            );
+                          })}
+                          {galleryInfo?.content?.length < 4 ? (
+                            <button
+                              type="button"
+                              className="btn btn-sm btn-primary"
+                              onClick={() => {
+                                setTitle("Add a gallery item");
+                                setAction("ADD-GALLERY-FROM");
+                              }}
+                            >
+                              + Add item
+                            </button>
                           ) : null}
                         </div>
-                      );
-                    })}
-                    {galleryInfo?.content?.length < 4 ? (
-                      <button type="button" className="btn btn-sm btn-primary" onClick={() => {
-                            setTitle("Add a gallery item");
-                            setAction("ADD-GALLERY-FROM");
-                          }}>+ Add item</button>
-                    ) : null}
+                        <p className={archStyles.previewLabel}>Preview</p>
+                        <XGallery
+                          disabled={true}
+                          shopInfo={shopInfo}
+                          content={galleryInfo.content}
+                        />
+                      </>
+                    )}
                   </div>
-                  <br />
-                  <p>Preview</p>
-                  <XGallery
-                    disabled={true}
-                    shopInfo={shopInfo}
-                    content={galleryInfo.content}
-                  />
-                </>
+                </div>
               )}
-              <br />
-              <br />
-              <hr />
-              <br />
-              <br />
-              <h1>Shipping information</h1>
-              <p>
-                fill in your shipping fees
-                <button type="button" className="btn btn-sm btn-success" onClick={() => saveArchitecture("shippingFee")}>Save</button>{" "}
-              </p>
-              <div className="labeledInput">
-                <label>Shipping fee :</label>
-              </div>
-              <input
-                type="number"
-                name="shippingFee"
-                placeholder={`0.0 ${shopInfo.currency}`}
-                value={shopInfo.shippingFee}
-                onChange={(e) => {
-                  setShopInfo({
-                    ...shopInfo,
-                    shippingFee: e.target.value,
-                  });
-                }}
-                className="defaultInput"
-                style={{ width: "50px" }}
-              />{" "}
-              {shopInfo.currency}
-              <div className="labeledInput">
-                <label>Free shipping starting from :</label>
-              </div>
-              <input
-                type="number"
-                name="freeShipping"
-                placeholder={`0.0 ${shopInfo.currency}`}
-                value={shopInfo.freeShipping}
-                onChange={(e) => {
-                  setShopInfo({
-                    ...shopInfo,
-                    freeShipping: e.target.value,
-                  });
-                }}
-                className="defaultInput"
-                style={{ width: "50px" }}
-              />{" "}
-              {shopInfo.currency}
-              <br />
-              <br />
-              <hr />
-              <br />
-              <br />
-              <h1>Contact information</h1>
-              <p>
-                fill in your contact details
-                <button type="button" className="btn btn-sm btn-success" onClick={() => saveArchitecture("contactComponent")}>Save</button>{" "}
-              </p>
-              <div className="row" style={{ justifyContent: "flex-start" }}>
-                <AddressIcon />
-                &nbsp;
-                <input
-                  name="address"
-                  placeholder="address"
-                  value={architecture.contact.address}
-                  onChange={(e) => {
-                    setArchitecture({
-                      ...architecture,
-                      contact: {
-                        ...architecture.contact,
-                        address: e.target.value,
-                      },
-                    });
-                  }}
-                  className="defaultInput"
-                  style={{ width: "300px" }}
-                />
-              </div>
-              <div className="row" style={{ justifyContent: "flex-start" }}>
-                <MailIcon />
-                &nbsp;
-                <input
-                  type="mail"
-                  name="email"
-                  placeholder="email"
-                  value={architecture.contact.direct.email}
-                  onChange={(e) => {
-                    setArchitecture({
-                      ...architecture,
-                      contact: {
-                        ...architecture.contact,
-                        direct: {
-                          ...architecture.contact.direct,
-                          email: e.target.value,
-                        },
-                      },
-                    });
-                  }}
-                  className="defaultInput"
-                  style={{ width: "300px" }}
-                />
-              </div>
-              <div className="row" style={{ justifyContent: "flex-start" }}>
-                <PhoneEnabledIcon />
-                &nbsp;
-                <input
-                  type="number"
-                  name="phone"
-                  placeholder="phone"
-                  value={architecture.contact.direct.phone}
-                  onChange={(e) => {
-                    setArchitecture({
-                      ...architecture,
-                      contact: {
-                        ...architecture.contact,
-                        direct: {
-                          ...architecture.contact.direct,
-                          phone: e.target.value,
-                        },
-                      },
-                    });
-                  }}
-                  className="defaultInput"
-                  style={{ width: "300px" }}
-                />
-              </div>
-              <div className="row" style={{ justifyContent: "flex-start" }}>
-                <FacebookIcon />
-                &nbsp;
-                <input
-                  name="facebook"
-                  placeholder="facebook"
-                  value={architecture.contact.socials.facebook}
-                  onChange={onSocialsChange}
-                  className="defaultInput"
-                  style={{ width: "300px" }}
-                />
-              </div>
-              <div className="row" style={{ justifyContent: "flex-start" }}>
-                <InstagramIcon />
-                &nbsp;
-                <input
-                  name="instagram"
-                  placeholder="instagram"
-                  value={architecture.contact.socials.instagram}
-                  onChange={onSocialsChange}
-                  className="defaultInput"
-                  style={{ width: "300px" }}
-                />
-              </div>
-              <div className="row" style={{ justifyContent: "flex-start" }}>
-                <TiktokIcon />
-                &nbsp;
-                <input
-                  name="tiktok"
-                  placeholder="tiktok"
-                  value={architecture.contact.socials.tiktok}
-                  onChange={onSocialsChange}
-                  className="defaultInput"
-                  style={{ width: "300px" }}
-                />
-              </div>
-              <div className="row" style={{ justifyContent: "flex-start" }}>
-                <YouTubeIcon />
-                &nbsp;
-                <input
-                  name="youtube"
-                  placeholder="youtube"
-                  value={architecture.contact.socials.youtube}
-                  onChange={onSocialsChange}
-                  className="defaultInput"
-                  style={{ width: "300px" }}
-                />
-              </div>
-              <div className="row" style={{ justifyContent: "flex-start" }}>
-                <LinkedInIcon />
-                &nbsp;
-                <input
-                  name="linkedIn"
-                  placeholder="linkedIn"
-                  value={architecture.contact.socials.linkedIn}
-                  onChange={onSocialsChange}
-                  className="defaultInput"
-                  style={{ width: "300px" }}
-                />
-              </div>
-              <br />
-              <br />
-              <hr />
-              <br />
-              <br />
-              <h1>About your shop</h1>
-              <p>
-                who are you and what do you sell?
-                <button type="button" className="btn btn-sm btn-success" onClick={() => saveArchitecture("aboutComponent")}>Save</button>{" "}
-              </p>
-              <textarea
-                rows={5}
-                name="about"
-                placeholder="I am a company and I sell awesome things"
-                value={architecture.about}
-                onChange={(e) => {
-                  setArchitecture({ ...architecture, about: e.target.value });
-                }}
-                className="defaultInput"
-                style={{ maxWidth: "500px", height: "100px" }}
-              />
-            </div>
+
+              {activeTab === "contact" && (
+                <div className={archStyles.tabPanel}>
+                  <div className={archStyles.sectionCard}>
+                    <div className={archStyles.sectionHeader}>
+                      <h2>Contact information</h2>
+                      <button
+                        type="button"
+                        className="btn btn-sm btn-success"
+                        onClick={() => saveArchitecture("contactComponent")}
+                      >
+                        Save
+                      </button>
+                    </div>
+                    <div className={archStyles.contactGrid}>
+                      <div className={archStyles.iconInput}>
+                        <AddressIcon />
+                        <input
+                          name="address"
+                          placeholder="address"
+                          value={architecture.contact.address}
+                          onChange={(e) => {
+                            setArchitecture({
+                              ...architecture,
+                              contact: {
+                                ...architecture.contact,
+                                address: e.target.value,
+                              },
+                            });
+                          }}
+                          className="defaultInput"
+                        />
+                      </div>
+                      <div className={archStyles.iconInput}>
+                        <MailIcon />
+                        <input
+                          type="mail"
+                          name="email"
+                          placeholder="email"
+                          value={architecture.contact.direct.email}
+                          onChange={(e) => {
+                            setArchitecture({
+                              ...architecture,
+                              contact: {
+                                ...architecture.contact,
+                                direct: {
+                                  ...architecture.contact.direct,
+                                  email: e.target.value,
+                                },
+                              },
+                            });
+                          }}
+                          className="defaultInput"
+                        />
+                      </div>
+                      <div className={archStyles.iconInput}>
+                        <PhoneEnabledIcon />
+                        <input
+                          type="number"
+                          name="phone"
+                          placeholder="phone"
+                          value={architecture.contact.direct.phone}
+                          onChange={(e) => {
+                            setArchitecture({
+                              ...architecture,
+                              contact: {
+                                ...architecture.contact,
+                                direct: {
+                                  ...architecture.contact.direct,
+                                  phone: e.target.value,
+                                },
+                              },
+                            });
+                          }}
+                          className="defaultInput"
+                        />
+                      </div>
+                      <div className={archStyles.iconInput}>
+                        <FacebookIcon />
+                        <input
+                          name="facebook"
+                          placeholder="facebook"
+                          value={architecture.contact.socials.facebook}
+                          onChange={onSocialsChange}
+                          className="defaultInput"
+                        />
+                      </div>
+                      <div className={archStyles.iconInput}>
+                        <InstagramIcon />
+                        <input
+                          name="instagram"
+                          placeholder="instagram"
+                          value={architecture.contact.socials.instagram}
+                          onChange={onSocialsChange}
+                          className="defaultInput"
+                        />
+                      </div>
+                      <div className={archStyles.iconInput}>
+                        <TiktokIcon />
+                        <input
+                          name="tiktok"
+                          placeholder="tiktok"
+                          value={architecture.contact.socials.tiktok}
+                          onChange={onSocialsChange}
+                          className="defaultInput"
+                        />
+                      </div>
+                      <div className={archStyles.iconInput}>
+                        <YouTubeIcon />
+                        <input
+                          name="youtube"
+                          placeholder="youtube"
+                          value={architecture.contact.socials.youtube}
+                          onChange={onSocialsChange}
+                          className="defaultInput"
+                        />
+                      </div>
+                      <div className={archStyles.iconInput}>
+                        <LinkedInIcon />
+                        <input
+                          name="linkedIn"
+                          placeholder="linkedIn"
+                          value={architecture.contact.socials.linkedIn}
+                          onChange={onSocialsChange}
+                          className="defaultInput"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className={archStyles.sectionCard}>
+                    <div className={archStyles.sectionHeader}>
+                      <h2>About your shop</h2>
+                      <button
+                        type="button"
+                        className="btn btn-sm btn-success"
+                        onClick={() => saveArchitecture("aboutComponent")}
+                      >
+                        Save
+                      </button>
+                    </div>
+                    <p className={archStyles.sectionHint}>
+                      Who are you and what do you sell?
+                    </p>
+                    <textarea
+                      rows={5}
+                      name="about"
+                      placeholder="I am a company and I sell awesome things"
+                      value={architecture.about}
+                      onChange={(e) => {
+                        setArchitecture({ ...architecture, about: e.target.value });
+                      }}
+                      className="defaultInput"
+                      style={{ maxWidth: "500px", height: "100px" }}
+                    />
+                  </div>
+                </div>
+              )}
+            </>
           )}
         </section>
       </DisconnectedGuard>

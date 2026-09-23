@@ -17,6 +17,14 @@ import { deduceColor } from "../../utils/config/convertHelper";
 import { checkExpirity } from "../../utils/shared/checkExpirity";
 import { getError } from "../../utils/shared/getError";
 import { ShoppingCartIcon } from "../../utils/theme/icons";
+
+const COLOR_FIELDS = [
+  { key: "headerColor", label: "Header" },
+  { key: "primaryColor", label: "Primary" },
+  { key: "secondaryColor", label: "Secondary" },
+  { key: "footerColor", label: "Footer" },
+];
+
 function Theme(props) {
   const { userInfo } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
@@ -29,6 +37,7 @@ function Theme(props) {
   const [action, setAction] = useState("");
   const [title, setTitle] = useState("");
   const [copiedColor, setCopiedColor] = useState(null);
+  const [copiedFrom, setCopiedFrom] = useState(null);
 
   const [colors, setColors] = useState({
     headerColor: "",
@@ -92,15 +101,28 @@ function Theme(props) {
         settings: { ...colors, [color]: copiedColor },
       });
       setCopiedColor(null);
+      setCopiedFrom(null);
       enqueueSnackbar("Color applied", {
         variant: "info",
       });
     } else {
       setCopiedColor(colors[color]);
+      setCopiedFrom(color);
       enqueueSnackbar("Color copied", {
         variant: "info",
       });
     }
+  };
+
+  const cancelColorCopy = () => {
+    setCopiedColor(null);
+    setCopiedFrom(null);
+  };
+
+  const openColorEditor = (field) => {
+    setTitle(`Change the ${field.label.toLowerCase()} color`);
+    setCurrentColor(field.key);
+    setAction(AdminActions.UPDATE);
   };
 
   return (
@@ -131,12 +153,9 @@ function Theme(props) {
           </div>
         </XModal>
         <section className={styles.container}>
-          <div className={styles.controls} style={{ justifyContent: "center" }}>
+          <div className={styles.controls}>
             <h1>Theme</h1>
           </div>
-          <p>
-            use the Change color buttons below to edit each color
-          </p>
 
           {loading ? (
             <Skeleton
@@ -146,6 +165,54 @@ function Theme(props) {
             />
           ) : (
             <section>
+              {copiedColor && (
+                <div className={themeStyles.copyBanner}>
+                  <span>
+                    Color copied — click &quot;Paste here&quot; on another
+                    swatch to apply it.
+                  </span>
+                  <button className="btn btn-sm" onClick={cancelColorCopy}>
+                    Cancel
+                  </button>
+                </div>
+              )}
+
+              <div className={themeStyles.colorsGrid}>
+                {COLOR_FIELDS.map((field) => (
+                  <div className={themeStyles.colorCard} key={field.key}>
+                    <div
+                      className={themeStyles.swatch}
+                      style={{ backgroundColor: colors[field.key] }}
+                    />
+                    <div className={themeStyles.colorInfo}>
+                      <p className={themeStyles.colorLabel}>{field.label}</p>
+                      <p className={themeStyles.colorHex}>{colors[field.key]}</p>
+                    </div>
+                    <div className={`btn-group ${themeStyles.colorActions}`}>
+                      <button
+                        className="btn btn-sm"
+                        onClick={() => openColorEditor(field)}
+                      >
+                        Change
+                      </button>
+                      {copiedFrom === field.key ? (
+                        <button className="btn btn-sm" disabled>
+                          Copied
+                        </button>
+                      ) : (
+                        <button
+                          className="btn btn-sm"
+                          onClick={() => handleColorCopyPaste(field.key)}
+                        >
+                          {copiedColor ? "Paste here" : "Copy"}
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <p className={themeStyles.previewLabel}>Live preview</p>
               <div className={themeStyles.pagePreview}>
                 <div
                   className={themeStyles.headerPreview}
@@ -155,116 +222,45 @@ function Theme(props) {
                     color: deduceColor(colors.headerColor),
                   }}
                 >
-                  this is what your navigation bar will look like
-                  <button
-                    className="btn btn-sm"
-                    onClick={() => {
-                        setTitle("change the header color");
-                        setCurrentColor("headerColor");
-                        setAction(AdminActions.UPDATE);
-                      }}
-                  >
-                    Change color
-                  </button>{" "}
-                  |{" "}
-                  <button
-                    className="btn btn-sm"
-                    onClick={() => {
-                      handleColorCopyPaste("headerColor");
-                    }}
-                  >
-                    {copiedColor ? "Apply copied color" : "Copy color"}
-                  </button>
+                  Your navigation bar
                 </div>
-                <br />
                 <div className={themeStyles.bodyPreview}>
-                  <p>the main color will look like this:</p>
-                  <br />
-                  <div className="row" style={{ justifyContent: "flex-start" }}>
+                  <div className={themeStyles.previewRow}>
+                    <span>Primary color</span>
                     <div
                       className={themeStyles.primaryColor}
-                      style={{
-                        backgroundColor: colors.primaryColor,
-                      }}
-                    />
-                    <button
-                    className="btn btn-sm"
-                    onClick={() => {
-                          setTitle("change the primary color");
-                          setCurrentColor("primaryColor");
-                          setAction(AdminActions.UPDATE);
-                        }}
-                  >
-                    Change color
-                  </button>
-                    |{" "}
-                    <button
-                    className="btn btn-sm"
-                    onClick={() => {
-                      handleColorCopyPaste("primaryColor");
-                    }}
-                  >
-                    {copiedColor ? "Apply copied color" : "Copy color"}
-                  </button>
-                  </div>
-                  <br />
-                  <p>the controls will look like this:</p>
-                  <br />
-                  <div className="row" style={{ justifyContent: "flex-start" }}>
-                    <XButton text="action" color={colors.primaryColor} />
-                    &nbsp;
-                    <XBadge color={colors.primaryColor} content={5}>
-                      <IconButton
-                        color={deduceColor(shopInfo.settings.headerColor)}
-                      >
-                        <ShoppingCartIcon />
-                      </IconButton>
-                    </XBadge>
-                    &nbsp;
-                    <CircularProgress
-                      size={"22px"}
-                      style={{ marginLeft: "10px", color: colors.primaryColor }}
+                      style={{ backgroundColor: colors.primaryColor }}
                     />
                   </div>
-                  <br />
-                  <p>the secondary color will look like this:</p>
-                  <br />
-                  <div className="row" style={{ justifyContent: "flex-start" }}>
+                  <div className={themeStyles.previewRow}>
+                    <span>Controls</span>
+                    <div className={themeStyles.controlsPreview}>
+                      <XButton text="action" color={colors.primaryColor} />
+                      <XBadge color={colors.primaryColor} content={5}>
+                        <IconButton
+                          color={deduceColor(shopInfo.settings.headerColor)}
+                        >
+                          <ShoppingCartIcon />
+                        </IconButton>
+                      </XBadge>
+                      <CircularProgress
+                        size={"22px"}
+                        style={{ color: colors.primaryColor }}
+                      />
+                    </div>
+                  </div>
+                  <div className={themeStyles.previewRow}>
+                    <span>Secondary color</span>
                     <div
                       className={themeStyles.secondaryColor}
-                      style={{
-                        backgroundColor: colors.secondaryColor,
-                      }}
+                      style={{ backgroundColor: colors.secondaryColor }}
                     />
-                    <button
-                    className="btn btn-sm"
-                    onClick={() => {
-                          setTitle("change the secondary color");
-                          setCurrentColor("secondaryColor");
-                          setAction(AdminActions.UPDATE);
-                        }}
-                  >
-                    Change color
-                  </button>
-                    |{" "}
-                    <button
-                    className="btn btn-sm"
-                    onClick={() => {
-                      handleColorCopyPaste("secondaryColor");
-                    }}
-                  >
-                    {copiedColor ? "Apply copied color" : "Copy color"}
-                  </button>
                   </div>
-                  <br />
-                  <p>the accents will look like this</p>
-                  <br />
-                  <div className="row" style={{ justifyContent: "flex-start" }}>
+                  <div className={themeStyles.previewRow}>
+                    <span>Accents</span>
                     <XHr color={colors.secondaryColor} />
                   </div>
                 </div>
-                <br />
-                <br />
                 <div
                   className={themeStyles.footerPreview}
                   style={{
@@ -273,26 +269,7 @@ function Theme(props) {
                     border: `1px solid ${deduceColor(colors.footerColor)}`,
                   }}
                 >
-                  this is what your footer will look like
-                  <button
-                    className="btn btn-sm"
-                    onClick={() => {
-                        setTitle("change the footer color");
-                        setCurrentColor("footerColor");
-                        setAction(AdminActions.UPDATE);
-                      }}
-                  >
-                    Change color
-                  </button>
-                  |{" "}
-                  <button
-                    className="btn btn-sm"
-                    onClick={() => {
-                      handleColorCopyPaste("footerColor");
-                    }}
-                  >
-                    {copiedColor ? "Apply copied color" : "Copy color"}
-                  </button>
+                  Your footer
                 </div>
               </div>
             </section>

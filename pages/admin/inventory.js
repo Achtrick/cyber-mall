@@ -2,6 +2,7 @@ import { CircularProgress, Skeleton, useMediaQuery } from "@mui/material";
 import axios from "axios";
 import EmptyState from "../../components/ui-components/EmptyState";
 import { useSnackbar } from "notistack";
+import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import AdminLayout from "../../components/admin/AdminLayout";
@@ -460,10 +461,9 @@ function Inventory(props) {
         <section className={styles.container}>
           <div className={styles.controls}>
             <h1>Products</h1>
-            <div className="row">
-              <SearchIcon color="secondary" style={{ marginRight: "-30px" }} />
+            <div className={styles.searchBox}>
+              <SearchIcon />
               <input
-                style={{ paddingLeft: "30px" }}
                 className="defaultInput"
                 placeholder="Designation..."
                 onChange={onSearchTermChange}
@@ -477,37 +477,34 @@ function Inventory(props) {
               count={count}
               onChange={onPaginationChange}
             />
-            <div className="row" style={{ justifyContent: "flex-end" }}>
-              {loadingCategories
-                ? null
-                : !categories.length && (
-                    <p>
-                      create categories to start adding products
-                      !
-                    </p>
-                  )}
+            <div className={styles.controlsEnd}>
+              {!loadingCategories && !categories.length && (
+                <p className={styles.controlsHint}>
+                  Create a category first to start adding products.
+                </p>
+              )}
               <button
-                  className="btn btn-primary"
-                  onClick={() => {
-                    if (userInfo) {
-                      checkPremium(
-                        userInfo,
-                        products.length >= 10,
-                        () => {
-                          setAction(AdminActions.ADD);
-                          setProduct({
-                            ...product,
-                            category: categories[0]._id,
-                          });
-                        },
-                        enqueueSnackbar
-                      )();
-                    }
-                  }}
-                  disabled={!categories.length}
-                >
-                  + Add product
-                </button>
+                className="btn btn-primary"
+                onClick={() => {
+                  if (userInfo) {
+                    checkPremium(
+                      userInfo,
+                      products.length >= 10,
+                      () => {
+                        setAction(AdminActions.ADD);
+                        setProduct({
+                          ...product,
+                          category: categories[0]._id,
+                        });
+                      },
+                      enqueueSnackbar
+                    )();
+                  }
+                }}
+                disabled={!categories.length}
+              >
+                + Add product
+              </button>
             </div>
           </div>
           {loading ? (
@@ -565,7 +562,13 @@ function Inventory(props) {
                           <div className="btn-group">
                             {userInfo?.shop.pack.type !== "PREMIUM" &&
                             index > 9 ? (
-                              "Activate Premium To Regain Control"
+                              <Link
+                                href="/admin/account"
+                                className="btn btn-sm"
+                                style={{ pointerEvents: "auto" }}
+                              >
+                                Upgrade to unlock
+                              </Link>
                             ) : (
                               <>
                                 <button

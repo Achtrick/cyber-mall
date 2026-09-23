@@ -266,11 +266,9 @@ function Orders() {
               count={count}
               onChange={onPaginationChange}
             />
-            <div className="row" style={{ justifyContent: "flex-end" }}></div>
-            <div className="row">
-              <SearchIcon color="secondary" style={{ marginRight: "-30px" }} />
+            <div className={styles.searchBox}>
+              <SearchIcon />
               <input
-                style={{ paddingLeft: "30px" }}
                 className="defaultInput"
                 placeholder="Customer"
                 onChange={onSearchTermChange}
@@ -431,6 +429,7 @@ function Orders() {
                 style={{ justifyContent: "flex-start", width: "100%" }}
               >
                 <img
+                  alt="shop logo"
                   src={
                     userInfo.shop.logo.length
                       ? `/api/images/${userInfo.shop.logo

@@ -12,32 +12,89 @@
   box-shadow: 0 2px 12px rgba(27, 22, 34, 0.25);
 }
 .sidebar {
-  width: min(320px, 86vw);
+  width: min(300px, 86vw);
   height: 100vh;
-  padding: 80px 14px 20px !important;
+  padding: 76px 12px 20px !important;
   overflow-y: auto;
   background-color: var(--surface-alt);
-  .logout button {
-    position: absolute;
-    bottom: 20px;
-    border-radius: var(--radius);
+  display: flex;
+  flex-direction: column;
+
+  .logout {
+    margin-top: auto;
+    padding-top: 12px;
+    button {
+      width: 100%;
+      border-radius: var(--radius);
+      justify-content: center;
+    }
   }
-  .header {
-    width: 100%;
+
+  .shopIdentity {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
-    p {
-      margin-left: 10px;
-      text-transform: uppercase;
-      letter-spacing: 3px;
+    gap: 10px;
+    padding: 10px;
+    margin-bottom: 14px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+
+    img {
+      width: 38px;
+      height: 38px;
+      object-fit: contain;
+      border-radius: var(--radius-sm);
+      background: var(--surface-alt);
     }
-    margin-bottom: 20px;
+
+    .shopName {
+      margin: 0;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--ink);
+      text-transform: capitalize;
+      max-width: 160px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .packPill {
+      display: inline-block;
+      margin-top: 3px;
+      padding: 1px 8px;
+      border-radius: 999px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+    .packFree {
+      background: var(--tint);
+      color: var(--ink-soft);
+    }
+    .packPremium {
+      background: #fff1d6;
+      color: #9a5b00;
+    }
   }
+
+  .navGroup {
+    margin-top: 10px;
+  }
+  .groupLabel {
+    margin: 0 0 4px 12px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
   .link {
     width: 100%;
     height: 44px;
-    margin: 4px 0px;
+    margin: 2px 0px;
     padding: 0 12px;
     border-radius: var(--radius);
     display: flex;
@@ -54,6 +111,13 @@
     &:hover {
       background-color: var(--tint);
       transform: translateX(2px);
+    }
+  }
+  .linkActive .link {
+    background-color: var(--tint);
+    p {
+      color: var(--ink);
+      font-weight: 700;
     }
   }
 }

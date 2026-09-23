@@ -4,6 +4,7 @@ import axios from "axios";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import InstallPWA from "../../components/installPwa";
@@ -22,6 +23,30 @@ import {
   TravelExploreIcon,
 } from "../../utils/theme/icons";
 
+const NAV_GROUPS = [
+  {
+    label: "Catalog",
+    links: [
+      { href: "/admin/categories", label: "Categories", icon: CategoryIcon, color: "shop2" },
+      { href: "/admin/inventory", label: "Products", icon: InventoryIcon, color: "shop3" },
+    ],
+  },
+  {
+    label: "Sales",
+    links: [
+      { href: "/admin/orders", label: "Orders", icon: LocalShippingIcon, color: "shop4", badge: true },
+    ],
+  },
+  {
+    label: "Storefront",
+    links: [
+      { href: "/admin/theme", label: "Theme", icon: PaletteIcon, color: "shop5" },
+      { href: "/admin/architecture", label: "Configure my shop", icon: SettingsIcon, color: "shop6" },
+      { href: "/admin/domain-name", label: "Domain name", icon: Language, color: "shop7" },
+    ],
+  },
+];
+
 function AdminLayout(props) {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [ordersCount, setOrdersCount] = useState(0);
@@ -29,6 +54,7 @@ function AdminLayout(props) {
   const { userInfo } = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
+  const router = useRouter();
 
   useEffect(() => {
     userInfo && getOrdersCount();
@@ -100,61 +126,84 @@ function AdminLayout(props) {
       </section>
       <Drawer open={drawerOpen} anchor={"left"} onClose={toggleDrawer}>
         <section className={styles.sidebar}>
-          <Link onClick={toggleDrawer} href="/admin/account">
-            <div className={`${styles.link} + hoverable`}>
+          {userInfo?.shop && (
+            <div className={styles.shopIdentity}>
+              <img
+                alt="shop logo"
+                src={
+                  userInfo.shop.logo
+                    ? `/api/images/${userInfo.shop.logo.split("/").pop()}`
+                    : "/images/default-store.png"
+                }
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = "/images/default-store.png";
+                }}
+              />
+              <div>
+                <p className={styles.shopName}>{userInfo.shop.name}</p>
+                <span
+                  className={`${styles.packPill} ${
+                    userInfo.shop.pack?.type === "FREE" ? styles.packFree : styles.packPremium
+                  }`}
+                >
+                  {userInfo.shop.pack?.type}
+                </span>
+              </div>
+            </div>
+          )}
+
+          <Link
+            onClick={toggleDrawer}
+            href="/admin/account"
+            className={router.pathname === "/admin/account" ? styles.linkActive : ""}
+          >
+            <div className={`${styles.link} hoverable`}>
               <Subscription color="primary" />
               <p>my account</p>
             </div>
           </Link>
-          <Link onClick={toggleDrawer} href="/admin/categories">
-            <div className={`${styles.link} + hoverable`}>
-              <CategoryIcon color="shop2" />
-              <p>categories</p>
+
+          {NAV_GROUPS.map((group) => (
+            <div className={styles.navGroup} key={group.label}>
+              <p className={styles.groupLabel}>{group.label}</p>
+              {group.links.map((link) => {
+                const Icon = link.icon;
+                const active = router.pathname === link.href;
+                return (
+                  <Link
+                    key={link.href}
+                    onClick={toggleDrawer}
+                    href={link.href}
+                    className={active ? styles.linkActive : ""}
+                  >
+                    <div className={`${styles.link} hoverable`}>
+                      {link.badge ? (
+                        <Badge badgeContent={ordersCount} color="secondary">
+                          <Icon color={link.color} />
+                        </Badge>
+                      ) : (
+                        <Icon color={link.color} />
+                      )}
+                      <p>{link.label}</p>
+                    </div>
+                  </Link>
+                );
+              })}
             </div>
-          </Link>
-          <Link onClick={toggleDrawer} href="/admin/inventory">
-            <div className={`${styles.link} + hoverable`}>
-              <InventoryIcon color="shop3" />
-              <p>Products</p>
-            </div>
-          </Link>
-          <Link onClick={toggleDrawer} href="/admin/orders">
-            <div className={`${styles.link} + hoverable`}>
-              <Badge badgeContent={ordersCount} color="secondary">
-                <LocalShippingIcon color="shop4" />
-              </Badge>
-              <p>orders</p>
-            </div>
-          </Link>
-          <Link onClick={toggleDrawer} href="/admin/theme">
-            <div className={`${styles.link} + hoverable`}>
-              <PaletteIcon color="shop5" />
-              <p>Theme</p>
-            </div>
-          </Link>
-          <Link onClick={toggleDrawer} href="/admin/architecture">
-            <div className={`${styles.link} + hoverable`}>
-              <SettingsIcon color="shop6" />
-              <p>configure my shop</p>
-            </div>
-          </Link>
-          <Link onClick={toggleDrawer} href="/admin/domain-name">
-            <div className={`${styles.link} + hoverable`}>
-              <Language color="shop7" />
-              <p>Domain name</p>
-            </div>
-          </Link>
+          ))}
+
           <Link
             rel="noreferrer"
             target="_blank"
             onClick={toggleDrawer}
             href={
-              userInfo?.shop?.domainName.length
+              userInfo?.shop?.domainName?.length
                 ? `https://${userInfo?.shop?.domainName}`
                 : `/${userInfo?.shop?.name}`
             }
           >
-            <div className={`${styles.link} + hoverable`}>
+            <div className={`${styles.link} hoverable`}>
               <TravelExploreIcon />
               <p>visit my shop</p>
             </div>

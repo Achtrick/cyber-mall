@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { Language } from "@mui/icons-material";
 import axios from "axios";
 import Link from "next/link";
 import { useSnackbar } from "notistack";
@@ -20,6 +20,9 @@ function DomainName(props) {
   const [domainName, setDomainName] = useState("");
 
   const { enqueueSnackbar } = useSnackbar();
+
+  const isPremium = userInfo?.shop.pack.type !== "FREE";
+  const hasCustomDomain = !!userInfo?.shop?.domainName?.length;
 
   const updateDomainName = async (e) => {
     e.preventDefault();
@@ -67,72 +70,76 @@ function DomainName(props) {
                 required
                 onChange={(e) => setDomainName(e.target.value)}
               />
-              <p>
-                After changing the domain name, add this information
-                to your DNS settings:
-              </p>
-              <br />
-              <table className="fixedTable">
-                <thead>
-                  <tr>
-                    <th>domain</th>
-                    <th>ttl</th>
-                    <th>type</th>
-                    <th>target</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>{domainName.length ? domainName : "example.com"}</td>
-                    <td>0</td>
-                    <td>A</td>
-                    <td>76.76.21.21</td>
-                  </tr>
-                </tbody>
-              </table>
             </div>
+            <p className={styles.dnsHint}>
+              After changing the domain name, add this record to your DNS
+              settings:
+            </p>
+            <table className="fixedTable">
+              <thead>
+                <tr>
+                  <th>domain</th>
+                  <th>ttl</th>
+                  <th>type</th>
+                  <th>target</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{domainName.length ? domainName : "example.com"}</td>
+                  <td>0</td>
+                  <td>A</td>
+                  <td>76.76.21.21</td>
+                </tr>
+              </tbody>
+            </table>
           </form>
         </XModal>
         <section className={styles.container}>
-          <div className={styles.controls} style={{ justifyContent: "center" }}>
+          <div className={styles.controls}>
             <h1>Domain name</h1>
           </div>
-          {userInfo?.shop.pack.type === "FREE" ? (
-            <>
-              <p>
-                you must be on the PREMIUM pack to benefit from a custom
-                domain name!
-              </p>
-              <Link
-                style={{ color: "blue", textDecoration: "underline" }}
-                href={"/admin/account"}
-              >
-                Upgrade to PREMIUM now!
-              </Link>
-            </>
-          ) : (
-            <section align="center">
-              <p style={{ textTransform: "unset", fontWeight: "500" }}>
-                {userInfo?.shop?.domainName.length
-                  ? "Domain name: " + userInfo?.shop?.domainName
-                  : `Your shop is now available at: ${SITE_URL}/` +
-                    userInfo?.shop.name}
-              </p>
-              <br />
 
-              <Button
-                variant="contained"
-                style={{
-                  background: "black",
-                  color: "white",
-                  height: "35px",
-                }}
-                onClick={() => setAction("UPDATE")}
-              >
-                Change the domain name
-              </Button>
-            </section>
-          )}
+          <div className={styles.domainCard}>
+            <div className={styles.domainIcon}>
+              <Language />
+            </div>
+
+            {!isPremium ? (
+              <>
+                <p className={styles.domainStatus}>
+                  Custom domain names are a premium feature
+                </p>
+                <p className={styles.domainSub}>
+                  Upgrade to premium to connect your own domain name to your
+                  shop.
+                </p>
+                <Link href="/admin/account" className="btn btn-primary">
+                  Upgrade to premium
+                </Link>
+              </>
+            ) : (
+              <>
+                <p className={styles.domainStatus}>
+                  {hasCustomDomain ? userInfo.shop.domainName : "No custom domain connected yet"}
+                </p>
+                <p className={styles.domainSub}>
+                  {hasCustomDomain ? (
+                    <span className={styles.connectedPill}>Connected</span>
+                  ) : (
+                    <>Your shop is available at {SITE_URL}/{userInfo?.shop.name}</>
+                  )}
+                </p>
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={() => setAction("UPDATE")}
+                >
+                  {hasCustomDomain ? "Change the domain name" : "Connect a domain name"}
+                </button>
+              </>
+            )}
+          </div>
         </section>
       </DisconnectedGuard>
     </AdminLayout>

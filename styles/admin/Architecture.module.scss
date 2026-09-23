@@ -1,0 +1,154 @@
+.pageHint {
+  margin: 0 0 18px;
+  font-size: 13px;
+  color: var(--muted);
+  text-transform: none;
+}
+
+// tabs
+.tabBar {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 20px;
+  padding-bottom: 0;
+  border-bottom: 1px solid var(--line);
+  overflow-x: auto;
+}
+.tabButton {
+  flex-shrink: 0;
+  padding: 10px 4px;
+  margin-right: 22px;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.18s ease, border-color 0.18s ease;
+  &:hover {
+    color: var(--ink);
+  }
+}
+.tabActive {
+  color: var(--ink);
+  border-bottom-color: var(--first-color);
+}
+
+.tabPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+// section cards
+.sectionCard {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: 20px 24px;
+
+  h2 {
+    margin: 0 0 4px;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--ink);
+    text-transform: capitalize;
+  }
+}
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 4px;
+  h2 {
+    margin: 0;
+  }
+}
+.sectionHint {
+  margin: 0 0 14px;
+  font-size: 13px;
+  color: var(--muted);
+  text-transform: none;
+}
+.previewLabel {
+  margin: 14px 0 8px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.inlineActions {
+  margin-left: 6px;
+}
+
+// thumbnail preview cards (slider / gallery items)
+.thumbCard {
+  width: 100% !important;
+  border: 1px solid var(--line) !important;
+  background: var(--surface-alt);
+  border-radius: var(--radius) !important;
+  text-align: center;
+  padding: 12px !important;
+}
+
+// shipping
+.shippingGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px 20px;
+}
+.suffixInput {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  span {
+    flex-shrink: 0;
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+}
+
+// contact
+.contactGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 20px;
+}
+.iconInput {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin: 5px 0;
+  svg {
+    position: absolute;
+    left: 12px;
+    color: var(--muted);
+    font-size: 20px;
+    pointer-events: none;
+  }
+  input {
+    margin: 0;
+    padding-left: 40px;
+  }
+}
+
+@media (max-width: 800px) {
+  .sectionCard {
+    padding: 16px 16px;
+  }
+  .shippingGrid,
+  .contactGrid {
+    grid-template-columns: 1fr;
+  }
+  .tabButton {
+    margin-right: 16px;
+  }
+}
