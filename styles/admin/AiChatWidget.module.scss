@@ -1,10 +1,11 @@
 // Single anchor point for both the FAB and the panel, used on every screen
 // size -- bottom-right, offset well above components/installPwa.js's install
 // button (fixed bottom:10px/right:10px, 30x30) so the two never collide, and
-// above react-cookie-consent's banner via z-index.
+// above react-cookie-consent's banner (999) via z-index -- but below MUI
+// modals (1300), or the FAB covers their confirm button on narrow screens.
 $anchor-bottom: 84px;
 $anchor-right: 18px;
-$z: 1400;
+$z: 1250;
 
 // Open/close (FAB<->panel) and maximize/restore are all driven by inline
 // styles from JS (opacity/transform/pointer-events/width/height), not

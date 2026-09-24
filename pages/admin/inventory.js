@@ -13,16 +13,12 @@ import XModal from "../../components/ui-components/XModal";
 import XPagination from "../../components/ui-components/XPagination";
 import XTag from "../../components/ui-components/XTag";
 import styles from "../../styles/admin/Dashboard.module.scss";
-import {
-  compressImage,
-  getThumbnail,
-  isBase64,
-} from "../../utils/config/convertHelper";
+import { compressImage, getThumbnail } from "../../utils/config/convertHelper";
 import { checkExpirity } from "../../utils/shared/checkExpirity";
 import { checkPremium } from "../../utils/shared/checkPremium";
 import { getError } from "../../utils/shared/getError";
 import { uploadImages } from "../../utils/shared/uploadImages";
-import { AddIcon, SearchIcon } from "../../utils/theme/icons";
+import { AddIcon, CloseIcon, SearchIcon } from "../../utils/theme/icons";
 
 function Inventory(props) {
   let executeSearchTimeout;
@@ -41,7 +37,12 @@ function Inventory(props) {
   const [modalLoading, setModalLoading] = useState(false);
   const [imagesLoading, setImagesLoading] = useState(false);
   const [action, setAction] = useState("");
-  const [images, setImages] = useState([]);
+  // Ordered list of the product's images as edited in the modal. Kept images
+  // are { id, src: "/uploads/..." }; newly picked ones also carry the
+  // compressed `file` to upload and a base64 preview as `src`. The first entry
+  // is the product's main image.
+  const [imageEntries, setImageEntries] = useState([]);
+  const maxImages = userInfo?.shop.pack.type === "PREMIUM" ? 6 : 1;
 
   const [product, setProduct] = useState({
     category: "",
@@ -100,31 +101,32 @@ function Inventory(props) {
 
   const onChange = async (e) => {
     if (e.target.name === "images") {
-      setImagesLoading(true);
-      let compressedImages = [];
-      let imagesToUpload = [];
+      const files = [...e.target.files];
+      e.target.value = ""; // lets the same file be picked again after removing it
+      if (!files.length) return;
 
-      const files = e.target.files;
-
-      for (let image of files) {
-        const base64 = await getThumbnail(image);
-        const compressedImage = await compressImage(image);
-        if (compressedImages.length < 6) {
-          compressedImages.push(base64);
-          imagesToUpload.push(compressedImage);
-        } else {
-          enqueueSnackbar("Do not exceed 6 images per product.", {
-            variant: "warning",
-          });
-        }
+      // single-image plans swap the image out; otherwise append up to the limit
+      const room = maxImages === 1 ? 1 : maxImages - imageEntries.length;
+      if (files.length > room) {
+        enqueueSnackbar(`Do not exceed ${maxImages} images per product.`, {
+          variant: "warning",
+        });
       }
+      const accepted = files.slice(0, Math.max(room, 0));
+      if (!accepted.length) return;
 
-      setImages(imagesToUpload);
-
-      setProduct({
-        ...product,
-        images: compressedImages,
-      });
+      setImagesLoading(true);
+      const picked = [];
+      for (const file of accepted) {
+        picked.push({
+          id: `${Date.now()}-${Math.random()}`,
+          src: await getThumbnail(file),
+          file: await compressImage(file),
+        });
+      }
+      setImageEntries((current) =>
+        maxImages === 1 ? picked : [...current, ...picked]
+      );
       setImagesLoading(false);
     } else {
       expandTextArea(e);
@@ -154,6 +156,30 @@ function Inventory(props) {
     }
   };
 
+  const removeImage = (id) => {
+    setImageEntries((current) => current.filter((entry) => entry.id !== id));
+  };
+
+  const makeMainImage = (id) => {
+    setImageEntries((current) => [
+      ...current.filter((entry) => entry.id === id),
+      ...current.filter((entry) => entry.id !== id),
+    ]);
+  };
+
+  // Uploads only the newly picked images and returns the final ordered list of
+  // paths. Images dropped from the list are deleted server-side on update.
+  const resolveImagePaths = async () => {
+    const pending = imageEntries.filter((entry) => entry.file);
+    const uploaded = pending.length
+      ? await uploadImages(pending.map((entry) => entry.file))
+      : [];
+    let next = 0;
+    return imageEntries.map((entry) =>
+      entry.file ? "/uploads/" + uploaded[next++].filename : entry.src
+    );
+  };
+
   const deleteTag = (entry) => {
     setProduct({
       ...product,
@@ -168,14 +194,8 @@ function Inventory(props) {
 
     try {
       switch (action) {
-        case AdminActions.ADD:
-          const data = await uploadImages(images);
-
-          const uploads = [];
-
-          for (let uploaded of data) {
-            uploads.push("/uploads/" + uploaded.filename);
-          }
+        case AdminActions.ADD: {
+          const images = await resolveImagePaths();
 
           product.slug =
             product.designation.split(" ").join("-") +
@@ -190,45 +210,30 @@ function Inventory(props) {
           result = await axios.post("/api/admin/products/add", {
             shop: userInfo.shop._id,
             ...product,
-            images: uploads,
+            images,
           });
-
-          setImages([]);
           break;
-        case AdminActions.UPDATE:
-          if (images.length) {
-            const data = await uploadImages(images);
-
-            const uploads = [];
-
-            for (let uploaded of data) {
-              uploads.push("/uploads/" + uploaded.filename);
-            }
-
-            result = await axios.put("/api/admin/products/update", {
-              ...product,
-              images: uploads,
-            });
-          } else {
-            result = await axios.put("/api/admin/products/update", {
-              _id: product._id,
-              category: product.category,
-              designation: product.designation,
-              slug: product.slug,
-              description: product.description,
-              variants: product.variants,
-              price: product.price,
-              discount: product.discount,
-              qty: product.qty,
-            });
-          }
-          setImages([]);
+        }
+        case AdminActions.UPDATE: {
+          const images = await resolveImagePaths();
+          result = await axios.put("/api/admin/products/update", {
+            _id: product._id,
+            category: product.category,
+            designation: product.designation,
+            slug: product.slug,
+            description: product.description,
+            variants: product.variants,
+            price: product.price,
+            discount: product.discount,
+            qty: product.qty,
+            images,
+          });
           break;
+        }
         case AdminActions.DELETE:
           result = await axios.post(`/api/admin/products/delete`, {
             productId: product._id,
           });
-          setImages([]);
           break;
         default:
           break;
@@ -256,6 +261,7 @@ function Inventory(props) {
       qty: 0,
       images: [],
     });
+    setImageEntries([]);
     setTag("");
     setAction("");
   };
@@ -341,27 +347,55 @@ function Inventory(props) {
                 />
               </div>
               <div className="labeledInput">
-                <label>images</label>
-                <br />
+                <label>
+                  images ({imageEntries.length}/{maxImages})
+                  {maxImages > 1 ? " — the first one is the main image" : ""}
+                </label>
                 <div className={styles.productImagesContainer}>
-                  {imagesLoading ? (
-                    <CircularProgress color="black" size={30} />
-                  ) : (
-                    product.images.map((image, index) => {
-                      return (
-                        <div key={index} className={styles.productImgPreview}>
-                          <img
-                            alt={index}
-                            src={`/api/images/${image.split("/").pop()}`}
-                            onError={(e) => {
-                              e.target.src = isBase64(image)
-                                ? image
-                                : "/images/image-placeholder.jpg";
-                            }}
-                          />
-                        </div>
-                      );
-                    })
+                  {imageEntries.map((entry, index) => (
+                    <div key={entry.id} className={styles.productImgPreview}>
+                      <img
+                        alt={`${product.designation || "product"} ${index + 1}`}
+                        src={
+                          entry.file
+                            ? entry.src
+                            : `/api/images/${entry.src
+                                .split("/")
+                                .pop()}?width=300&height=300`
+                        }
+                        onError={(e) => {
+                          e.currentTarget.onerror = null;
+                          e.currentTarget.src = "/images/image-placeholder.jpg";
+                        }}
+                      />
+                      <button
+                        type="button"
+                        className={styles.removeImage}
+                        aria-label="Remove image"
+                        title="Remove image"
+                        onClick={() => removeImage(entry.id)}
+                      >
+                        <CloseIcon />
+                      </button>
+                      {maxImages > 1 &&
+                        (index === 0 ? (
+                          <span className={styles.mainImageBadge}>Main</span>
+                        ) : (
+                          <button
+                            type="button"
+                            className={styles.makeMainImage}
+                            onClick={() => makeMainImage(entry.id)}
+                          >
+                            Set as main
+                          </button>
+                        ))}
+                      {entry.file && <span className={styles.newImageBadge}>New</span>}
+                    </div>
+                  ))}
+                  {imagesLoading && (
+                    <div className={styles.productImgLoading}>
+                      <CircularProgress color="secondary" size={28} />
+                    </div>
                   )}
                 </div>
                 <input
@@ -369,21 +403,30 @@ function Inventory(props) {
                   hidden
                   type="file"
                   accept="image/*"
-                  multiple={userInfo?.shop.pack.type === "PREMIUM"}
+                  multiple={maxImages > 1}
                   name="images"
                   onChange={onChange}
                 />
-                <label
-                  className="btn btn-sm"
-                  style={{ marginTop: "8px" }}
-                  htmlFor="images"
-                >
-                  {imagesLoading
-                    ? "Uploading..."
-                    : product.images.length
-                    ? "Change images"
-                    : "Add images"}
-                </label>
+                {maxImages === 1 || imageEntries.length < maxImages ? (
+                  <label
+                    className="btn btn-sm"
+                    style={{ marginTop: "8px" }}
+                    htmlFor="images"
+                  >
+                    {imagesLoading
+                      ? "Processing..."
+                      : maxImages === 1 && imageEntries.length
+                      ? "Replace image"
+                      : imageEntries.length
+                      ? "Add more images"
+                      : "Add images"}
+                  </label>
+                ) : (
+                  <p className={styles.controlsHint}>
+                    Maximum of {maxImages} images reached. Remove one to add
+                    another.
+                  </p>
+                )}
               </div>
               <div style={{ position: "relative" }} className="labeledInput">
                 <label>
@@ -593,6 +636,12 @@ function Inventory(props) {
                                   className="btn btn-sm"
                                   onClick={() => {
                                     setProduct(product);
+                                    setImageEntries(
+                                      (product.images ?? []).map((src) => ({
+                                        id: src,
+                                        src,
+                                      }))
+                                    );
                                     setAction(AdminActions.UPDATE);
                                   }}
                                 >

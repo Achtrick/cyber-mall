@@ -14,10 +14,7 @@ import Steps from "../components/vitrine/Steps";
 export default function Home() {
   return (
     <ConnectedGuard>
-      <Layout
-        description={"Making commerce better for everyone"}
-        image={"/logo-512.png"}
-      >
+      <Layout description={"Making commerce better for everyone"}>
         <HomeHedaer />
         <br />
         <XHr width="10%" marginLeft="45%" color={"var(--second-color)"} />

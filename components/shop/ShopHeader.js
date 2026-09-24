@@ -44,6 +44,10 @@ function ShopHeader({ shopInfo, ...props }) {
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [cart, setCart] = useState(null);
+  // The cart lives in localStorage, which the server can't read: the server
+  // renders an empty cart, so the count may only differ after hydration.
+  const [hydrated, setHydrated] = useState(false);
+  useEffect(() => setHydrated(true), []);
   const headerHidden = useHideOnScroll({
     disabled: drawerOpen || searchOpen || cartPreviewOpen,
   });
@@ -447,8 +451,10 @@ function ShopHeader({ shopInfo, ...props }) {
             <XBadge
               color={shopInfo.settings.primaryColor}
               content={
-                carts?.find((cart) => cart.shop === shopInfo.name)?.content
-                  ?.length || 0
+                hydrated
+                  ? carts?.find((cart) => cart.shop === shopInfo.name)?.content
+                      ?.length || 0
+                  : 0
               }
             >
               <IconButton

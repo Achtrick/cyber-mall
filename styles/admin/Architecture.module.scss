@@ -98,6 +98,21 @@
   text-align: center;
   padding: 12px !important;
 }
+.thumbActions {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+// background is set inline from the logo's own brightness (light or dark box)
+.logoBox {
+  object-fit: contain;
+  padding: 8px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  transition: background-color 0.2s ease;
+}
 
 // shipping
 .shippingGrid {

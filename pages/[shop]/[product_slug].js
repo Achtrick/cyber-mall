@@ -15,6 +15,7 @@ import XMagnifier from "../../components/ui-components/XMagnifier";
 import XSwiper from "../../components/ui-components/XSwiper";
 import styles from "../../styles/shop/Product.module.scss";
 import ProductModel from "../../models/product.model";
+import ProductCategory from "../../models/productCategory.model";
 import Shop from "../../models/shop.model";
 import connectDB from "../../utils/connectDB";
 import {
@@ -339,10 +340,16 @@ export async function getServerSideProps(context) {
       return { redirect: { destination: "/", permanent: false } };
     }
 
+    // `model` passed explicitly: populate() otherwise resolves
+    // "ProductCategory" from mongoose's global registry, which only has it if
+    // another file loaded in the same serverless function imported that
+    // model. This page never did, so in production populate() threw
+    // (MissingSchemaError) and the page rendered without its SSR data, i.e.
+    // with no og:title / og:image for link-preview crawlers.
     const productDoc = await ProductModel.findOne({
       shop: shopDoc._id,
       slug: productSlug,
-    }).populate({ path: "category" });
+    }).populate({ path: "category", model: ProductCategory });
 
     if (!productDoc) {
       return { redirect: { destination: `/${shopName}`, permanent: false } };

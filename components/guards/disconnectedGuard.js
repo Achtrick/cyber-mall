@@ -1,8 +1,10 @@
 import { CircularProgress } from "@mui/material";
 import axios from "axios";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { SITE_ICON } from "../../utils/config/site";
 
 function DisconnectedGuard(props) {
   const router = useRouter();
@@ -24,6 +26,16 @@ function DisconnectedGuard(props) {
 
   return loading ? (
     <div className="auth-guard-loader">
+      {/* keeps the platform icon on admin/super-admin pages while this loader
+          stands in for their content (same key as the layouts: no duplicate) */}
+      <Head>
+        <link
+          key="site-icon"
+          rel="icon"
+          type="image/svg+xml"
+          href={SITE_ICON}
+        />
+      </Head>
       <div className="loaderContainer">
         <img
           width="60px"

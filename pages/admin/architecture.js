@@ -23,6 +23,7 @@ import {
 import { checkExpirity } from "../../utils/shared/checkExpirity";
 import { getError } from "../../utils/shared/getError";
 import { uploadImages } from "../../utils/shared/uploadImages";
+import { useContrastBoxBackground } from "../../utils/shared/useContrastBoxBackground";
 import {
   AddressIcon,
   FacebookIcon,
@@ -238,6 +239,15 @@ function Architecture(props) {
   const [currency, setCurrency] = useState("");
   const [logo, setLogo] = useState(null);
   const [compressedLogo, setCompressedLogo] = useState(null);
+  // image path of the slide / gallery item being edited (its identity in the list)
+  const [editingKey, setEditingKey] = useState(null);
+
+  const logoSrc = !logo
+    ? "/cyber-mall.png"
+    : logo.startsWith("data:") || logo.startsWith("/cyber-mall")
+    ? logo
+    : `/api/images/${logo.split("/").pop()}`;
+  const logoBg = useContrastBoxBackground(logoSrc);
 
   const [action, setAction] = useState("");
   const [title, setTitle] = useState("");
@@ -328,7 +338,10 @@ function Architecture(props) {
     }
   };
 
-  const saveArchitecture = async (component) => {
+  // `overrideBody` saves exactly that value instead of deriving it from state
+  // (used by edits, which build the new list before state catches up).
+  // Resolves to true when the save succeeded.
+  const saveArchitecture = async (component, overrideBody) => {
     setLoading(true);
     try {
       let body = {};
@@ -373,6 +386,7 @@ function Architecture(props) {
         default:
           break;
       }
+      if (overrideBody !== undefined) body = overrideBody;
 
       const { data } = await axios.post("/api/admin/shop/update-architecture", {
         shopId: shopInfo._id,
@@ -389,10 +403,12 @@ function Architecture(props) {
       enqueueSnackbar(data.message, { variant: "success" });
       setLoading(false);
       setAction("");
+      return true;
     } catch (error) {
       checkExpirity(error, dispatch);
       enqueueSnackbar(getError(error), { variant: "error" });
       setLoading(false);
+      return false;
     }
   };
 
@@ -478,6 +494,15 @@ function Architecture(props) {
     setSlideImage(null);
     setGalleryItem({ image: "", link: "", text: "", category: "" });
     setGalleryItemImage(null);
+    setEditingKey(null);
+  };
+
+  // Uploads the newly picked image if there is one, otherwise keeps the
+  // original. The server deletes the replaced file once nothing references it.
+  const resolveEditedImage = async (pickedImage) => {
+    if (!pickedImage) return editingKey;
+    const data = await uploadImages([pickedImage]);
+    return "/uploads/" + data[0].filename;
   };
 
   // SLIDES FUNCTIONS
@@ -506,6 +531,24 @@ function Architecture(props) {
     setSliderInfo(sliderInfo.filter((s) => s.image !== slide.image));
     await saveArchitecture("sliderComponent");
     closeAction();
+  };
+
+  const editSlide = async () => {
+    setSlideImageLoading(true);
+    try {
+      const image = await resolveEditedImage(slideImage);
+      const updated = sliderInfo.map((s) =>
+        s.image === editingKey ? { ...slide, image } : s
+      );
+      if (await saveArchitecture("sliderComponent", updated)) {
+        setSliderInfo(updated);
+        closeAction();
+      }
+    } catch (error) {
+      checkExpirity(error, dispatch);
+      enqueueSnackbar(getError(error), { variant: "error" });
+    }
+    setSlideImageLoading(false);
   };
 
   // CATEGORIES GRID FUNCTIONS
@@ -582,6 +625,27 @@ function Architecture(props) {
     });
     await saveArchitecture("galleryComponent");
     closeAction();
+  };
+
+  const editGalleryItem = async () => {
+    setGalleryItemImageLoading(true);
+    try {
+      const image = await resolveEditedImage(galleryItemImage);
+      const updated = {
+        ...galleryInfo,
+        content: galleryInfo.content.map((item) =>
+          item.image === editingKey ? { ...galleryItem, image } : item
+        ),
+      };
+      if (await saveArchitecture("galleryComponent", updated)) {
+        setGalleryInfo(updated);
+        closeAction();
+      }
+    } catch (error) {
+      checkExpirity(error, dispatch);
+      enqueueSnackbar(getError(error), { variant: "error" });
+    }
+    setGalleryItemImageLoading(false);
   };
 
   // CONTACT FUNCTIONS
@@ -877,10 +941,14 @@ function Architecture(props) {
           confirmAction={
             action === "ADD-SLIDE-FROM"
               ? addSlide
+              : action === "EDIT-SLIDE-FORM"
+              ? editSlide
               : action === "DELETE-SLIDE-FORM"
               ? deleteSlide
               : action === "ADD-GALLERY-FROM"
               ? addGalleryItem
+              : action === "EDIT-GALLERY-FORM"
+              ? editGalleryItem
               : action === "DELETE-GALLERY-FORM"
               ? deleteGalleryItem
               : action === "CATEGORIES-GRID-FORM"
@@ -893,7 +961,10 @@ function Architecture(props) {
           }
           loading={galleryItemImageLoading || slideImageLoading || loading}
           size={
-            action === "ADD-SLIDE-FROM" || action === "ADD-GALLERY-FROM"
+            action === "ADD-SLIDE-FROM" ||
+            action === "EDIT-SLIDE-FORM" ||
+            action === "ADD-GALLERY-FROM" ||
+            action === "EDIT-GALLERY-FORM"
               ? ModalSizes.BIG
               : action === "CATEGORIES-GRID-FORM"
               ? ModalSizes.MEDIUM
@@ -906,13 +977,13 @@ function Architecture(props) {
           }
         >
           <div className={styles.modal}>
-            {action === "ADD-SLIDE-FROM"
+            {action === "ADD-SLIDE-FROM" || action === "EDIT-SLIDE-FORM"
               ? addSliderForm
               : action === "DELETE-SLIDE-FORM"
               ? deleteSlideForm
               : action === "GALLERY-ORDER-FORM"
               ? galleryOrderForm
-              : action === "ADD-GALLERY-FROM"
+              : action === "ADD-GALLERY-FROM" || action === "EDIT-GALLERY-FORM"
               ? addGalleryForm
               : action === "DELETE-GALLERY-FORM"
               ? deleteGalleryForm
@@ -964,33 +1035,17 @@ function Architecture(props) {
                     <div className="row" style={{ justifyContent: "flex-start" }}>
                       <>
                         {!compressingLogo ? (
-                          <>
-                            {logo ? (
-                              <img
-                                alt="logo"
-                                src={
-                                  logo.startsWith("data:") ||
-                                  logo.startsWith("/cyber-mall")
-                                    ? logo
-                                    : `/api/images/${logo.split("/").pop()}`
-                                }
-                                onError={(e) => {
-                                  setLogo("/cyber-mall.png");
-                                }}
-                                width={"150"}
-                                height={"80"}
-                                style={{ objectFit: "contain" }}
-                              />
-                            ) : (
-                              <img
-                                alt="logo"
-                                src={"/cyber-mall.png"}
-                                width={"150"}
-                                height={"80"}
-                                style={{ objectFit: "contain" }}
-                              />
-                            )}
-                          </>
+                          <img
+                            alt="logo"
+                            src={logoSrc}
+                            onError={() => {
+                              setLogo("/cyber-mall.png");
+                            }}
+                            width={"150"}
+                            height={"80"}
+                            className={archStyles.logoBox}
+                            style={{ background: logoBg }}
+                          />
                         ) : (
                           <Skeleton
                             variant="circular"
@@ -1141,19 +1196,6 @@ function Architecture(props) {
                                 key={slide.image}
                                 className={`${styles.imgPreview} ${archStyles.thumbCard}`}
                               >
-                                <span className={styles.closeIcon}>
-                                  <button
-                                    type="button"
-                                    className="btn btn-sm btn-danger"
-                                    onClick={() => {
-                                      setSlide(slide);
-                                      setTitle("delete the slide");
-                                      setAction("DELETE-SLIDE-FORM");
-                                    }}
-                                  >
-                                    Delete
-                                  </button>
-                                </span>
                                 <img
                                   alt={slide.category}
                                   src={`/api/images/${slide.image.split("/").pop()}`}
@@ -1165,6 +1207,35 @@ function Architecture(props) {
                                 {slide.category?.length ? (
                                   <p>category: {slide.category}</p>
                                 ) : null}
+                                <div className={archStyles.thumbActions}>
+                                  <button
+                                    type="button"
+                                    className="btn btn-sm"
+                                    onClick={() => {
+                                      setSlide({
+                                        image: slide.image,
+                                        link: slide.link ?? "",
+                                        category: slide.category ?? "",
+                                      });
+                                      setEditingKey(slide.image);
+                                      setTitle("Edit slide");
+                                      setAction("EDIT-SLIDE-FORM");
+                                    }}
+                                  >
+                                    Edit
+                                  </button>
+                                  <button
+                                    type="button"
+                                    className="btn btn-sm btn-danger"
+                                    onClick={() => {
+                                      setSlide(slide);
+                                      setTitle("delete the slide");
+                                      setAction("DELETE-SLIDE-FORM");
+                                    }}
+                                  >
+                                    Delete
+                                  </button>
+                                </div>
                               </div>
                             );
                           })}
@@ -1325,19 +1396,6 @@ function Architecture(props) {
                                 key={block.image}
                                 className={`${styles.imgPreview} ${archStyles.thumbCard}`}
                               >
-                                <span className={styles.closeIcon}>
-                                  <button
-                                    type="button"
-                                    className="btn btn-sm btn-danger"
-                                    onClick={() => {
-                                      setGalleryItem(block);
-                                      setTitle("delete the item");
-                                      setAction("DELETE-GALLERY-FORM");
-                                    }}
-                                  >
-                                    Delete
-                                  </button>
-                                </span>
                                 <img
                                   alt={block.category}
                                   src={`/api/images/${block.image.split("/").pop()}`}
@@ -1350,6 +1408,36 @@ function Architecture(props) {
                                 {block.category?.length ? (
                                   <p>category: {block.category}</p>
                                 ) : null}
+                                <div className={archStyles.thumbActions}>
+                                  <button
+                                    type="button"
+                                    className="btn btn-sm"
+                                    onClick={() => {
+                                      setGalleryItem({
+                                        image: block.image,
+                                        link: block.link ?? "",
+                                        text: block.text ?? "",
+                                        category: block.category ?? "",
+                                      });
+                                      setEditingKey(block.image);
+                                      setTitle("Edit gallery item");
+                                      setAction("EDIT-GALLERY-FORM");
+                                    }}
+                                  >
+                                    Edit
+                                  </button>
+                                  <button
+                                    type="button"
+                                    className="btn btn-sm btn-danger"
+                                    onClick={() => {
+                                      setGalleryItem(block);
+                                      setTitle("delete the item");
+                                      setAction("DELETE-GALLERY-FORM");
+                                    }}
+                                  >
+                                    Delete
+                                  </button>
+                                </div>
                               </div>
                             );
                           })}

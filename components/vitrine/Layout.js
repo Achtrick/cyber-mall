@@ -2,7 +2,13 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import React from "react";
 import styles from "../../styles/vitrine/Layout.module.scss";
-import { SITE_HOST, SITE_URL, absoluteUrl } from "../../utils/config/site";
+import {
+  DEFAULT_OG_IMAGE,
+  SITE_HOST,
+  SITE_ICON,
+  SITE_URL,
+  absoluteUrl,
+} from "../../utils/config/site";
 import Footer from "./Footer";
 import Navbar from "./Navbar";
 
@@ -12,6 +18,11 @@ function Layout({ children, title, description, tags, image }) {
   // instead of its own -- fixed by deriving it from the actual route.
   const router = useRouter();
   const path = router.asPath.split("?")[0].split("#")[0];
+  // Link-preview crawlers (WhatsApp, Facebook, X) don't render SVG, and most
+  // pages pass their SVG illustration here, so those get the default card.
+  const customImage = image && !/\.svg(\?|$)/i.test(image) ? image : null;
+  const ogImage = absoluteUrl(customImage || DEFAULT_OG_IMAGE.url);
+  const ogTitle = title ? `${title} - Cyber-Mall` : "Cyber-Mall";
   return (
     <>
       <Head>
@@ -27,15 +38,41 @@ function Layout({ children, title, description, tags, image }) {
           />
         )}
         {/* Social media meta */}
-        <meta
-          property="og:title"
-          content={title ? `${title} - Cyber-Mall` : "Cyber-Mall"}
-        />
+        <meta property="og:title" content={ogTitle} />
         <meta property="og:url" content={`${SITE_URL}${path}`} />
         {description && (
           <meta property="og:description" content={description} />
         )}
-        <meta property="og:image" content={absoluteUrl(image || "/logo-512.png")} />
+        <meta property="og:image" content={ogImage} />
+        {ogImage.startsWith("https://") && (
+          <meta property="og:image:secure_url" content={ogImage} />
+        )}
+        {!customImage && (
+          <>
+            <meta property="og:image:type" content={DEFAULT_OG_IMAGE.type} />
+            <meta
+              property="og:image:width"
+              content={String(DEFAULT_OG_IMAGE.width)}
+            />
+            <meta
+              property="og:image:height"
+              content={String(DEFAULT_OG_IMAGE.height)}
+            />
+            <meta property="og:image:alt" content={DEFAULT_OG_IMAGE.alt} />
+          </>
+        )}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={ogTitle} />
+        {description && (
+          <meta name="twitter:description" content={description} />
+        )}
+        <meta name="twitter:image" content={ogImage} />
+        <link
+          key="site-icon"
+          rel="icon"
+          type="image/svg+xml"
+          href={SITE_ICON}
+        />
         <link
           rel="apple-touch-icon"
           sizes="180x180"

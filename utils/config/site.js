@@ -33,3 +33,22 @@ export const absoluteUrl = (path) => {
   if (/^https?:\/\//i.test(path)) return path;
   return `${SITE_URL}${path.startsWith("/") ? path : `/${path}`}`;
 };
+
+// Default link-preview image for the platform's own pages (public/og-image.png:
+// the logo on the opaque brand background). The logo files themselves
+// (logo-512.png is really a 2000x449 transparent PNG with a white wordmark)
+// make poor previews: WhatsApp draws transparency on a white card, so the
+// wordmark vanishes, and the wide strip gets center-cropped. Crawlers also
+// don't render SVG at all. Keep width/height in sync with the file.
+export const DEFAULT_OG_IMAGE = {
+  url: "/og-image.png",
+  width: 1200,
+  height: 630,
+  type: "image/png",
+  alt: "Cyber-Mall - Making commerce better for everyone",
+};
+
+// Browser tab icon for the platform's own pages. Deliberately NOT in
+// pages/_document.js: a global <link rel="icon"> there is emitted on shop pages
+// too, and browsers prefer it over the shop's own icon.
+export const SITE_ICON = "/images/icon.svg";

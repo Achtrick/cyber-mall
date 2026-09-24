@@ -10,7 +10,13 @@ import { useDispatch, useSelector } from "react-redux";
 import AiChatWidget from "./AiChatWidget";
 import InstallPWA from "../../components/installPwa";
 import styles from "../../styles/admin/AdminLayout.module.scss";
-import { SITE_HOST, SITE_URL, absoluteUrl } from "../../utils/config/site";
+import {
+  DEFAULT_OG_IMAGE,
+  SITE_HOST,
+  SITE_ICON,
+  SITE_URL,
+  absoluteUrl,
+} from "../../utils/config/site";
 import { useContrastBoxBackground } from "../../utils/shared/useContrastBoxBackground";
 import {
   CategoryIcon,
@@ -94,11 +100,30 @@ function AdminLayout(props) {
         <meta property="og:title" content="Cyber-Mall" />
         <meta property="og:description" content="Cyber-Mall Dashboard" />
         <meta property="og:url" content={`${SITE_URL}/`} />
-        <meta property="og:image" content={absoluteUrl("/logo-512.png")} />
+        <meta
+          property="og:image"
+          content={absoluteUrl(DEFAULT_OG_IMAGE.url)}
+        />
+        <meta property="og:image:type" content={DEFAULT_OG_IMAGE.type} />
+        <meta
+          property="og:image:width"
+          content={String(DEFAULT_OG_IMAGE.width)}
+        />
+        <meta
+          property="og:image:height"
+          content={String(DEFAULT_OG_IMAGE.height)}
+        />
+        <meta name="twitter:card" content="summary_large_image" />
         <link
           rel="apple-touch-icon"
           sizes="180x180"
           href="/cybermall-192.png"
+        />
+        <link
+          key="site-icon"
+          rel="icon"
+          type="image/svg+xml"
+          href={SITE_ICON}
         />
         <link rel="icon" type="image/ico" sizes="32x32" href="/favicon.ico" />
         <link rel="icon" type="image/ico" sizes="16x16" href="/favicon.ico" />
