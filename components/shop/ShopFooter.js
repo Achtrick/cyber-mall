@@ -150,7 +150,7 @@ function ShopFooter({ shopInfo }) {
         className={styles.shoutOut}
       >
         Powered by&nbsp;
-        <img alt="cyber-mall" src="/cyber-mall.png" />
+        <img alt="cyber-mall" src={`${SITE_URL}/cyber-mall.png`} />
         &nbsp;
         <Link rel="noreferrer" target="_blank" href={SITE_URL}>
           {SITE_HOST}
