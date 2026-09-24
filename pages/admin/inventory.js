@@ -518,6 +518,7 @@ function Inventory(props) {
               <table className="defaultTable">
                 <thead>
                   <tr>
+                    <th>image</th>
                     <th>designation</th>
                     <th>price</th>
                     <th>quantity</th>
@@ -551,6 +552,23 @@ function Inventory(props) {
                               : "all",
                         }}
                       >
+                        <td data-label="Image">
+                          <img
+                            className={styles.rowThumb}
+                            alt={product.designation}
+                            src={
+                              product.images?.[0]
+                                ? `/api/images/${product.images[0]
+                                    .split("/")
+                                    .pop()}?width=80&height=80`
+                                : "/images/image-placeholder.jpg"
+                            }
+                            onError={(e) => {
+                              e.currentTarget.onerror = null;
+                              e.currentTarget.src = "/images/image-placeholder.jpg";
+                            }}
+                          />
+                        </td>
                         <td data-label="Designation">{product.designation}</td>
                         <td data-label="Price">
                           {product.price.toLocaleString() +

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import styles from "../../styles/shop/Cart.module.scss";
 import { deduceColor } from "../../utils/config/convertHelper";
+import { shopPath } from "../../utils/shared/shopUrl";
 import { AddIcon, DeleteIcon, RemoveIcon } from "../../utils/theme/icons";
 import { ModalSizes } from "../admin/ModalSettings";
 import XButton from "../ui-components/XButton";
@@ -237,11 +238,7 @@ function CartContent({
             text={"Complete Your Purchase"}
             action={() => {
               dispatch({ type: "TOGGLE_CART_PREVIEW" });
-              router.push(
-                shopInfo?.domainName?.length
-                  ? `/cart`
-                  : `/${shopInfo.name}/cart`
-              );
+              router.push(shopPath(shopInfo, router.asPath, "/cart"));
             }}
           />
         ) : null}

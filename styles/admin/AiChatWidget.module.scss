@@ -45,6 +45,19 @@ $z: 1400;
     box-shadow: 0 14px 34px -6px rgba(84, 41, 128, 0.6);
   }
 }
+.proBadge {
+  position: absolute;
+  top: -4px;
+  right: -6px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: #1b1622;
+  background: linear-gradient(135deg, #ffe27a, #ffc800);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
 
 .panel {
   // see the comment on .fab above -- same fix, same reason.
@@ -111,6 +124,46 @@ $z: 1400;
   background: #fff1d6;
   color: #9a5b00;
   font-size: 13px;
+}
+
+.upsell {
+  flex: 1;
+  margin: 16px;
+  padding: 28px 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(160deg, #f6eeff 0%, #fff0f8 100%);
+  border: 1px solid var(--line);
+  h3 {
+    margin: 4px 0 6px;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  p {
+    margin: 0 0 18px;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    max-width: 260px;
+  }
+  a {
+    text-decoration: none;
+  }
+}
+.upsellIcon {
+  width: 44px;
+  height: 44px;
+  padding: 10px;
+  border-radius: 50%;
+  color: #fff;
+  background: linear-gradient(135deg, var(--first-color), var(--second-color));
+  font-size: 24px !important;
+  box-shadow: 0 8px 20px -6px rgba(84, 41, 128, 0.5);
 }
 
 .thread {

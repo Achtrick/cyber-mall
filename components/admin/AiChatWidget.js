@@ -1,4 +1,5 @@
 import axios from "axios";
+import Link from "next/link";
 import { useSnackbar } from "notistack";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -54,7 +55,10 @@ function AiChatWidget() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [sending, setSending] = useState(false);
-  const [unavailable, setUnavailable] = useState(false);
+  // null | "unconfigured" (no ANTHROPIC_API_KEY) | "premiumRequired"
+  const [blocked, setBlocked] = useState(null);
+
+  const isPremium = userInfo?.shop?.pack?.type === "PREMIUM";
 
   const scrollRef = useRef(null);
 
@@ -71,13 +75,21 @@ function AiChatWidget() {
       setLoadingHistory(false);
     } catch (error) {
       checkExpirity(error, dispatch);
-      enqueueSnackbar(getError(error), { variant: "error" });
+      if (error?.response?.data?.premiumRequired) {
+        setBlocked("premiumRequired");
+      } else {
+        enqueueSnackbar(getError(error), { variant: "error" });
+      }
       setLoadingHistory(false);
     }
   };
 
   const openWidget = () => {
     setOpen(true);
+    if (!isPremium) {
+      setBlocked("premiumRequired");
+      return;
+    }
     if (!historyLoaded) getHistory();
   };
 
@@ -101,8 +113,10 @@ function AiChatWidget() {
       ]);
     } catch (error) {
       checkExpirity(error, dispatch);
-      if (error?.response?.status === 503) {
-        setUnavailable(true);
+      if (error?.response?.data?.premiumRequired) {
+        setBlocked("premiumRequired");
+      } else if (error?.response?.status === 503) {
+        setBlocked("unconfigured");
       } else {
         enqueueSnackbar(getError(error), { variant: "error" });
         setMessages((prev) => prev.slice(0, -1));
@@ -133,6 +147,7 @@ function AiChatWidget() {
         onClick={openWidget}
       >
         <AutoAwesomeIcon />
+        {!isPremium ? <span className={styles.proBadge}>PRO</span> : null}
       </button>
 
       <div
@@ -173,7 +188,19 @@ function AiChatWidget() {
           </div>
         </div>
 
-        {unavailable ? (
+        {blocked === "premiumRequired" ? (
+          <div className={styles.upsell}>
+            <AutoAwesomeIcon className={styles.upsellIcon} />
+            <h3>AI assistant is a PREMIUM feature</h3>
+            <p>
+              Get stock reports, low-stock alerts, and quantity updates just
+              by asking -- upgrade to unlock it.
+            </p>
+            <Link href="/admin/account" className="btn btn-primary">
+              View premium plans
+            </Link>
+          </div>
+        ) : blocked === "unconfigured" ? (
           <div className={styles.notice}>
             The AI assistant isn&apos;t configured yet. An administrator needs
             to set an Anthropic API key on the server.

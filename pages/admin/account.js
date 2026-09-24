@@ -266,6 +266,7 @@ function Account(props) {
               <li>Unlimited home page slides</li>
               <li>Invoice generation</li>
               <li>Custom domain name</li>
+              <li>AI assistant</li>
             </ul>
           </section>
         </XModal>
@@ -343,6 +344,12 @@ function Account(props) {
                     <li>
                       <Check />
                       custom domain name
+                    </li>
+                  )}
+                  {pack.type !== "FREE" && (
+                    <li>
+                      <Check />
+                      AI assistant
                     </li>
                   )}
                 </ul>

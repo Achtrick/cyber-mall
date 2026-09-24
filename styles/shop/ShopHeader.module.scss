@@ -94,6 +94,8 @@
   @include flexContainer;
   width: 100vw;
   height: 80px;
+  // 10px inset from both screen edges, centering the bar in the space between
+  padding: 0 10px;
   input {
     padding-right: 80px !important;
     font-size: 17px;

@@ -23,6 +23,7 @@ import {
   deduceColor,
 } from "../../utils/config/convertHelper";
 import { getError } from "../../utils/shared/getError";
+import { shopPath } from "../../utils/shared/shopUrl";
 import { ResetIcon } from "../../utils/theme/icons";
 
 function Products({ shop }) {
@@ -126,13 +127,12 @@ function Products({ shop }) {
   };
 
   const applyFilters = (nextCategory, nextSort) => {
-    const pathname = router.pathname;
     const query = { ...router.query, category: nextCategory, sort: nextSort };
     if (!nextCategory) delete query.category;
     if (!nextSort) delete query.sort;
     setPage(0);
     router.push({
-      pathname: shopInfo?.domainName.length ? "/products" : pathname,
+      pathname: shopPath(shopInfo, router.asPath, "/products"),
       query: query,
     });
   };
@@ -244,11 +244,11 @@ function Products({ shop }) {
 
   const resetSearch = (searchTerm) => {
     router.push(
-      shopInfo?.domainName.length
-        ? `/products?searchTerm=${searchTerm ? searchTerm : ""}`
-        : `/${shopInfo.name}/products?searchTerm=${
-            searchTerm ? searchTerm : ""
-          }`
+      shopPath(
+        shopInfo,
+        router.asPath,
+        `/products?searchTerm=${searchTerm ? searchTerm : ""}`
+      )
     );
   };
 
@@ -400,11 +400,7 @@ function Products({ shop }) {
                         key={product._id}
                       >
                         <Link
-                          href={
-                            shopInfo?.domainName.length
-                              ? `/${product.slug}`
-                              : `/${shopInfo.name}/${product.slug}`
-                          }
+                          href={shopPath(shopInfo, router.asPath, `/${product.slug}`)}
                         >
                           <img
                             alt={product.designation}

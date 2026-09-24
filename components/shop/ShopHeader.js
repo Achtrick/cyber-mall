@@ -15,6 +15,7 @@ import XHr from "../../components/ui-components/XHr";
 import EmptyState from "../../components/ui-components/EmptyState";
 import styles from "../../styles/shop/ShopHeader.module.scss";
 import { deduceColor } from "../../utils/config/convertHelper";
+import { shopPath } from "../../utils/shared/shopUrl";
 import useHideOnScroll from "../../utils/shared/useHideOnScroll";
 import {
   CloseIcon,
@@ -127,9 +128,7 @@ function ShopHeader({ shopInfo, ...props }) {
 
   const navigateToSeacrh = (searchTerm) => {
     let query = router.query;
-    let pathname = shopInfo?.domainName.length
-      ? `/products`
-      : `/${shopInfo.name}/products`;
+    let pathname = shopPath(shopInfo, router.asPath, "/products");
 
     query = { ...query, searchTerm: searchTerm };
     router.push({ pathname, query });
@@ -140,9 +139,7 @@ function ShopHeader({ shopInfo, ...props }) {
   const getCategoryPath = (categoryName) => {
     let query = router.query;
 
-    const pathname = shopInfo?.domainName.length
-      ? `/products`
-      : `/${shopInfo.name}/products`;
+    const pathname = shopPath(shopInfo, router.asPath, "/products");
 
     query = { ...query, category: categoryName };
 
@@ -163,7 +160,7 @@ function ShopHeader({ shopInfo, ...props }) {
       >
         <section className={styles.search}>
           <form
-            style={{ flex: 1, minWidth: 0, margin: "0 0 0 24px" }}
+            style={{ flex: 1, minWidth: 0 }}
             onSubmit={(e) => {
               e.preventDefault();
               navigateToSeacrh(searchTerm);
@@ -215,7 +212,7 @@ function ShopHeader({ shopInfo, ...props }) {
         <section className={styles.drawer}>
           <div className={styles.container}>
             <Link
-              href={shopInfo?.domainName.length ? "/" : `/${shopInfo.name}`}
+              href={shopPath(shopInfo, router.asPath, "/")}
               onClick={toggleDrawer}
             >
               <div
@@ -241,11 +238,7 @@ function ShopHeader({ shopInfo, ...props }) {
               </div>
             </Link>
             <Link
-              href={
-                shopInfo?.domainName.length
-                  ? "/products"
-                  : `/${shopInfo.name}/products`
-              }
+              href={shopPath(shopInfo, router.asPath, "/products")}
               onClick={toggleDrawer}
             >
               <div
@@ -418,7 +411,7 @@ function ShopHeader({ shopInfo, ...props }) {
         </div>
         <div className={styles.logo}>
           {shopInfo.logo ? (
-            <Link href={`/${shopInfo?.domainName.length ? "" : shopInfo.name}`}>
+            <Link href={shopPath(shopInfo, router.asPath, "/")}>
               <img
                 alt={shopInfo.name}
                 src={`/api/images/${shopInfo.logo.split("/").pop()}`}
@@ -428,7 +421,7 @@ function ShopHeader({ shopInfo, ...props }) {
               />
             </Link>
           ) : (
-            <Link href={`/${shopInfo?.domainName.length ? "" : shopInfo.name}`}>
+            <Link href={shopPath(shopInfo, router.asPath, "/")}>
               <img alt={shopInfo.name} src={`/cyber-mall.png`} />
             </Link>
           )}

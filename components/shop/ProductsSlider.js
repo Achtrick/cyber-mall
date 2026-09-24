@@ -1,5 +1,6 @@
 import { useMediaQuery } from "@mui/material";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { SwiperSlide } from "swiper/react";
 import styles from "../../styles/shop/ProductsSlider.module.scss";
@@ -7,6 +8,7 @@ import {
   calculateDiscount,
   deduceColor,
 } from "../../utils/config/convertHelper";
+import { shopPath } from "../../utils/shared/shopUrl";
 import XButton from "../ui-components/XButton";
 import XSwiper from "../ui-components/XSwiper";
 import OutOfStock from "./OutOfStock";
@@ -15,6 +17,7 @@ function ProductsSlider({ disabled, products, shopInfo, title, buttonAction }) {
   const [selectedVariant, setSelectedVariant] = useState(null);
   const [selectedProduct, setSelectedProduct] = useState(null);
 
+  const router = useRouter();
   const isMobile = useMediaQuery("(max-width:800px)");
 
   const handleClick = (event) => {
@@ -89,11 +92,7 @@ function ProductsSlider({ disabled, products, shopInfo, title, buttonAction }) {
               >
                 <Link
                   onClick={handleClick}
-                  href={
-                    shopInfo?.domainName.length
-                      ? `/${product.slug}`
-                      : `/${shopInfo.name}/${product.slug}`
-                  }
+                  href={shopPath(shopInfo, router.asPath, `/${product.slug}`)}
                 >
                   <img
                     alt={index}

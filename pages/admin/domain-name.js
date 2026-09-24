@@ -68,7 +68,8 @@ function DomainName(props) {
                 type="text"
                 className="defaultInput"
                 required
-                onChange={(e) => setDomainName(e.target.value)}
+                value={domainName}
+                onChange={(e) => setDomainName(e.target.value.toLowerCase())}
               />
             </div>
             <p className={styles.dnsHint}>
@@ -86,10 +87,12 @@ function DomainName(props) {
               </thead>
               <tbody>
                 <tr>
-                  <td>{domainName.length ? domainName : "example.com"}</td>
+                  <td style={{ textTransform: "lowercase" }}>
+                    {domainName.length ? domainName : "example.com"}
+                  </td>
                   <td>0</td>
                   <td>A</td>
-                  <td>76.76.21.21</td>
+                  <td>213.186.33.5</td>
                 </tr>
               </tbody>
             </table>

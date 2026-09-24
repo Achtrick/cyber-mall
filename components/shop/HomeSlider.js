@@ -1,9 +1,13 @@
 import { Link, useMediaQuery } from "@mui/material";
+import { useRouter } from "next/router";
 import React from "react";
 import { SwiperSlide } from "swiper/react";
+import styles from "../../styles/shop/HomeSlider.module.scss";
+import { shopPath } from "../../utils/shared/shopUrl";
 import XSwiper from "../ui-components/XSwiper";
 
 function HomeSlider({ slides, disabled, shopInfo, ...props }) {
+  const router = useRouter();
   const isMobile = useMediaQuery("(max-width:800px)");
   const handleClick = (event) => {
     disabled && event.preventDefault();
@@ -16,7 +20,7 @@ function HomeSlider({ slides, disabled, shopInfo, ...props }) {
           spaceBetween={0}
           loop={true}
           autoplay={slides.length > 1}
-          style={{ width: "100%", height: "100%" }}
+          style={{ width: "100%", height: "60dvh" }}
         >
           {slides.map((slide, index) => {
             return (
@@ -29,6 +33,7 @@ function HomeSlider({ slides, disabled, shopInfo, ...props }) {
                     target="_blank"
                   >
                     <img
+                      className={styles.slideImg}
                       src={
                         slide.image !== "slider-placeholder.jpg"
                           ? `/api/images/${slide.image.split("/").pop()}${
@@ -47,13 +52,14 @@ function HomeSlider({ slides, disabled, shopInfo, ...props }) {
                 ) : slide.category && slide.category !== "" ? (
                   <Link
                     onClick={handleClick}
-                    href={
-                      shopInfo?.domainName.length
-                        ? `/products?category=${slide.category}`
-                        : `/${shopInfo.name}/products?category=${slide.category}`
-                    }
+                    href={shopPath(
+                      shopInfo,
+                      router.asPath,
+                      `/products?category=${slide.category}`
+                    )}
                   >
                     <img
+                      className={styles.slideImg}
                       src={
                         slide.image !== "slider-placeholder.jpg"
                           ? `/api/images/${slide.image.split("/").pop()}${
@@ -71,6 +77,7 @@ function HomeSlider({ slides, disabled, shopInfo, ...props }) {
                   </Link>
                 ) : (
                   <img
+                    className={styles.slideImg}
                     src={
                       slide.image !== "slider-placeholder.jpg"
                         ? `/api/images/${slide.image.split("/").pop()}${

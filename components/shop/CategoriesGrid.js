@@ -1,11 +1,14 @@
 import { useMediaQuery } from "@mui/material";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React from "react";
 import { SwiperSlide } from "swiper/react";
 import styles from "../../styles/shop/CategoriesGrid.module.scss";
+import { shopPath } from "../../utils/shared/shopUrl";
 import XSwiper from "../ui-components/XSwiper";
 
 function CategoriesGrid({ disabled, categories, architecture, shopInfo }) {
+  const router = useRouter();
   const isMobile = useMediaQuery("(max-width:800px)");
   const handleClick = (event) => {
     disabled && event.preventDefault();
@@ -37,11 +40,11 @@ function CategoriesGrid({ disabled, categories, architecture, shopInfo }) {
                 <SwiperSlide key={index}>
                   <Link
                     onClick={handleClick}
-                    href={
-                      shopInfo?.domainName.length
-                        ? `/products?category=${category.name}`
-                        : `/${shopInfo.name}/products?category=${category.name}`
-                    }
+                    href={shopPath(
+                      shopInfo,
+                      router.asPath,
+                      `/products?category=${category.name}`
+                    )}
                   >
                     <div className={styles.category}>
                       <img

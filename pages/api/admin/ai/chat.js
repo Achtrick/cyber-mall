@@ -7,15 +7,35 @@ import connectDB from "../../../../utils/connectDB";
 import { AI_TOOLS, AI_TOOL_EXECUTORS } from "../../../../utils/shared/aiTools";
 import { fail, rateLimit, str } from "../../../../utils/shared/security";
 
-const MODEL = process.env.ANTHROPIC_MODEL || "claude-opus-5";
+const MODEL = process.env.ANTHROPIC_MODEL || "claude-haiku-4-5";
 const MAX_TOOL_ITERATIONS = 6;
 const HISTORY_LIMIT = 30; // messages kept for display and sent as prior context
 const MAX_MESSAGE_LENGTH = 2000;
+const PREMIUM_REQUIRED_MESSAGE =
+  "The AI assistant is a PREMIUM feature. Upgrade your plan to use it.";
+
+/** Loads the caller's own shop and enforces the PREMIUM gate; writes the
+ * response and returns null if blocked, otherwise returns the shop doc. */
+const requirePremiumShop = async (req, res, select) => {
+  const shop = await Shop.findById(req.auth.shopId)
+    .select(`pack ${select ?? ""}`)
+    .lean();
+  if (!shop) {
+    res.status(404).json({ message: "Shop not found" });
+    return null;
+  }
+  if (shop.pack?.type !== "PREMIUM") {
+    res.status(403).json({ message: PREMIUM_REQUIRED_MESSAGE, premiumRequired: true });
+    return null;
+  }
+  return shop;
+};
 
 let client = null;
 const getClient = () => {
   if (!process.env.ANTHROPIC_API_KEY) return null;
-  if (!client) client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+  if (!client)
+    client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
   return client;
 };
 
@@ -35,13 +55,15 @@ const summarizeAction = (name, result) => {
 };
 
 const handler = nc({
-  onError: (err, req, res) => fail(res, err, 500, "AI assistant request failed"),
+  onError: (err, req, res) =>
+    fail(res, err, 500, "AI assistant request failed"),
 });
 
 handler.use(auth);
 
 handler.get(async (req, res) => {
   await connectDB();
+  if (!(await requirePremiumShop(req, res))) return;
   const history = await AiChatMessage.find({ shop: req.auth.shopId })
     .sort({ createdAt: -1 })
     .limit(HISTORY_LIMIT)
@@ -52,27 +74,37 @@ handler.get(async (req, res) => {
       content: m.content,
       actions: m.actions ?? [],
       createdAt: m.createdAt,
-    }))
+    })),
   );
 });
 
 handler.post(async (req, res) => {
-  if (!rateLimit(req, res, { name: "ai-chat", key: req.auth.userId, max: 30, windowMs: 60 * 60 * 1000 })) return;
+  if (
+    !rateLimit(req, res, {
+      name: "ai-chat",
+      key: req.auth.userId,
+      max: 30,
+      windowMs: 60 * 60 * 1000,
+    })
+  )
+    return;
 
   const anthropic = getClient();
   if (!anthropic) {
     return res.status(503).json({
-      message: "The AI assistant isn't configured yet. Set ANTHROPIC_API_KEY to enable it.",
+      message:
+        "The AI assistant isn't configured yet. Set ANTHROPIC_API_KEY to enable it.",
     });
   }
 
   const userMessage = str(req.body?.message, MAX_MESSAGE_LENGTH);
-  if (!userMessage) return res.status(400).json({ message: "Message is required" });
+  if (!userMessage)
+    return res.status(400).json({ message: "Message is required" });
 
   await connectDB();
   const shopId = req.auth.shopId;
-  const shop = await Shop.findById(shopId).select("name").lean();
-  if (!shop) return res.status(404).json({ message: "Shop not found" });
+  const shop = await requirePremiumShop(req, res, "name");
+  if (!shop) return;
 
   const priorHistory = await AiChatMessage.find({ shop: shopId })
     .sort({ createdAt: -1 })
@@ -143,20 +175,32 @@ handler.post(async (req, res) => {
     }
   } catch (err) {
     if (err instanceof Anthropic.AuthenticationError) {
-      return res.status(503).json({ message: "The AI assistant's API key is invalid." });
+      return res
+        .status(503)
+        .json({ message: "The AI assistant's API key is invalid." });
     }
     if (err instanceof Anthropic.RateLimitError) {
-      return res.status(429).json({ message: "The AI assistant is busy, try again shortly." });
+      return res
+        .status(429)
+        .json({ message: "The AI assistant is busy, try again shortly." });
     }
     console.error("AI chat failed", err);
-    return res.status(500).json({ message: "The AI assistant couldn't complete that request." });
+    return res
+      .status(500)
+      .json({ message: "The AI assistant couldn't complete that request." });
   }
 
   if (!finalText) finalText = "Done.";
 
   await AiChatMessage.create([
     { shop: shopId, user: req.auth.userId, role: "user", content: userMessage },
-    { shop: shopId, user: req.auth.userId, role: "assistant", content: finalText, actions },
+    {
+      shop: shopId,
+      user: req.auth.userId,
+      role: "assistant",
+      content: finalText,
+      actions,
+    },
   ]);
 
   res.status(200).json({ reply: finalText, actions });

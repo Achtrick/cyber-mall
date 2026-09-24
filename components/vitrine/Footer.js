@@ -65,8 +65,8 @@ function Footer(props) {
       </div>
       <div className={styles.shoutout}>
         Developed by&nbsp;
-        <Link rel="noreferrer" target="_blank" href="https://ashref-mtir.dev">
-          Ashref-mtir
+        <Link rel="noreferrer" target="_blank" href="https://www.achraf-mtir.dev">
+          Achraf Mtir
         </Link>
       </div>
     </section>
