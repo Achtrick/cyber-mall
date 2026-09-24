@@ -18,15 +18,18 @@ import ShopLayout from "../../components/shop/ShopLayout";
 import XButton from "../../components/ui-components/XButton";
 import XPagination from "../../components/ui-components/XPagination";
 import styles from "../../styles/shop/Products.module.scss";
+import ShopModel from "../../models/shop.model";
+import connectDB from "../../utils/connectDB";
 import {
   calculateDiscount,
   deduceColor,
 } from "../../utils/config/convertHelper";
 import { getError } from "../../utils/shared/getError";
+import { str } from "../../utils/shared/security";
 import { shopPath } from "../../utils/shared/shopUrl";
 import { ResetIcon } from "../../utils/theme/icons";
 
-function Products({ shop }) {
+function Products({ shop, initialShopInfo }) {
   const router = useRouter();
   const { category, searchTerm, sort } = router.query;
 
@@ -41,11 +44,14 @@ function Products({ shop }) {
 
   const isMobile = useMediaQuery("(max-width:800px)");
 
-  const [loading, setLoading] = useState(true);
+  // When SSR already fetched the shop (see getServerSideProps below), skip
+  // the initial LoadingScreen so crawlers (and real users) see the real
+  // title/description/image meta tags -- and the real page -- immediately.
+  const [loading, setLoading] = useState(!initialShopInfo);
   const [loadingCategories, setLoadingCategories] = useState(true);
   const [loadingProducts, setLoadingProducts] = useState(true);
 
-  const [shopInfo, setShopInfo] = useState(null);
+  const [shopInfo, setShopInfo] = useState(initialShopInfo || null);
   const [categories, setCategories] = useState([]);
 
   const [products, setProducts] = useState([]);
@@ -575,8 +581,39 @@ function Products({ shop }) {
 }
 export default Products;
 
-export function getServerSideProps(context) {
-  return {
-    props: { shop: context.params.shop },
-  };
+// Crawlers (WhatsApp, Facebook, Twitter/X, ...) never execute the client-side
+// fetches above -- they only ever see this raw SSR HTML. Fetch the shop
+// server-side (same query/select as /api/shop/getInfo) so ShopLayout's
+// title/description/image meta tags are already populated in the initial
+// response. The client-side effects above are left untouched and still run
+// after hydration to keep existing behavior unchanged.
+export async function getServerSideProps(context) {
+  const shop = context.params.shop;
+
+  try {
+    const shopName = str(shop, 60);
+    if (!shopName) return { props: { shop } };
+
+    await connectDB();
+
+    const shopDoc = await ShopModel.findOne({ name: shopName })
+      .select("-architecture.home")
+      .exec();
+
+    if (!shopDoc || shopDoc.banned) {
+      return { redirect: { destination: "/", permanent: false } };
+    }
+
+    return {
+      props: {
+        shop,
+        initialShopInfo: JSON.parse(JSON.stringify(shopDoc)),
+      },
+    };
+  } catch (err) {
+    // Fail open: never take the page down over a transient DB hiccup, the
+    // existing client-side fetch (with its own error handling) still runs.
+    console.error(err);
+    return { props: { shop } };
+  }
 }

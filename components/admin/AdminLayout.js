@@ -10,7 +10,8 @@ import { useDispatch, useSelector } from "react-redux";
 import AiChatWidget from "./AiChatWidget";
 import InstallPWA from "../../components/installPwa";
 import styles from "../../styles/admin/AdminLayout.module.scss";
-import { SITE_HOST, SITE_URL } from "../../utils/config/site";
+import { SITE_HOST, SITE_URL, absoluteUrl } from "../../utils/config/site";
+import { useContrastBoxBackground } from "../../utils/shared/useContrastBoxBackground";
 import {
   CategoryIcon,
   CloseIcon,
@@ -57,6 +58,12 @@ function AdminLayout(props) {
   const dispatch = useDispatch();
   const router = useRouter();
 
+  const shopLogoBg = useContrastBoxBackground(
+    userInfo?.shop?.logo
+      ? `/api/images/${userInfo.shop.logo.split("/").pop()}`
+      : null
+  );
+
   useEffect(() => {
     userInfo && getOrdersCount();
   }, []);
@@ -87,7 +94,7 @@ function AdminLayout(props) {
         <meta property="og:title" content="Cyber-Mall" />
         <meta property="og:description" content="Cyber-Mall Dashboard" />
         <meta property="og:url" content={`${SITE_URL}/`} />
-        <meta property="og:image" content="/logo-512.png" />
+        <meta property="og:image" content={absoluteUrl("/logo-512.png")} />
         <link
           rel="apple-touch-icon"
           sizes="180x180"
@@ -141,6 +148,7 @@ function AdminLayout(props) {
                   e.currentTarget.onerror = null;
                   e.currentTarget.src = "/images/default-store.png";
                 }}
+                style={{ background: shopLogoBg }}
               />
               <div>
                 <p className={styles.shopName}>{userInfo.shop.name}</p>

@@ -1,11 +1,17 @@
 import Head from "next/head";
+import { useRouter } from "next/router";
 import React from "react";
 import styles from "../../styles/vitrine/Layout.module.scss";
-import { SITE_HOST, SITE_URL } from "../../utils/config/site";
+import { SITE_HOST, SITE_URL, absoluteUrl } from "../../utils/config/site";
 import Footer from "./Footer";
 import Navbar from "./Navbar";
 
 function Layout({ children, title, description, tags, image }) {
+  // og:url used to be hardcoded to SITE_URL + "/" here, so every vitrine page
+  // (pricing, contact, login, ...) reported the homepage as its shared URL
+  // instead of its own -- fixed by deriving it from the actual route.
+  const router = useRouter();
+  const path = router.asPath.split("?")[0].split("#")[0];
   return (
     <>
       <Head>
@@ -25,11 +31,11 @@ function Layout({ children, title, description, tags, image }) {
           property="og:title"
           content={title ? `${title} - Cyber-Mall` : "Cyber-Mall"}
         />
-        <meta property="og:url" content={`${SITE_URL}/`} />
+        <meta property="og:url" content={`${SITE_URL}${path}`} />
         {description && (
           <meta property="og:description" content={description} />
         )}
-        <meta property="og:image" content={image || "/logo-512.png"} />
+        <meta property="og:image" content={absoluteUrl(image || "/logo-512.png")} />
         <link
           rel="apple-touch-icon"
           sizes="180x180"

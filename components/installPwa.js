@@ -20,13 +20,34 @@ const InstallPWA = () => {
   useEffect(() => {
     const handler = (e) => {
       e.preventDefault();
-      setSupportsPWA(isCookiePresent("cyber-mall-cookies-consent") && true);
       setPromptInstall(e);
     };
     window.addEventListener("beforeinstallprompt", handler);
 
-    return () => window.removeEventListener("transitionend", handler);
+    return () => window.removeEventListener("beforeinstallprompt", handler);
   }, []);
+
+  // `beforeinstallprompt` fires once, early in the page lifecycle -- usually
+  // before the user has had a chance to accept the cookie-consent banner.
+  // Re-derive visibility reactively instead of freezing the consent check
+  // inside that one-shot handler, so the button appears as soon as both the
+  // install prompt is available AND consent is granted, whichever comes last.
+  useEffect(() => {
+    if (!promptInstall) {
+      return;
+    }
+    if (isCookiePresent("cyber-mall-cookies-consent")) {
+      setSupportsPWA(true);
+      return;
+    }
+    const interval = setInterval(() => {
+      if (isCookiePresent("cyber-mall-cookies-consent")) {
+        setSupportsPWA(true);
+        clearInterval(interval);
+      }
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [promptInstall]);
 
   const onClick = (evt) => {
     evt.preventDefault();

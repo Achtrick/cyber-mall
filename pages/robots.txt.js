@@ -9,20 +9,8 @@ function RobotsTxt() {
 export const getServerSideProps = async ({ res }) => {
   const body = `user-agent: *
 Allow: /
-Allow: /#customize
-Allow: /#dashboard
-Allow: /#receipts
-Allow: /#domain
-Allow: /#how-to
-Allow: /pricing
-Allow: /contact
-Allow: /login
-Allow: /register
-Allow: /forgot-password
-Allow: /condition-of-use
-Allow: /privacy-policy
-Allow: /:shop
-Allow: /:shop/:product
+Disallow: /admin
+Disallow: /api
 Sitemap: ${SITE_URL}/sitemap.xml
 `;
   res.setHeader("Content-Type", "text/plain");

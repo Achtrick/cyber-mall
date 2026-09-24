@@ -15,6 +15,7 @@ import DisconnectedGuard from "../../components/guards/disconnectedGuard";
 import XModal from "../../components/ui-components/XModal";
 import styles from "../../styles/admin/Dashboard.module.scss";
 import { checkExpirity } from "../../utils/shared/checkExpirity";
+import { useContrastBoxBackground } from "../../utils/shared/useContrastBoxBackground";
 import { getError } from "../../utils/shared/getError";
 import {
   AccountCircleIcon,
@@ -61,6 +62,12 @@ function Account(props) {
   const isMobile = useMediaQuery("(max-width:800px)");
 
   const pack = userInfo?.shop.pack;
+
+  const shopLogoBg = useContrastBoxBackground(
+    userInfo?.shop.logo
+      ? `/api/images/${userInfo.shop.logo.split("/").pop()}`
+      : null
+  );
 
   const offers = [
     { period: "1 Month", price: 49 },
@@ -302,7 +309,7 @@ function Account(props) {
                       }}
                       width={"64"}
                       height={"64"}
-                      style={{ objectFit: "contain" }}
+                      style={{ objectFit: "contain", background: shopLogoBg }}
                     />
                   ) : (
                     <img

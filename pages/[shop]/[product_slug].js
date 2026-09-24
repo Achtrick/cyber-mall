@@ -14,21 +14,27 @@ import XHr from "../../components/ui-components/XHr";
 import XMagnifier from "../../components/ui-components/XMagnifier";
 import XSwiper from "../../components/ui-components/XSwiper";
 import styles from "../../styles/shop/Product.module.scss";
+import ProductModel from "../../models/product.model";
+import Shop from "../../models/shop.model";
+import connectDB from "../../utils/connectDB";
 import {
   calculateDiscount,
   deduceColor,
 } from "../../utils/config/convertHelper";
 import { getError } from "../../utils/shared/getError";
+import { str } from "../../utils/shared/security";
 import { AddIcon, RemoveIcon } from "../../utils/theme/icons";
 
-function Product({ shop, slug }) {
+function Product({ shop, slug, initialShopInfo, initialProduct }) {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
 
-  const [shopInfo, setShopInfo] = useState(null);
-  const [product, setProduct] = useState(null);
-  const [selectedVariant, setSelectedVariant] = useState("");
+  const [shopInfo, setShopInfo] = useState(initialShopInfo || null);
+  const [product, setProduct] = useState(initialProduct || null);
+  const [selectedVariant, setSelectedVariant] = useState(
+    initialProduct?.variants?.[0] || ""
+  );
   const [similars, setSimilars] = useState([]);
   const [qty, setQty] = useState(1);
 
@@ -130,8 +136,8 @@ function Product({ shop, slug }) {
           description={product?.description}
           url={router.asPath.replace(/^\//, "")}
           image={
-            product?.image &&
-            `/api/images/${product?.image
+            product?.images?.[0] &&
+            `/api/images/${product.images[0]
               .split("/")
               .pop()}?width=300&height=300`
           }
@@ -307,11 +313,53 @@ function Product({ shop, slug }) {
 
 export default Product;
 
-export function getServerSideProps(context) {
-  return {
-    props: {
-      shop: context.params.shop,
-      slug: context.params.product_slug,
-    },
-  };
+// Crawlers (WhatsApp, Facebook, Twitter/X, ...) never execute the client-side
+// fetches below -- they only ever see this raw SSR HTML. Fetch the shop +
+// product server-side (same queries as /api/shop/getInfo and
+// /api/shop/get-product) so ShopLayout's title/description/image meta tags
+// are already populated in the initial response. The client-side effects
+// below are left untouched and still run after hydration to keep existing
+// behavior (fresh data, loading states, redirect-on-error, etc.) unchanged.
+export async function getServerSideProps(context) {
+  const shop = context.params.shop;
+  const slug = context.params.product_slug;
+
+  try {
+    const shopName = str(shop, 60);
+    const productSlug = str(slug, 260);
+    if (!shopName || !productSlug) return { props: { shop, slug } };
+
+    await connectDB();
+
+    const shopDoc = await Shop.findOne({ name: shopName })
+      .select("-architecture.home")
+      .exec();
+
+    if (!shopDoc || shopDoc.banned) {
+      return { redirect: { destination: "/", permanent: false } };
+    }
+
+    const productDoc = await ProductModel.findOne({
+      shop: shopDoc._id,
+      slug: productSlug,
+    }).populate({ path: "category" });
+
+    if (!productDoc) {
+      return { redirect: { destination: `/${shopName}`, permanent: false } };
+    }
+
+    return {
+      props: {
+        shop,
+        slug,
+        initialShopInfo: JSON.parse(JSON.stringify(shopDoc)),
+        initialProduct: JSON.parse(JSON.stringify(productDoc)),
+      },
+    };
+  } catch (err) {
+    // Fail open: never take the page down over a transient DB hiccup, the
+    // existing client-side fetch (with its own error handling) still runs.
+    console.error(err);
+    return { props: { shop, slug } };
+  }
 }

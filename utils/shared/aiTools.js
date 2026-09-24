@@ -124,6 +124,79 @@ export const AI_TOOLS = [
       "Get a quick summary of the shop: product count, category count, pending vs closed order counts, and subscription plan. Use this for general 'how's my shop doing' / 'give me an overview' questions.",
     input_schema: { type: "object", properties: {} },
   },
+  {
+    name: "update_order_status",
+    description:
+      "Change an order's fulfillment state. WAITING means pending/unfulfilled, CLOSED means fulfilled. Use this to mark an order as fulfilled/closed, or to reopen one. Identify the order by orderId -- use search_orders_by_customer or get_recent_orders first if the admin only gave a customer name.",
+    input_schema: {
+      type: "object",
+      properties: {
+        orderId: { type: "string", description: "The order's id." },
+        status: { type: "string", enum: ["WAITING", "CLOSED"], description: "The new state." },
+      },
+      required: ["orderId", "status"],
+    },
+  },
+  {
+    name: "get_order_details",
+    description:
+      "Get full detail for a single order by id: customer name/address/phone, every line item (product, quantity, price), state, computed total, and when it was placed. Use this when the admin asks about a specific order.",
+    input_schema: {
+      type: "object",
+      properties: {
+        orderId: { type: "string", description: "The order's id." },
+      },
+      required: ["orderId"],
+    },
+  },
+  {
+    name: "search_orders_by_customer",
+    description:
+      "Find this shop's orders by customer name and/or phone (partial, case-insensitive match), most recent first. Use this when the admin refers to a customer by name or phone instead of an order id, e.g. before calling update_order_status or get_order_details.",
+    input_schema: {
+      type: "object",
+      properties: {
+        name: { type: "string", description: "Customer first and/or last name, or part of it." },
+        phone: { type: "string", description: "Customer phone number, or part of it." },
+        limit: { type: "integer", description: "Default 10, max 50." },
+      },
+    },
+  },
+  {
+    name: "get_top_products",
+    description:
+      "Rank this shop's products by units sold or revenue, aggregated from CLOSED (fulfilled) orders only -- so the numbers reflect actual completed sales, not pending/unfulfilled carts. Use order 'desc' (default) for best sellers, 'asc' for worst sellers.",
+    input_schema: {
+      type: "object",
+      properties: {
+        limit: { type: "integer", description: "Default 10, max 50." },
+        sortBy: {
+          type: "string",
+          enum: ["unitsSold", "revenue"],
+          description: "What to rank by. Default unitsSold.",
+        },
+        order: {
+          type: "string",
+          enum: ["desc", "asc"],
+          description: "Default desc (best sellers first). Use asc for worst sellers first.",
+        },
+      },
+    },
+  },
+  {
+    name: "update_product_price",
+    description:
+      "Change a product's price and/or discount percentage. Identify the product with productId (preferred) or designation, resolved the same way as adjust_product_quantity -- if the name is ambiguous or not found, this returns candidates or an error instead of guessing. Give at least one of price (new absolute price) or discount (new discount percentage, 0-100).",
+    input_schema: {
+      type: "object",
+      properties: {
+        productId: { type: "string", description: "The product's id, if already known." },
+        designation: { type: "string", description: "The product's name, if the id isn't known." },
+        price: { type: "number", minimum: 0, description: "New absolute price." },
+        discount: { type: "number", minimum: 0, maximum: 100, description: "New discount percentage (0-100)." },
+      },
+    },
+  },
 ];
 
 export const AI_TOOL_EXECUTORS = {
@@ -238,6 +311,163 @@ export const AI_TOOL_EXECUTORS = {
       categoryCount,
       pendingOrders: waitingOrders,
       closedOrders,
+    };
+  },
+
+  update_order_status: async (input, { shopId }) => {
+    if (!isObjectId(input?.orderId)) return { error: "That order id isn't valid." };
+    if (input?.status !== "WAITING" && input?.status !== "CLOSED") {
+      return { error: "status must be WAITING or CLOSED." };
+    }
+
+    const order = await Order.findOne({ _id: input.orderId, shop: shopId });
+    if (!order) return { error: "No order with that id in this shop." };
+
+    // defense in depth: the query above already scoped this to shopId
+    if (String(order.shop) !== String(shopId)) {
+      return { error: "That order does not belong to this shop." };
+    }
+
+    const previousState = order.state;
+    order.state = input.status;
+    await order.save();
+
+    return {
+      orderId: String(order._id),
+      customer: `${order.user?.firstName ?? ""} ${order.user?.lastName ?? ""}`.trim(),
+      itemCount: (order.products ?? []).reduce((n, p) => n + (p.qty ?? 0), 0),
+      previousState,
+      newState: order.state,
+    };
+  },
+
+  get_order_details: async (input, { shopId }) => {
+    if (!isObjectId(input?.orderId)) return { error: "That order id isn't valid." };
+
+    const order = await Order.findOne({ _id: input.orderId, shop: shopId }).lean();
+    if (!order) return { error: "No order with that id in this shop." };
+
+    const items = (order.products ?? []).map((p) => ({
+      designation: p.designation,
+      qty: p.qty,
+      price: p.price,
+      lineTotal: Math.round((p.qty ?? 0) * (p.price ?? 0) * 100) / 100,
+    }));
+
+    return {
+      orderId: String(order._id),
+      state: order.state,
+      customer: {
+        name: `${order.user?.firstName ?? ""} ${order.user?.lastName ?? ""}`.trim(),
+        phone: order.user?.phone ?? "",
+        address: order.user?.address ?? "",
+        postalCode: order.user?.postalCode ?? "",
+        city: order.user?.city ?? "",
+      },
+      items,
+      itemCount: items.reduce((n, i) => n + (i.qty ?? 0), 0),
+      total: Math.round(items.reduce((sum, i) => sum + i.lineTotal, 0) * 100) / 100,
+      createdAt: order.createdAt,
+    };
+  },
+
+  search_orders_by_customer: async (input, { shopId }) => {
+    const name = str(input?.name, 100);
+    const phone = str(input?.phone, 50);
+    if (!name && !phone) return { error: "Give a customer name and/or phone to search for." };
+    const limit = num(input?.limit, { min: 1, max: 50, def: 10, int: true });
+
+    const clauses = [];
+    if (name) {
+      const re = new RegExp(escapeRegex(name), "i");
+      clauses.push({ "user.firstName": re }, { "user.lastName": re });
+    }
+    if (phone) {
+      clauses.push({ "user.phone": new RegExp(escapeRegex(phone), "i") });
+    }
+
+    const orders = await Order.find({ shop: shopId, $or: clauses })
+      .sort({ createdAt: -1 })
+      .limit(limit)
+      .lean();
+
+    return {
+      count: orders.length,
+      orders: orders.map((o) => ({
+        id: String(o._id),
+        state: o.state,
+        customer: `${o.user?.firstName ?? ""} ${o.user?.lastName ?? ""}`.trim(),
+        itemCount: (o.products ?? []).reduce((n, p) => n + (p.qty ?? 0), 0),
+        total: (o.products ?? []).reduce((sum, p) => sum + (p.qty ?? 0) * (p.price ?? 0), 0),
+        createdAt: o.createdAt,
+      })),
+    };
+  },
+
+  get_top_products: async (input, { shopId }) => {
+    const limit = num(input?.limit, { min: 1, max: 50, def: 10, int: true });
+    const sortBy = input?.sortBy === "revenue" ? "revenue" : "unitsSold";
+    const sortDir = input?.order === "asc" ? 1 : -1;
+
+    const results = await Order.aggregate([
+      { $match: { shop: new mongoose.Types.ObjectId(shopId), state: "CLOSED" } },
+      { $unwind: "$products" },
+      {
+        $group: {
+          _id: "$products.designation",
+          unitsSold: { $sum: "$products.qty" },
+          revenue: { $sum: { $multiply: ["$products.qty", "$products.price"] } },
+        },
+      },
+      { $sort: { [sortBy]: sortDir, _id: 1 } },
+      { $limit: limit },
+    ]);
+
+    return {
+      basis: "CLOSED orders only",
+      sortBy,
+      order: sortDir === 1 ? "asc" : "desc",
+      products: results.map((r) => ({
+        designation: r._id,
+        unitsSold: r.unitsSold,
+        revenue: Math.round(r.revenue * 100) / 100,
+      })),
+    };
+  },
+
+  update_product_price: async (input, { shopId }) => {
+    const hasPrice = input?.price !== undefined && input?.price !== null;
+    const hasDiscount = input?.discount !== undefined && input?.discount !== null;
+    if (!hasPrice && !hasDiscount) {
+      return { error: "Give at least one of price or discount." };
+    }
+
+    const { product, error, candidates } = await resolveProduct(shopId, input ?? {});
+    if (error) return { error, candidates };
+
+    // defense in depth: resolveProduct already scoped the query to shopId
+    if (String(product.shop) !== String(shopId)) {
+      return { error: "That product does not belong to this shop." };
+    }
+
+    const changes = {};
+    if (hasPrice) {
+      const previousPrice = product.price;
+      product.price = num(input.price, { min: 0, max: 100000000, def: previousPrice });
+      changes.price = { previous: previousPrice, new: product.price };
+    }
+    if (hasDiscount) {
+      const previousDiscount = product.discount;
+      product.discount = num(input.discount, { min: 0, max: 100, def: previousDiscount });
+      changes.discount = { previous: previousDiscount, new: product.discount };
+    }
+
+    await product.save();
+
+    return {
+      productId: String(product._id),
+      designation: product.designation,
+      ...changes,
     };
   },
 };

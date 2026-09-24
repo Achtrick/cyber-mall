@@ -20,3 +20,16 @@ export const SITE_URL = (
 ).replace(/\/+$/, "");
 
 export const SITE_HOST = SITE_URL.replace(/^https?:\/\//, "");
+
+// Open Graph / Twitter card images MUST be absolute URLs -- crawlers (WhatsApp,
+// Facebook, Twitter/X) silently drop a relative og:image, which often makes the
+// whole preview card fail to render. Every meta image should be passed through
+// this helper. Already-absolute URLs are returned unchanged; anything else is
+// resolved against SITE_URL (the images themselves are served by this same
+// Next.js app regardless of which host the page was requested on, so SITE_URL
+// always resolves correctly).
+export const absoluteUrl = (path) => {
+  if (!path) return path;
+  if (/^https?:\/\//i.test(path)) return path;
+  return `${SITE_URL}${path.startsWith("/") ? path : `/${path}`}`;
+};

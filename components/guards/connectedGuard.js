@@ -1,52 +1,32 @@
-import { CircularProgress } from "@mui/material";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 
+// This guard only needs to bounce an already-logged-in admin away from the
+// public marketing pages (home, pricing, login, ...) to their dashboard --
+// `userInfo` only ever exists client-side (read from localStorage), so that
+// redirect can only happen after mount either way. It used to also hide
+// `props.children` (and therefore every meta tag declared by the page's
+// <Layout>/<Head>) behind a loading spinner until that check ran. Crawlers
+// (WhatsApp, Facebook, Twitter/X, ...) never run client-side JS, so they saw
+// nothing but a bare spinner and no title/og tags at all on every one of
+// these pages, including the homepage. Rendering children immediately fixes
+// that; the redirect effect below still runs exactly as before for the rare
+// case of a signed-in admin browsing the storefront.
 function ConnectedGuard(props) {
   const router = useRouter();
-
-  const [loading, setLoading] = useState(true);
 
   const { userInfo } = useSelector((state) => state.auth);
 
   useEffect(() => {
     if (userInfo !== null && userInfo.role === "ADMIN") {
       router.push("admin/account");
-      setLoading(false);
     } else if (userInfo !== null && userInfo.role === "SUPER-ADMIN") {
       router.push("super-admin/shops");
-      setLoading(false);
-    } else {
-      setLoading(false);
     }
   }, [userInfo, router]);
 
-  return loading ? (
-    <div className="auth-guard-loader">
-      <div className="loaderContainer">
-        <img
-          width="60px"
-          style={{ opacity: "0.8" }}
-          alt="cyber-mall"
-          src="/images/icon.svg"
-        />
-        <CircularProgress
-          size={100}
-          color="secondary"
-          sx={{
-            opacity: 0.3,
-            position: "absolute",
-            top: "calc(50% - 50px)",
-            left: "calc(50% - 50px)",
-            zIndex: 1,
-          }}
-        />
-      </div>
-    </div>
-  ) : (
-    <div>{props.children}</div>
-  );
+  return <div>{props.children}</div>;
 }
 
 export default ConnectedGuard;

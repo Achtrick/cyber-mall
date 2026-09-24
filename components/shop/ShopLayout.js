@@ -1,7 +1,7 @@
 import Head from "next/head";
 import React from "react";
 import InstallPWA from "../installPwa";
-import { SITE_HOST, SITE_URL } from "../../utils/config/site";
+import { SITE_HOST, SITE_URL, absoluteUrl } from "../../utils/config/site";
 import ShopFooter from "./ShopFooter";
 import ShopHeader from "./ShopHeader";
 
@@ -42,9 +42,9 @@ function ShopLayout({
         )}
         <meta
           property="og:image"
-          content={
+          content={absoluteUrl(
             image ?? `/api/images/fill/${shopInfo.logo.split("/").pop()}`
-          }
+          )}
         />
         <link
           rel="apple-touch-icon"
