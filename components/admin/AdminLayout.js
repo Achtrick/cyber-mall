@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import AiChatWidget from "./AiChatWidget";
 import InstallPWA from "../../components/installPwa";
 import styles from "../../styles/admin/AdminLayout.module.scss";
 import { SITE_HOST, SITE_URL } from "../../utils/config/site";
@@ -78,6 +79,7 @@ function AdminLayout(props) {
   return (
     <>
       <InstallPWA color={"#ec008c"} />
+      <AiChatWidget />
       <Head>
         <title>Cyber-Mall</title>
         <meta name="description" content="Cyber-Mall Dashboard"></meta>

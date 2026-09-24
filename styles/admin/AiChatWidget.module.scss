@@ -1,0 +1,303 @@
+// Single anchor point for both the FAB and the panel, used on every screen
+// size -- bottom-right, offset well above components/installPwa.js's install
+// button (fixed bottom:10px/right:10px, 30x30) so the two never collide, and
+// above react-cookie-consent's banner via z-index.
+$anchor-bottom: 84px;
+$anchor-right: 18px;
+$z: 1400;
+
+// Open/close (FAB<->panel) and maximize/restore are all driven by inline
+// styles from JS (opacity/transform/pointer-events/width/height), not
+// toggled classes: combining a class-swapped transition with this element
+// also matching #__next > *'s page-load fade-in (globals.scss) left a CSS
+// transition that never settled -- opacity stuck at 1 after "minimize" even
+// though the class list was correct. Inline styles sidestep it entirely.
+.fab {
+  // React fragments don't create a DOM wrapper, so this button can end up a
+  // direct child of #__next -- explicitly opt out of its page-load fade-in
+  // (globals.scss `#__next > *`), whose `both` fill mode would otherwise
+  // permanently pin opacity:1 and silently defeat the inline opacity below.
+  // #__next is an ID selector, so a plain class rule can't outrank it on
+  // specificity alone -- !important is required (same pattern globals.scss
+  // itself uses to override this exact rule under prefers-reduced-motion).
+  animation: none !important;
+  position: fixed;
+  bottom: $anchor-bottom;
+  right: $anchor-right;
+  z-index: $z;
+  width: 56px;
+  height: 56px;
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  background: linear-gradient(135deg, var(--first-color), var(--second-color));
+  box-shadow: 0 10px 28px -6px rgba(84, 41, 128, 0.55);
+  cursor: pointer;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease,
+    box-shadow 0.2s ease;
+  svg {
+    font-size: 26px;
+  }
+  &:hover {
+    box-shadow: 0 14px 34px -6px rgba(84, 41, 128, 0.6);
+  }
+}
+
+.panel {
+  // see the comment on .fab above -- same fix, same reason.
+  animation: none !important;
+  position: fixed;
+  bottom: $anchor-bottom;
+  right: $anchor-right;
+  z-index: $z;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 24px 64px -12px rgba(27, 22, 34, 0.4);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transform-origin: bottom right;
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
+}
+
+.titlebar {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 8px 10px 16px;
+  background: linear-gradient(120deg, #1b1622 0%, #3a2450 100%);
+  color: #fff;
+}
+.titlebarLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.titlebarControls {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  button {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.85);
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+    &:hover {
+      background: rgba(255, 255, 255, 0.14);
+    }
+  }
+}
+
+.notice {
+  margin: 16px;
+  padding: 14px 16px;
+  border-radius: var(--radius);
+  background: #fff1d6;
+  color: #9a5b00;
+  font-size: 13px;
+}
+
+.thread {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.emptyState {
+  margin: auto;
+  text-align: center;
+  color: var(--muted);
+  font-size: 13px;
+  max-width: 300px;
+}
+.emptyIcon {
+  color: var(--first-color);
+  font-size: 30px !important;
+  margin-bottom: 8px;
+}
+.suggestions {
+  margin-top: 14px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+}
+.suggestion {
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--ink-soft);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color 0.18s ease, color 0.18s ease, transform 0.18s ease;
+  &:hover {
+    border-color: var(--first-color);
+    color: var(--first-color);
+    transform: translateY(-1px);
+  }
+}
+
+.bubbleRow {
+  display: flex;
+  width: 100%;
+}
+.fromUser {
+  justify-content: flex-end;
+}
+.fromAssistant {
+  justify-content: flex-start;
+}
+.bubble {
+  max-width: 85%;
+  padding: 9px 12px;
+  border-radius: var(--radius);
+  font-size: 13px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.fromUser .bubble {
+  background: linear-gradient(135deg, var(--first-color), var(--second-color));
+  color: #fff;
+  border-bottom-right-radius: 4px;
+}
+.fromAssistant .bubble {
+  background: var(--surface-alt);
+  color: var(--ink);
+  border-bottom-left-radius: 4px;
+}
+
+.actions {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.actionPill {
+  display: inline-block;
+  width: fit-content;
+  font-size: 11px;
+  font-weight: 600;
+  color: #1a6b2a;
+  background: #dcf5df;
+  border-radius: 999px;
+  padding: 3px 9px;
+}
+
+.typing {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 12px;
+  span {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--muted);
+    animation: typingDot 1.1s infinite ease-in-out;
+    &:nth-child(2) {
+      animation-delay: 0.15s;
+    }
+    &:nth-child(3) {
+      animation-delay: 0.3s;
+    }
+  }
+}
+@keyframes typingDot {
+  0%,
+  60%,
+  100% {
+    opacity: 0.3;
+    transform: translateY(0);
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(-3px);
+  }
+}
+
+.quickSuggestions {
+  flex-shrink: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 8px 12px 0;
+  border-top: 1px solid var(--line);
+}
+.chip {
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--ink-soft);
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-family: inherit;
+  cursor: pointer;
+  &:hover:not(:disabled) {
+    border-color: var(--first-color);
+    color: var(--first-color);
+  }
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.inputRow {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-top: 1px solid var(--line);
+  input {
+    flex: 1;
+    max-width: none;
+    margin: 0;
+    height: 38px;
+  }
+  button {
+    flex-shrink: 0;
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+  }
+}
+
+@media (max-width: 800px) {
+  // width/height are set inline from JS with viewport-relative formulas
+  // (min(Npx, calc(100vw - 36px)) etc.) so they already adapt to any
+  // screen size without a breakpoint here; only the FAB's own size shrinks.
+  .fab {
+    width: 50px;
+    height: 50px;
+    svg {
+      font-size: 22px;
+    }
+  }
+}
